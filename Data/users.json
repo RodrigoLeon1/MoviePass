@@ -1,0 +1,26 @@
+[
+    {
+        "mail": "user@user.com",
+        "password": "123",
+        "firstname": "Agustin",
+        "lastname": "Gomez",
+        "dni": "33480621",
+        "role": 0
+    },
+    {
+        "mail": "admin@admin.com",
+        "password": "123",
+        "firstname": "Agustin",
+        "lastname": "Gomez",
+        "dni": "33480621",
+        "role": 1
+    },
+    {
+        "mail": "agustin.ariel31@gmail.com",
+        "password": "123456",
+        "firstname": "Agustin",
+        "lastname": "Gomez",
+        "dni": "33480621",
+        "role": 0
+    }
+]

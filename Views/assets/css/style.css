@@ -1,0 +1,567 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+/* Basic style */
+html {
+    font-size: 10px;
+    font-family: 'Oxygen', sans-serif;
+    box-sizing: border-box;
+    color: #fff;    
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+
+p {
+    font-size: 1.6rem;
+}
+
+img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+body {
+    background-color: #222831;    
+}
+
+section {
+    padding: 10em 0;
+}
+
+hr {
+    color: yellow;
+    width: 70px;          
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid yellow;  
+}
+
+
+/* Navbar */
+.nav-container {
+    position: absolute;
+    top: 0rem;
+    left: 5%;
+    height: 6rem;
+    width: 90%;
+    margin: 0 auto;        
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;    
+    text-transform: uppercase;
+    z-index: 100;    
+}
+
+.nav-brand i {
+    font-size: 1.4rem;    
+    text-transform: none;    
+    font-style: normal;
+    color: #fff;    
+    text-shadow: 2px 1px 7px rgba(0, 0, 25, 1);
+}
+
+.nav-brand i span {
+    font-size: 2rem;
+    color: yellow;
+}
+
+.nav-list {
+    display: flex;
+    width: 40%;        
+    justify-content: space-around;    
+}
+
+.nav-link {
+    font-weight: 500;
+    text-shadow: 2px 1px 7px rgba(0, 0, 25, 1);
+    color: #fff;
+}
+
+.sub-menu {
+    width: 13rem;
+    display: block;
+    position: absolute;
+    border-top: 3px solid yellow;
+    border-radius: 1rem;
+    background-color: #191919;
+    z-index: 100;
+    top: 10rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 650ms ease;
+    box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.75);    
+}
+
+.sub-menu::before {
+    content: '';
+    position: absolute;
+    top: -2.5rem;
+    left: 3rem;
+    border: 1.2rem solid transparent;
+    border-bottom-color: yellow;
+}
+
+.nav-list li:hover > .sub-menu {
+    top: 5rem;
+    opacity: 1;
+    visibility: visible;
+}
+
+.sub-menu li a:hover {
+    color: yellow;
+}
+
+.sub-menu li {
+    line-height: 4rem;
+    text-align: center;
+}
+
+.text-s {
+    text-shadow: 2px 1px 7px rgba(0, 0, 25, 1);
+}
+
+
+/* Hero */
+.super {
+    clip-path: polygon(50% 0%, 100% 0, 100% 43%, 100% 90%, 68% 100%, 32% 100%, 0 90%, 0 0, 100% 0);    
+}
+
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    margin-bottom: 100px;    
+    position: relative;
+    overflow: hidden;
+    height: 90vh;
+}
+
+.video-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.hero-intro {        
+    display: flex;    
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+    font-size: 4rem;
+    text-shadow: 2px 1px 7px rgba(0, 0, 25, 1);
+    color: #fff;            
+}
+
+.hero-intro h1 span {
+    color: yellow;
+}
+
+
+/* Sections */
+.container {
+    max-width: 1140px;
+    margin: 0 auto;    
+    text-align: center;
+}
+
+.section-title {
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: .2em;
+    color: #fff;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.s-2 {
+    background-color: #171b21;
+}
+
+
+/* Glider slider - Extra style */
+.glider {
+    overflow: hidden;
+}
+
+.glider figure a h2 {    
+    color: #fff;
+    font-weight: 100;
+    padding: .8em;
+}
+
+.glider figure a img {
+    width: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.75);
+}
+
+
+/* Footer */
+.ft-container {
+    background-color: #171b21;    
+    padding: 6rem 0;
+    text-align: center;
+}
+
+.ft-container p {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+
+/* Movie page */
+.more-movies {
+    display: block;    
+    height: 2rem;
+    width: 10%;
+    margin: 0 auto;
+    margin-top: 1.5rem;
+    color: #fff;
+    border: 1px solid yellow;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.movie-h {
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+    background-position: center;    
+    background-size: cover;    
+    border-bottom: 1px solid #000;
+    margin-bottom: 7rem;
+}
+
+.filter-container {
+    padding-bottom: 10rem;     
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 4rem;      
+}
+
+.filter-container h4 {
+    font-size: 1.8rem;
+    margin-bottom: 4rem;
+}
+
+.filter-form {
+    margin: 0 auto;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;    
+}
+
+.btn-f {
+    background-color: transparent;
+    color: #fff;
+    border-style: none;
+    border: 1px solid yellow;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    cursor: pointer;
+}
+
+
+.movie-container {    
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    max-height: 300px;    
+    margin-bottom: 4rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.movie-img {
+    width: 200px;
+    padding: .9rem;
+    margin-bottom: 1rem;
+}
+
+.movie-img img {
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.75);
+}
+
+.movie-info {    
+    text-align: left;
+    padding-top: 1rem;
+    display: flex;    
+    flex-direction: column;
+    justify-content: center;      
+}
+
+.movie-info h3 {
+    text-shadow: 2px 1px 7px rgba(0, 0, 25, 1);
+}
+
+.movie-info p {
+    padding: 1rem;
+}
+
+.movie-info h3{
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.movie-cta,
+.movie-cta a {
+    display: flex;    
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/* LOGIN/REGISTER PAGE */
+.login-container,
+.register-container {
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    color: #fff;
+}
+
+.login-img {    
+    background-position: center;
+    background-size: cover;
+}
+
+.login-content,
+.register-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-content h3,
+.register-content h3 {
+    text-transform: uppercase;
+    font-size: 1.5rem;
+}
+
+.login-form,
+.register-form,
+.search-container {
+    display: flex;
+    flex-direction: column;
+    padding: 4rem;
+}
+
+.login-form label,
+.register-form label,
+.search-container label {
+    font-size: 1.5rem;    
+    padding: 1rem;
+    margin-bottom: 30px;
+}
+
+.login-form input,
+.register-form input,
+.search-container input {
+    width: 25rem;
+    margin: 5px;
+    padding: .6rem;
+    background-color: #222831;
+    border: none;
+    border-bottom: 1px solid yellow;
+    color: #fff;
+}
+
+.btn-l {
+    background-color: transparent;
+    color: #fff;    
+    width: 10rem;
+    height: 4rem;
+    border: none;
+    border: 1px solid yellow;
+    cursor: pointer;
+    text-transform: uppercase;
+    margin: 0 auto;    
+    transition: all 0.2s ease-in-out;    
+}
+
+.btn-l:hover {
+    background-color: yellow;   
+    border: 1px solid #000;
+    color: #000;
+    
+}
+
+.btn-l i {
+    font-size: 2.5rem;
+    margin-right: 0.3rem;
+}
+
+.btn-fb {
+    display: block;
+    height: 3.5rem;
+    width: 17rem;
+    color: #fff;
+    background-color: #4267b2;
+    border: 1px solid #29487d;
+    cursor: pointer;
+}
+
+.register-img {
+    background-image: url('assets/img/w4.png');
+    background-position: center;
+    background-size: cover;    
+}
+
+.hr-l {
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    width: 60%;
+    margin: 20px;
+}
+
+
+/* Datasheet page*/
+.specification2_Style {    
+    width:245px; 
+    float:right; 
+}
+
+.title1_Style {
+    /*display: inline-block;*/
+    font-size: 2.5rem; 
+    color:yellow;
+}
+
+.title2_Style {
+    font-size: 2rem; 
+    color:#fff;
+}
+
+.synopsis_Style {
+    margin-top: 2%;
+    color: #919191;
+    font-size: 1.5rem;
+    margin-bottom: 2%;
+    
+}
+
+.tableTitle_Style {
+    font-size: 200%; 
+    
+}
+
+.schedule_Style {
+    font-size: 130%;
+    display: inline;
+    color: yellow;
+}
+
+.cinemaName_Style {
+    font-size: 200%;
+}
+
+.day_Style {
+    font-size: 180%;
+    margin-top: 4%;
+}
+
+.specification_Style {
+    margin-left: 10%;
+    display: inline-block;
+    width:652px;
+    height:452px;
+}
+
+.label_Style {
+    font-size: 200%;
+    color: #fff;
+}
+
+.data_Style {
+    margin-top: 1%;
+    font-size: 150%;
+    color: #919191;
+}
+
+.poster_Style {
+    width:245px; 
+    float:left;
+    text-align: center;    
+}
+
+.poster_Style img {
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.75);
+}
+
+.dataSheet_Style {
+    margin-top: 8%;
+    margin-left: 10%;
+    margin-right: 8%;
+    margin-bottom: 10rem;
+    padding:3px;
+}
+
+.select_Style {
+    width: 25rem;
+    margin: 5px;
+    padding: .6rem;
+    background-color: #222831;
+    border: none;
+    border-bottom: 1px solid yellow;
+    color: #fff;
+}
+
+.cinemaAndSchedules_Style {
+    margin-top: 130px;
+}
+
+.item_Style {
+    float: left;
+    margin-bottom: 2%;
+    margin-right: 30px; 
+}
+
+.scheduleBox_style {
+    display: inline-block;
+}
+
+.datasheet-video {
+    height: 60rem;
+    padding: 10rem;
+    background-color: rgb(15, 15, 15);
+    margin: 0 auto;
+    text-align: center;
+    clip-path: polygon(50% 7%, 50% 7%, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 100%, 0 0);
+}
+
+.datasheet-video h4 {
+    font-size: 2rem;
+}
