@@ -14,10 +14,7 @@
                     <label>
                         <h4>Insert your DNI</h4>
                         <input type="number" name="dni" id="" placeholder="55666777" autofocus required/>
-                    </label>
-					<hr>
-					<br>
-					<br>
+                    </label>					
                     <label>
                         <h4>Insert your email</h4>
                         <input type="email" name="mail" id="" placeholder="mail@example.com" autofocus required/>

@@ -370,6 +370,10 @@ hr {
     font-size: 1.5rem;
 }
 
+.register-content form {
+    height: 65%;
+}
+
 .login-form,
 .register-form,
 .search-container {
@@ -384,6 +388,10 @@ hr {
     font-size: 1.5rem;    
     padding: 1rem;
     margin-bottom: 30px;
+}
+
+.register-form label {
+    padding: 0;
 }
 
 .login-form input,
