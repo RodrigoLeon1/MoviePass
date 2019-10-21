@@ -1,8 +1,20 @@
     <main>
         <div class="login-container">
+
+
             <div class="login-img" style="background-image: url('<?= $img ?>');"></div>
 			<div class="login-content">
                 <h3>MoviePass Account Login</h3>
+                
+                <?php if($alert != null): ?>
+                <div class="error-container">
+                    <p>
+                        <i class="icon ion-md-close-circle-outline"></i>
+                        <?= $alert ?>
+                    </p>
+                </div>
+                <?php endif; ?>
+
                 <form action="<?= FRONT_ROOT ?>/user/validateLogin" method="POST" class="login-form">
                     <label>
                         <h4>Email</h4>

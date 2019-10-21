@@ -12,7 +12,7 @@
 
         <div class="specification_Style">
             <div>
-                <p class="title1_Style">SYNOPSIS </p>
+                <p class="title1_Style">SYNOPSIS</p>
             </div>
             <div>
                 <p class="synopsis_Style">

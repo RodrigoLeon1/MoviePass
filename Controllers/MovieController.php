@@ -11,17 +11,16 @@
         private $movieDAO;
         private $apiDAO;
 
-        public function __construct()
-        {
+        public function __construct() {
             $this->movieDAO = new MovieDAO();
             $this->apiDAO = new Api();
         }
 
-        public function showMoviesNowPlaying () {
+        public function showMoviesNowPlaying() {
             return $this->movieDAO->getAll();
         }
 
-        public function showMovie ($id) {
+        public function showMovie($id) {
             $movies = $this->movieDAO->getAll();
             foreach ($movies as $movie) {
                 if ($movie->getId() == $id) {

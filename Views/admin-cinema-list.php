@@ -25,7 +25,7 @@
 									<td><?= $cinema->getAddress(); ?></td>
 									<td><?= $cinema->getPrice(); ?></td>
 									<td><button type="submit" name="id" class="btn" value="<?php echo $cinema->getId() ?>"> Remove </button></td>
-								</td>
+								</tr>
 							<?php endforeach; ?>
 						</tbody>
 					</table>

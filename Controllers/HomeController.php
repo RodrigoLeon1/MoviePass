@@ -5,8 +5,7 @@
 
     class HomeController
     {
-        public function Index($message = "")
-        {
+        public function Index() {
             $movieController = new MovieController();
             $movies = $movieController->showMoviesNowPlaying();
             $title = 'MoviePass';

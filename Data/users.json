@@ -22,5 +22,13 @@
         "lastname": "Gomez",
         "dni": "33480621",
         "role": 0
+    },
+    {
+        "mail": "user55@user.com",
+        "password": "123",
+        "firstname": "Rodrigo",
+        "lastname": "Leon",
+        "dni": "11111",
+        "role": 0
     }
 ]

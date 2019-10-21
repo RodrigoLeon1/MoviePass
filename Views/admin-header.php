@@ -49,7 +49,7 @@
                     <ul>
                         <li>
                             <i class="icon ion-md-remove"></i>
-                            View users
+                            <a href="<?= FRONT_ROOT ?>user/list">View users</a>                            
                         </li>
                     </ul>
                 </li>

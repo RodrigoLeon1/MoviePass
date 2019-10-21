@@ -21,10 +21,10 @@
         "price": "280"
     },
     {
-        "id": "5",
-        "name": "Test",
-        "address": "555",
-        "capacity": "71 sth",
-        "price": "55"
+        "id": "7",
+        "name": "Cine1",
+        "address": "100",
+        "capacity": "Calle 101",
+        "price": "30"
     }
 ]
