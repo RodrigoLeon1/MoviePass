@@ -5,7 +5,8 @@
             <img src="<?= IMG_PATH_TMDB . $poster_path ?> ">
             <br><br>
 
-            <form method="POST" action="purchase_form.php">
+            <form method="POST" action="<?= FRONT_ROOT ?>test/purchaseTicket">
+                <input id="idMovie" name="idMovie" type="hidden" value="">
                 <button class="btn-l" type="submit">Buy ticket</button>
             </form>
         </div>

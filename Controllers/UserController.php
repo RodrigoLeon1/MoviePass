@@ -2,8 +2,9 @@
 
     namespace Controllers;
 
-    use DAO\UserDAO as UserDAO;
     use Models\User as User;
+    use DAO\UserDAO as UserDAO;
+    use DAO\ProfileUserDAO as ProfileUserDAO;
     use Controllers\HomeController as HomeController;
     use Controllers\MovieController as MovieController;
 
@@ -29,18 +30,16 @@
         }
 
         public function validateLogin($mail, $password) {
-            $users = $this->userDAO->getAll();
-            foreach ($users as $user) {
-                if ($user->getMail() == $mail && $user->getPassword() == $password) {
-                    $_SESSION["loggedUser"] = $user;
-                    if ($user->getRole() == 1) {
-                        return $this->adminPath();
-                    }
-                    else if ($user->getRole() == 0) {
-                        return $this->userPath();
-                    }
-                }
-            }
+            $user = $this->userDAO->getByMail($mail);
+			if (($user != null) && ($user->getPassword() == $password)) {
+				$_SESSION["loggedUser"] = $user;
+				if ($user->getRole() == 1) {
+					return $this->adminPath();
+				}
+				else if ($user->getRole() == 0) {
+					return $this->userPath();
+				}
+			}
             return $this->loginPath("You have entered an invalid e-mail or password. Try again!");
         }
 

@@ -1,10 +1,10 @@
 <?php
+
     namespace Controllers;
 
     use Controllers\MovieController as MovieController;
 
-    class HomeController
-    {
+    class HomeController {
         public function Index() {
             $movieController = new MovieController();
             $movies = $movieController->showMoviesNowPlaying();

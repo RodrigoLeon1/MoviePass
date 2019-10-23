@@ -1,7 +1,6 @@
     <main>
         <div class="login-container">
 
-
             <div class="login-img" style="background-image: url('<?= $img ?>');"></div>
 			<div class="login-content">
                 <h3>MoviePass Account Login</h3>

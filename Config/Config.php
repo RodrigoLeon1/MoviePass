@@ -12,6 +12,12 @@
     define("JS_PATH", FRONT_ROOT . VIEWS_PATH . "assets/js/");
     define('VIDEO_PATH', FRONT_ROOT . VIEWS_PATH . "assets/video/");
     
+    //DB
+	define("DB_HOST", "localhost");
+	define("DB_NAME", "moviepass");
+	define("DB_USER", "root");
+	define("DB_PASS", "");
+
     //API TMDB
     define("URL_TMDB", "https://api.themoviedb.org/3");
     define("TOKEN_TMDB", "api_key=5d5fe41bdf62bea9ea2f194984b9ad74");

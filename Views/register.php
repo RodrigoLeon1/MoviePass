@@ -1,7 +1,6 @@
     <main>
         <div class="register-container">
-            <div class="register-content" >
-                <h3>Insert your personal information</h3>
+            <div class="register-content" >                
                 <form action="<?= FRONT_ROOT ?>user/validateRegister" method="post" class="register-form">
                     <label>
                         <h4>Insert your First Name</h4>

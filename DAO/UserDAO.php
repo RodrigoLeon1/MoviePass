@@ -2,68 +2,71 @@
 
     namespace DAO;
 
+	use \Exception as Exception;
+	use DAO\Connection as Connection;
     use Models\User as User;
+	use DAO\ProfileUserDAO as ProfileUserDAO;
+	use DAO\RoleDAO as RoleDAO;
 
     class UserDAO {
 
-        private $userList = array();
+		private $userList = array();
+		private $connection;
+		private $tableName = "users";
+		private $profileUserDAO;
+		private $roleDAO;
+
+		public function __construct () {
+			$this->profileUserDAO = new ProfileUserDAO();
+			$this->roleDAO = new RoleDAO();
+		}
 
         public function add(User $user) {
-            $this->retrieveData();
-            array_push($this->userList, $user);
-            $this->saveData();
+			$profileUserDAO = new ProfileUserDAO ();
+			$profileUserDAO->add($user);
+			try {
+				$query = "INSERT INTO " . $this->tableName . " (mail, password, FK_dni, FK_id_role) VALUES (:mail, :password, :dni, :role);";
+				$parameters["mail"] = $user->getMail();
+                $parameters["password"] = $user->getPassword();
+				$parameters["dni"] = $user->getDni();
+				$parameters["role"] = $user->getRole();
+                $this->connection = Connection::getInstance();
+				$this->connection->executeNonQuery($query, $parameters);
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
         }
 
-        public function getAll() {
-            $this->retrieveData();
-            return $this->userList;
-        }
-
-        private function saveData() {
-            $arrayToEncode = array();
-
-            foreach ($this->userList as $user) {
-                $valuesArray["mail"] = $user->getMail();
-                $valuesArray["password"] = $user->getPassword();
-                $valuesArray["firstname"] = $user->getFirstName();
-                $valuesArray["lastname"] = $user->getLastName();
-                $valuesArray["dni"] = $user->getDni();
-                $valuesArray["role"] = $user->getRole();
-                array_push($arrayToEncode, $valuesArray);
-            }
-            $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
-            file_put_contents($this->getJsonFilePath(), $jsonContent);
-        }
-
-        private function retrieveData() {
-            $this->userList = array();
-            $jsonPath = $this->getJsonFilePath();
-            $jsonContent = file_get_contents($jsonPath);
-            $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
-            foreach ($arrayToDecode as $valuesArray) {
+		public function getByMail($mail) {
+            $user = null;
+            $query = "CALL users_getByMail (?)";
+            $parameters["mail"] = $mail;
+            $this->connection = Connection::GetInstance();
+            $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+            foreach($results as $row) {
                 $user = new User();
-                $user->setMail($valuesArray["mail"]);
-                $user->setPassword($valuesArray["password"]);
-                $user->setFirstName($valuesArray["firstname"]);
-                $user->setLastName($valuesArray["lastname"]);
-                $user->setDni($valuesArray["dni"]);
-                $user->setRole($valuesArray["role"]);
-                array_push($this->userList, $user);
+				$user = $this->profileUserDAO->getByDNI($row["FK_dni"]);
+                $user->setMail($row["mail"]);
+                $user->setPassword($row["password"]);
+				$role = $this->roleDAO->getById($row["FK_id_role"]);
+				$user->setRole($role);
             }
-        }
-
-        function getJsonFilePath() {
-
-            $initialPath = "Data/users.json";
-
-            if(file_exists($initialPath)){
-                $jsonFilePath = $initialPath;
-            }else{
-                $jsonFilePath = "../".$initialPath;
+            return $user;
+		}
+		
+		public function getAll() {
+			$query = "SELECT * FROM " . $this->tableName;
+            $this->connection = Connection::GetInstance();
+            $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+            foreach($results as $row) {
+                $user = new User();
+				$user->setMail($row["mail"]);				
+				array_push ($this->userList, $user);
             }
+            return $this->userList;			
+		}
 
-            return $jsonFilePath;
-        }
     }
 
  ?>

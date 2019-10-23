@@ -9,14 +9,12 @@
         private $cinemaDAO;
 		private $cinemas;
 
-        public function __construct()
-        {
+        public function __construct() {
             $this->cinemaDAO = new CinemaDAO();
         }
 
-        public function add($id, $name, $address, $capacity, $price) {
-            $cinema = new Cinema();
-            $cinema->setId($id);
+        public function add($name, $address, $capacity, $price) {
+            $cinema = new Cinema();            
             $cinema->setName($name);
             $cinema->setAddress($address);
             $cinema->setCapacity($capacity);
@@ -48,8 +46,8 @@
 			}
         }
 
-		public function remove($id)
-		{
+        // En lugar de recibir el ID debe recibir un objeto de tipo CINEMA
+		public function remove($id) {
 			$this->cinemaDAO->remove($id);
 			$this->list();
 		}

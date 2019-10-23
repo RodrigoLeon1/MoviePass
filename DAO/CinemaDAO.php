@@ -2,77 +2,60 @@
 
     namespace DAO;
 
+	use \Exception as Exception;
+	use DAO\Connection as Connection;
     use Models\Cinema as Cinema;
 
-    class CinemaDAO
-    {
+    class CinemaDAO {
 
         private $cinemaList = array();
+		private $connection;
+		private $tableName = "cinemas";
 
         public function add(Cinema $cinema) {
-            $this->retrieveData();
-            array_push($this->cinemaList, $cinema);
-            $this->saveData();
+			try {
+				$query = "INSERT INTO " . $this->tableName . " (name, capacity, address, ticket_value) VALUES (:name, :capacity, :address, :ticket_value);";
+				$parameters["name"] = $cinema->getName();
+				$parameters["address"] = $cinema->getAddress();
+				$parameters["capacity"] = $cinema->getCapacity();
+				$parameters["ticket_value"] = $cinema->getPrice();
+                $this->connection = Connection::getInstance();
+				$this->connection->executeNonQuery($query, $parameters);
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
         }
 
-        public function getAll() {
-            $this->retrieveData();
-            return $this->cinemaList;
-        }
-
-        private function saveData() {
-            $arrayToEncode = array();
-
-            foreach ($this->cinemaList as $cinema) {
-                $valuesArray["id"] = $cinema->getId();
-                $valuesArray["name"] = $cinema->getName();
-                $valuesArray["address"] = $cinema->getAddress();
-                $valuesArray["capacity"] = $cinema->getCapacity();
-                $valuesArray["price"] = $cinema->getPrice();
-                array_push($arrayToEncode, $valuesArray);
+        public function getAll () {
+			$query = "SELECT * FROM " . $this->tableName;
+            $this->connection = Connection::GetInstance();
+            $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+            foreach($results as $row)
+            {
+                $cinema = new Cinema();
+				$cinema->setId($row["id"]);
+                $cinema->setName($row["name"]);
+                $cinema->setAddress($row["address"]);
+                $cinema->setCapacity($row["capacity"]);
+                $cinema->setPrice($row["ticket_value"]);
+				array_push ($this->cinemaList, $cinema);
             }
-            $jsonContent = json_encode($arrayToEncode, JSON_PRETTY_PRINT);
-            file_put_contents($this->getJsonFilePath(), $jsonContent);
-        }
-
-		public function remove($id)
-		{
-			$this->RetrieveData();
-			$this->cinemaList = array_filter($this->cinemaList, function($cellPhone) use($id){
-				return $cellPhone->getId() != $id;
-			});		
-			$this->SaveData();
+            return $this->cinemaList;
 		}
 
-        private function retrieveData()
-        {
-            $this->cinemaList = array();
-            $jsonPath = $this->getJsonFilePath();
-            $jsonContent = file_get_contents($jsonPath);
-            $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
-            foreach ($arrayToDecode as $valuesArray) {
-                $cinema = new Cinema();
-                $cinema->setId($valuesArray["id"]);
-                $cinema->setName($valuesArray["name"]);
-                $cinema->setAddress($valuesArray["address"]);
-                $cinema->setCapacity($valuesArray["capacity"]);
-                $cinema->setPrice($valuesArray["price"]);
-                array_push($this->cinemaList, $cinema);
-            }
-        }
+		public function deleteById ($id) {
+			try {
+				$query = "CALL cinemas_deleteById(?)";
+				$parameters ["id"] = $id; 
+				$this->connection = Connection::GetInstance();
+				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
+		}
 
-        function getJsonFilePath(){
-
-            $initialPath = "Data/cinemas.json";
-
-            if(file_exists($initialPath)){
-                $jsonFilePath = $initialPath;
-            }else{
-                $jsonFilePath = "../".$initialPath;
-            }
-
-            return $jsonFilePath;
-        }
     }
 
  ?>

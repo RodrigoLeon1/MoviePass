@@ -1,14 +1,13 @@
 <?php
+    
     namespace Config;
 
-    class Request
-    {
+    class Request {
         private $controller;
         private $method;
         private $parameters = array();
 
-        public function __construct()
-        {
+        public function __construct() {
             $url = filter_input(INPUT_GET, "url", FILTER_SANITIZE_URL);
 
             $urlArray = explode("/", $url);
@@ -27,12 +26,10 @@
 
             $methodRequest = $this->getMethodRequest();
 
-            if($methodRequest == "GET")
-            {
+            if($methodRequest == "GET") {
                 unset($_GET["url"]);
 
-                if(!empty($_GET))
-                {
+                if(!empty($_GET)) {
                     foreach($_GET as $key => $value)
                         array_push($this->parameters, $value);
                 }
@@ -42,19 +39,16 @@
             elseif ($_POST)
                 $this->parameters = $_POST;
 
-            if($_FILES)
-            {
+            if($_FILES) {
                 unset($this->parameters["button"]);
 
-                foreach($_FILES as $file)
-                {
+                foreach($_FILES as $file) {
                     array_push($this->parameters, $file);
                 }
             }
         }
 
-        private static function getMethodRequest()
-        {
+        private static function getMethodRequest() {
             return $_SERVER["REQUEST_METHOD"];
         }
 

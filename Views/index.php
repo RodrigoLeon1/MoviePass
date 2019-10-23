@@ -31,7 +31,7 @@
                 <div id="dots" class="glider-dots"></div>
             </div>
 
-            <a class="more-movies" href="<?= FRONT_ROOT ?>/home/now_playing">More movies</a>
+            <a class="more-movies" href="<?= FRONT_ROOT ?>movie/nowPlaying">More movies</a>
 
         </div>
     </section>
@@ -90,7 +90,7 @@
                 <div id="dots2" class="glider-dots"></div>
             </div>
 
-            <a class="more-movies" href="<?= FRONT_ROOT ?>/home/coming_soon">More movies</a>
+            <a class="more-movies" href="<?= FRONT_ROOT ?>movie/comingSoon">More movies</a>
 
         </div>
     </section>

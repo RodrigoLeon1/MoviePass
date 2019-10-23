@@ -160,7 +160,7 @@ hr {
     font-weight: 300;      
 }
 
-.content-container input {
+.content-container input, select {
     background-color: #3b4654;
     border-radius: 2px;
     border: 1px solid #4a5869;

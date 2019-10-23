@@ -20,11 +20,12 @@
             return $this->movieDAO->getAll();
         }
 
+        // $id -> Movie $movie
+        // El dao se encargar de ir a $movie->getId()
         public function showMovie($id) {
             $movies = $this->movieDAO->getAll();
             foreach ($movies as $movie) {
-                if ($movie->getId() == $id) {
-                    $id = $id;
+                if ($movie->getId() == $id) {                    
                     $title = $movie->getTitle();
                     $poster_path = $movie->getPosterPath();
                     $release_date = $movie->getReleaseDate();
@@ -63,7 +64,12 @@
 			require_once(VIEWS_PATH . "header-s.php");
 			require_once(VIEWS_PATH . "coming-soon.php");
 			require_once(VIEWS_PATH . "footer.php");
-		}
+        }
+        
+        public function getNowPlayingMoviesFromDAO () {
+			$this->movieDAO->getNowPlayingMoviesFromDAO();
+        }
+        
     }
 
  ?>

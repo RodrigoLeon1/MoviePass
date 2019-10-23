@@ -36,7 +36,7 @@
             <p><?= $movie->getOverview() ?></p>
         </div>
         <div class="movie-cta">
-            <a class="btn-l" href="<?= FRONT_ROOT ?>/movie/showMovie/?id=<?= $movie->getId() ?>">  
+            <a class="btn-l" href="<?= FRONT_ROOT ?>movie/showMovie/?id=<?= $movie->getId() ?>">  
                 <i class="icon ion-md-add"></i>More info
             </a>
         </div>
