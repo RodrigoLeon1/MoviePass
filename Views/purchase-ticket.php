@@ -9,11 +9,10 @@
     </header>
 
     <main>
-        <div class="register-container" style="margin-bottom: 25rem">            
-            <div class="register-content">
+        <div class="purchase-container">
+            <div class="purchase-form">
+                <h2>Complete the form</h2>
                 
-                <h3>Enter purchase data</h3>
-
                 <form action="" method="post" class="register-form">  
                     <label> 
                         <h4>Cinema</h4>
@@ -22,8 +21,7 @@
 
                             <option value=""><?php $value->getName(); ?></option>
                             
-                        <?php  }  ?>
-                            
+                        <?php  }  ?>                            
                         </select>
                     </label>
                     <label>
@@ -52,83 +50,85 @@
                     </label>
                     <button class="btn-l" type="submit">Register</button>
                 </form>
+            </div>
+                        
+            <div class="purchase-seats">                
+                <h2>Seats cinema</h2>
+                <div class="theatre">  
+                    <div class="cinema-seats left">
+                        <div class="cinema-row row-1">
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                        </div>
+
+                        <div class="cinema-row row-2">
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                        </div>
+
+                        <div class="cinema-row row-3">
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                        </div>
+
+                        <div class="cinema-row row-4">
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                        </div>
+
+                        <div class="cinema-row row-5">
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                        </div>
+
+                        <div class="cinema-row row-6">
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                        </div>
+
+                        <div class="cinema-row row-7">
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                            <div class="seat"></div>
+                        </div>                        
+                    </div>                                      
+                </div>  
 
             </div>
-            
-            <div class="theatre">  
-                <h3>Seats cinema</h3>
-                <div class="cinema-seats left">
-                    <div class="cinema-row row-1">
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                    </div>
-
-                    <div class="cinema-row row-2">
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                    </div>
-
-                    <div class="cinema-row row-3">
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                    </div>
-
-                    <div class="cinema-row row-4">
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                    </div>
-
-                    <div class="cinema-row row-5">
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                    </div>
-
-                    <div class="cinema-row row-6">
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                    </div>
-
-                    <div class="cinema-row row-7">
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                        <div class="seat"></div>
-                    </div>
-                </div>  
-                </div>
-            </div>        
+        </div>
 
     </main>

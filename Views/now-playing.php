@@ -5,7 +5,7 @@
 
         <form class="filter-form" action="" method="post">
             <label>
-                Category
+                Category:
                 <select name="category">
                     <option value="value1">Value 1</option>
                     <option value="value2">Value 2</option>
@@ -20,7 +20,6 @@
             <button type="submit" class="btn-f">Filter</button>
         </form>
     </div>
-
 
     <?php foreach ($movies as $movie): ?>
     <div class="container movie-container">

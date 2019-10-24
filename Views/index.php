@@ -95,6 +95,13 @@
         </div>
     </section>
 
+    <div class="parallax-banner">
+        <h4>
+            <i class="icon ion-md-globe"></i>    
+            Discover the best experiences in cinemas
+        </h4>
+    </div>
+
     <section>
         <div class="container">
             <h3 class="section-title">Search movies</h3>

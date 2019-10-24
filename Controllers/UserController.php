@@ -82,8 +82,7 @@
             if(!isset($_SESSION["loggedUser"])) {
                 $title = "MoviePass — Login";
                 $img = IMG_PATH . "w5.png";
-                require_once(VIEWS_PATH . "header.php");
-                require_once(VIEWS_PATH . "navbar.php");
+                require_once(VIEWS_PATH . "header.php");                
                 require_once(VIEWS_PATH . "login.php");			
             } else {
                 $this->userPath();
@@ -93,9 +92,8 @@
         public function registerPath() {
             if(!isset($_SESSION["loggedUser"])) {
                 $title = 'MoviePass — Register';
-                $img = IMG_PATH . '/w4.png';
-                require_once(VIEWS_PATH . "header.php");
-                require_once(VIEWS_PATH . "navbar.php");
+                $img = IMG_PATH . '/w3.jpg';
+                require_once(VIEWS_PATH . "header.php");                
                 require_once(VIEWS_PATH . "register.php");			
             } else {
                 $this->userPath();
