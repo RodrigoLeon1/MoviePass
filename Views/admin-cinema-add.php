@@ -5,10 +5,6 @@
 
             <form class="content-container" action="<?= FRONT_ROOT ?>cinema/add" method="post">
                 <label>
-                    <h4>Insert id:</h4>
-                    <input type="text" name="id" id="" required>
-                </label>
-                <label>
                     <h4>Insert name:</h4>
                     <input type="text" name="name" id="" required>
                 </label>

@@ -13,13 +13,13 @@
             <li>
                 <a href="<?= FRONT_ROOT ?>/movie/comingSoon" class="nav-link">Coming soon</a>
             </li>
-            
+
             <?php if (!isset($_SESSION["loggedUser"])): ?>
             <li>
                 <a href="<?= FRONT_ROOT ?>user/registerPath" class="nav-link">Register</a>
             </li>
             <?php endif; ?>
-            
+
             <?php if (!isset($_SESSION["loggedUser"])): ?>
             <li>
                 <a href="<?= FRONT_ROOT ?>user/loginPath" class="nav-link">Login</a>
@@ -35,14 +35,14 @@
                     </a>
                     <!-- SubMenu -->
                     <ul class="sub-menu">
-                        <li>
-                            Account
+						<li>
+                            <a href="<?= FRONT_ROOT ?>user/account" class="nav-link">Account</a>
                         </li>
 
                         <?php if($user->getRole() == 1): ?>
                         <li>
                             <a href="<?= FRONT_ROOT ?>user/adminpath" class="nav-link">Dashboard</a>
-                        </li>                        
+                        </li>
                         <?php endif; ?>
 
                         <li>

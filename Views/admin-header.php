@@ -1,7 +1,7 @@
 <body>
     <header>
         <nav class="nav-container">
-            <div class="nav-brand">                
+            <div class="nav-brand">
                 <span>
                     <a href="<?= FRONT_ROOT ?>">
                         <i class="icon ion-md-play"></i>
@@ -47,9 +47,9 @@
                     <i class="icon ion-md-person"></i>
                     Users
                     <ul>
-                        <li>
+						<li>
                             <i class="icon ion-md-remove"></i>
-                            View users
+                            <a href="<?= FRONT_ROOT ?>user/list">View users</a>
                         </li>
                     </ul>
                 </li>

@@ -1,24 +1,10 @@
 [
     {
-        "id": "1",
-        "name": "Ambassador",
-        "address": "100",
-        "capacity": "Cordoba",
-        "price": "100"
-    },
-    {
         "id": "100",
         "name": "Los Gallegos Cine",
         "address": "100",
         "capacity": "Shopping Los Gallegos",
         "price": "500"
-    },
-    {
-        "id": "2",
-        "name": "Del Paseo",
-        "address": "20000",
-        "capacity": "Shopping Del Paseo",
-        "price": "280"
     },
     {
         "id": "5",

@@ -96,6 +96,25 @@ hr {
     margin: 2rem;
 }
 
+.error-container {    
+    margin: 2rem;
+    width: 40%;
+    display: flex;
+    align-items: center;
+    padding: .75rem 1.25rem;    
+    border: 1px solid transparent;
+    border-radius: .25rem;    
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    font-size: 1.3rem;
+}
+
+.error-container i {
+    font-size: 2rem;
+    margin-right: 1.3rem;
+}
+
 .dashboard-container {
     width: 85%;
     margin-top: 5rem;
@@ -141,7 +160,7 @@ hr {
     font-weight: 300;      
 }
 
-.content-container input {
+.content-container input, select {
     background-color: #3b4654;
     border-radius: 2px;
     border: 1px solid #4a5869;

@@ -24,7 +24,11 @@
 									<td><?= $cinema->getCapacity(); ?></td>
 									<td><?= $cinema->getAddress(); ?></td>
 									<td><?= $cinema->getPrice(); ?></td>
-									<td><button type="submit" name="id" class="btn" value="<?php echo $cinema->getId() ?>"> Remove </button></td>
+									<td>
+										<a href="<?php echo FRONT_ROOT . "cinema/remove/" . $cinema->getId(); ?>" class="btn">Remove</a>
+										<a href="<?php echo FRONT_ROOT . "cinema/getById/" . $cinema->getId(); ?>" class="btn">Modify</a>
+									</td>
+
 								</td>
 							<?php endforeach; ?>
 						</tbody>

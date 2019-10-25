@@ -14,12 +14,11 @@
             $this->cinemaDAO = new CinemaDAO();
         }
 
-        public function add($id, $name, $address, $capacity, $price) {
+        public function add($name, $capacity, $address, $price) {
             $cinema = new Cinema();
-            $cinema->setId($id);
             $cinema->setName($name);
+			$cinema->setCapacity($capacity);
             $cinema->setAddress($address);
-            $cinema->setCapacity($capacity);
             $cinema->setPrice($price);
             $this->cinemaDAO->add($cinema);
             $this->addCinemaPath();
@@ -35,7 +34,7 @@
 				$admin = $_SESSION["loggedUser"];
 				require_once(VIEWS_PATH . "admin-head.php");
 				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-add-cinema.php");
+				require_once(VIEWS_PATH . "admin-cinema-add.php");
 			}
         }
 
@@ -48,11 +47,32 @@
 			}
         }
 
-		public function remove($id)
-		{
-			$this->cinemaDAO->remove($id);
+		public function remove ($id) {
+			$this->cinemaDAO->deleteById($id);
 			$this->list();
 		}
+
+		public function getById ($id) {
+			$cinema = $this->cinemaDAO->getById($id);
+			if ($_SESSION["loggedUser"]) {
+				$admin = $_SESSION["loggedUser"];
+				require_once(VIEWS_PATH . "admin-head.php");
+				require_once(VIEWS_PATH . "admin-header.php");
+				require_once(VIEWS_PATH . "admin-cinema-modify.php");
+			}
+		}
+
+		public function modify($id, $name, $capacity, $address, $price) {
+			$cinema = new Cinema();
+            $cinema->setId($id);
+            $cinema->setName($name);
+            $cinema->setCapacity($capacity);
+			$cinema->setAddress($address);
+            $cinema->setPrice($price);
+	        $this->cinemaDAO->modify($cinema);
+            $this->list();
+        }
+
     }
 
  ?>

@@ -1,14 +1,14 @@
 <?php
 
-    namespace Models;
+	namespace Models;
 
-    class User {
+	use Models\ProfileUser as ProfileUser;
+	use Models\Role as Role;
+
+    class User extends ProfileUser {
 
         private $mail;
         private $password;
-        private $firstName;
-        private $lastName;
-        private $dni;
         private $role;
 
         public function getMail() {
@@ -20,7 +20,6 @@
             return $this;
         }
 
-
         public function getPassword() {
             return $this->password;
         }
@@ -30,48 +29,15 @@
             return $this;
         }
 
-        public function getFirstName() {
-            return $this->firstName;
-        }
+		public function getRole() {
+			return $this->role->getId();
+		}
 
-        public function setFirstName($firstName) {
-            $this->firstName = $firstName;
-            return $this;
-        }
-
-
-        public function getLastName() {
-            return $this->lastName;
-        }
-
-        public function setLastName($lastName) {
-            $this->lastName = $lastName;
-            return $this;
-        }
-
-
-        public function getDni() {
-            return $this->dni;
-        }
-
-        public function setDni($dni) {
-            $this->dni = $dni;
-            return $this;
-        }
-
-
-        public function getRole() {
-            return $this->role;
-        }
-
-        public function setRole($role) {
-            $this->role = $role;
-            return $this;
-        }
-
-    }
-
-
-
+		public function setRole(Role $role) {
+			$this->role = new Role();
+			$this->role = $role;
+			return $this->role;
+		}
+	}
 
 ?>

@@ -33,8 +33,8 @@
 					$adult = $movie->getAdult();
 					$vote_average = $movie->getVoteAverage();
                     $img = IMG_PATH_TMDB . $movie->getBackdropPath();
-                    
-                    $urlTrailer = $this->apiDAO->getKeyMovieTrailer($id);                    
+
+                    $urlTrailer = $this->apiDAO->getKeyMovieTrailer($id);
                 }
             }
             require_once(VIEWS_PATH . "header.php");
@@ -64,6 +64,10 @@
 			require_once(VIEWS_PATH . "header-s.php");
 			require_once(VIEWS_PATH . "coming-soon.php");
 			require_once(VIEWS_PATH . "footer.php");
+		}
+
+		public function getNowPlayingMoviesFromDAO () {
+			$this->movieDAO->getNowPlayingMoviesFromDAO();
 		}
     }
 

@@ -4,15 +4,15 @@
 
     class Role {
 
-        private $role;
+        private $id;
         private $description;
-        
-        public function getRole() {
-            return $this->role;
+
+        public function getId() {
+            return $this->id;
         }
 
-        public function setRole($role) {
-            $this->role = $role;
+        public function setId($id) {
+            $this->id = $id;
             return $this;
         }
 

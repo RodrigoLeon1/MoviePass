@@ -2,8 +2,9 @@
 
     namespace Controllers;
 
-    use DAO\UserDAO as UserDAO;
     use Models\User as User;
+	use DAO\UserDAO as UserDAO;
+	use DAO\ProfileUserDAO as ProfileUserDAO;
     use Controllers\HomeController as HomeController;
     use Controllers\MovieController as MovieController;
 
@@ -29,18 +30,17 @@
         }
 
         public function validateLogin ($mail, $password) {
-            $users = $this->userDAO->getAll();
-            foreach ($users as $user) {
-                if ($user->getMail() == $mail && $user->getPassword() == $password) {
-                    $_SESSION["loggedUser"] = $user;
-                    if ($user->getRole() == 1) {
-                        $this->adminPath();
-                    }
-                    else if ($user->getRole() == 0) {
-                        $this->userPath();
-                    }
-                }
-            }
+			$user = $this->userDAO->getByMail($mail);
+			if (($user != null) && ($user->getPassword() == $password)) {
+				$_SESSION["loggedUser"] = $user;
+				if ($user->getRole() == 1) {
+					$this->adminPath();
+				}
+				else if ($user->getRole() == 0) {
+					$this->userPath();
+				}
+			}
+			return $this->loginPath("You have entered an invalid e-mail or password. Try again!");
         }
 
         public function adminPath () {
@@ -50,6 +50,9 @@
 				require_once(VIEWS_PATH . "admin-header.php");
 				require_once(VIEWS_PATH . "admin-dashboard.php");
 			}
+			else {
+                $this->userPath();
+            }
         }
 
         public function userPath () {
@@ -64,28 +67,60 @@
 			require_once(VIEWS_PATH . "footer.php");
         }
 
-        public function loginPath () {
-			$title = "MoviePass — Login";
-            $img = IMG_PATH . "w5.png";
-			require_once(VIEWS_PATH . "header.php");
-            require_once(VIEWS_PATH . "navbar.php");
-            require_once(VIEWS_PATH . "login.php");			
+		public function loginPath ($alert = "") {
+			if(!isset($_SESSION["loggedUser"])) {
+				$title = "MoviePass — Login";
+				$img = IMG_PATH . "w5.png";
+				require_once(VIEWS_PATH . "header.php");
+				require_once(VIEWS_PATH . "navbar.php");
+				require_once(VIEWS_PATH . "login.php");
+			} else {
+				$this->userPath();
+			}
         }
 
-        public function registerPath () {
-			$title = 'MoviePass — Register';
-            $img = IMG_PATH . '/w4.png';
-            require_once(VIEWS_PATH . "header.php");
-            require_once(VIEWS_PATH . "navbar.php");
-            require_once(VIEWS_PATH . "register.php");			
-
-        }
+		public function registerPath () {
+			if(!isset($_SESSION["loggedUser"])) {
+				$title = 'MoviePass — Register';
+				$img = IMG_PATH . '/w4.png';
+				require_once(VIEWS_PATH . "header.php");
+				require_once(VIEWS_PATH . "navbar.php");
+				require_once(VIEWS_PATH . "register.php");
+			} else {
+				$this->userPath();
+			}
+		}
 
         public function logoutPath () {
             session_destroy();
             $_SESSION["loggedUser"] = null;
 			$this->userPath();
         }
+
+		public function account() {
+			if (isset($_SESSION["loggedUser"])) {
+                $user = $_SESSION["loggedUser"];
+                $title = "My account";
+				require_once(VIEWS_PATH . "header.php");
+                require_once(VIEWS_PATH . "navbar.php");
+                require_once(VIEWS_PATH . "my-account.php");
+                require_once(VIEWS_PATH . "footer.php");
+			} else {
+                $this->loginPath();
+            }
+        }
+
+		public function list() {
+			if (isset($_SESSION["loggedUser"])) {
+				$admin = $_SESSION["loggedUser"];
+				$users = $this->userDAO->getAll();
+				require_once(VIEWS_PATH . "admin-head.php");
+				require_once(VIEWS_PATH . "admin-header.php");
+				require_once(VIEWS_PATH . "admin-user-list.php");
+			} else {
+				$this->userPath();
+			}
+		}
 
     }
 
