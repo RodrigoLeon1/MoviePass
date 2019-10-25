@@ -7,10 +7,17 @@
         "price": "500"
     },
     {
-        "id": "5",
-        "name": "Test",
-        "address": "555",
-        "capacity": "71 sth",
-        "price": "55"
+        "id": "2",
+        "name": "Del Paseo",
+        "address": "20000",
+        "capacity": "Shopping Del Paseo",
+        "price": "280"
+    },
+    {
+        "id": "7",
+        "name": "Cine1",
+        "address": "100",
+        "capacity": "Calle 101",
+        "price": "30"
     }
 ]

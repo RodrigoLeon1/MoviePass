@@ -1,12 +1,12 @@
 <?php
+
     namespace Config;
 
     use Config\Request as Request;
 
-    class Router
-    {
-        public static function Route(Request $request)
-        {
+    class Router {
+        
+        public static function Route(Request $request) {
             $controllerName = $request->getcontroller() . 'Controller';
 
             $methodName = $request->getmethod();

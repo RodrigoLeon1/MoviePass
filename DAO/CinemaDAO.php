@@ -20,7 +20,7 @@
 				$parameters["capacity"] = $cinema->getCapacity();
 				$parameters["ticket_value"] = $cinema->getPrice();
                 $this->connection = Connection::getInstance();
-				$this->connection->ExecuteNonQuery($query, $parameters);
+				$this->connection->executeNonQuery($query, $parameters);
 			}
 			catch (Exception $e) {
 				throw $e;

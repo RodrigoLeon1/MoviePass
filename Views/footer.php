@@ -5,7 +5,7 @@
         </div>
     </footer>
 
-    <script src="<?=LIBS_PATH?>/Glider/glider.min.js"></script>
+    <script src="<?= LIBS_PATH ?>Glider/glider.min.js"></script>
     <script>
         new Glider(document.querySelector('.glider'), {
             slidesToShow: 4,

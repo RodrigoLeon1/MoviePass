@@ -8,35 +8,35 @@
 
         <ul class="nav-list">
             <li>
-                <a href="<?= FRONT_ROOT ?>/movie/nowPlaying" class="nav-link">Now playing</a>
+                <a href="<?= FRONT_ROOT ?>movie/nowPlaying" class="nav-link">Now playing</a>
             </li>
             <li>
-                <a href="<?= FRONT_ROOT ?>/movie/comingSoon" class="nav-link">Coming soon</a>
+                <a href="<?= FRONT_ROOT ?>movie/comingSoon" class="nav-link">Coming soon</a>
             </li>
-
-            <?php if (!isset($_SESSION["loggedUser"])): ?>
+            
+            <?php if(!isset($_SESSION["loggedUser"])): ?>
             <li>
                 <a href="<?= FRONT_ROOT ?>user/registerPath" class="nav-link">Register</a>
             </li>
             <?php endif; ?>
-
-            <?php if (!isset($_SESSION["loggedUser"])): ?>
+            
+            <?php if(!isset($_SESSION["loggedUser"])): ?>
             <li>
                 <a href="<?= FRONT_ROOT ?>user/loginPath" class="nav-link">Login</a>
             </li>
             <?php endif; ?>
 
-            <?php if (isset($_SESSION["loggedUser"])): ?>
-                <?php $user = $_SESSION["loggedUser"]; ?>
+            <?php if(isset($_SESSION["loggedUser"])): ?>      
+                <?php $user = $_SESSION["loggedUser"] ?>
                 <li>
                 	<a href="<?= FRONT_ROOT ?>user/loginPath" class="nav-link">
-                        <?= $user->getMail(); ?>
+                        <?= $user->getMail() ?>
                         <i class="icon ion-md-arrow-dropdown"></i>
                     </a>
                     <!-- SubMenu -->
                     <ul class="sub-menu">
-						<li>
-                            <a href="<?= FRONT_ROOT ?>user/account" class="nav-link">Account</a>
+                        <li>
+                            <a href="<?= FRONT_ROOT ?>user/account" class="nav-link">Account</a>                            
                         </li>
 
                         <?php if($user->getRole() == 1): ?>

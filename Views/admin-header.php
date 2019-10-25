@@ -39,7 +39,7 @@
                         </li>
                         <li>
                             <i class="icon ion-md-remove"></i>
-                            Add show
+                            <a href="">Add show</a>                            
                         </li>
                     </ul>
                 </li>

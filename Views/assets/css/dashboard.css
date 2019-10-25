@@ -47,6 +47,7 @@ hr {
     border-bottom: 1px solid #038b9a;
 }
 
+/* Navbar */
 .nav-container {
     background-color: #fff;
     border-right: 1px solid #000;
@@ -96,6 +97,7 @@ hr {
     margin: 2rem;
 }
 
+/* Error */
 .error-container {    
     margin: 2rem;
     width: 40%;
@@ -115,6 +117,7 @@ hr {
     margin-right: 1.3rem;
 }
 
+/* Dashboard */
 .dashboard-container {
     width: 85%;
     margin-top: 5rem;
@@ -135,8 +138,56 @@ hr {
     width: 25rem;
     padding: 4rem;
     border-radius: 1rem;
+    font-size: 1.5rem;
 }
 
+.dash-item p {
+    padding: 1rem;    
+    font-size: 2rem;
+}
+
+.dashboard-movies {
+    margin: 5rem;
+    font-size: 2.5rem;    
+}
+
+.dashboard-movies hr {
+    width: 16.5%;
+}
+
+.dashboard-movies > a {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    border: 1px solid #038b9a;
+    padding: 1rem;
+    transition: all .3s ease-in-out;
+}
+
+.dashboard-movies > a:hover {
+    border: 1px solid #fff;
+    color: #038b9a;
+}
+
+.movies-container {
+    padding: 2rem;
+    display: grid;
+    max-width: 70%;    
+    grid-template-columns: repeat(4, 1fr);    
+}
+
+.movie {    
+    width: 200px;    
+}
+
+.movie img {
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.75);
+}
+
+
+
+/*  */
 .content-container {
     background-color: #323c48;
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);

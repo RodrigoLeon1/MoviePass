@@ -5,26 +5,28 @@
             <img src="<?= IMG_PATH_TMDB . $poster_path ?> ">
             <br><br>
 
-            <form method="POST" action="<?= FRONT_ROOT ?>show/purchaseTicket">
+            <form method="POST" action="<?= FRONT_ROOT ?>test/purchaseTicket">
+                <input id="idMovie" name="idMovie" type="hidden" value="">
                 <button class="btn-l" type="submit">Buy ticket</button>
             </form>
         </div>
 
         <div class="specification_Style">
             <div>
-                <p class="title1_Style">SYNOPSIS </p>
+                <p class="title1_Style">SYNOPSIS</p>
             </div>
             <div>
                 <p class="synopsis_Style">
                     <?= $overview ?>
                 </p>
             </div>
+            
             <br><br><br>
-            <ul>
-                <br>
+
+            <ul>                
                 <li>
                     <div class="label_Style">
-                    <i class="icon ion-md-remove"></i>
+                        <i class="icon ion-md-arrow-dropright"></i>
                         Genre
                     </div>
                     <div class="data_Style">Terror</div>
@@ -33,7 +35,7 @@
                 <br>
                 <li>
                     <div class="label_Style">
-                        <i class="icon ion-md-remove"></i>
+                        <i class="icon ion-md-arrow-dropright"></i>
                         Age restriction
                     </div>
                     <div class="data_Style">
@@ -48,7 +50,16 @@
                 <br>
                 <li>
                     <div class="label_Style">
-                        <i class="icon ion-md-remove"></i>
+                        <i class="icon ion-md-arrow-dropright"></i>
+                        Duration
+                    </div>
+                    <div class="data_Style"><?= $vote_average ?></div>
+                </li>     
+                <br>
+                <br>           
+                <li>
+                    <div class="label_Style">
+                        <i class="icon ion-md-arrow-dropright"></i>
                         Rating
                     </div>
                     <div class="data_Style"><?= $vote_average ?></div>
@@ -57,7 +68,7 @@
                 <br>
                 <li>
                     <div class="label_Style">
-                        <i class="icon ion-md-remove"></i>
+                        <i class="icon ion-md-arrow-dropright"></i>
                         Release date
                     </div>
                     <div class="data_Style"><?= $release_date ?></div>

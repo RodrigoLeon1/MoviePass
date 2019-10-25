@@ -13,7 +13,7 @@
 
             <div class="img-account">
                 <img src="<?= IMG_PATH ?>profile.jpg" alt="Profile picture">
-                <!-- <a href="" class="btn-l">Edit Account</a> -->
+                <a href="" class="btn-l">Edit Account</a>
             </div>
             
             <div class="content-account">

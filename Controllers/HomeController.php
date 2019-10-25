@@ -1,12 +1,11 @@
 <?php
+
     namespace Controllers;
 
     use Controllers\MovieController as MovieController;
 
-    class HomeController
-    {
-        public function Index($message = "")
-        {
+    class HomeController {
+        public function Index() {
             $movieController = new MovieController();
             $movies = $movieController->showMoviesNowPlaying();
             $title = 'MoviePass';

@@ -16,7 +16,7 @@
     <!--Fonts-->
     <link href="https://fonts.googleapis.com/css?family=Oxygen:300,400&display=swap" rel="stylesheet">
     <!--Styles-->
-    <link rel="stylesheet" href="<?=CSS_PATH?>/style.css">
+    <link rel="stylesheet" href="<?= CSS_PATH ?>style.css">
     <!--Styles Glider-->
-    <link rel="stylesheet" href="<?=LIBS_PATH?>/Glider/glider.min.css">
+    <link rel="stylesheet" href="<?= LIBS_PATH ?>Glider/glider.min.css">
 </head>

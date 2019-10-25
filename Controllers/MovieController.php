@@ -11,21 +11,21 @@
         private $movieDAO;
         private $apiDAO;
 
-        public function __construct()
-        {
+        public function __construct() {
             $this->movieDAO = new MovieDAO();
             $this->apiDAO = new Api();
         }
 
-        public function showMoviesNowPlaying () {
+        public function showMoviesNowPlaying() {
             return $this->movieDAO->getAll();
         }
 
-        public function showMovie ($id) {
+        // $id -> Movie $movie
+        // El dao se encargar de ir a $movie->getId()
+        public function showMovie($id) {
             $movies = $this->movieDAO->getAll();
             foreach ($movies as $movie) {
-                if ($movie->getId() == $id) {
-                    $id = $id;
+                if ($movie->getId() == $id) {                    
                     $title = $movie->getTitle();
                     $poster_path = $movie->getPosterPath();
                     $release_date = $movie->getReleaseDate();

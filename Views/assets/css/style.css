@@ -85,10 +85,16 @@ hr {
 }
 
 .nav-link {
-    font-weight: 500;
+    font-weight: 600;
     text-shadow: 2px 1px 7px rgba(0, 0, 25, 1);
     color: #fff;
+    transition: all .3s ease-in-out;
 }
+
+.nav-link:hover {
+    color: rgba(255, 255, 0, 1);
+}
+
 
 .sub-menu {
     width: 13rem;
@@ -217,6 +223,24 @@ hr {
 }
 
 
+/* Parallax */
+.parallax-banner {
+    height: 40rem;
+    background-image: url('/MoviePass/Views/assets/img/w2.png');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    border-top: 1px solid #171b21;
+    border-bottom: 1px solid #171b21;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;    
+    text-shadow: 2px 1px 7px rgba(0, 0, 25, 1);
+}
+
+
 /* Footer */
 .ft-container {
     background-color: #171b21;    
@@ -274,7 +298,41 @@ hr {
     width: 50%;
     display: flex;
     align-items: center;
-    justify-content: space-around;    
+    justify-content: space-around;   
+    font-size: 1.3rem; 
+}
+
+.filter-form select,
+.filter-form input {
+    margin-left: 1rem;
+    padding: .5rem;
+    color: #fff;
+    text-align: center;
+    background-color: #171b21;
+    border: none;
+    border: 1px solid rgba(255, 255, 0, .5);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.test {
+    display: block;
+    height: 10rem !important;
+    margin: 10rem;
+    padding: 10rem;
+}
+
+[type="date"] {
+    background: url('/MoviePass/Views/assets/img/calendar.png')  97% 50% no-repeat;
+    background-color: #171b21;
+}
+
+[type="date"]::-webkit-inner-spin-button {
+    display: none;
+}
+
+[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
 }
 
 .btn-f {
@@ -288,7 +346,6 @@ hr {
     padding-right: 1rem;
     cursor: pointer;
 }
-
 
 .movie-container {    
     display: grid;
@@ -341,7 +398,6 @@ hr {
 }
 
 
-
 /* LOGIN/REGISTER PAGE */
 .login-container,
 .register-container {
@@ -365,14 +421,41 @@ hr {
     align-items: center;
 }
 
-.login-content h3,
-.register-content h3 {
-    text-transform: uppercase;
-    font-size: 1.5rem;
+.sign-brand {    
+    position: relative;
+    top: -6rem;
+    font-size: 2rem;        
 }
 
-.register-content form {
-    height: 65%;
+.sign-brand a > i {
+    color: #fff;        
+    font-style: normal;
+}
+
+.sign-header {    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 60%;       
+}
+
+.sign-header span {
+    color: rgba(255, 255, 0, .5);
+}
+
+.sign-header h3,
+.sign-header p {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.sign-header p > a {
+    color: yellow;
+} 
+
+.sign-header p > a:hover {
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .login-form,
@@ -403,7 +486,7 @@ hr {
     padding: .6rem;
     background-color: #222831;
     border: none;
-    border-bottom: 1px solid yellow;
+    border-bottom: 1px solid rgba(255, 255, 0, .5);
     color: #fff;
 }
 
@@ -432,18 +515,35 @@ hr {
     margin-right: 0.3rem;
 }
 
+.register-extra {    
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    font-weight: 700;
+}
+
 .btn-fb {
     display: block;
     height: 3.5rem;
-    width: 17rem;
+    width: 10rem;
     color: #fff;
     background-color: #4267b2;
     border: 1px solid #29487d;
     cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.register-img {
-    background-image: url('assets/img/w4.png');
+.btn-fb i {    
+    margin-right: .5rem;
+    font-size: 1.5rem;
+}
+
+.register-img {    
     background-position: center;
     background-size: cover;    
 }
@@ -476,19 +576,10 @@ hr {
 
 
 /* Datasheet page*/
-.specification2_Style {    
-    width:245px; 
-    float:right; 
-}
-
 .title1_Style {    
     font-size: 2.5rem; 
     color:yellow;
-}
-
-.title2_Style {
-    font-size: 2rem; 
-    color:#fff;
+    font-weight: 700;
 }
 
 .synopsis_Style {
@@ -497,25 +588,6 @@ hr {
     font-size: 1.5rem;
     margin-bottom: 2%;
     
-}
-
-.tableTitle_Style {
-    font-size: 200%;     
-}
-
-.schedule_Style {
-    font-size: 130%;
-    display: inline;
-    color: yellow;
-}
-
-.cinemaName_Style {
-    font-size: 200%;
-}
-
-.day_Style {
-    font-size: 180%;
-    margin-top: 4%;
 }
 
 .specification_Style {
@@ -530,8 +602,13 @@ hr {
     color: #fff;
 }
 
+.label_Style i {
+    font-size: 2rem;
+}
+
 .data_Style {
     margin-top: 1%;
+    margin-left: 1rem;
     font-size: 150%;
     color: #919191;
 }
@@ -539,7 +616,7 @@ hr {
 .poster_Style {
     width:245px; 
     float:left;
-    text-align: center;    
+    text-align: center;        
 }
 
 .poster_Style img {
@@ -561,22 +638,8 @@ hr {
     padding: .6rem;
     background-color: #222831;
     border: none;
-    border-bottom: 1px solid yellow;
+    border-bottom: 1px solid rgba(255, 255, 0, .5);
     color: #fff;
-}
-
-.cinemaAndSchedules_Style {
-    margin-top: 130px;
-}
-
-.item_Style {
-    float: left;
-    margin-bottom: 2%;
-    margin-right: 30px; 
-}
-
-.scheduleBox_style {
-    display: inline-block;
 }
 
 .datasheet-video {
@@ -589,75 +652,33 @@ hr {
 }
 
 .datasheet-video h4 {
-    font-size: 2rem;
+    font-size: 2.5rem;
 }
 
 
-/* Account page */
-.account-head {
-    background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
-}
-
-.account-container {
+/* Purchase ticket */
+.purchase-container {
+    height: 100vh;
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    margin-bottom: 5rem;    
+    grid-template-columns: 1.2fr 1fr;    
 }
 
-.img-account {    
-    position: relative;
-    top: -60%;    
+.purchase-form {
+    margin: 0 auto;
 }
 
-.img-account img {
-    width: 250px;
-    border-radius: 10rem;
-    box-shadow: 1px 2px 3px 1px rgba(0,0,0,0.75);    
+.purchase-seats {
+    margin: 0 auto;
 }
-
-.img-account > .btn-l {
-    margin-top: 1rem;
-    display: block;     
-    height: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-}
-
-.content-account {
-    text-align: left;
-}
-
-.content-account > .item-account {    
-    height: 7rem;
-}
-
-.content-account > .item-account > h2, p {
-    display: inline-block;
-    padding: 1rem;
-}
-
-.content-account > .item-account > h2 {
-    width: 10%;    
-}
-
-.content-account > .item-account > p {
-    position: relative;
-    left: 10%;
-    width: 60%;    
-    border-bottom: 1px solid yellow;    
-}
-
 
 
 /* CINEMA SEATS - TEST */
 .theatre {
     display: flex;
     position: relative;
-    top: 70%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 25%;
+    right: 20%;
+    /* transform: translate(-50%, -50%); */
   }
   
   .cinema-seats {
@@ -789,3 +810,62 @@ hr {
   .right .row-7 .seat {
     transform: skew(-20deg);
   }
+
+
+  
+/* Account page */
+.account-head {
+    background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+}
+
+.account-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    margin-bottom: 5rem;    
+}
+
+.img-account {    
+    position: relative;
+    top: -60%;    
+}
+
+.img-account img {
+    width: 250px;
+    border-radius: 10rem;
+    box-shadow: 1px 2px 3px 1px rgba(0,0,0,0.75);    
+}
+
+.img-account > .btn-l {
+    margin-top: 1rem;
+    display: block;     
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+.content-account {
+    text-align: left;
+}
+
+.content-account > .item-account {    
+    height: 7rem;
+}
+
+.content-account > .item-account > h2, p {
+    display: inline-block;
+    padding: 1rem;
+}
+
+.content-account > .item-account > h2 {
+    width: 10%;    
+}
+
+.content-account > .item-account > p {
+    position: relative;
+    left: 10%;
+    width: 60%;    
+    border-bottom: 1px solid rgba(255, 255, 0, .5);    
+}
+

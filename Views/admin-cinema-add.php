@@ -1,8 +1,15 @@
     <main>
         <h2 class="dash-title">Add cinema</h2>
         <hr>
-        <div class="dashboard-container">
 
+        <?php ?>
+        <div class="error-container">
+            <i class="icon ion-md-close-circle-outline"></i>
+            <h3>Error message</h3>
+        </div>
+        <?php ?>
+        
+        <div class="dashboard-container">            
             <form class="content-container" action="<?= FRONT_ROOT ?>cinema/add" method="post">
                 <label>
                     <h4>Insert name:</h4>
