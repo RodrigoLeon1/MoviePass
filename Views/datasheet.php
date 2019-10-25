@@ -20,12 +20,13 @@
                     <?= $overview ?>
                 </p>
             </div>
+            
             <br><br><br>
-            <ul>
-                <br>
+
+            <ul>                
                 <li>
                     <div class="label_Style">
-                    <i class="icon ion-md-remove"></i>
+                        <i class="icon ion-md-arrow-dropright"></i>
                         Genre
                     </div>
                     <div class="data_Style">Terror</div>
@@ -34,7 +35,7 @@
                 <br>
                 <li>
                     <div class="label_Style">
-                        <i class="icon ion-md-remove"></i>
+                        <i class="icon ion-md-arrow-dropright"></i>
                         Age restriction
                     </div>
                     <div class="data_Style">
@@ -49,7 +50,16 @@
                 <br>
                 <li>
                     <div class="label_Style">
-                        <i class="icon ion-md-remove"></i>
+                        <i class="icon ion-md-arrow-dropright"></i>
+                        Duration
+                    </div>
+                    <div class="data_Style"><?= $vote_average ?></div>
+                </li>     
+                <br>
+                <br>           
+                <li>
+                    <div class="label_Style">
+                        <i class="icon ion-md-arrow-dropright"></i>
                         Rating
                     </div>
                     <div class="data_Style"><?= $vote_average ?></div>
@@ -58,7 +68,7 @@
                 <br>
                 <li>
                     <div class="label_Style">
-                        <i class="icon ion-md-remove"></i>
+                        <i class="icon ion-md-arrow-dropright"></i>
                         Release date
                     </div>
                     <div class="data_Style"><?= $release_date ?></div>

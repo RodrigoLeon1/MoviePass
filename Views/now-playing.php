@@ -7,7 +7,7 @@
             <label>
                 Category:
                 <select name="category">
-                    <option value="value1">Value 1</option>
+                    <option class="test" value="value1">Value 1</option>
                     <option value="value2">Value 2</option>
                     <option value="value3">Value 3</option>
                 </select>
@@ -17,7 +17,10 @@
                 <input type="date" name="" id="">
             </label>
 
-            <button type="submit" class="btn-f">Filter</button>
+            <button type="submit" class="btn-f">
+                <i class="icon ion-md-search"></i>
+                Filter
+            </button>
         </form>
     </div>
 
