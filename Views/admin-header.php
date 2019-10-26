@@ -35,11 +35,11 @@
                     <ul>
                         <li>
                             <i class="icon ion-md-remove"></i>
-                            Add movie
+                            <a href="<?= FRONT_ROOT ?>movie/addMoviePath">Add movie</a>
                         </li>
                         <li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="">Add show</a>                            
+                            <a href="<?= FRONT_ROOT ?>show/addShowPath">Add show</a>                            
                         </li>
                     </ul>
                 </li>
