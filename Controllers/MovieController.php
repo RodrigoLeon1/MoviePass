@@ -68,7 +68,22 @@
 
 		public function getNowPlayingMoviesFromDAO () {
 			$this->movieDAO->getNowPlayingMoviesFromDAO();
-		}
+        }
+        
+
+        public function addMoviePath() {
+			if (isset($_SESSION["loggedUser"])) {
+				$admin = $_SESSION["loggedUser"];
+				require_once(VIEWS_PATH . "admin-head.php");
+				require_once(VIEWS_PATH . "admin-header.php");
+				require_once(VIEWS_PATH . "admin-movie-add.php");
+			} else {
+                $this->userPath();
+            }            
+        }
+
+        
+
     }
 
  ?>

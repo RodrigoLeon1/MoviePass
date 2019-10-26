@@ -3,7 +3,7 @@
     <hr>
     <div class="dashboard-container">
 
-        <form class="content-container" action="<?= FRONT_ROOT ?>cinema/add" method="post">
+        <form class="content-container" action="<?= FRONT_ROOT ?>show/add" method="post">
             <label>
                 <h4>Insert cinema:</h4>
                 <select name="cinemas">

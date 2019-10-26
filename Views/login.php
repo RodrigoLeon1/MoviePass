@@ -12,7 +12,7 @@
                 </div>
 
                 <div class="sign-header">
-                    <h3> <span>.</span> Sign in to continue wuoeijwiojw</h3>
+                    <h3> <span>.</span> Sign in to continue</h3>
                     <p>
                         Not a member yet? 
                         <a href="<?= FRONT_ROOT ?>user/registerPath"> Register now</a>                        
