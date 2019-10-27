@@ -71,7 +71,7 @@
         }
         
 
-        public function addMoviePath() {
+        public function addMoviePath($alert = "") {
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				require_once(VIEWS_PATH . "admin-head.php");

@@ -23,7 +23,7 @@
                 <input type="date" name="date" id="" required>
             </label>            
                             
-            <button type="submit">Add show</button>
+            <button type="submit" class="btn">Add show</button>
         </form>
 
     </div>

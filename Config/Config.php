@@ -20,13 +20,19 @@
 	
 	//API TMDB
 	define("URL_TMDB", "https://api.themoviedb.org/3");
-	define("TOKEN_TMDB", "api_key=5d5fe41bdf62bea9ea2f194984b9ad74");
+	define("TOKEN_TMDB", "5d5fe41bdf62bea9ea2f194984b9ad74");
 	define("SLASH_MOVIE_TMDB", "/movie");
 	define("LANGUAGE_TMDB", "&language=en-US");
 	define("PAGE_TMDB", "&page=");
 	define("IMG_PATH_TMDB", "https://image.tmdb.org/t/p/original/");
 
 	define("API_N", "5d5fe41bdf62bea9ea2f194984b9ad74");
-	define("NOW_PLAYING_PATH", "https://api.themoviedb.org/3/movie/now_playing?api_key=" . API_N . "&language=en-US&page=1")
+	define("NOW_PLAYING_PATH", "https://api.themoviedb.org/3/movie/now_playing?api_key=" . API_N . "&language=en-US&page=1");
 
+	//ERROR -- No se si es la mejor forma de hacerlo
+	define("CINEMA_EXIST", "This cinema has already been registered.");
+	define("MOVIE_EXIST", "This movie has already been registered.");
+	// define(" ", " ");
+	define("LOGIN_ERROR", "You have entered an invalid e-mail or password. Try again!");
+	define("REGISTER_ERROR", "This email address has already been registered.");
 ?>

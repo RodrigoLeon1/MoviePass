@@ -16,6 +16,15 @@
                     </p>
                 </div>
 
+                <?php if($alert != null): ?>
+                <div class="error-container">
+                    <p>
+                        <i class="icon ion-md-close-circle-outline"></i>
+                        <?= $alert ?>
+                    </p>
+                </div>
+                <?php endif; ?>                
+
                 <form action="<?= FRONT_ROOT ?>user/validateRegister" method="post" class="register-form">
                     <label>
                         <input type="text" name="firstName" id="" placeholder="Insert your name" autofocus required/>

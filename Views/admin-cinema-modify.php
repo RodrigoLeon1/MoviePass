@@ -23,9 +23,8 @@
                     <h4>Price for ticket:</h4>
                     <input type="number" name="price" id="" value="<?php echo $cinema->getPrice(); ?>">
                 </label>
-                <button type="submit">Modify</button>
+                <button type="submit" class="btn">Modify</button>
             </form>
-
         </div>
     </main>
 

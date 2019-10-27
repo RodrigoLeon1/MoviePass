@@ -17,16 +17,19 @@
         }
 
         public function validateRegister($firstName, $lastName, $dni, $mail, $password) {
-            $user = new User();
-            $user->setFirstName($firstName);
-            $user->setLastName($lastName);
-            $user->setDni($dni);
-            $user->setMail($mail);
-            $user->setPassword($password);
-            $user->setRole(0);
-            $this->userDAO->add($user);
-            $_SESSION["loggedUser"] = $user;
-            $this->userPath();
+            if($this->userDAO->getByMail($mail) == null) {
+                $user = new User();
+                $user->setFirstName($firstName);
+                $user->setLastName($lastName);
+                $user->setDni($dni);
+                $user->setMail($mail);
+                $user->setPassword($password);
+                $user->setRole(0);
+                $this->userDAO->add($user);
+                $_SESSION["loggedUser"] = $user;
+                $this->userPath();
+            }
+            return $this->registerPath(REGISTER_ERROR);
         }
 
         public function validateLogin($mail, $password) {
@@ -40,7 +43,7 @@
 					return $this->userPath();
 				}
 			}
-            return $this->loginPath("You have entered an invalid e-mail or password. Try again!");
+            return $this->loginPath(LOGIN_ERROR);
         }
 
         public function list() {
@@ -89,7 +92,7 @@
             }
         }
 
-        public function registerPath() {
+        public function registerPath($alert = "") {
             if(!isset($_SESSION["loggedUser"])) {
                 $title = 'MoviePass — Register';
                 $img = IMG_PATH . '/w3.jpg';

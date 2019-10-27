@@ -2,12 +2,12 @@
         <h2 class="dash-title">Add cinema</h2>
         <hr>
 
-        <?php ?>
+        <?php if($alert != null): ?>
         <div class="error-container">
             <i class="icon ion-md-close-circle-outline"></i>
-            <h3>Error message</h3>
+            <h3><?= $alert ?></h3>
         </div>
-        <?php ?>
+        <?php endif; ?>
         
         <div class="dashboard-container">            
             <form class="content-container" action="<?= FRONT_ROOT ?>cinema/add" method="post">
@@ -27,7 +27,7 @@
                     <h4>Price for ticket:</h4>
                     <input type="number" name="price" id="" required>
                 </label>
-                <button type="submit">Add cinema</button>
+                <button type="submit" class="btn">Add cinema</button>
             </form>
 
         </div>

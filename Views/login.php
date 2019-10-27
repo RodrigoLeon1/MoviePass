@@ -31,11 +31,11 @@
                 <form action="<?= FRONT_ROOT ?>/user/validateLogin" method="POST" class="login-form">
                     <label>
                         <h4>Mail</h4>
-                        <input type="email" name="mail" id="email" placeholder="Insert your mail" autofocus>
+                        <input type="email" name="mail" id="email" placeholder="Insert your mail" required autofocus>
                     </label>
                     <label>
                         <h4>Password</h4>
-                        <input type="password" name="password" id="password" placeholder="Insert your password">
+                        <input type="password" name="password" id="password" placeholder="Insert your password" required>
                     </label>
                     <button class="btn-l" type="submit">Login</button>
                 </form>

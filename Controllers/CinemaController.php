@@ -28,7 +28,7 @@
 			$this->listCinemaPath();
         }
 
-        public function addCinemaPath () {
+        public function addCinemaPath($alert = "") {
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
 				require_once(VIEWS_PATH . "admin-head.php");
@@ -37,7 +37,7 @@
 			}
         }
 
-		public function listCinemaPath () {
+		public function listCinemaPath() {
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
 				require_once(VIEWS_PATH . "admin-head.php");
@@ -46,12 +46,12 @@
 			}
         }
 
-		public function remove ($id) {
+		public function remove($id) {
 			$this->cinemaDAO->deleteById($id);
 			$this->list();
 		}
 
-		public function getById ($id) {
+		public function getById($id) {
 			$cinema = $this->cinemaDAO->getById($id);
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];

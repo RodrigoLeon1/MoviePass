@@ -24,7 +24,7 @@
 									<td><?= $user->getLastName(); ?></td>
 									<td><?= $user->getDni(); ?></td>
 									<td><?= $user->getMail(); ?></td>
-									<td><button type="submit" name="id" class="btn" value="<?php ?>"> Remove </button></td>
+									<td><button type="submit" name="id" class="btn btn-delete" value="<?php ?>"> Remove </button></td>
 								</tr>
 							<?php endforeach; ?>
 						</tbody>
