@@ -1,18 +1,18 @@
     <main>
         <div class="register-container">
-            <div class="register-content" >       
-                
-                <div class="sign-brand">                    
+            <div class="register-content" >
+
+                <div class="sign-brand">
                     <a href="<?= FRONT_ROOT ?>">
-                        <i class="icon ion-md-play">MoviePass.</i>                        
+                        <i class="icon ion-md-play">MoviePass.</i>
                     </a>
-                </div>   
+                </div>
 
                 <div class="sign-header">
                     <h3> <span>.</span> Register to start</h3>
                     <p>
-                        Are you a member? 
-                        <a href="<?= FRONT_ROOT ?>user/loginPath"> Login now</a>                        
+                        Are you a member?
+                        <a href="<?= FRONT_ROOT ?>user/loginPath"> Login now</a>
                     </p>
                 </div>
 
@@ -48,8 +48,8 @@
                 <div class="register-extra">
                     <p>Register with: </p>
                     <button class="btn-fb">
-                        <i class="icon ion-logo-facebook"></i>       
-                        <span>Facebook</span>             
+                        <i class="icon ion-logo-facebook"></i>
+                        <span>Facebook</span>
                     </button>
                 </div>
             </div>

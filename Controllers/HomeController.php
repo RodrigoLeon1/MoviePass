@@ -7,7 +7,7 @@
     class HomeController {
         public function Index() {
             $movieController = new MovieController();
-            $movies = $movieController->showMoviesNowPlaying();
+            $movies = $movieController->moviesNowPlayingOnShow();
             $title = 'MoviePass';
 			require_once(VIEWS_PATH . "header.php");
 			require_once(VIEWS_PATH . "nav-video.php");

@@ -2,56 +2,67 @@
 
     namespace Models;
 
+	use Models\Cinema as Cinema;
+	use Models\Movie as Movie;
+
     class Show
     {
-        private $id_show;
-        private $id_cinema;
-        private $id_movie;
-        private $day;
-        private $hour;
-        
+        private $id;
+        private $cinema;
+        private $movie;
+        private $date;
+        private $time;
 
-        public function getIdShow()
-        {
-            return $this->id_show;
-        }
-        public function getIdCinema()
-        {
-            return $this->id_cinema;
-        }
-        public function getIdMovie()
-        {
-            return $this->id_movie;
-        }
-        public function getDay()
-        {
-            return $this->day;
-        }
-        public function getHour()
-        {
-            return $this->hour;
+		public function __construct () {
+			$this->cinema = new Cinema ();
+			$this->movie = new Movie ();
+		}
+
+		public function getId() {
+            return $this->id;
         }
 
-        public function setIdShow($id_show)
-        {
-            $this->id_show = $id_show;
+        public function setId($id) {
+            $this->id = $id;
+            return $this;
         }
-        public function setIdCinema($id_cinema)
-        {
-            $this->id_cinema = $id_cinema;
+
+		public function getCinema() {
+			return $this->cinema;
+		}
+
+		public function setCinema(Cinema $cinema) {
+			$this->cinema = $cinema;
+			return $this;
+		}
+
+		public function getMovie() {
+            return $this->movie;
         }
-        public function setIdMovie($id_movie)
-        {
-            $this->id_movie = $id_movie;
+
+        public function setMovie(Movie $movie) {
+            $this->movie = $movie;
+            return $this;
         }
-        public function setDay($day)
-        {
-            $this->day = $day;
+
+		public function getDate() {
+			return $this->date;
         }
-        public function setHour($hour)
-        {
-            $this->hour = $hour;
+
+        public function setDate($date) {
+            $this->date = $date;
+            return $this;
         }
+
+		public function getTime() {
+            return $this->time;
+        }
+
+        public function setTime($time) {
+            $this->time = $time;
+            return $this;
+        }
+
     }
 
 ?>

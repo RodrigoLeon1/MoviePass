@@ -59,19 +59,31 @@ DROP procedure IF EXISTS `users_getByMail`;
 DELIMITER $$
 CREATE PROCEDURE users_getByMail (IN mail VARCHAR(255))
 BEGIN
-	SELECT users.mail, users.password, users.FK_dni, users.FK_id_role
-    FROM users
+	SELECT 	users.mail,
+			users.password,
+			users.FK_id_role,
+			profile_users.dni,
+			profile_users.first_name,
+			profile_users.last_name
+	FROM users
+	INNER JOIN profile_users ON users.FK_dni = profile_users.dni
     WHERE (users.mail = mail);
 END$$
 
-DROP procedure IF EXISTS `profile_users_getByDNI`;
+DROP procedure IF EXISTS `users_getAll`;
 DELIMITER $$
-CREATE PROCEDURE profile_users_getByDNI (IN dni INT)
+CREATE PROCEDURE users_getAll ()
 BEGIN
-	SELECT profile_users.dni, profile_users.first_name, profile_users.last_name
-    FROM profile_users
-    WHERE (profile_users.dni = dni);
-END$$
+	SELECT 	users.mail,
+			users.password,
+			users.FK_id_role,
+			profile_users.dni,
+			profile_users.first_name,
+			profile_users.last_name
+	FROM users
+	INNER JOIN profile_users ON users.FK_dni = profile_users.dni
+	ORDER By profile_users.dni;
+END $$
 
 
 ----------------------------- CINEMAS -----------------------------
@@ -106,9 +118,7 @@ BEGIN
 END$$
 
 DROP procedure IF EXISTS `cinemas_modify`;
-
 DELIMITER $$
-
 CREATE PROCEDURE cinemas_modify (	IN id int,
 									IN name VARCHAR (255),
 									IN capacity INT,
@@ -117,8 +127,16 @@ CREATE PROCEDURE cinemas_modify (	IN id int,
 BEGIN
 	UPDATE cinemas SET cinemas.name = name, cinemas.capacity = capacity, cinemas.address = address, cinemas.ticket_value = ticket_value WHERE cinemas.id = id;
 END$$
-
 DELIMITER ;
+
+DROP procedure IF EXISTS `cinemas_getById`;
+DELIMITER $$
+CREATE PROCEDURE cinemas_getById (IN id INT)
+BEGIN
+	SELECT * FROM `cinemas` WHERE `movies`.`id` = id;
+END$$
+
+
 ----------------------------- MOVIES -----------------------------
 
 CREATE TABLE movies (
@@ -196,6 +214,77 @@ BEGIN
         (id, popularity, vote_count, video, poster_path, adult, backdrop_path, original_language, original_title, genre_ids, title, vote_average, overview, release_date);
 END$$
 
+DROP procedure IF EXISTS `movies_getById`;
+DELIMITER $$
+CREATE PROCEDURE movies_getById (IN id INT)
+BEGIN
+	SELECT * FROM `movies_now_playing` WHERE `movies_now_playing`.`id` = id;
+END$$
+
+
+----------------------------- SHOWS	 -----------------------------
+
+CREATE TABLE shows (
+	`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`FK_id_cinema` int,
+	`FK_id_movie` int,
+	`date` DATE NOT NULL,
+	`time` TIME NOT NULL,
+	CONSTRAINT `FK_id_cinema` FOREIGN KEY (`FK_id_cinema`) REFERENCES `cinemas` (`id`),
+	CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies_now_playing` (`id`)
+);
+
+DROP procedure IF EXISTS `shows_getAll`;
+DELIMITER $$
+CREATE PROCEDURE shows_getAll ()
+BEGIN
+	SELECT 	shows.id AS shows_id,
+			shows.date AS shows_date,
+			shows.time AS shows_time,
+			movies_now_playing.id AS movies_now_playing_id,
+			movies_now_playing.title AS movies_now_playing_title,
+			cinemas.id AS cinemas_id,
+			cinemas.name AS cinemas_name
+	FROM `shows`
+	INNER JOIN movies_now_playing ON movies_now_playing.id = shows.FK_id_movie
+	INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema;
+END$$
+
+DROP procedure IF EXISTS `shows_deleteById`;
+DELIMITER $$
+CREATE PROCEDURE shows_deleteById (IN id INT)
+BEGIN
+	DELETE FROM `shows` WHERE `shows`.`id` = id;
+END$$
+
+DROP procedure IF EXISTS `shows_getById`;
+DELIMITER $$
+CREATE PROCEDURE shows_getById (IN id INT)
+BEGIN
+	SELECT 	shows.id AS shows_id,
+			shows.date AS shows_date,
+			shows.time AS shows_time,
+			movies_now_playing.id AS movies_now_playing_id,
+			movies_now_playing.title AS movies_now_playing_title,
+			cinemas.id AS cinemas_id,
+			cinemas.name AS cinemas_name
+	FROM `shows`
+	INNER JOIN movies_now_playing ON movies_now_playing.id = shows.FK_id_movie
+	INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
+	WHERE (shows.id = id);
+END$$
+
+DROP procedure IF EXISTS `shows_modify`;
+DELIMITER $$
+CREATE PROCEDURE shows_modify (		IN id int,
+									IN id_cinema INT,
+									IN id_movie INT,
+									IN dat DATE,
+									IN tim TIME)
+BEGIN
+	UPDATE shows SET shows.	FK_id_cinema = id_cinema, shows.FK_id_movie = id_movie, shows.date = dat, shows.time = tim WHERE shows.id = id;
+END$$
+DELIMITER ;
 
 
 ----------------------------- PURCHASE -----------------------------
@@ -220,18 +309,6 @@ CREATE TABLE tickets (
 	`FK_id_show` int NOT NULL,
 	CONSTRAINT `FK_id_purchase` FOREIGN KEY (`FK_id_purchase`) REFERENCES `purchase` (`id_purchase`),
 	CONSTRAINT `FK_id_show` FOREIGN KEY (`FK_id_show`) REFERENCES `show` (`id_show`)
-);
-
-
------------------------------ PURCHASE -----------------------------
-
-CREATE TABLE shows (
-	`id_show` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	`date` DATE NOT NULL,
-	`FK_id_cinema` int,
-	`FK_id_movie` int,
-	CONSTRAINT `FK_id_cinema` FOREIGN KEY ('FK_id_cinema') REFERENCES `cinema` (`id_cinema`),
-	CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movie` (`id_movie`)
 );
 
 

@@ -2,15 +2,15 @@
 
     namespace DAO;
 
-    use Models\Movie as Movie;
+	use Models\Movie as Movie;
 
     class MovieDAO {
 
 		private $movieList = array();
 		private $tableName = "movies_now_playing";
 
-		public function add(Movie $movie) {
-			// try {
+		public function add (Movie $movie) {
+			try {
 				$query = "CALL movies_add_now_playing(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				$parameters["id"] = $movie->getId();
 				$parameters["popularity"] = $movie->getPopularity();
@@ -28,15 +28,14 @@
 				$parameters["release_date"] = $movie->getReleaseDate();
 				$this->connection = Connection::GetInstance();
 				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
-			// }
-			// catch (Exception $e) {
-				// throw $ex;
-			// }
+			}
+			catch (Exception $e) {
+				throw $ex;
+			}
         }
 
         public function getAll() {
 			try {
-				$cellList = array ();
 				$query = "SELECT * FROM " . $this->tableName;
 				$this->connection = Connection::getInstance();
 				$resultSet = $this->connection->execute($query);
@@ -157,6 +156,36 @@
 				}
 			}			
 			return $comingSoonMovies;
+		}
+
+		public function getById ($id) {
+			try {
+				$query = "CALL movies_getById(?)";
+				$parameters ["id"] = $id;
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+				$movie = new Movie();
+				foreach ($results as $values) {
+					$movie->setPopularity($values["popularity"]);
+					$movie->setVoteCount($values["vote_count"]);
+					$movie->setVideo($values["video"]);
+					$movie->setPosterPath($values["poster_path"]);
+					$movie->setId($values["id"]);
+					$movie->setAdult($values["adult"]);
+					$movie->setBackdropPath($values["backdrop_path"]);
+					$movie->setOriginalLanguage($values["original_language"]);
+					$movie->setOriginalTitle($values["original_title"]);
+					$movie->setGenreIds($values["genre_ids"]);
+					$movie->setTitle($values["title"]);
+					$movie->setVoteAverage($values["vote_average"]);
+					$movie->setOverview($values["overview"]);
+					$movie->setReleaseDate($values["release_date"]);
+				}
+				return $movie;
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
 		}
     }
 

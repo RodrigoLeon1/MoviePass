@@ -46,23 +46,28 @@
             $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
             foreach($results as $row) {
                 $user = new User();
-				$user = $this->profileUserDAO->getByDNI($row["FK_dni"]);
-                $user->setMail($row["mail"]);
+				$user->setMail($row["mail"]);
                 $user->setPassword($row["password"]);
-				$role = $this->roleDAO->getById($row["FK_id_role"]);
-				$user->setRole($role);
+				$user->setRole($row["FK_id_role"]);
+				$user->setDni($row["dni"]);
+				$user->setFirstName($row["first_name"]);
+				$user->setLastName($row["last_name"]);
             }
             return $user;
         }
 
 		public function getAll() {
-			$query = "SELECT * FROM " . $this->tableName;
+			$query = "CALL users_getAll";
 			$this->connection = Connection::GetInstance();
 			$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
 			foreach($results as $row) {
 				$user = new User();
+				$user->setFirstName($row["first_name"]);
+				$user->setLastName($row["last_name"]);
+				$user->setDni($row["dni"]);
 				$user->setMail($row["mail"]);
-				array_push ($this->userList, $user);
+				$user->setRole($row["FK_id_role"]);
+				array_push($this->userList, $user);
 			}
 			return $this->userList;
 		}

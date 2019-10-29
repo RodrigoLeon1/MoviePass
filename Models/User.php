@@ -30,13 +30,12 @@
         }
 
 		public function getRole() {
-			return $this->role->getId();
+			return $this->role;
 		}
 
-		public function setRole(Role $role) {
-			$this->role = new Role();
+		public function setRole($role) {
 			$this->role = $role;
-			return $this->role;
+			return $this;
 		}
 	}
 

@@ -4,25 +4,32 @@
 
     use DAO\MovieDAO as MovieDAO;    
     use Models\Movie as Movie;
+	use Controllers\ShowController as ShowController;
 
     class MovieController {
 
         private $movieDAO;        
+		private $showController;
 
         public function __construct() {
             $this->movieDAO = new MovieDAO();
+			$this->showController = new ShowController ();
         }
 
-        public function showMoviesNowPlaying() {
+        public function moviesNowPlaying() {
             return $this->movieDAO->getAll();
+        }
+
+		public function moviesNowPlayingOnShow() {
+            return $this->showController->moviesOnShow();
         }
 
         // $id -> Movie $movie
         // El dao se encargar de ir a $movie->getId()
         public function showMovie($id) {
-            $movies = $this->movieDAO->getAll();
+            $movies = $this->moviesNowPlaying();
             foreach ($movies as $movie) {
-                if ($movie->getId() == $id) {                    
+                if ($movie->getId() == $id) {
                     $title = $movie->getTitle();
                     $poster_path = $movie->getPosterPath();
                     $release_date = $movie->getReleaseDate();
@@ -41,7 +48,7 @@
         }
 
 		public function nowPlaying() {
-			$movies = $this->showMoviesNowPlaying();
+			$movies = $this->moviesNowPlayingOnShow();
 			$title = 'Now Playing';
 			$img = IMG_PATH . '/w4.png';
 			require_once(VIEWS_PATH . "header.php");
@@ -67,7 +74,6 @@
 		public function getNowPlayingMoviesFromDAO () {
 			$this->movieDAO->getNowPlayingMoviesFromDAO();
         }
-        
 
         public function addMoviePath($alert = "", $success = "") {
 			if (isset($_SESSION["loggedUser"])) {
@@ -77,7 +83,7 @@
 				require_once(VIEWS_PATH . "admin-movie-add.php");
 			} else {
                 $this->userPath();
-            }            
+            }
         }
 
         // 
@@ -94,6 +100,7 @@
         }
 
         
+
 
     }
 

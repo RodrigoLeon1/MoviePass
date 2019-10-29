@@ -17,27 +17,28 @@
         }
 
         public function validateRegister($firstName, $lastName, $dni, $mail, $password) {
+			$user = $this->add (0, $firstName, $lastName, $dni, $mail, $password);
+			$_SESSION["loggedUser"] = $user;
+            $this->userPath();
+        }
+
+		public function add ($role, $firstName, $lastName, $dni, $mail, $password) {
+			$user = new User();
+            $user->setFirstName($firstName);
+            $user->setLastName($lastName);
+            $user->setDni($dni);
+            $user->setMail($mail);
+            $user->setPassword($password);
+			$user->setRole($role);
+            $this->userDAO->add($user);
+			return $user;
+		}
             if($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) && $this->validateMailForm($mail)) {
                 if($this->userDAO->getByMail($mail) == NULL) {
-                    $user = new User();
-                    
-                    $role = new Role();
-                    $role->setId(0);
 
-                    $user->setFirstName($firstName);
-                    $user->setLastName($lastName);
-                    $user->setDni($dni);
-                    $user->setMail($mail);
-                    $user->setPassword($password);                    
-                    $user->setRole($role);
-                    $this->userDAO->add($user);
-                    $_SESSION["loggedUser"] = $user;
-                    $this->userPath();
-                }
-                return $this->registerPath(REGISTER_ERROR);
-            }
-            return $this->registerPath(EMPTY_FIELDS);
-        }
+        private function validateMailForm($mail) {
+            return (filter_var($mail, FILTER_VALIDATE_EMAIL)) ? TRUE : FALSE;
+        }        
 
         private function validateRegisterForm($firstName, $lastName, $dni, $email, $password) {
             if(empty($firstName) || empty($lastName) || empty($dni) || empty($email) || empty($password)) {
@@ -46,9 +47,22 @@
             return true;
         }
 
-        private function validateMailForm($mail) {
-            return (filter_var($mail, FILTER_VALIDATE_EMAIL)) ? TRUE : FALSE;
-        }        
+		public function addUser () {
+			if (isset($_SESSION["loggedUser"])) {
+				$admin = $_SESSION["loggedUser"];
+				require_once(VIEWS_PATH . "admin-head.php");
+				require_once(VIEWS_PATH . "admin-header.php");
+				require_once(VIEWS_PATH . "admin-user-add.php");
+			}
+			else {
+				$this->userPath();
+			}
+		}
+
+		public function adminAdd ($role, $firstName, $lastName, $dni, $mail, $password) {
+			$this->add($role, $firstName, $lastName, $dni, $mail, $password);
+			$this->list();
+		}
 
         public function validateLogin($mail, $password) {
             if($this->validateLoginForm($mail, $password) && $this->validateMailForm($mail)) {
@@ -80,7 +94,7 @@
                 $users = $this->userDAO->getAll();
 				require_once(VIEWS_PATH . "admin-head.php");
 				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-user-list.php");                
+				require_once(VIEWS_PATH . "admin-user-list.php");
             } else {
                 $this->userPath();
             }
@@ -113,8 +127,8 @@
             if(!isset($_SESSION["loggedUser"])) {
                 $title = "MoviePass — Login";
                 $img = IMG_PATH . "w5.png";
-                require_once(VIEWS_PATH . "header.php");                
-                require_once(VIEWS_PATH . "login.php");			
+                require_once(VIEWS_PATH . "header.php");
+                require_once(VIEWS_PATH . "login.php");
             } else {
                 $this->userPath();
             }
@@ -124,8 +138,8 @@
             if(!isset($_SESSION["loggedUser"])) {
                 $title = 'MoviePass — Register';
                 $img = IMG_PATH . '/w3.jpg';
-                require_once(VIEWS_PATH . "header.php");                
-                require_once(VIEWS_PATH . "register.php");			
+                require_once(VIEWS_PATH . "header.php");
+                require_once(VIEWS_PATH . "register.php");
             } else {
                 $this->userPath();
             }
@@ -142,12 +156,12 @@
                 $user = $_SESSION["loggedUser"];
                 $title = "My account";
 				require_once(VIEWS_PATH . "header.php");
-                require_once(VIEWS_PATH . "navbar.php");                
+                require_once(VIEWS_PATH . "navbar.php");
                 require_once(VIEWS_PATH . "my-account.php");
                 require_once(VIEWS_PATH . "footer.php");
 			} else {
                 $this->loginPath();
-            }            
+            }
         }
 
         public function modifyAccountPath() {

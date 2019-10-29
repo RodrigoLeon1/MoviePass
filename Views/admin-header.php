@@ -44,11 +44,26 @@
                         <li>
                             <i class="icon ion-md-remove"></i>
                             <a href="<?= FRONT_ROOT ?>show/addShowPath">Add show</a>                            
+                            <a href="<?= FRONT_ROOT ?>"></a>
                         </li>
                         <li>
                             <i class="icon ion-md-remove"></i>
                             <a href="<?= FRONT_ROOT ?>">View shows</a>                            
                         </li>                        
+                    </ul>
+                </li>
+                <li>
+                    <i class="icon ion-md-play-circle"></i>
+                    Shows
+                    <ul>
+                        <li>
+                            <i class="icon ion-md-remove"></i>
+                            <a href="<?= FRONT_ROOT ?>show/addShowPath">Add show</a>
+                        </li>
+                        <li>
+                            <i class="icon ion-md-remove"></i>
+                            <a href="<?= FRONT_ROOT ?>show/listShowsPath">List show</a>
+                        </li>
                     </ul>
                 </li>
                 <li>
@@ -58,6 +73,10 @@
 						<li>
                             <i class="icon ion-md-remove"></i>
                             <a href="<?= FRONT_ROOT ?>user/listUserPath">View users</a>
+                        </li>
+						<li>
+                            <i class="icon ion-md-remove"></i>
+                            <a href="<?= FRONT_ROOT ?>user/addUser">Add User</a>
                         </li>
                     </ul>
                 </li>

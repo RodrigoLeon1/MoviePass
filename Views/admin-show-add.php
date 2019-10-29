@@ -19,26 +19,36 @@
     <div class="dashboard-container">
 
         <form class="content-container" action="<?= FRONT_ROOT ?>show/add" method="post">
-            <label>
-                <h4>Insert cinema:</h4>
-                <select name="cinemas">
-                    <?php foreach($this->cinemas as $cinema){ ?>
-                    <option value=<?php $cinema->getId(); ?> > <?php echo $cinema->getName(); ?> </option>
-                    <?php } ?>
-                </select>
-            </label>
-            <label>
-                <h4>Insert movie:</h4>                
-                <select name="">
-                    <option value="">MOVIE1</option>
-                </select>
-            </label>
-            <label>
+
+			<label>
+				<h4>Select cinema:</h4>
+				<select class="" name="id_cinema">
+					<?php foreach ($cinemas as $cinema): ?>
+						<option value="<?= $cinema->getId(); ?>"><?= $cinema->getName(); ?></option>
+					<?php endforeach; ?>
+				</select>
+			</label>
+
+			<label>
+				<h4>Select Movie:</h4>
+				<select class="" name="id_movie">
+					<?php foreach ($movies as $movie): ?>
+						<option value="<?= $movie->getId(); ?>"><?= $movie->getTitle(); ?></option>
+					<?php endforeach; ?>
+				</select>
+			</label>
+
+			<label>
                 <h4>Insert date:</h4>
                 <input type="date" name="date" id="" required>
-            </label>            
-                            
-            <button type="submit" class="btn">Add show</button>
+            </label>
+
+			<label>
+                <h4>Insert hour:</h4>
+                <input type="time" name="time" id="" required>
+            </label>
+
+            <button type="submit">Add show</button>
         </form>
 
     </div>

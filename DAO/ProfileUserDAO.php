@@ -26,21 +26,6 @@
 			}
         }
 
-		public function getByDNI($dni) {
-            $user = null;
-            $query = "CALL profile_users_getByDNI (?)";
-            $parameters["dni"] = $dni;
-            $this->connection = Connection::GetInstance();
-            $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-            foreach($results as $row) {
-                $user = new User();
-                $user->setDni($row["dni"]);
-                $user->setFirstName($row["first_name"]);
-                $user->setLastName($row["last_name"]);
-            }
-            return $user;
-        }
-
     }
 
  ?>
