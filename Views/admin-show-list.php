@@ -1,5 +1,5 @@
     <main>
-        <h2 class="dash-title">Cinemas</h2>
+        <h2 class="dash-title">Shows</h2>
         <hr>
         <div class="dashboard-container">
 

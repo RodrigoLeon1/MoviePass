@@ -4,7 +4,7 @@
 
     use Models\Role as Role;
     use Models\User as User;
-	use DAO\UserDAO as UserDAO;	
+	use DAO\UserDAO as UserDAO;
     use Controllers\HomeController as HomeController;
     use Controllers\MovieController as MovieController;
 
@@ -17,10 +17,14 @@
         }
 
         public function validateRegister($firstName, $lastName, $dni, $mail, $password) {
-			$user = $this->add (0, $firstName, $lastName, $dni, $mail, $password);
-			$_SESSION["loggedUser"] = $user;
-            $this->userPath();
-        }
+			if($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) && $this->validateMailForm($mail)) {
+				if($this->userDAO->getByMail($mail) == NULL) {
+					$user = $this->add (0, $firstName, $lastName, $dni, $mail, $password);
+					$_SESSION["loggedUser"] = $user;
+					$this->userPath();
+				}
+			}
+		}
 
 		public function add ($role, $firstName, $lastName, $dni, $mail, $password) {
 			$user = new User();
@@ -33,12 +37,10 @@
             $this->userDAO->add($user);
 			return $user;
 		}
-            if($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) && $this->validateMailForm($mail)) {
-                if($this->userDAO->getByMail($mail) == NULL) {
 
         private function validateMailForm($mail) {
             return (filter_var($mail, FILTER_VALIDATE_EMAIL)) ? TRUE : FALSE;
-        }        
+        }
 
         private function validateRegisterForm($firstName, $lastName, $dni, $email, $password) {
             if(empty($firstName) || empty($lastName) || empty($dni) || empty($email) || empty($password)) {
@@ -47,7 +49,7 @@
             return true;
         }
 
-		public function addUser () {
+		public function addUser ($alert = "", $success = "") {
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				require_once(VIEWS_PATH . "admin-head.php");
@@ -55,7 +57,7 @@
 				require_once(VIEWS_PATH . "admin-user-add.php");
 			}
 			else {
-				$this->userPath();
+				$this->listUserPath();
 			}
 		}
 
@@ -113,14 +115,7 @@
 
         public function userPath() {
 			$movieController = new MovieController();
-			$movies = $movieController->showMoviesNowPlaying();
-			$title = 'Now Playing';
-			$img = IMG_PATH . '/w4.png';
-			require_once(VIEWS_PATH . "header.php");
-			require_once(VIEWS_PATH . "navbar.php");
-			require_once(VIEWS_PATH . "header-s.php");
-			require_once(VIEWS_PATH . "now-playing.php");
-			require_once(VIEWS_PATH . "footer.php");
+			$movies = $movieController->nowPlaying();
         }
 
         public function loginPath($alert = "") {
@@ -169,12 +164,12 @@
                 $user = $_SESSION["loggedUser"];
                 $title = "Modify my account";
 				require_once(VIEWS_PATH . "header.php");
-                require_once(VIEWS_PATH . "navbar.php");                
+                require_once(VIEWS_PATH . "navbar.php");
                 require_once(VIEWS_PATH . "my-account-modify.php");
                 require_once(VIEWS_PATH . "footer.php");
 			} else {
                 $this->loginPath();
-            }              
+            }
         }
 
     }

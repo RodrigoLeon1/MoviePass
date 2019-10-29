@@ -39,17 +39,8 @@
                         </li>
                         <li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>">View movies</a>                            
-                        </li>
-                        <li>
-                            <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>show/addShowPath">Add show</a>                            
-                            <a href="<?= FRONT_ROOT ?>"></a>
-                        </li>
-                        <li>
-                            <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>">View shows</a>                            
-                        </li>                        
+                            <a href="<?= FRONT_ROOT ?>">View movies</a>
+                        </li>                    
                     </ul>
                 </li>
                 <li>
@@ -89,7 +80,7 @@
                             <a href="<?= FRONT_ROOT ?>">View</a>
                         </li>
                     </ul>
-                </li>                
+                </li>
             </ul>
         </nav>
 
