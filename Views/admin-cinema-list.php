@@ -1,6 +1,14 @@
     <main>
         <h2 class="dash-title">Cinemas</h2>
         <hr>
+
+        <?php if($success != NULL): ?>
+        <div class="alert-container success-container">
+            <i class="icon ion-md-checkmark"></i>
+            <h3><?= $success ?></h3>
+        </div>
+        <?php endif; ?>    
+
         <div class="dashboard-container">
 
             <div class="content-container">				
@@ -16,7 +24,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ($this->cinemas as $cinema): ?>
+						<?php foreach($this->cinemas as $cinema): ?>
 							<tr>
 								<td><?= $cinema->getId(); ?></td>
 								<td><?= $cinema->getName(); ?></td>
@@ -24,9 +32,16 @@
 								<td><?= $cinema->getAddress(); ?></td>
 								<td><?= $cinema->getPrice(); ?></td>
 								<td>
-									<a href="<?php echo FRONT_ROOT . "cinema/remove/" . $cinema->getId(); ?>" class="btn btn-delete">Remove</a>
-									<br>
-									<a href="<?php echo FRONT_ROOT . "cinema/getById/" . $cinema->getId(); ?>" class="btn">Modify</a>
+									<div class="actions-container">
+										<a href="<?php echo FRONT_ROOT . "cinema/remove/" . $cinema->getId(); ?>" class="btn btn-delete">
+											<i class="icon ion-md-trash"></i>
+											Remove
+										</a>										
+										<a href="<?php echo FRONT_ROOT . "cinema/getById/" . $cinema->getId(); ?>" class="btn">
+											<i class="icon ion-md-build"></i>
+											Modify
+										</a>
+									</div>
 								</td>
 							</tr>
 						<?php endforeach; ?>

@@ -13,7 +13,7 @@
 
             <div class="img-account">
                 <img src="<?= IMG_PATH ?>profile.jpg" alt="Profile picture">
-                <a href="" class="btn-l">Edit Account</a>
+                <a href="<?= FRONT_ROOT ?>user/modifyAccountPath" class="btn-l">Edit Account</a>
             </div>
             
             <div class="content-account">
@@ -36,7 +36,6 @@
                     <h2>Email:</h2>
                     <p><?= $user->getMail() ?></p>            
                 </div>
-
             </div>
 
         </div>

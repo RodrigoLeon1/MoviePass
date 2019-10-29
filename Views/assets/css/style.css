@@ -315,13 +315,6 @@ hr {
     cursor: pointer;
 }
 
-.test {
-    display: block;
-    height: 10rem !important;
-    margin: 10rem;
-    padding: 10rem;
-}
-
 [type="date"] {
     background: url('/MoviePass/Views/assets/img/calendar.png')  97% 50% no-repeat;
     background-color: #171b21;

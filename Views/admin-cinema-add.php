@@ -2,8 +2,15 @@
         <h2 class="dash-title">Add cinema</h2>
         <hr>
 
-        <?php if($alert != null): ?>
-        <div class="error-container">
+        <?php if($success != NULL): ?>
+        <div class="alert-container success-container">
+            <i class="icon ion-md-checkmark"></i>
+            <h3><?= $success ?></h3>
+        </div>
+        <?php endif; ?>    
+
+        <?php if($alert != NULL): ?>
+        <div class="alert-container error-container">
             <i class="icon ion-md-close-circle-outline"></i>
             <h3><?= $alert ?></h3>
         </div>
@@ -27,7 +34,9 @@
                     <h4>Price for ticket:</h4>
                     <input type="number" name="price" id="" required>
                 </label>
-                <button type="submit" class="btn">Add cinema</button>
+                <button type="submit" class="btn">                
+                    Add cinema
+                </button>
             </form>
 
         </div>

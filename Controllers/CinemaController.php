@@ -14,21 +14,31 @@
         }
 
         public function add($name, $capacity, $address, $price) {
-            $cinema = new Cinema();
-            $cinema->setName($name);
-			$cinema->setCapacity($capacity);
-            $cinema->setAddress($address);
-            $cinema->setPrice($price);
-            $this->cinemaDAO->add($cinema);
-            $this->addCinemaPath();
-        }
+			if($this->validateCinemaForm($name, $capacity, $address, $price)) {
+				$cinema = new Cinema();            
+				$cinema->setName($name);
+				if($this->cinemaDAO->getByName($cinema) == NULL) {
+					$cinema = new Cinema();
+					$cinema->setName($name);
+					$cinema->setCapacity($capacity);
+					$cinema->setAddress($address);
+					$cinema->setPrice($price);
+					$this->cinemaDAO->add($cinema);
+					return $this->addCinemaPath(CINEMA_ADDED, NULL);
+				}
+				return $this->addCinemaPath(NULL, CINEMA_EXIST);
+			}
+			return $this->addCinemaPath(NULL, EMPTY_FIELDS);
+		}
+		
+        private function validateCinemaForm($name, $capacity, $address, $price) {
+            if(empty($name) || empty($capacity) || empty($address) || empty($price)) {
+                return false;
+            }
+            return true;
+        }		
 
-        public function list() {
-			$this->cinemas = $this->cinemaDAO->getAll();
-			$this->listCinemaPath();
-        }
-
-        public function addCinemaPath($alert = "") {
+        public function addCinemaPath($success = "", $alert = "") {
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
 				require_once(VIEWS_PATH . "admin-head.php");
@@ -37,18 +47,21 @@
 			}
         }
 
-		public function listCinemaPath() {
+		public function listCinemaPath($success = "") {
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
+				
+				$this->cinemas = $this->cinemaDAO->getAll();
+
 				require_once(VIEWS_PATH . "admin-head.php");
 				require_once(VIEWS_PATH . "admin-header.php");
 				require_once(VIEWS_PATH . "admin-cinema-list.php");
 			}
         }
 
-		public function remove($id) {
+		public function remove($id) {			
 			$this->cinemaDAO->deleteById($id);
-			$this->list();
+			$this->listCinemaPath(CINEMA_REMOVE);
 		}
 
 		public function getById($id) {

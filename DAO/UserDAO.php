@@ -16,7 +16,7 @@
 		private $profileUserDAO;
 		private $roleDAO;
 
-		public function __construct () {
+		public function __construct() {
 			$this->profileUserDAO = new ProfileUserDAO();
 			$this->roleDAO = new RoleDAO();
 		}
@@ -39,7 +39,7 @@
         }
 
 		public function getByMail($mail) {
-            $user = null;
+            $user = NULL;
             $query = "CALL users_getByMail (?)";
             $parameters["mail"] = $mail;
             $this->connection = Connection::GetInstance();

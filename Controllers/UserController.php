@@ -2,9 +2,9 @@
 
     namespace Controllers;
 
+    use Models\Role as Role;
     use Models\User as User;
-	use DAO\UserDAO as UserDAO;
-	use DAO\ProfileUserDAO as ProfileUserDAO;
+	use DAO\UserDAO as UserDAO;	
     use Controllers\HomeController as HomeController;
     use Controllers\MovieController as MovieController;
 
@@ -17,36 +17,64 @@
         }
 
         public function validateRegister($firstName, $lastName, $dni, $mail, $password) {
-            if($this->userDAO->getByMail($mail) == null) {
-                $user = new User();
-                $user->setFirstName($firstName);
-                $user->setLastName($lastName);
-                $user->setDni($dni);
-                $user->setMail($mail);
-                $user->setPassword($password);
-                $user->setRole(0);
-                $this->userDAO->add($user);
-                $_SESSION["loggedUser"] = $user;
-                $this->userPath();
+            if($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) && $this->validateMailForm($mail)) {
+                if($this->userDAO->getByMail($mail) == NULL) {
+                    $user = new User();
+                    
+                    $role = new Role();
+                    $role->setId(0);
+
+                    $user->setFirstName($firstName);
+                    $user->setLastName($lastName);
+                    $user->setDni($dni);
+                    $user->setMail($mail);
+                    $user->setPassword($password);                    
+                    $user->setRole($role);
+                    $this->userDAO->add($user);
+                    $_SESSION["loggedUser"] = $user;
+                    $this->userPath();
+                }
+                return $this->registerPath(REGISTER_ERROR);
             }
-            return $this->registerPath(REGISTER_ERROR);
+            return $this->registerPath(EMPTY_FIELDS);
         }
+
+        private function validateRegisterForm($firstName, $lastName, $dni, $email, $password) {
+            if(empty($firstName) || empty($lastName) || empty($dni) || empty($email) || empty($password)) {
+                return false;
+            }
+            return true;
+        }
+
+        private function validateMailForm($mail) {
+            return (filter_var($mail, FILTER_VALIDATE_EMAIL)) ? TRUE : FALSE;
+        }        
 
         public function validateLogin($mail, $password) {
-            $user = $this->userDAO->getByMail($mail);
-			if (($user != null) && ($user->getPassword() == $password)) {
-				$_SESSION["loggedUser"] = $user;
-				if ($user->getRole() == 1) {
-					return $this->adminPath();
-				}
-				else if ($user->getRole() == 0) {
-					return $this->userPath();
-				}
-			}
-            return $this->loginPath(LOGIN_ERROR);
+            if($this->validateLoginForm($mail, $password) && $this->validateMailForm($mail)) {
+                $user = $this->userDAO->getByMail($mail);
+                if (($user != NULL) && ($user->getPassword() == $password)) {
+                    $_SESSION["loggedUser"] = $user;
+                    if ($user->getRole() == 1) {
+                        return $this->adminPath();
+                    }
+                    else if ($user->getRole() == 0) {
+                        return $this->userPath();
+                    }
+                }
+                return $this->loginPath(LOGIN_ERROR);
+            }
+            return $this->loginPath(EMPTY_FIELDS);
         }
 
-        public function list() {
+        private function validateLoginForm($mail, $password) {
+            if(empty($mail) || empty($password)) {
+                return FALSE;
+            }
+            return TRUE;
+        }
+
+        public function listUserPath($alert = "", $success = "") {
             if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
                 $users = $this->userDAO->getAll();
@@ -105,11 +133,11 @@
 
         public function logoutPath() {
             session_destroy();
-            $_SESSION["loggedUser"] = null;
+            $_SESSION["loggedUser"] = NULL;
 			$this->userPath();
         }
 
-        public function account() {
+        public function myAccountPath() {
 			if (isset($_SESSION["loggedUser"])) {
                 $user = $_SESSION["loggedUser"];
                 $title = "My account";
@@ -120,6 +148,19 @@
 			} else {
                 $this->loginPath();
             }            
+        }
+
+        public function modifyAccountPath() {
+			if (isset($_SESSION["loggedUser"])) {
+                $user = $_SESSION["loggedUser"];
+                $title = "Modify my account";
+				require_once(VIEWS_PATH . "header.php");
+                require_once(VIEWS_PATH . "navbar.php");                
+                require_once(VIEWS_PATH . "my-account-modify.php");
+                require_once(VIEWS_PATH . "footer.php");
+			} else {
+                $this->loginPath();
+            }              
         }
 
     }

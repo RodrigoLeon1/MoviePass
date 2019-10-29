@@ -2,18 +2,15 @@
 
     namespace Controllers;
 
-    use DAO\MovieDAO as MovieDAO;
-    use DAO\ApiDAO as Api;
+    use DAO\MovieDAO as MovieDAO;    
     use Models\Movie as Movie;
 
     class MovieController {
 
-        private $movieDAO;
-        private $apiDAO;
+        private $movieDAO;        
 
         public function __construct() {
             $this->movieDAO = new MovieDAO();
-            $this->apiDAO = new Api();
         }
 
         public function showMoviesNowPlaying() {
@@ -32,9 +29,8 @@
                     $overview = $movie->getOverview();
 					$adult = $movie->getAdult();
 					$vote_average = $movie->getVoteAverage();
-                    $img = IMG_PATH_TMDB . $movie->getBackdropPath();
-
-                    $urlTrailer = $this->apiDAO->getKeyMovieTrailer($id);
+                    $img = IMG_PATH_TMDB . $movie->getBackdropPath();                    
+                    $urlTrailer = $this->movieDAO->getKeyMovieTrailer($id);
                 }
             }
             require_once(VIEWS_PATH . "header.php");
@@ -55,10 +51,12 @@
 			require_once(VIEWS_PATH . "footer.php");
 		}
 
-		public function comingSoon() {
-			$movies = $this->showMoviesNowPlaying();
+		public function comingSoon() {			
 			$title = 'Coming Soon';
-			$img = IMG_PATH . '/w5.png';
+            $img = IMG_PATH . '/w5.png';
+            
+            $movies = $this->movieDAO->getComingSoonMovies();
+
 			require_once(VIEWS_PATH . "header.php");
 			require_once(VIEWS_PATH . "navbar.php");
 			require_once(VIEWS_PATH . "header-s.php");
@@ -71,7 +69,7 @@
         }
         
 
-        public function addMoviePath($alert = "") {
+        public function addMoviePath($alert = "", $success = "") {
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				require_once(VIEWS_PATH . "admin-head.php");
@@ -80,6 +78,19 @@
 			} else {
                 $this->userPath();
             }            
+        }
+
+        // 
+        public function add($id) {
+            $movie = new Movie();
+            $movie->setId($id);
+
+            if(true){
+                $this->movieDAO->add($movie);
+                $this->addMoviePath(NULL, MOVIE_ADDED);     
+            }
+
+            return $this->addMoviePath(MOVIE_EXIST, NULL);    
         }
 
         

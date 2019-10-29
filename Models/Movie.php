@@ -17,7 +17,8 @@
         private $title;
         private $vote_average;
         private $overview;
-        private $release_date;
+        private $release_date;        
+        private $runtime;
 
         public function getPopularity() {
             return $this->popularity;
@@ -157,7 +158,15 @@
             $this->release_date = $release_date;
             return $this;
         }
-    }
 
-	///fdsafds
+        public function getRuntime() {
+            return $this->runtime;
+        }
+
+        public function setRuntime($runtime) {
+            $this->runtime = $runtime;
+            return $this;
+        }
+    }
+	
 ?>

@@ -25,7 +25,7 @@
                         </li>
                         <li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>cinema/list">View/Edit cinemas</a>
+                            <a href="<?= FRONT_ROOT ?>cinema/listCinemaPath">View/Edit cinemas</a>
                         </li>
                     </ul>
                 </li>
@@ -39,8 +39,16 @@
                         </li>
                         <li>
                             <i class="icon ion-md-remove"></i>
+                            <a href="<?= FRONT_ROOT ?>">View movies</a>                            
+                        </li>
+                        <li>
+                            <i class="icon ion-md-remove"></i>
                             <a href="<?= FRONT_ROOT ?>show/addShowPath">Add show</a>                            
                         </li>
+                        <li>
+                            <i class="icon ion-md-remove"></i>
+                            <a href="<?= FRONT_ROOT ?>">View shows</a>                            
+                        </li>                        
                     </ul>
                 </li>
                 <li>
@@ -49,10 +57,20 @@
                     <ul>
 						<li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>user/list">View users</a>
+                            <a href="<?= FRONT_ROOT ?>user/listUserPath">View users</a>
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <i class="icon ion-logo-usd"></i>
+                    Sales
+                    <ul>
+						<li>
+                            <i class="icon ion-md-remove"></i>
+                            <a href="<?= FRONT_ROOT ?>">View</a>
+                        </li>
+                    </ul>
+                </li>                
             </ul>
         </nav>
 

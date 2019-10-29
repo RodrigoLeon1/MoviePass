@@ -10,9 +10,9 @@
             <li>
                 <a href="<?= FRONT_ROOT ?>movie/nowPlaying" class="nav-link">Now playing</a>
             </li>
-            <li>
+            <!-- <li>
                 <a href="<?= FRONT_ROOT ?>movie/comingSoon" class="nav-link">Coming soon</a>
-            </li>
+            </li> -->
             
             <?php if(!isset($_SESSION["loggedUser"])): ?>
             <li>
@@ -36,7 +36,7 @@
                     <!-- SubMenu -->
                     <ul class="sub-menu">
                         <li>
-                            <a href="<?= FRONT_ROOT ?>user/account" class="nav-link">Account</a>                            
+                            <a href="<?= FRONT_ROOT ?>user/myAccountPath" class="nav-link">Account</a>                            
                         </li>
 
                         <?php if($user->getRole() == 1): ?>

@@ -12,7 +12,7 @@
 		private $tableName = "roles";
 
 		public function getById($id) {
-            $user = null;
+            $user = NULL;
             $query = "CALL roles_getById(?)";
             $parameters["id"] = $id;
             $this->connection = Connection::GetInstance();

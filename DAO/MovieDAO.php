@@ -9,7 +9,7 @@
 		private $movieList = array();
 		private $tableName = "movies_now_playing";
 
-		public function add (Movie $movie) {
+		public function add(Movie $movie) {
 			// try {
 				$query = "CALL movies_add_now_playing(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				$parameters["id"] = $movie->getId();
@@ -89,7 +89,75 @@
 					$this->add($movie);
 				}
             }
+		}		
+		
+		public function getKeyMovieTrailer($idMovie) {			
+			$jsonPath = MOVIE_DETAILS_PATH . $idMovie . "/videos?api_key=" . API_N . "&language=en-US";
+            $jsonContent = file_get_contents($jsonPath);
+            $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
+			foreach ($arrayToDecode as $valuesArray) {
+				$key = $valuesArray[0]["key"];
+			}			
+			return $key;             
         }
+
+		public function getMovieDetailsById(Movie $movie) {
+            $jsonPath = MOVIE_DETAILS_PATH . $movie->getId() . "?api_key=" . API_N . "&language=en-US";
+            $jsonContent = file_get_contents($jsonPath);
+            $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
+            foreach ($arrayToDecode as $valuesArray) {
+				foreach ($valuesArray as $values) {
+					$movie = new Movie();
+					$movie->setPopularity($values["popularity"]);
+					$movie->setVoteCount($values["vote_count"]);
+					$movie->setVideo($values["video"]);
+					$movie->setPosterPath($values["poster_path"]);
+					$movie->setId($values["id"]);
+					$movie->setAdult($values["adult"]);
+					$movie->setBackdropPath($values["backdrop_path"]);
+					$movie->setOriginalLanguage($values["original_language"]);
+					$movie->setOriginalTitle($values["original_title"]);
+					$movie->setGenreIds($values["genre_ids"]);
+					$movie->setTitle($values["title"]);
+					$movie->setVoteAverage($values["vote_average"]);
+					$movie->setOverview($values["overview"]);
+					$movie->setReleaseDate($values["release_date"]);
+					
+					$movie->setRuntime($values["runtime"]);
+					
+				}
+            }
+		}
+
+		//problemas aca
+		public function getComingSoonMovies() {
+			$comingSoonMovies = array();
+            $jsonPath = COMING_SOON_PATH;
+            $jsonContent = file_get_contents($jsonPath);
+            $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
+            foreach ($arrayToDecode as $valuesArray) {				
+				foreach ($valuesArray as $values) {									
+					$movie = new Movie();
+					$movie->setPopularity($values["popularity"]);
+					$movie->setVoteCount($values["vote_count"]);
+					$movie->setVideo($values["video"]);
+					$movie->setPosterPath($values["poster_path"]);
+					$movie->setId($values["id"]);
+					$movie->setAdult($values["adult"]);
+					$movie->setBackdropPath($values["backdrop_path"]);
+					$movie->setOriginalLanguage($values["original_language"]);
+					$movie->setOriginalTitle($values["original_title"]);
+					$movie->setGenreIds($values["genre_ids"]);
+					$movie->setTitle($values["title"]);
+					$movie->setVoteAverage($values["vote_average"]);
+					$movie->setOverview($values["overview"]);
+					$movie->setReleaseDate($values["release_date"]);
+					// $this->add($movie);
+					array_push($comingSoonMovies, $movie);
+				}
+			}			
+			return $comingSoonMovies;
+		}
     }
 
  ?>

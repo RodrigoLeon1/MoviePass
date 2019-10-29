@@ -27,12 +27,11 @@
 			}
         }
 
-        public function getAll () {
+        public function getAll() {
 			$query = "SELECT * FROM " . $this->tableName;
             $this->connection = Connection::GetInstance();
             $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-            foreach($results as $row)
-            {
+            foreach($results as $row) {
                 $cinema = new Cinema();
 				$cinema->setId($row["id"]);
                 $cinema->setName($row["name"]);
@@ -44,7 +43,7 @@
             return $this->cinemaList;
 		}
 
-		public function deleteById ($id) {
+		public function deleteById($id) {
 			try {
 				$query = "CALL cinemas_deleteById(?)";
 				$parameters ["id"] = $id;
@@ -56,7 +55,7 @@
 			}
 		}
 
-		public function getById ($id) {
+		public function getById($id) {
 			try {
 				$query = "CALL cinemas_getById(?)";
 				$parameters ["id"] = $id;
@@ -92,6 +91,21 @@
 			catch (Exception $e) {
 				throw $e;
 			}
+		}
+
+		//
+		public function getByName(Cinema $cinema) {
+			try {				
+				$query = "SELECT * FROM " . $this->tableName . " WHERE name = :name";
+				$parameters["name"] = $cinema->getName();
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->ExecuteNonQuery($query, $parameters);				
+
+				return $results;
+			}
+			catch (Exception $e) {
+				throw $e;
+			}			
 		}
 
     }

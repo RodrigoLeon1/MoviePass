@@ -2,8 +2,8 @@
 
     namespace Config;
 
-    define("ROOT", dirname(__DIR__) . "/");
     //Path to your project's root folder
+    define("ROOT", dirname(__DIR__) . "/");
     define("FRONT_ROOT", "/MoviePass/");
     define("VIEWS_PATH", "Views/");
     define("LIBS_PATH", VIEWS_PATH . "assets/libs/");
@@ -19,20 +19,25 @@
 	define("DB_PASS", "");
 	
 	//API TMDB
-	define("URL_TMDB", "https://api.themoviedb.org/3");
-	define("TOKEN_TMDB", "5d5fe41bdf62bea9ea2f194984b9ad74");
-	define("SLASH_MOVIE_TMDB", "/movie");
-	define("LANGUAGE_TMDB", "&language=en-US");
-	define("PAGE_TMDB", "&page=");
+	define("URL_TMDB", "https://api.themoviedb.org/3");	
 	define("IMG_PATH_TMDB", "https://image.tmdb.org/t/p/original/");
-
 	define("API_N", "5d5fe41bdf62bea9ea2f194984b9ad74");
-	define("NOW_PLAYING_PATH", "https://api.themoviedb.org/3/movie/now_playing?api_key=" . API_N . "&language=en-US&page=1");
 
-	//ERROR -- No se si es la mejor forma de hacerlo
+	define("NOW_PLAYING_PATH", "https://api.themoviedb.org/3/movie/now_playing?api_key=" . API_N . "&language=en-US&page=1");
+	define("COMING_SOON_PATH", "https://api.themoviedb.org/3/movie/upcoming?api_key=" . API_N . "&language=en-US&page=1");	
+	define("MOVIE_DETAILS_PATH", "https://api.themoviedb.org/3/movie/");
+
+	
+	//MANEJO DE ERRORES
 	define("CINEMA_EXIST", "This cinema has already been registered.");
-	define("MOVIE_EXIST", "This movie has already been registered.");
-	// define(" ", " ");
-	define("LOGIN_ERROR", "You have entered an invalid e-mail or password. Try again!");
+	define("CINEMA_ADDED", "Cinema added with success.");
+	define("CINEMA_REMOVE", "The cinema was remove with success.");
+	define("CINEMA_MODIFY", "The cinema was modified with success.");
+	
+	define("MOVIE_ADDED", "Movie added with success.");
+	define("MOVIE_EXIST", "This movie has already been registered.");	
+	
+	define("LOGIN_ERROR", "You have entered an invalid e-mail or password. Try again!");	
 	define("REGISTER_ERROR", "This email address has already been registered.");
+	define("EMPTY_FIELDS", "Complete all the fields correctly to continue.");
 ?>

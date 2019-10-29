@@ -12,7 +12,7 @@
 		private $connection;
 		private $tableName = "profile_users";
 
-        public function add (User $user) {
+        public function add(User $user) {
 			try {
 				$query = "INSERT INTO " . $this->tableName . " (dni, first_name, last_name) VALUES (:dni, :first_name, :last_name);";
 				$parameters["dni"] = $user->getDni();

@@ -35,9 +35,8 @@
                 </div>
                 <div class="movie">
                     <img src="/MoviePass/Views/assets/img/poster2.jpg" alt="Movie poster">
-                </div>                
+                </div>                                
             </div>
-            <a href="<?= FRONT_ROOT ?>">See more</a>
         </div>
 
     </main>

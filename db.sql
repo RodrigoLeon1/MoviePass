@@ -121,6 +121,26 @@ END$$
 DELIMITER ;
 ----------------------------- MOVIES -----------------------------
 
+CREATE TABLE movies (
+	`id` int NOT NULL UNIQUE PRIMARY KEY,
+	`popularity` VARCHAR (255) NOT NULL,
+	`vote_count` VARCHAR (255) NOT NULL,
+	`video` VARCHAR (255) NOT NULL,
+	`poster_path` VARCHAR (255) NOT NULL,
+	`adult` VARCHAR (255) NOT NULL,
+	`backdrop_path` VARCHAR (255) NOT NULL,
+	`original_language` VARCHAR (255) NOT NULL,
+	`original_title` VARCHAR (255) NOT NULL,
+	`genre_ids` VARCHAR (255) NOT NULL,
+	`title` VARCHAR (255) NOT NULL,
+	`vote_average` VARCHAR (255) NOT NULL,
+	`overview` VARCHAR (255) NOT NULL,
+	`release_date` DATE NOT NULL,
+	`runtime` int NOT NULL
+);
+
+
+
 CREATE TABLE movies_now_playing (
 	`id` int NOT NULL UNIQUE PRIMARY KEY,
 	`popularity` VARCHAR (255) NOT NULL,

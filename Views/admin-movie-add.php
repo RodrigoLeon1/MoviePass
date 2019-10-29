@@ -1,9 +1,16 @@
 <main>
         <h2 class="dash-title">Add Movie</h2>
         <hr>
-            
-        <?php if($alert != null): ?>
-        <div class="error-container">
+
+        <?php if($success != NULL): ?>
+        <div class="alert-container success-container">
+            <i class="icon ion-md-checkmark"></i>
+            <h3><?= $success ?></h3>
+        </div>
+        <?php endif; ?>        
+
+        <?php if($alert != NULL): ?>
+        <div class="alert-container error-container">
             <i class="icon ion-md-close-circle-outline"></i>
             <h3><?= $alert ?></h3>
         </div>
@@ -15,15 +22,20 @@
                     <h4>Insert name of movie:</h4>
                     <input type="text" name="name" id="movie-name" required>
                 </label>
-                <button class="btn" id="btn-s">Search</button>
+                <button class="btn" id="btn-s">
+                    <i class="icon ion-md-search"></i>
+                    Search
+                </button>
             </div>
         </div>     
         
-        <div class="suggestions-container">
-            <p>Suggestions:</p>    
-            <div class="" id="movie-container"></div>
-        </div>   
-    
+        <div class="suggestions-container">            
+            <p>
+                <i class="icon ion-md-information-circle-outline"></i>    
+                Suggestions:
+            </p>    
+            <div id="movie-container"></div>
+        </div>       
     </main>
 </body>
 
@@ -39,12 +51,10 @@
             //Guardamos el valor que ingrese el usuario en el input
             let movieTitle = movie.value;                        
 
-            let movies = getMovies(movieTitle);                                        
-            console.log(movies);
-
+            //Realizamos la peticion a la API con el nombre de pelicula que el usuario haya ingresado
             getMovies(movieTitle)
                 .then(res => {
-                    const elements = res.results.reduce((acc, user) => acc + movieTemplate(user), "");
+                    const elements = res.results.reduce((acc, movie) => acc + movieTemplate(movie), "");
 
                     const list = `
                         <ul class="movie-list">
@@ -59,50 +69,28 @@
         //Genera el <li> para cada pelicula
         function movieTemplate(movie) {            
             return `
-                <li class="movie-item">
-                   <p class="movie-name">
-                        <b>${movie.title}</b>
-                        <b><img src="<?= IMG_PATH_TMDB ?>${movie.poster_path}" alt=""></b>
-                    </p>                    
+                <li class="movie-item">                   
+                    <img src="<?= IMG_PATH_TMDB ?>${movie.poster_path}" alt="">
+                    <div class="movie-add">
+                        <div>
+                            <h3>${movie.title}</h3>
+                            <p>${movie.overview}</p>
+                        </div>
+                    </div>   
+                    <div class="movie-add">     
+                        <a href="<?= FRONT_ROOT ?>movie/addMovie/?id=${movie.id}" class="btn">
+                            <i class="icon ion-md-checkmark"></i>
+                            Add
+                        </a>       
+                    </div>
                 </li>
             `;
         }
 
         function getMovies(str) {
             return fetch(`https://api.themoviedb.org/3/search/movie?api_key=<?= API_N ?>&query=${str}`)
-                .then(res => res.json())                                              
+                .then(res => res.json());                                              
         }
-
-
-        /*
-        function showHint(str) {
-            if (str.length == 0) {
-                // document.getElementById("txtHint").innerHTML = "";
-                return;
-            } else {
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-
-                        var resultado =  JSON.parse(this.responseText);
-                        console.log(resultado);
-
-                        // document.getElementById("txtHint").innerHTML = this.responseText;
-                        document.getElementById("txtHint").innerHTML = resultado.results[0].title;
-
-                        resultado.results.forEach(e => {
-                            console.log(e);
-                            suggestionContainer.appendChild(drawMovieItem(e.title));
-                        });
-
-                        // console.log(this.r);
-                    }
-                };
-                xmlhttp.open("GET", "https://api.themoviedb.org/3/search/movie?api_key=<?= API_N ?>&query=" + str, true);
-                xmlhttp.send();                
-            }            
-        }  
-        */
 
     </script>
 </html>

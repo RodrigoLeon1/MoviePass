@@ -31,8 +31,7 @@
 			$query = "SELECT * FROM " . $this->tableName;
             $this->connection = Connection::GetInstance();
             $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-            foreach($results as $row)
-            {
+            foreach($results as $row) {
                 $show = new Show();
 				$show->setIdShow($row["id_show"]);
                 $show->setIdCinema($row["id_cinema"]);

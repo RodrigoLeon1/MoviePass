@@ -16,7 +16,7 @@
                     </p>
                 </div>
 
-                <?php if($alert != null): ?>
+                <?php if($alert != NULL): ?>
                 <div class="error-container">
                     <p>
                         <i class="icon ion-md-close-circle-outline"></i>
@@ -27,19 +27,19 @@
 
                 <form action="<?= FRONT_ROOT ?>user/validateRegister" method="post" class="register-form">
                     <label>
-                        <input type="text" name="firstName" id="" placeholder="Insert your name" autofocus required/>
+                        <input type="text" name="firstName" placeholder="Insert your name" autofocus required/>
                     </label>
                     <label>
-                        <input type="text" name="lastName" id="" placeholder="Insert your lastname" required/>
+                        <input type="text" name="lastName" placeholder="Insert your lastname" required/>
                     </label>
                     <label>
-                        <input type="number" name="dni" id="" placeholder="Insert your dni" required/>
+                        <input type="number" name="dni" placeholder="Insert your dni" required/>
                     </label>					
                     <label>
-                        <input type="email" name="mail" id="" placeholder="Insert your mail" required/>
+                        <input type="email" name="mail" placeholder="Insert your mail" required/>
                     </label>
                     <label>                        
-                        <input type="password" name="password" id="" placeholder="Insert your password" required/>
+                        <input type="password" name="password" placeholder="Insert your password" required/>
                     </label>
                     <button class="btn-l" type="submit">Register</button>
                 </form>

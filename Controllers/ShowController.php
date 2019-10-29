@@ -16,7 +16,7 @@
             $this->cinemaDAO = new CinemaDAO();
         }
     
-        public function add($id_cinema, $id_movie, $day, $hour) {
+        public function add($id_cinema, $id_movie, $day, $hour) {            
             $show = new Show();
             $show->setIdCinema($id_cinema);
             $show->setIdMovie($id_movie);
@@ -25,8 +25,15 @@
             $this->showDAO->Add($show);
             $this->addShowPath();
         }
+
+        private function validateShowForm($id_cinema, $id_movie, $day, $hour) {
+            if(empty($id_cinema) || empty($id_movie) || empty($day) || empty($hour)) {
+                return false;
+            }
+            return true;
+        }        
         
-        public function addShowPath() {
+        public function addShowPath($alert = "", $success = "") {
             if ($_SESSION["loggedUser"]) {
                 $admin = $_SESSION["loggedUser"];
 				require_once(VIEWS_PATH . "admin-head.php");
@@ -36,7 +43,5 @@
         }
 
     }
-
     
-
 ?>
