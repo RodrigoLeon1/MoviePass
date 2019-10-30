@@ -48,7 +48,7 @@
                 <input type="time" name="time" id="" required>
             </label>
 
-            <button type="submit">Add show</button>
+            <button type="submit" class="btn">Add show</button>
         </form>
 
     </div>

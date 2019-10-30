@@ -19,14 +19,16 @@
         public function validateRegister($firstName, $lastName, $dni, $mail, $password) {
 			if($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) && $this->validateMailForm($mail)) {
 				if($this->userDAO->getByMail($mail) == NULL) {
-					$user = $this->add (0, $firstName, $lastName, $dni, $mail, $password);
+					$user = $this->add(0, $firstName, $lastName, $dni, $mail, $password);
 					$_SESSION["loggedUser"] = $user;
-					$this->userPath();
-				}
-			}
+					return $this->userPath();
+                }
+                return $this->registerPath(REGISTER_ERROR);
+            }
+            return $this->registerPath(EMPTY_FIELDS);
 		}
 
-		public function add ($role, $firstName, $lastName, $dni, $mail, $password) {
+		public function add($role, $firstName, $lastName, $dni, $mail, $password) {
 			$user = new User();
             $user->setFirstName($firstName);
             $user->setLastName($lastName);
@@ -49,7 +51,7 @@
             return true;
         }
 
-		public function addUser ($alert = "", $success = "") {
+		public function addUser($alert = "", $success = "") {
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				require_once(VIEWS_PATH . "admin-head.php");
@@ -57,13 +59,13 @@
 				require_once(VIEWS_PATH . "admin-user-add.php");
 			}
 			else {
-				$this->listUserPath();
+				return $this->listUserPath();
 			}
 		}
 
-		public function adminAdd ($role, $firstName, $lastName, $dni, $mail, $password) {
+		public function adminAdd($role, $firstName, $lastName, $dni, $mail, $password) {
 			$this->add($role, $firstName, $lastName, $dni, $mail, $password);
-			$this->list();
+			return $this->listUserPath();
 		}
 
         public function validateLogin($mail, $password) {
@@ -98,7 +100,7 @@
 				require_once(VIEWS_PATH . "admin-header.php");
 				require_once(VIEWS_PATH . "admin-user-list.php");
             } else {
-                $this->userPath();
+                return $this->userPath();
             }
         }
 
@@ -109,7 +111,7 @@
 				require_once(VIEWS_PATH . "admin-header.php");
 				require_once(VIEWS_PATH . "admin-dashboard.php");
 			} else {
-                $this->userPath();
+                return $this->userPath();
             }
         }
 
@@ -125,7 +127,7 @@
                 require_once(VIEWS_PATH . "header.php");
                 require_once(VIEWS_PATH . "login.php");
             } else {
-                $this->userPath();
+                return $this->userPath();
             }
         }
 
@@ -136,14 +138,14 @@
                 require_once(VIEWS_PATH . "header.php");
                 require_once(VIEWS_PATH . "register.php");
             } else {
-                $this->userPath();
+                return $this->userPath();
             }
         }
 
         public function logoutPath() {
             session_destroy();
             $_SESSION["loggedUser"] = NULL;
-			$this->userPath();
+			return $this->userPath();
         }
 
         public function myAccountPath() {
@@ -155,7 +157,7 @@
                 require_once(VIEWS_PATH . "my-account.php");
                 require_once(VIEWS_PATH . "footer.php");
 			} else {
-                $this->loginPath();
+                return $this->loginPath();
             }
         }
 
@@ -168,7 +170,7 @@
                 require_once(VIEWS_PATH . "my-account-modify.php");
                 require_once(VIEWS_PATH . "footer.php");
 			} else {
-                $this->loginPath();
+                return $this->loginPath();
             }
         }
 

@@ -21,17 +21,22 @@
         }
 
         public function add($id_cinema, $id_movie, $date, $time) {
-			$movie = new Movie ();
-			$movie->setId($id_movie);
-			$cinema = new Cinema();
-			$cinema->setId($id_cinema);
-			$show = new Show();
-			$show->setDate($date);
-			$show->setTime($time);
-			$show->setMovie($movie);
-			$show->setCinema($cinema);
-            $this->showDAO->add($show);
-            $this->addShowPath();
+			if($this->validateShowForm($id_cinema, $id_movie, $date, $time)) {
+				//Validaciones aca
+				$movie = new Movie ();
+				$movie->setId($id_movie);
+				$cinema = new Cinema();
+				$cinema->setId($id_cinema);
+				$show = new Show();
+				$show->setDate($date);
+				$show->setTime($time);
+				$show->setMovie($movie);
+				$show->setCinema($cinema);
+				$this->showDAO->add($show);
+				return $this->addShowPath(NULL, SHOW_ADDED);
+
+			}
+			return $this->addShowPath(EMPTY_FIELDS);
         }
 
         private function validateShowForm($id_cinema, $id_movie, $day, $hour) {
@@ -62,12 +67,12 @@
 			}
 		}
 
-		public function remove ($id) {
+		public function remove($id) {
 			$this->showDAO->deleteById($id);
-			$this->listShowsPath();
+			return $this->listShowsPath();
 		}
 
-		public function getById ($id) {
+		public function getById($id) {
 			if ($_SESSION["loggedUser"]) {
 				$show = $this->showDAO->getById($id);
 				$movies = $this->movieDAO->getAll();
@@ -91,10 +96,10 @@
 			$show->setMovie($movie);
 			$show->setCinema($cinema);
 			$this->cinemaDAO->modify($cinema);
-			$this->listShowsPath();
+			return $this->listShowsPath();
 		}
 
-		public function moviesOnShow () {
+		public function moviesOnShow() {
 			return $this->showDAO->moviesOnShow();
 		}
 

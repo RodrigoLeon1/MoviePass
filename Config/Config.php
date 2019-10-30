@@ -36,6 +36,9 @@
 	
 	define("MOVIE_ADDED", "Movie added with success.");
 	define("MOVIE_EXIST", "This movie has already been registered.");	
+
+	define("SHOW_ADDED", "Show added with success.");
+	define("SHOW_EXIST", "This show has already been registered.");	
 	
 	define("LOGIN_ERROR", "You have entered an invalid e-mail or password. Try again!");	
 	define("REGISTER_ERROR", "This email address has already been registered.");

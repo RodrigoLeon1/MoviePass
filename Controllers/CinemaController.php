@@ -61,7 +61,7 @@
 
 		public function remove($id) {			
 			$this->cinemaDAO->deleteById($id);
-			$this->listCinemaPath(CINEMA_REMOVE);
+			return $this->listCinemaPath(CINEMA_REMOVE);
 		}
 
 		public function getById($id) {
@@ -74,7 +74,7 @@
 			}
 		}
 
-		public function modify($id, $name, $capacity, $address, $price) {
+		public function modify($id, $name, $capacity, $address, $price) {			
 			$cinema = new Cinema();
             $cinema->setId($id);
             $cinema->setName($name);
@@ -82,7 +82,7 @@
 			$cinema->setAddress($address);
             $cinema->setPrice($price);
 	        $this->cinemaDAO->modify($cinema);
-            $this->list();
+            return $this->listCinemaPath();
         }
 
     }

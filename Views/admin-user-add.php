@@ -42,7 +42,7 @@
                     <h4>Password:</h4>
                     <input type="password" name="password" id="" required>
                 </label>
-                <button type="submit">Add user</button>
+                <button type="submit" class="btn">Add user</button>
             </form>
 
         </div>

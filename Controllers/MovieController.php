@@ -71,7 +71,7 @@
 			require_once(VIEWS_PATH . "footer.php");
 		}
 
-		public function getNowPlayingMoviesFromDAO () {
+		public function getNowPlayingMoviesFromDAO() {
 			$this->movieDAO->getNowPlayingMoviesFromDAO();
         }
 
@@ -82,7 +82,7 @@
 				require_once(VIEWS_PATH . "admin-header.php");
 				require_once(VIEWS_PATH . "admin-movie-add.php");
 			} else {
-                $this->userPath();
+                return $this->userPath();
             }
         }
 
