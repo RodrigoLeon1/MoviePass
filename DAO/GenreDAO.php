@@ -29,7 +29,7 @@
                 $resultSet = $this->connection->execute($query);
 				foreach ($resultSet as $row) {
 					$genre = new Genre();
-                    $genre->setIdGenre($row["id_genre"]);
+                    $genre->setIdGenre($row["id"]);
                     $genre->setName($row["name"]);
 					
 					array_push($this->genreList, $genre);

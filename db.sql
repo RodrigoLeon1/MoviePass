@@ -87,7 +87,7 @@ END $$
 
 DROP procedure IF EXISTS `users_deleteByDni`;
 DELIMITER $$
-CREATE PROCEDURE users_deleteById (IN dni INT)
+CREATE PROCEDURE users_deleteByDni (IN dni INT)
 BEGIN
 	DELETE FROM `users` WHERE `users`.`FK_dni` = dni;
 END$$
@@ -158,7 +158,7 @@ CREATE TABLE movies (
 	`genre_ids` VARCHAR (255) NOT NULL,
 	`title` VARCHAR (255) NOT NULL,
 	`vote_average` VARCHAR (255) NOT NULL,
-	`overview` VARCHAR (255) NOT NULL,
+	`overview` TEXT NOT NULL,
 	`release_date` DATE NOT NULL,
 	`runtime` INT
 );
@@ -337,8 +337,8 @@ CREATE TABLE tickets (
 ----------------------------- GENRE -----------------------------
 
 CREATE TABLE genres (
-	`id_genre` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	`description` VARCHAR (255) NOT NULL,
+	`id` int NOT NULL PRIMARY KEY,
+	`name` VARCHAR (255) NOT NULL,
 );
 
 
@@ -346,7 +346,7 @@ CREATE TABLE genres (
 
 CREATE TABLE genres_x_movies (
 	`FK_id_genre` int,
-	`FK_id_movie` int,
-	CONSTRAINT `FK_id_genre` FOREIGN KEY (`FK_id_genre`) REFERENCES `genre` (`id_genre`),
-	CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movie` (`id_movie`)
+	`FK_id_movie` int
+	CONSTRAINT `FK_id_genre` FOREIGN KEY (`FK_id_genre`) REFERENCES `genres` (`id`),
+	CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`)
 );

@@ -43,13 +43,13 @@
             $query = "CALL users_getByMail (?)";
             $parameters["mail"] = $mail;
             $this->connection = Connection::GetInstance();
-            $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
+            $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);						
             foreach($results as $row) {
                 $user = new User();
 				$user->setMail($row["mail"]);
                 $user->setPassword($row["password"]);
 				$user->setRole($row["FK_id_role"]);
-				$user->setDni($row["FK_dni"]);
+				$user->setDni($row["dni"]);
 				$user->setFirstName($row["first_name"]);
 				$user->setLastName($row["last_name"]);
             }

@@ -76,7 +76,7 @@
 		}
 
 		public function getNowPlayingMoviesFromDAO() {
-			$this->movieDAO->getNowPlayingMoviesFromDAO();
+			// $this->movieDAO->getNowPlayingMoviesFromDAO();
 			$this->movieDAO->getRunTimeMovieFromDAO();
         }
 
@@ -91,21 +91,18 @@
 			} else {
                 return $this->userPath();
             }
+        }        
+
+
+        public function filterMovies($id) {
+            
+            $genreMovieDAO = new Genre_x_MovieDAO();
+
+            $movies = $genreMovieDAO->searchMovieByGenre($id);
+
+            // return $this->;
         }
-
-        //
-        public function add($id) {
-            $movie = new Movie();
-            $movie->setId($id);
-
-            if(true){
-                $this->movieDAO->add($movie);
-                $this->addMoviePath(NULL, MOVIE_ADDED);
-            }
-
-            return $this->addMoviePath(MOVIE_EXIST, NULL);
-        }
-
+        
 
 
 

@@ -30,10 +30,10 @@
 											<i class="icon ion-md-trash"></i>
 											Remove
 										</a>
-										<a href="<?php echo FRONT_ROOT . "show/getById/" . $show->getId(); ?>" class="btn">
+										<!-- <a href="<?php echo FRONT_ROOT . "show/getById/" . $show->getId(); ?>" class="btn">
 											<i class="icon ion-md-build"></i>
 											Modify
-										</a>
+										</a> -->
 									</div>
 								</td>
 
