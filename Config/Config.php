@@ -17,25 +17,26 @@
 	define("DB_NAME", "moviepass");
 	define("DB_USER", "root");
 	define("DB_PASS", "");
-	
+
 	//API TMDB
-	define("URL_TMDB", "https://api.themoviedb.org/3");	
+	define("URL_TMDB", "https://api.themoviedb.org/3");
 	define("IMG_PATH_TMDB", "https://image.tmdb.org/t/p/original/");
 	define("API_N", "5d5fe41bdf62bea9ea2f194984b9ad74");
+	define("URL_API_LANGUAGE", "&language=en-US");
 
-	define("NOW_PLAYING_PATH", "https://api.themoviedb.org/3/movie/now_playing?api_key=" . API_N . "&language=en-US&page=1");
-	define("COMING_SOON_PATH", "https://api.themoviedb.org/3/movie/upcoming?api_key=" . API_N . "&language=en-US&page=1");	
+	define("NOW_PLAYING_PATH", "https://api.themoviedb.org/3/movie/now_playing?api_key=" . API_N . URL_API_LANGUAGE . "&page=1");
+	define("COMING_SOON_PATH", "https://api.themoviedb.org/3/movie/upcoming?api_key=" . API_N . URL_API_LANGUAGE . "&page=1");
 	define("MOVIE_DETAILS_PATH", "https://api.themoviedb.org/3/movie/");
 
-	
-	//MANEJO DE ERRORES
+
+	//ERR MSGS
 	define("CINEMA_EXIST", "This cinema has already been registered.");
 	define("CINEMA_ADDED", "Cinema added with success.");
 	define("CINEMA_REMOVE", "The cinema was remove with success.");
 	define("CINEMA_MODIFY", "The cinema was modified with success.");
-	
+
 	define("MOVIE_ADDED", "Movie added with success.");
-	define("MOVIE_EXIST", "This movie has already been registered.");	
+	define("MOVIE_EXIST", "This movie has already been registered.");
 
 	define("SHOW_ADDED", "Show added with success.");
 	define("SHOW_EXIST", "This show has already been registered.");	

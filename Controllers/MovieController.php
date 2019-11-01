@@ -2,13 +2,13 @@
 
     namespace Controllers;
 
-    use DAO\MovieDAO as MovieDAO;    
+    use DAO\MovieDAO as MovieDAO;
     use Models\Movie as Movie;
 	use Controllers\ShowController as ShowController;
 
     class MovieController {
 
-        private $movieDAO;        
+        private $movieDAO;
 		private $showController;
 
         public function __construct() {
@@ -36,7 +36,7 @@
                     $overview = $movie->getOverview();
 					$adult = $movie->getAdult();
 					$vote_average = $movie->getVoteAverage();
-                    $img = IMG_PATH_TMDB . $movie->getBackdropPath();                    
+                    $img = IMG_PATH_TMDB . $movie->getBackdropPath();
                     $urlTrailer = $this->movieDAO->getKeyMovieTrailer($id);
                 }
             }
@@ -62,10 +62,10 @@
 			require_once(VIEWS_PATH . "footer.php");
 		}
 
-		public function comingSoon() {			
+		public function comingSoon() {
 			$title = 'Coming Soon';
             $img = IMG_PATH . '/w5.png';
-            
+
             $movies = $this->movieDAO->getComingSoonMovies();
 
 			require_once(VIEWS_PATH . "header.php");
@@ -77,6 +77,7 @@
 
 		public function getNowPlayingMoviesFromDAO() {
 			$this->movieDAO->getNowPlayingMoviesFromDAO();
+			$this->movieDAO->getRunTimeMovieFromDAO();
         }
 
         public function addMoviePath($alert = "", $success = "") {
@@ -92,20 +93,20 @@
             }
         }
 
-        // 
+        //
         public function add($id) {
             $movie = new Movie();
             $movie->setId($id);
 
             if(true){
                 $this->movieDAO->add($movie);
-                $this->addMoviePath(NULL, MOVIE_ADDED);     
+                $this->addMoviePath(NULL, MOVIE_ADDED);
             }
 
-            return $this->addMoviePath(MOVIE_EXIST, NULL);    
+            return $this->addMoviePath(MOVIE_EXIST, NULL);
         }
 
-        
+
 
 
     }

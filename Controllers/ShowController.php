@@ -28,8 +28,8 @@
 				$cinema = new Cinema();
 				$cinema->setId($id_cinema);
 				$show = new Show();
-				$show->setDate($date);
-				$show->setTime($time);
+				$show->setDateStart($date);
+				$show->setTimeStart($time);
 				$show->setMovie($movie);
 				$show->setCinema($cinema);
 				$this->showDAO->add($show);
@@ -43,9 +43,9 @@
             if(empty($id_cinema) || empty($id_movie) || empty($day) || empty($hour)) {
                 return FALSE;
             }
-            return TRUE;
-        }        
-        
+            return true;
+        }
+
         public function addShowPath($alert = "", $success = "") {
             if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
@@ -92,16 +92,16 @@
 
 		public function modify($id, $id_cinema, $id_movie, $date, $time) {
 			$movie = new Movie ();
-			$movie->setId($id_movie);
-			$cinema = new Cinema();
-			$cinema->setId($id_cinema);
+			$movie->setId($id_cinema);
+			$cinema = new Cinema ();
+			$cinema->setId ($id_cinema);
 			$show = new Show();
 			$show->setId($id);
-			$show->setDate($date);
-			$show->setTime($time);
+			$show->setDateStart($date);
+			$show->setTimeStart($time);
 			$show->setMovie($movie);
 			$show->setCinema($cinema);
-			$this->cinemaDAO->modify($cinema);
+			$this->showDAO->modify($show);
 			return $this->listShowsPath();
 		}
 

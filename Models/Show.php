@@ -10,8 +10,10 @@
         private $id;
         private $cinema;
         private $movie;
-        private $date;
-        private $time;
+        private $dateStart;
+        private $timeStart;
+        private $dateEnd;
+        private $timeEnd;
 
 		public function __construct () {
 			$this->cinema = new Cinema ();
@@ -45,21 +47,39 @@
             return $this;
         }
 
-		public function getDate() {
-			return $this->date;
+		public function getDateStart() {
+			return $this->dateStart;
         }
 
-        public function setDate($date) {
-            $this->date = $date;
+        public function setDateStart($dateStart) {
+            $this->dateStart = $dateStart;
             return $this;
         }
 
-		public function getTime() {
-            return $this->time;
+		public function getTimeStart() {
+            return $this->timeStart;
         }
 
-        public function setTime($time) {
-            $this->time = $time;
+        public function setTimeStart($timeStart) {
+            $this->timeStart = $timeStart;
+            return $this;
+        }
+
+		public function getDateEnd() {
+			return $this->dateEnd;
+        }
+
+        public function setDateEnd($dateEnd) {
+            $this->dateEnd = $dateEnd;
+            return $this;
+        }
+
+		public function getTimeEnd() {
+            return $this->timeEnd;
+        }
+
+        public function setTimeEnd($timeEnd) {
+            $this->timeEnd = $timeEnd;
             return $this;
         }
 

@@ -160,31 +160,12 @@ CREATE TABLE movies (
 	`vote_average` VARCHAR (255) NOT NULL,
 	`overview` VARCHAR (255) NOT NULL,
 	`release_date` DATE NOT NULL,
-	`runtime` int NOT NULL
+	`runtime` INT
 );
 
-
-
-CREATE TABLE movies_now_playing (
-	`id` int NOT NULL UNIQUE PRIMARY KEY,
-	`popularity` VARCHAR (255) NOT NULL,
-	`vote_count` VARCHAR (255) NOT NULL,
-	`video` VARCHAR (255) NOT NULL,
-	`poster_path` VARCHAR (255) NOT NULL,
-	`adult` VARCHAR (255) NOT NULL,
-	`backdrop_path` VARCHAR (255) NOT NULL,
-	`original_language` VARCHAR (255) NOT NULL,
-	`original_title` VARCHAR (255) NOT NULL,
-	`genre_ids` VARCHAR (255) NOT NULL,
-	`title` VARCHAR (255) NOT NULL,
-	`vote_average` VARCHAR (255) NOT NULL,
-	`overview` VARCHAR (255) NOT NULL,
-	`release_date` DATE NOT NULL
-);
-
-DROP procedure IF EXISTS `movies_add_now_playing`;
+DROP procedure IF EXISTS `movies_add`;
 DELIMITER $$
-CREATE PROCEDURE movies_add_now_playing (
+CREATE PROCEDURE movies_add (
 								IN id INT,
 								IN popularity VARCHAR(255),
 								IN vote_count VARCHAR(255),
@@ -198,23 +179,23 @@ CREATE PROCEDURE movies_add_now_playing (
 								IN title VARCHAR(255),
 								IN vote_average VARCHAR(255),
  								IN overview VARCHAR (255),
-								IN release_date DATE )
+								IN release_date DATE)
 BEGIN
-	INSERT INTO movies_now_playing (
-			movies_now_playing.id,
-			movies_now_playing.popularity,
-			movies_now_playing.vote_count,
-			movies_now_playing.video,
-			movies_now_playing.poster_path,
-			movies_now_playing.adult,
-			movies_now_playing.backdrop_path,
-			movies_now_playing.original_language,
-			movies_now_playing.original_title,
-			movies_now_playing.genre_ids,
-			movies_now_playing.title,
-			movies_now_playing.vote_average,
-			movies_now_playing.overview,
-			movies_now_playing.release_date
+	INSERT INTO movies (
+			movies.id,
+			movies.popularity,
+			movies.vote_count,
+			movies.video,
+			movies.poster_path,
+			movies.adult,
+			movies.backdrop_path,
+			movies.original_language,
+			movies.original_title,
+			movies.genre_ids,
+			movies.title,
+			movies.vote_average,
+			movies.overview,
+			movies.release_date
 	)
     VALUES
         (id, popularity, vote_count, video, poster_path, adult, backdrop_path, original_language, original_title, genre_ids, title, vote_average, overview, release_date);
@@ -224,7 +205,16 @@ DROP procedure IF EXISTS `movies_getById`;
 DELIMITER $$
 CREATE PROCEDURE movies_getById (IN id INT)
 BEGIN
-	SELECT * FROM `movies_now_playing` WHERE `movies_now_playing`.`id` = id;
+	SELECT * FROM `movies` WHERE `movies`.`id` = id;
+END$$
+
+DROP procedure IF EXISTS `movies_add_runtime`;
+DELIMITER $$
+CREATE PROCEDURE movies_add_runtime (IN id INT, IN runtime INT)
+BEGIN
+	UPDATE movies
+	SET movies.runtime = runtime
+	WHERE movies.id = id;
 END$$
 
 
@@ -234,10 +224,12 @@ CREATE TABLE shows (
 	`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`FK_id_cinema` int,
 	`FK_id_movie` int,
-	`date` DATE NOT NULL,
-	`time` TIME NOT NULL,
+	`date_start` DATE NOT NULL,
+	`time_start` TIME NOT NULL,
+	`date_end` DATE NOT NULL,
+	`time_end` TIME NOT NULL,
 	CONSTRAINT `FK_id_cinema` FOREIGN KEY (`FK_id_cinema`) REFERENCES `cinemas` (`id`),
-	CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies_now_playing` (`id`)
+	CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`)
 );
 
 DROP procedure IF EXISTS `shows_getAll`;
@@ -245,14 +237,16 @@ DELIMITER $$
 CREATE PROCEDURE shows_getAll ()
 BEGIN
 	SELECT 	shows.id AS shows_id,
-			shows.date AS shows_date,
-			shows.time AS shows_time,
-			movies_now_playing.id AS movies_now_playing_id,
-			movies_now_playing.title AS movies_now_playing_title,
+			shows.date_start AS shows_date_start,
+			shows.time_start AS shows_time_start,
+			shows.date_end AS shows_date_end,
+			shows.time_end AS shows_time_end,
+			movies.id AS movies_id,
+			movies.title AS movies_title,
 			cinemas.id AS cinemas_id,
 			cinemas.name AS cinemas_name
 	FROM `shows`
-	INNER JOIN movies_now_playing ON movies_now_playing.id = shows.FK_id_movie
+	INNER JOIN movies ON movies.id = shows.FK_id_movie
 	INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema;
 END$$
 
@@ -268,14 +262,16 @@ DELIMITER $$
 CREATE PROCEDURE shows_getById (IN id INT)
 BEGIN
 	SELECT 	shows.id AS shows_id,
-			shows.date AS shows_date,
-			shows.time AS shows_time,
-			movies_now_playing.id AS movies_now_playing_id,
-			movies_now_playing.title AS movies_now_playing_title,
+			shows.date_start AS shows_date_start,
+			shows.time_start AS shows_time_start,
+			shows.date_end AS shows_date_end,
+			shows.time_end AS shows_time_end,
+			movies.id AS movies_id,
+			movies.title AS movies_title,
 			cinemas.id AS cinemas_id,
 			cinemas.name AS cinemas_name
 	FROM `shows`
-	INNER JOIN movies_now_playing ON movies_now_playing.id = shows.FK_id_movie
+	INNER JOIN movies ON movies.id = shows.FK_id_movie
 	INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
 	WHERE (shows.id = id);
 END$$
@@ -285,12 +281,32 @@ DELIMITER $$
 CREATE PROCEDURE shows_modify (		IN id int,
 									IN id_cinema INT,
 									IN id_movie INT,
-									IN dat DATE,
-									IN tim TIME)
+									IN date_start DATE,
+									IN time_start TIME,
+									IN date_end DATE,
+									IN time_end TIME)
 BEGIN
-	UPDATE shows SET shows.	FK_id_cinema = id_cinema, shows.FK_id_movie = id_movie, shows.date = dat, shows.time = tim WHERE shows.id = id;
+	UPDATE shows SET shows.	FK_id_cinema = id_cinema, shows.FK_id_movie = id_movie, shows.date_start = date_start, shows.time_start = time_start, shows.date_end = date_end, shows.time_end = time_end WHERE shows.id = id;
 END$$
 DELIMITER ;
+
+DROP procedure IF EXISTS `shows_getByMovieId`;
+DELIMITER $$
+CREATE PROCEDURE shows_getByMovieId (IN id_movie INT)
+BEGIN
+	SELECT 	*
+	FROM `shows`
+	WHERE (shows.FK_id_movie = id_movie);
+END$$
+
+DROP procedure IF EXISTS `shows_getByCinemaId`;
+DELIMITER $$
+CREATE PROCEDURE shows_getByCinemaId (IN id_movie INT)
+BEGIN
+	SELECT 	*
+	FROM `shows`
+	WHERE (shows.FK_id_cinema = id_movie);
+END$$
 
 
 ----------------------------- PURCHASE -----------------------------

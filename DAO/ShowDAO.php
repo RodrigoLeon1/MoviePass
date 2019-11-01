@@ -22,18 +22,90 @@
 
         public function add(Show $show) {
 			try {
-				$query = "INSERT INTO " . $this->tableName . " (FK_id_cinema, FK_id_movie, date, time) VALUES (:FK_id_cinema, :FK_id_movie, :date, :time);";
-				$parameters["FK_id_cinema"] = $show->getCinema()->getId();
-				$parameters["FK_id_movie"] = $show->getMovie()->getId();
-                $parameters["date"] = $show->getDate();
-                $parameters["time"] = $show->getTime();
-                $this->connection = Connection::getInstance();
-				$this->connection->executeNonQuery($query, $parameters);
+				if ($this->checkAndAdd($show)) {
+					$query = "INSERT INTO " . $this->tableName . " (FK_id_cinema, FK_id_movie, date_start, time_start, date_end, time_end) VALUES (:FK_id_cinema, :FK_id_movie, :date_start, :time_start, :date_end, :time_end);";
+					$parameters["FK_id_cinema"] = $show->getCinema()->getId();
+					$parameters["FK_id_movie"] = $show->getMovie()->getId();
+					$parameters["date_start"] = $show->getDateStart();
+					$parameters["time_start"] = $show->getTimeStart();
+					$parameters["date_end"] = $show->getDateEnd();
+					$parameters["time_end"] = $show->getTimeEnd();
+					$this->connection = Connection::getInstance();
+					$this->connection->executeNonQuery($query, $parameters);
+				}
 			}
 			catch (Exception $e) {
 				throw $e;
 			}
         }
+
+		public function timeCheck ($show) {
+			$movie = $this->movieDAO->getById($show->getMovie()->getId()); // Get Movie On Show In Order To Get It's Runtime
+			//Modify Time Lapse
+			$timeStart = strtotime ("-15 minutes", strtotime($show->getDateStart() . $show->getTimeStart()));
+			$plusRunTime = "+" . $movie->getRuntime() . " minutes";
+			$timeEnd = strtotime ($plusRunTime, strtotime($show->getDateStart() . $show->getTimeStart()));
+			$timeEnd += strtotime ("+15 minutes", strtotime($timeEnd));
+			// Assign time to paramenters
+			$show->setDateStart(date ('Y-m-d', $timeStart));
+			$show->setTimeStart(date ('H:i:s', $timeStart));
+			$show->setDateEnd(date ('Y-m-d', $timeEnd));
+			$show->setTimeEnd(date ('H:i:s', $timeEnd));
+
+		}
+
+		public function checkAndAdd (Show $show) {
+			$existance = $this->getByCinemaId($show); // Get Shows That Belong To That Particular Cinema
+			$this->timeCheck ($show);
+			$flag = 1;
+			if ($existance != null) {
+				foreach ($existance as $showsOnDB) {
+					if ( ($showsOnDB["date_start"] == $show->getDateStart()) || ($showsOnDB["date_end"] == $show->getDateEnd()) ) {
+						if ( ($showsOnDB["time_start"] > $show->getTimeStart()) && ($showsOnDB["time_start"] > $show->getTimeEnd()) ) {
+							// echo "entra1" . "<br>";
+							// echo $showsOnDB["time_start"] . " > " . $show->getTimeStart() . "<br>";
+							// echo $showsOnDB["time_start"] . " > " . $show->getTimeEnd() . "<br>";
+							$flag *= 1;
+						}
+						else if ( ($showsOnDB["time_end"] < $show->getTimeStart()) && ($showsOnDB["time_end"] < $show->getTimeEnd()) ) {
+							// echo "entra2" . "<br>";
+							// echo $showsOnDB["time_end"] . " < " . $show->getTimeStart() . "<br>";
+							// echo $showsOnDB["time_end"] . " < " . $show->getTimeEnd() . "<br>";
+							$flag *= 1;
+						}
+						else {
+							// echo "entra3";
+							$flag *= 0;
+						}
+					}
+				}
+			}
+			return $flag;
+		}
+
+		public function getByMovieId (Show $show) {
+			try {
+				$query = "CALL shows_getByMovieId (?)";
+				$parameters ["id_movie"] = $show->getMovie()->getId();
+				$this->connection = Connection::GetInstance();
+				return $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
+		}
+
+		public function getByCinemaId (Show $show) {
+			try {
+				$query = "CALL shows_getByCinemaId (?)";
+				$parameters ["id_cinema"] = $show->getCinema()->getId();
+				$this->connection = Connection::GetInstance();
+				return $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
+		}
 
         public function getAll () {
 			$query = "CALL shows_getAll";
@@ -41,15 +113,17 @@
             $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
             foreach($results as $row) {
 				$movie = new Movie ();
-				$movie->setId($row["movies_now_playing_id"]);
-				$movie->setTitle($row["movies_now_playing_title"]);
+				$movie->setId($row["movies_id"]);
+				$movie->setTitle($row["movies_title"]);
 				$cinema = new Cinema();
 				$cinema->setId($row["cinemas_id"]);
 				$cinema->setName($row["cinemas_name"]);
 				$show = new Show ();
 				$show->setId($row["shows_id"]);
-				$show->setDate($row["shows_date"]);
-				$show->setTime($row["shows_time"]);
+				$show->setDateStart($row["shows_date_start"]);
+				$show->setTimeStart($row["shows_time_start"]);
+				$show->setDateEnd($row["shows_date_end"]);
+				$show->setTimeEnd($row["shows_time_end"]);
 				$show->setMovie($movie);
 				$show->setCinema($cinema);
 				array_push ($this->showList, $show);
@@ -78,14 +152,16 @@
 				$show = new Show();
 				foreach($results as $row) {
 					$movie = new Movie ();
-					$movie->setId($row["movies_now_playing_id"]);
-					$movie->setTitle($row["movies_now_playing_title"]);
+					$movie->setId($row["movies_id"]);
+					$movie->setTitle($row["movies_title"]);
 					$cinema = new Cinema();
 					$cinema->setId($row["cinemas_id"]);
 					$cinema->setName($row["cinemas_name"]);
 					$show->setId($row["shows_id"]);
-					$show->setDate($row["shows_date"]);
-					$show->setTime($row["shows_time"]);
+					$show->setDateStart($row["shows_date_start"]);
+					$show->setTimeStart($row["shows_time_start"]);
+					$show->setDateEnd($row["shows_date_end"]);
+					$show->setTimeEnd($row["shows_time_end"]);
 					$show->setMovie($movie);
 					$show->setCinema($cinema);
 				}
@@ -96,14 +172,17 @@
 			}
 		}
 
-		public function modify(Show $show) {
+		public function modify (Show $show) {
 			try {
-				$query = "CALL shows_modify(?, ?, ?, ?, ?)";
+				$query = "CALL shows_modify(?, ?, ?, ?, ?, ?, ?)";
 				$parameters["id"] = $show->getId();
 				$parameters["id_cinema"] = $show->getCinema()->getId();
 				$parameters["id_movie"] = $show->getMovie()->getId();
-				$parameters["date"] = $show->getDate();
-				$parameters["time"] = $show->getTime();
+				$this->timeCheck($show);
+				$parameters["date_start"] = $show->getDateStart();
+				$parameters["time_start"] = $show->getTimeStart();
+				$parameters["date_end"] = $show->getDateEnd();
+				$parameters["time_end"] = $show->getTimeEnd();
 				$this->connection = Connection::getInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 			}

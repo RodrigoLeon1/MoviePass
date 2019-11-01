@@ -7,11 +7,11 @@
     class MovieDAO {
 
 		private $movieList = array();
-		private $tableName = "movies_now_playing";
+		private $tableName = "movies";
 
 		public function add(Movie $movie) {
 			try {
-				$query = "CALL movies_add_now_playing(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				$query = "CALL movies_add(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				$parameters["id"] = $movie->getId();
 				$parameters["popularity"] = $movie->getPopularity();
 				$parameters["vote_count"] = $movie->getVoteCount();
@@ -55,6 +55,7 @@
 					$movie->setVoteAverage($row["vote_average"]);
 					$movie->setOverview($row["overview"]);
 					$movie->setReleaseDate($row["release_date"]);
+					$movie->setRuntime($row["runtime"]);
 					array_push($this->movieList, $movie);
 				}
 				return $this->movieList;
@@ -88,16 +89,38 @@
 					$this->add($movie);
 				}
             }
-		}		
-		
-		public function getKeyMovieTrailer($idMovie) {			
+		}
+
+		public function getRunTimeMovieFromDAO () {
+			try {
+				$query = "SELECT id FROM " . $this->tableName;
+				$this->connection = Connection::getInstance();
+				$resultSet = $this->connection->execute($query);
+				foreach ($resultSet as $row) {
+					$jsonPath = MOVIE_DETAILS_PATH . $row["id"] . "?api_key=" . API_N . URL_API_LANGUAGE;
+					$jsonContent = file_get_contents($jsonPath);
+					$arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
+					$query = "CALL movies_add_runtime (?, ?)";
+					$parameters["id"] = $row["id"];
+					$parameters["runtime"] = $arrayToDecode["runtime"];
+					$this->connection = Connection::GetInstance();
+					$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
+				}
+			}
+			catch (Exception $ex) {
+				throw $ex;
+			}
+
+		}
+
+		public function getKeyMovieTrailer($idMovie) {
 			$jsonPath = MOVIE_DETAILS_PATH . $idMovie . "/videos?api_key=" . API_N . "&language=en-US";
             $jsonContent = file_get_contents($jsonPath);
             $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
 			foreach ($arrayToDecode as $valuesArray) {
 				$key = $valuesArray[0]["key"];
-			}			
-			return $key;             
+			}
+			return $key;
         }
 
 		public function getMovieDetailsById(Movie $movie) {
@@ -121,9 +144,9 @@
 					$movie->setVoteAverage($values["vote_average"]);
 					$movie->setOverview($values["overview"]);
 					$movie->setReleaseDate($values["release_date"]);
-					
+
 					$movie->setRuntime($values["runtime"]);
-					
+
 				}
             }
 		}
@@ -134,8 +157,8 @@
             $jsonPath = COMING_SOON_PATH;
             $jsonContent = file_get_contents($jsonPath);
             $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
-            foreach ($arrayToDecode as $valuesArray) {				
-				foreach ($valuesArray as $values) {									
+            foreach ($arrayToDecode as $valuesArray) {
+				foreach ($valuesArray as $values) {
 					$movie = new Movie();
 					$movie->setPopularity($values["popularity"]);
 					$movie->setVoteCount($values["vote_count"]);
@@ -154,7 +177,7 @@
 					// $this->add($movie);
 					array_push($comingSoonMovies, $movie);
 				}
-			}			
+			}
 			return $comingSoonMovies;
 		}
 
@@ -180,6 +203,7 @@
 					$movie->setVoteAverage($values["vote_average"]);
 					$movie->setOverview($values["overview"]);
 					$movie->setReleaseDate($values["release_date"]);
+					$movie->setRuntime($values["runtime"]);
 				}
 				return $movie;
 			}

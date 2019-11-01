@@ -17,12 +17,13 @@
 					</thead>
 					<tbody>
 						<?php foreach ($shows as $show): ?>
+							<?php $time = strtotime ("+15 minutes", strtotime($show->getTimeStart())); ?>
 							<tr>
 								<td><?= $show->getId(); ?></td>
 								<td><?= $show->getCinema()->getName(); ?></td>
 								<td><?= $show->getMovie()->getTitle(); ?></td>
-								<td><?= $show->getDate(); ?></td>
-								<td><?= $show->getTime(); ?></td>
+								<td><?= $show->getDateStart(); ?></td>
+								<td><?= date('H:i:s', $time); ?></td>
 								<td>
 									<div class="actions-container">
 										<a href="<?php echo FRONT_ROOT . "show/remove/" . $show->getId(); ?>" class="btn btn-delete">
@@ -36,7 +37,7 @@
 									</div>
 								</td>
 
-							</td>
+							</tr>
 						<?php endforeach; ?>
 					</tbody>
 				</table>
