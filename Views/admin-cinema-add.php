@@ -24,7 +24,7 @@
                 </label>
                 <label>
                     <h4>Capacity:</h4>
-                    <input type="number" name="capacity" id="" required>
+                    <input type="number" name="capacity" id="" min="1" required>
                 </label>
                 <label>
                     <h4>Address:</h4>
@@ -32,7 +32,7 @@
                 </label>
                 <label>
                     <h4>Price for ticket:</h4>
-                    <input type="number" name="price" id="" required>
+                    <input type="number" name="price" id="" min="1" required>
                 </label>
                 <button type="submit" class="btn">                
                     Add cinema

@@ -41,29 +41,33 @@
 
         private function validateShowForm($id_cinema, $id_movie, $day, $hour) {
             if(empty($id_cinema) || empty($id_movie) || empty($day) || empty($hour)) {
-                return false;
+                return FALSE;
             }
-            return true;
+            return TRUE;
         }        
         
         public function addShowPath($alert = "", $success = "") {
             if ($_SESSION["loggedUser"]) {
-				$movies = $this->movieDAO->getAll();
-				$cinemas = $this->cinemaDAO->getAll();
-                $admin = $_SESSION["loggedUser"];
-				require_once(VIEWS_PATH . "admin-head.php");
-				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-show-add.php");
+				$admin = $_SESSION["loggedUser"];
+				if($admin->getRole() == 1) {
+					$movies = $this->movieDAO->getAll();
+					$cinemas = $this->cinemaDAO->getAll();
+					require_once(VIEWS_PATH . "admin-head.php");
+					require_once(VIEWS_PATH . "admin-header.php");
+					require_once(VIEWS_PATH . "admin-show-add.php");
+				}
 			}
         }
 
 		public function listShowsPath() {
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
-				$shows = $this->showDAO->getAll();
-				require_once(VIEWS_PATH . "admin-head.php");
-				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-show-list.php");
+				if($admin->getRole() == 1) {
+					$shows = $this->showDAO->getAll();
+					require_once(VIEWS_PATH . "admin-head.php");
+					require_once(VIEWS_PATH . "admin-header.php");
+					require_once(VIEWS_PATH . "admin-show-list.php");
+				}
 			}
 		}
 
@@ -74,13 +78,15 @@
 
 		public function getById($id) {
 			if ($_SESSION["loggedUser"]) {
-				$show = $this->showDAO->getById($id);
-				$movies = $this->movieDAO->getAll();
-				$cinemas = $this->cinemaDAO->getAll();
 				$admin = $_SESSION["loggedUser"];
-				require_once(VIEWS_PATH . "admin-head.php");
-				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-show-modify.php");
+				if($admin->getRole() == 1) {
+					$show = $this->showDAO->getById($id);
+					$movies = $this->movieDAO->getAll();
+					$cinemas = $this->cinemaDAO->getAll();
+					require_once(VIEWS_PATH . "admin-head.php");
+					require_once(VIEWS_PATH . "admin-header.php");
+					require_once(VIEWS_PATH . "admin-show-modify.php");
+				}
 			}
 		}
 

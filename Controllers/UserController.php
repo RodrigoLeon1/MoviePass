@@ -16,6 +16,18 @@
             $this->userDAO = new UserDAO();
         }
 
+		public function add($role, $firstName, $lastName, $dni, $mail, $password) {
+			$user = new User();
+            $user->setFirstName($firstName);
+            $user->setLastName($lastName);
+            $user->setDni($dni);
+            $user->setMail($mail);
+            $user->setPassword($password);
+			$user->setRole($role);
+            $this->userDAO->add($user);
+			return $user;
+        }
+                
         public function validateRegister($firstName, $lastName, $dni, $mail, $password) {
 			if($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) && $this->validateMailForm($mail)) {
 				if($this->userDAO->getByMail($mail) == NULL) {
@@ -28,45 +40,16 @@
             return $this->registerPath(EMPTY_FIELDS);
 		}
 
-		public function add($role, $firstName, $lastName, $dni, $mail, $password) {
-			$user = new User();
-            $user->setFirstName($firstName);
-            $user->setLastName($lastName);
-            $user->setDni($dni);
-            $user->setMail($mail);
-            $user->setPassword($password);
-			$user->setRole($role);
-            $this->userDAO->add($user);
-			return $user;
-		}
+        private function validateRegisterForm($firstName, $lastName, $dni, $email, $password) {
+            if(empty($firstName) || empty($lastName) || empty($dni) || empty($email) || empty($password)) {
+                return FALSE;
+            }
+            return TRUE;
+        }
 
         private function validateMailForm($mail) {
             return (filter_var($mail, FILTER_VALIDATE_EMAIL)) ? TRUE : FALSE;
         }
-
-        private function validateRegisterForm($firstName, $lastName, $dni, $email, $password) {
-            if(empty($firstName) || empty($lastName) || empty($dni) || empty($email) || empty($password)) {
-                return false;
-            }
-            return true;
-        }
-
-		public function addUser($alert = "", $success = "") {
-			if (isset($_SESSION["loggedUser"])) {
-				$admin = $_SESSION["loggedUser"];
-				require_once(VIEWS_PATH . "admin-head.php");
-				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-user-add.php");
-			}
-			else {
-				return $this->listUserPath();
-			}
-		}
-
-		public function adminAdd($role, $firstName, $lastName, $dni, $mail, $password) {
-			$this->add($role, $firstName, $lastName, $dni, $mail, $password);
-			return $this->listUserPath();
-		}
 
         public function validateLogin($mail, $password) {
             if($this->validateLoginForm($mail, $password) && $this->validateMailForm($mail)) {
@@ -90,15 +73,43 @@
                 return FALSE;
             }
             return TRUE;
-        }
+        }        
+
+		public function addUser($alert = "", $success = "") {
+			if (isset($_SESSION["loggedUser"])) {
+                $admin = $_SESSION["loggedUser"];
+                if($admin->getRole() == 1) {
+                    require_once(VIEWS_PATH . "admin-head.php");
+                    require_once(VIEWS_PATH . "admin-header.php");
+                    require_once(VIEWS_PATH . "admin-user-add.php");
+                } else {
+                    return $this->userPath();
+                }
+			}
+			else {
+				return $this->userPath();
+			}
+		}
+
+		public function adminAdd($role, $firstName, $lastName, $dni, $mail, $password) { 
+            if($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) && $this->validateMailForm($mail)) {
+                $this->add($role, $firstName, $lastName, $dni, $mail, $password);
+                return $this->listUserPath(NULL, USER_ADDED);
+            }
+            return $this->addUser(EMPTY_FIELDS, NULL);
+		}
 
         public function listUserPath($alert = "", $success = "") {
             if (isset($_SESSION["loggedUser"])) {
-				$admin = $_SESSION["loggedUser"];
-                $users = $this->userDAO->getAll();
-				require_once(VIEWS_PATH . "admin-head.php");
-				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-user-list.php");
+                $admin = $_SESSION["loggedUser"];
+                if($admin->getRole() == 1) {
+                    $users = $this->userDAO->getAll();
+				    require_once(VIEWS_PATH . "admin-head.php");
+				    require_once(VIEWS_PATH . "admin-header.php");
+                    require_once(VIEWS_PATH . "admin-user-list.php");
+                } else {
+                    return $this->userPath();
+                }
             } else {
                 return $this->userPath();
             }
@@ -106,10 +117,14 @@
 
         public function adminPath() {
 			if (isset($_SESSION["loggedUser"])) {
-				$admin = $_SESSION["loggedUser"];
-				require_once(VIEWS_PATH . "admin-head.php");
-				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-dashboard.php");
+                $admin = $_SESSION["loggedUser"];
+                if($admin->getRole() == 1) {
+				    require_once(VIEWS_PATH . "admin-head.php");
+				    require_once(VIEWS_PATH . "admin-header.php");
+                    require_once(VIEWS_PATH . "admin-dashboard.php");
+                } else {
+                    return $this->userPath();
+                }
 			} else {
                 return $this->userPath();
             }
@@ -151,7 +166,7 @@
         public function myAccountPath() {
 			if (isset($_SESSION["loggedUser"])) {
                 $user = $_SESSION["loggedUser"];
-                $title = "My account";
+                $title = "My account";                            
 				require_once(VIEWS_PATH . "header.php");
                 require_once(VIEWS_PATH . "navbar.php");
                 require_once(VIEWS_PATH . "my-account.php");
@@ -164,7 +179,7 @@
         public function modifyAccountPath() {
 			if (isset($_SESSION["loggedUser"])) {
                 $user = $_SESSION["loggedUser"];
-                $title = "Modify my account";
+                $title = "Modify my account";        
 				require_once(VIEWS_PATH . "header.php");
                 require_once(VIEWS_PATH . "navbar.php");
                 require_once(VIEWS_PATH . "my-account-modify.php");
@@ -173,6 +188,16 @@
                 return $this->loginPath();
             }
         }
+
+        public function removeUser($dni) {		
+            $admin = $_SESSION["loggedUser"];
+            if($admin->getDni() == $dni) {
+                return $this->listUserPath("You can not eliminate yourself.", NULL);
+            } else {
+                $this->userDAO->deleteByDni($dni);
+                return $this->listUserPath(NULL, USER_REMOVE);
+            }
+		}
 
     }
 

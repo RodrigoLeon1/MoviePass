@@ -24,8 +24,16 @@
 								<td><?= $show->getDate(); ?></td>
 								<td><?= $show->getTime(); ?></td>
 								<td>
-									<a href="<?php echo FRONT_ROOT . "show/remove/" . $show->getId(); ?>" class="btn">Remove</a>
-									<a href="<?php echo FRONT_ROOT . "show/getById/" . $show->getId(); ?>" class="btn">Modify</a>
+									<div class="actions-container">
+										<a href="<?php echo FRONT_ROOT . "show/remove/" . $show->getId(); ?>" class="btn btn-delete">
+											<i class="icon ion-md-trash"></i>
+											Remove
+										</a>
+										<a href="<?php echo FRONT_ROOT . "show/getById/" . $show->getId(); ?>" class="btn">
+											<i class="icon ion-md-build"></i>
+											Modify
+										</a>
+									</div>
 								</td>
 
 							</td>

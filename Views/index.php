@@ -17,7 +17,7 @@
                     <?php foreach ($movies as $movie): ?>
                     <figure>
                         <a href="<?= FRONT_ROOT ?>movie/showMovie/<?= $movie->getId() ?>">
-                            <img src="https://image.tmdb.org/t/p/original<?= $movie->getPosterPath() ?>" alt="">
+                            <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?>" alt="">
                             <h2><?= $movie->getTitle(); ?></h2>
                         </a>
                     </figure>

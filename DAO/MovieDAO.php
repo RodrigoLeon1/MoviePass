@@ -9,7 +9,7 @@
 		private $movieList = array();
 		private $tableName = "movies_now_playing";
 
-		public function add (Movie $movie) {
+		public function add(Movie $movie) {
 			try {
 				$query = "CALL movies_add_now_playing(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				$parameters["id"] = $movie->getId();
@@ -158,7 +158,7 @@
 			return $comingSoonMovies;
 		}
 
-		public function getById ($id) {
+		public function getById($id) {
 			try {
 				$query = "CALL movies_getById(?)";
 				$parameters ["id"] = $id;

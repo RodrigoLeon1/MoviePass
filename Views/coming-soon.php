@@ -1,7 +1,27 @@
 <main>
 
-    <div class="movie-options">
+    <div class="container filter-container">
+        <h4>Do you want to filter the list of movies?</h4>
 
+        <form class="filter-form" action="" method="POST">
+            <label>
+                Category:
+                <select name="category">
+                <?php foreach ($genres as $genre): ?>
+                    <option value="<?= $genre->getId(); ?>"><?= $genre->getName(); ?></option>
+                <?php endforeach; ?>                
+                </select>
+            </label>
+            <label>
+                Date:
+                <input type="date" name="date">
+            </label>
+
+            <button type="submit" class="btn-f">
+                <i class="icon ion-md-search"></i>
+                Filter
+            </button>
+        </form>
     </div>
 
     <?php foreach ($movies as $movie): ?>

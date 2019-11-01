@@ -48,7 +48,11 @@
         }
 
 		public function nowPlaying() {
-			$movies = $this->moviesNowPlayingOnShow();
+            $movies = $this->moviesNowPlayingOnShow();
+            
+            $genreController = new Genre_x_MovieController();
+            $genres = $genreController->getAllGenres();            
+
 			$title = 'Now Playing';
 			$img = IMG_PATH . '/w4.png';
 			require_once(VIEWS_PATH . "header.php");
@@ -77,10 +81,12 @@
 
         public function addMoviePath($alert = "", $success = "") {
 			if (isset($_SESSION["loggedUser"])) {
-				$admin = $_SESSION["loggedUser"];
-				require_once(VIEWS_PATH . "admin-head.php");
-				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-movie-add.php");
+                $admin = $_SESSION["loggedUser"];
+                if($admin->getRole() == 1) {
+				    require_once(VIEWS_PATH . "admin-head.php");
+				    require_once(VIEWS_PATH . "admin-header.php");
+                    require_once(VIEWS_PATH . "admin-movie-add.php");
+                }
 			} else {
                 return $this->userPath();
             }

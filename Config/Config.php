@@ -40,6 +40,9 @@
 	define("SHOW_ADDED", "Show added with success.");
 	define("SHOW_EXIST", "This show has already been registered.");	
 	
+	define("USER_ADDED", "User added with success.");
+	define("USER_REMOVE", "User was remove with success.");
+
 	define("LOGIN_ERROR", "You have entered an invalid e-mail or password. Try again!");	
 	define("REGISTER_ERROR", "This email address has already been registered.");
 	define("EMPTY_FIELDS", "Complete all the fields correctly to continue.");

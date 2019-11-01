@@ -3,77 +3,152 @@
 
         <div class="poster_Style">
             <img src="<?= IMG_PATH_TMDB . $poster_path ?> ">
-            <br><br>
 
-            <form method="POST" action="<?= FRONT_ROOT ?>test/purchaseTicket">
+            <!-- <form method="POST" action="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">
                 <input id="idMovie" name="idMovie" type="hidden" value="">
                 <button class="btn-l" type="submit">Buy ticket</button>
-            </form>
+            </form> -->
         </div>
 
         <div class="specification_Style">
             <div>
-                <p class="title1_Style">SYNOPSIS</p>
+                <p class="title1_Style">Overview</p>
             </div>
-            <div>
+            <div class="synopsis-container">
                 <p class="synopsis_Style">
                     <?= $overview ?>
+                    <div class="synopsis-extra">
+                        <div class="movie-rating">
+                            <i class="icon ion-md-star"></i>
+                            Rating <?= $vote_average ?> 
+                        </div>
+                        <div class="genres">
+                            <i class="icon ion-md-color-wand"></i>
+                            Genres: Terror, adventure, family
+                        </div>
+                        <div class="duration">
+                            <i class="icon ion-md-stopwatch"></i>
+                            Duration 90m
+                        </div>
+                        <div class="genres">
+                            <i class="icon ion-md-calendar"></i>
+                            Release date: 
+                            <?= $release_date ?>
+                        </div>          
+                        <div class="age">
+                            <i class="icon ion-md-person"></i>
+                            Age restriction:
+                            <?= $adult ?>
+                        </div>                                       
+                    </div>
                 </p>
-            </div>
-            
-            <br><br><br>
+            </div>    
 
-            <ul>                
-                <li>
-                    <div class="label_Style">
-                        <i class="icon ion-md-arrow-dropright"></i>
-                        Genre
+            <div class="show-container">
+
+                <h2>Movie Showtimes</h2>
+
+                <div class="show-item">
+                    <div class="show-content">
+                        <h2>Paseo Aldrey</h2>
+                        <p>
+                            <p>
+                                <i class="icon ion-md-calendar"></i> 
+                                June18, 2019 at 8:00 
+                            </p>
+                            <p>-</p>
+                            <p>
+                                <i class="icon ion-md-pin"></i>
+                                Sarmiento 2685
+                            </p>
+                        </p>
                     </div>
-                    <div class="data_Style">Terror</div>
-                </li>
-                <br>
-                <br>
-                <li>
-                    <div class="label_Style">
-                        <i class="icon ion-md-arrow-dropright"></i>
-                        Age restriction
+                    <div class="show-ticket">
+                        <a href="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">Buy Ticket</a>
                     </div>
-                    <div class="data_Style">
-                        <?php if( $adult ) { ?>
-                            Adults Only
-                        <?php } else { ?>
-                            General Audiences
-                        <?php } ?>
+                </div>
+                
+                <div class="show-item">
+                    <div class="show-content">
+                        <h2>Ambassador</h2>
+                        <p>
+                            <p>
+                                <i class="icon ion-md-calendar"></i> 
+                                June18, 2019 at 8:00 
+                            </p>
+                            <p>-</p>
+                            <p>
+                                <i class="icon ion-md-pin"></i>
+                                Cordoba DVi
+                            </p>
+                        </p>
                     </div>
-                </li>
-                <br>
-                <br>
-                <li>
-                    <div class="label_Style">
-                        <i class="icon ion-md-arrow-dropright"></i>
-                        Duration
+                    <div class="show-ticket">
+                        <a href="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">Buy Ticket</a>
                     </div>
-                    <div class="data_Style"><?= $vote_average ?></div>
-                </li>     
-                <br>
-                <br>           
-                <li>
-                    <div class="label_Style">
-                        <i class="icon ion-md-arrow-dropright"></i>
-                        Rating
+                </div>
+
+                <div class="show-item">
+                    <div class="show-content">
+                        <h2>CinemaCenter</h2>
+                        <p>
+                            <p>
+                                <i class="icon ion-md-calendar"></i>     
+                                June18, 2019 at 8:00 
+                            </p>
+                            <p>-</p>
+                            <p>
+                                <i class="icon ion-md-pin"></i>    
+                                Diag. Pueyrredon 3050
+                            </p>
+                        </p>
                     </div>
-                    <div class="data_Style"><?= $vote_average ?></div>
-                </li>
-                <br>
-                <br>
-                <li>
-                    <div class="label_Style">
-                        <i class="icon ion-md-arrow-dropright"></i>
-                        Release date
+                    <div class="show-ticket">
+                        <a href="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">Buy Ticket</a>
                     </div>
-                    <div class="data_Style"><?= $release_date ?></div>
-                </li>
-            </ul>
+                </div>
+
+                <div class="show-item">
+                    <div class="show-content">
+                        <h2>Cinema II</h2>
+                        <p>
+                            <p>
+                                <i class="icon ion-md-calendar"></i> 
+                                June18, 2019 at 8:00 
+                            </p>
+                            <p>-</p>
+                            <p>
+                                <i class="icon ion-md-pin"></i>
+                                Los Gallegos Shopping
+                            </p>
+                        </p>
+                    </div>
+                    <div class="show-ticket">
+                        <a href="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">Buy Ticket</a>
+                    </div>
+                </div>  
+                
+                <div class="show-item">
+                    <div class="show-content">
+                        <h2>Cine del Paseo</h2>
+                        <p>
+                            <p>
+                                <i class="icon ion-md-calendar"></i> 
+                                June18, 2019 at 8:00 
+                            </p>
+                            <p>-</p>
+                            <p>
+                                <i class="icon ion-md-pin"></i>
+                                Diagonal Pueyrredon
+                            </p>
+                        </p>
+                    </div>
+                    <div class="show-ticket">
+                        <a href="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">Buy Ticket</a>
+                    </div>
+                </div>                  
+                <br>                
+            </div>    
         </div>
     </div>
 

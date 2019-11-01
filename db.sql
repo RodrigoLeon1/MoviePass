@@ -85,6 +85,12 @@ BEGIN
 	ORDER By profile_users.dni;
 END $$
 
+DROP procedure IF EXISTS `users_deleteByDni`;
+DELIMITER $$
+CREATE PROCEDURE users_deleteById (IN dni INT)
+BEGIN
+	DELETE FROM `users` WHERE `users`.`FK_dni` = dni;
+END$$
 
 ----------------------------- CINEMAS -----------------------------
 

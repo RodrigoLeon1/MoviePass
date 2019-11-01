@@ -8,50 +8,79 @@
         </div>
     </header>
 
-    <main>
-        <div class="purchase-container">
-            <div class="purchase-form">
-                <h2>Complete the form</h2>
-                
-                <form action="" method="post" class="register-form">  
-                    <label> 
-                        <h4>Cinema</h4>
-                        <select name="cinema" class="select_Style" required>    
-                        <?php foreach($cinemas as $value){?>
+    <main>    
+        <div class="container">            
+            <div class="purchase-container">
 
-                            <option value=""><?php $value->getName(); ?></option>
-                            
-                        <?php  }  ?>                            
-                        </select>
-                    </label>
-                    <label>
-                        <h4>Number of tickets</h4>               
-                        <input type="number" name="numberOfTickets" id="" min="1">
-                    </label>                                      
-                    <label> 
-                        <h4>Day</h4>
-                        <input type="date" name="date" min="<?php $date ?>" >
-                    </label>
-                    <label> 
-                        <h4>Hour</h4>
-                        <input type="time" name="hour" >
-                    </label>
-                    <label>
-                        <h4>Insert card number</h4>               
-                        <input type="text" name="" id="" maxlength="16" minlength="16">
-                    </label>
-                    <label>
-                        <h4>Security code</h4>               
-                        <input type="text" name="" id="" maxlength="3" minlength="3">
-                    </label>
-                    <label>
-                        <h4>Expiration date</h4>               
-                        <input type="month" name="" id="">
-                    </label>
-                    <button class="btn-l" type="submit">Register</button>
-                </form>
+                <div class="show-info">
+                    <h3 class="cinema-name">Show information</h3>                        
+                    <div class="show-complete-info">
+                        <h3>
+                            <i class="icon ion-md-calendar"></i> 
+                            Paseo Aldrey
+                        </h3>
+                        <h3>
+                            <i class="icon ion-md-videocam"></i> 
+                            Terminator 3
+                        </h3>
+                        <h3>
+                            <i class="icon ion-logo-usd"></i> 
+                            Price for ticket: $300
+                        </h3>
+                        <h3>
+                            <i class="icon ion-md-calendar"></i> 
+                            June18, 2019 at 8:00
+                        </h3>
+                        <h3>
+                            <i class="icon ion-md-pin"></i> 
+                            Sarmiento 2685
+                        </h3>
+                    </div>
+                    <div class="show-total">
+                        <h3 class="cinema-name">
+                            <i class="icon ion-md-cart"></i>     
+                            Total: $300
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="purchase-form">                    
+                    <form action="" method="POST" class="register-form">                        
+                        <label>
+                            <h4>Select Tickets</h4>               
+                            <input type="number" name="numberOfTickets" id="numberTickets" min="1">
+                        </label> 
+
+                        <label>
+                            <h4>Card</h4>
+                            <div class="card-container">
+                                <input type="radio" name="card" value="visa" id="visa">Visa
+                                <input type="radio" name="card" value="mastercard" id="mastercard">MasterCard                          
+                            </div>
+                        </label>
+
+                        <label>
+                            <h4>Insert card number</h4>               
+                            <input type="text" name="" id="" maxlength="16" minlength="16">
+                        </label>
+
+                        <label>
+                            <h4>Security code</h4>               
+                            <input type="text" name="" id="" maxlength="3" minlength="3">
+                        </label>
+
+                        <label>
+                            <h4>Expiration date</h4>               
+                            <input type="month" name="" id="">
+                        </label>
+
+                        <button class="btn-l" type="submit">Buy</button>
+                    </form> 
+
+                </div>
+
             </div>
-                        
+
             <div class="purchase-seats">                
                 <h2>Seats cinema</h2>
                 <div class="theatre">  
@@ -127,8 +156,7 @@
                         </div>                        
                     </div>                                      
                 </div>  
+            </div> 
 
-            </div>
         </div>
-
     </main>

@@ -28,7 +28,7 @@
                 </div>
                 <?php endif; ?>
 
-                <form action="<?= FRONT_ROOT ?>/user/validateLogin" method="POST" class="login-form">
+                <form action="<?= FRONT_ROOT ?>user/validateLogin" method="POST" class="login-form">
                     <label>
                         <h4>Mail</h4>
                         <input type="email" name="mail" id="email" placeholder="Insert your mail" required autofocus>

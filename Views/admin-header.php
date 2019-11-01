@@ -63,11 +63,11 @@
                     <ul>
 						<li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>user/listUserPath">View users</a>
+                            <a href="<?= FRONT_ROOT ?>user/addUser">Add User</a>
                         </li>
 						<li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>user/addUser">Add User</a>
+                            <a href="<?= FRONT_ROOT ?>user/listUserPath">View users</a>
                         </li>
                     </ul>
                 </li>

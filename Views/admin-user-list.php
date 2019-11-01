@@ -38,14 +38,10 @@
 								<td><?= $user->getMail(); ?></td>
 								<td>
 									<div class="actions-container">
-										<a href="<?php echo FRONT_ROOT . "user/remove/" . $user->getDni(); ?>" class="btn btn-delete">
+										<a href="<?php echo FRONT_ROOT . "user/removeUser/" . $user->getDni(); ?>" class="btn btn-delete">
 											<i class="icon ion-md-trash"></i>
 											Remove
 										</a>										
-										<a href="<?php echo FRONT_ROOT . "user/" . $user->getDni(); ?>" class="btn">
-											<i class="icon ion-md-build"></i>
-											Modify
-										</a>
 									</div> 									
 								</td>																		
 							</tr>

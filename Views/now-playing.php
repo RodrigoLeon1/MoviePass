@@ -1,20 +1,19 @@
 <main>
-
     <div class="container filter-container">
         <h4>Do you want to filter the list of movies?</h4>
 
-        <form class="filter-form" action="" method="post">
+        <form class="filter-form" action="" method="POST">
             <label>
                 Category:
                 <select name="category">
-                    <option class="test" value="value1">Value 1</option>
-                    <option value="value2">Value 2</option>
-                    <option value="value3">Value 3</option>
+                <?php foreach ($genres as $genre): ?>
+                    <option value="<?= $genre->getIdGenre(); ?>"><?= $genre->getName(); ?></option>
+                <?php endforeach; ?>                
                 </select>
             </label>
             <label>
                 Date:
-                <input type="date" name="" id="">
+                <input type="date" name="date">
             </label>
 
             <button type="submit" class="btn-f">
@@ -27,7 +26,9 @@
     <?php foreach ($movies as $movie): ?>
     <div class="container movie-container">
         <div class="movie-img">
-            <img src="https://image.tmdb.org/t/p/original<?= $movie->getPosterPath() ?>" alt="">
+            <a href="<?= FRONT_ROOT ?>movie/showMovie/?id=<?= $movie->getId() ?>">
+                <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?>" alt="">
+            </a>
         </div>
         <div class="movie-info">
             <h3><?= $movie->getTitle() ?></h3>

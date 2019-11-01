@@ -10,9 +10,9 @@
             <li>
                 <a href="<?= FRONT_ROOT ?>movie/nowPlaying" class="nav-link">Now playing</a>
             </li>
-            <!-- <li>
+            <li>
                 <a href="<?= FRONT_ROOT ?>movie/comingSoon" class="nav-link">Coming soon</a>
-            </li> -->
+            </li> 
             
             <?php if(!isset($_SESSION["loggedUser"])): ?>
             <li>

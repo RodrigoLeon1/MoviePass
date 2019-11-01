@@ -33,17 +33,20 @@
 		
         private function validateCinemaForm($name, $capacity, $address, $price) {
             if(empty($name) || empty($capacity) || empty($address) || empty($price)) {
-                return false;
+                return FALSE;
             }
-            return true;
+            return TRUE;
         }		
 
         public function addCinemaPath($success = "", $alert = "") {
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
-				require_once(VIEWS_PATH . "admin-head.php");
-				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-cinema-add.php");
+				if($admin->getRole() == 1) {
+					require_once(VIEWS_PATH . "admin-head.php");
+					require_once(VIEWS_PATH . "admin-header.php");
+					require_once(VIEWS_PATH . "admin-cinema-add.php");
+				}
+				
 			}
         }
 
@@ -52,10 +55,11 @@
 				$admin = $_SESSION["loggedUser"];
 				
 				$this->cinemas = $this->cinemaDAO->getAll();
-
-				require_once(VIEWS_PATH . "admin-head.php");
-				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-cinema-list.php");
+				if($admin->getRole() == 1) {
+					require_once(VIEWS_PATH . "admin-head.php");
+					require_once(VIEWS_PATH . "admin-header.php");
+					require_once(VIEWS_PATH . "admin-cinema-list.php");
+				}
 			}
         }
 
@@ -68,9 +72,11 @@
 			$cinema = $this->cinemaDAO->getById($id);
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
-				require_once(VIEWS_PATH . "admin-head.php");
-				require_once(VIEWS_PATH . "admin-header.php");
-				require_once(VIEWS_PATH . "admin-cinema-modify.php");
+				if($admin->getRole() == 1) {
+					require_once(VIEWS_PATH . "admin-head.php");
+					require_once(VIEWS_PATH . "admin-header.php");
+					require_once(VIEWS_PATH . "admin-cinema-modify.php");
+				}
 			}
 		}
 
@@ -82,7 +88,7 @@
 			$cinema->setAddress($address);
             $cinema->setPrice($price);
 	        $this->cinemaDAO->modify($cinema);
-            return $this->listCinemaPath();
+            return $this->listCinemaPath(CINEMA_MODIFY);
         }
 
     }
