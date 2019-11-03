@@ -34,7 +34,6 @@
 				$show->setCinema($cinema);
 				$this->showDAO->add($show);
 				return $this->addShowPath(NULL, SHOW_ADDED);
-
 			}
 			return $this->addShowPath(EMPTY_FIELDS);
         }
