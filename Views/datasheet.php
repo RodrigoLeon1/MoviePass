@@ -8,6 +8,7 @@
         <div class="specification_Style">
             <div>
                 <p class="title1_Style">Overview</p>
+
             </div>
             <div class="synopsis-container">
                 <p class="synopsis_Style">
@@ -51,10 +52,10 @@
                         <p>
                             <p>
                                 <i class="icon ion-md-calendar"></i> 
-                                <!-- June18, 2019 at 8:00  -->
-                                <?= $show->getDateStart() ?>
+                                <!-- June 18, 2019 at 8:00  -->
+                                <?= date('F j, Y', strtotime($show->getDateStart())) ?>
                                 at 
-                                <?= $show->getTimeStart() ?>
+                                <?= date('H:i', strtotime($show->getTimeStart())) ?>
                             </p>
                             <p>-</p>
                             <p>
