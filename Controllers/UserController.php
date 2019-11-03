@@ -93,8 +93,11 @@
 
 		public function adminAdd($role, $firstName, $lastName, $dni, $mail, $password) { 
             if($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) && $this->validateMailForm($mail)) {
-                $this->add($role, $firstName, $lastName, $dni, $mail, $password);
-                return $this->listUserPath(NULL, USER_ADDED);
+                if($this->userDAO->getByMail($mail) == NULL) {
+                    $this->add($role, $firstName, $lastName, $dni, $mail, $password);
+                    return $this->listUserPath(NULL, USER_ADDED);
+                }
+                return $this->listUserPath(REGISTER_ERROR, NULL);
             }
             return $this->addUser(EMPTY_FIELDS, NULL);
 		}

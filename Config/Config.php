@@ -38,6 +38,7 @@
 	define("MOVIE_EXIST", "This movie has already been registered.");
 
 	define("SHOW_ADDED", "Show added with success.");
+	define("SHOW_REMOVE", "Show remove with success.");
 	define("SHOW_EXIST", "This show has already been registered.");	
 	
 	define("USER_ADDED", "User added with success.");

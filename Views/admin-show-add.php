@@ -17,7 +17,6 @@
     <?php endif; ?>
 
     <div class="dashboard-container">
-
         <form class="content-container" action="<?= FRONT_ROOT ?>show/add" method="post">
 
 			<label>

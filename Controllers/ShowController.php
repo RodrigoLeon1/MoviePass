@@ -58,7 +58,7 @@
 			}
         }
 
-		public function listShowsPath() {
+		public function listShowsPath($success = "") {
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
@@ -72,7 +72,7 @@
 
 		public function remove($id) {
 			$this->showDAO->deleteById($id);
-			return $this->listShowsPath();
+			return $this->listShowsPath(SHOW_REMOVE);
 		}
 
 		public function getById($id) {

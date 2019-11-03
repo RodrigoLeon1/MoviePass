@@ -1,6 +1,14 @@
     <main>
         <h2 class="dash-title">Shows</h2>
         <hr>
+
+        <?php if($success != NULL): ?>
+        <div class="alert-container success-container">
+            <i class="icon ion-md-checkmark"></i>
+            <h3><?= $success ?></h3>
+        </div>
+        <?php endif; ?> 
+
         <div class="dashboard-container">
 
 			<div class="content-container">

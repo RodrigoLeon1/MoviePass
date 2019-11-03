@@ -346,10 +346,12 @@ hr {
 }
 
 .container > .info {
-    font-size: 3rem;
+    display: block;
+    color: #919191;
+    font-size: 3.3rem;
     font-weight: 300;
-    word-spacing: 1rem;
-    margin: 5rem;    
+    word-spacing: 1rem;    
+    margin: 12rem;
 }
 
 .movie-container {    

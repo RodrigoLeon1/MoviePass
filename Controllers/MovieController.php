@@ -61,24 +61,29 @@
 			require_once(VIEWS_PATH . "footer.php");
 		}
 
-        public function filterMovies($id, $date) {            
+        public function filterMovies($id = "", $date = "") {            
             
             $genreMovieController = new GenreToMovieController();            
-            $genres = $genreMovieController->getAllGenres();
-            $nameGenre = $genreMovieController->getNameOfGenre($id);            
-            $movies = $genreMovieController->searchMovieByGenre($id);  
+            $genres = $genreMovieController->getAllGenres();                        
 
-            if(!empty($id) && empty($date)) {
-                echo '1 - filtrar por id';
-            } else if (!empty($date) && empty($id)) {
-                echo '2 - filtrar por fecha';
+            if(!empty($id) && empty($date)) {                
+                // echo ' filtrar por id';
+                $nameGenre = $genreMovieController->getNameOfGenre($id);   
+                $title = 'Now Playing - ' . $nameGenre;         
+                $movies = $genreMovieController->searchMoviesOnShowByGenre($id);  
+            } else if (!empty($date) && empty($id)) {                
+                // echo ' filtrar por fecha';
+                $title = 'Now Playing';
+                $movies = $genreMovieController->searchMoviesOnShowByDate($date); 
             } else if (!empty($id) && !empty($date)) {
-                echo '3 - filtrar por id y fecha';
+                // echo ' filtrar por id y fecha';
+                $nameGenre = $genreMovieController->getNameOfGenre($id);            
+                $title = 'Now Playing - ' . $nameGenre;
+                $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);                
             } else {
-                echo 'ambos vacios - no filtrar';
+                return $this->nowPlaying();
             }
-
-            $title = 'Now Playing - ' . $nameGenre;
+            
 			$img = IMG_PATH . '/w4.png';                                
 
             require_once(VIEWS_PATH . "header.php");

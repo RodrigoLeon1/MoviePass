@@ -47,7 +47,7 @@
             $this->genresToMoviesDAO->infoMovie();
         }
 
-        public function searchMovieByGenre($genre) {
+        public function searchMoviesOnShowByGenre($genre) {
             $movies = array();
             if(is_numeric($genre)) {
                 $movies = $this->genresToMoviesDAO->getByGenre($genre);
@@ -57,6 +57,18 @@
             }
             return $movies;
         }
+
+        public function searchMoviesOnShowByDate($date) {
+            $movies = array();
+            $movies = $this->genresToMoviesDAO->getByDate($date);            
+            return $movies;
+        }         
+
+        public function searchMoviesOnShowByGenreAndDate($genre, $date) {
+            $movies = array();            
+            $movies = $this->genresToMoviesDAO->getByGenreAndDate($genre, $date);
+            return $movies;
+        }        
 
         public function getGenresOfMovie(Movie $movie) {
             return $this->genresToMoviesDAO->getGenresOfMovie($movie);

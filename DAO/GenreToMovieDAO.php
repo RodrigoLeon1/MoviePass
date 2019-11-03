@@ -78,8 +78,8 @@
 			$movies = array();	
 			try {
 				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON FK_id_movie = movies.id 
-																INNER JOIN shows ON movies.id = shows.FK_id_movie
-																WHERE (FK_id_genre = :id_genre)";			
+																 INNER JOIN shows ON movies.id = shows.FK_id_movie
+																 WHERE (FK_id_genre = :id_genre)";			
 				$parameters["id_genre"] = $id;
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters);			
@@ -109,14 +109,83 @@
 			return $movies;
 		} 
 
+		public function getByDate($date) {
+			$movies = array();	
+			try {
+				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON FK_id_movie = movies.id 
+																 INNER JOIN shows ON movies.id = shows.FK_id_movie
+																 WHERE (shows.date_start = :date)";			
+				$parameters["date"] = $date;
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, $parameters);			
+				foreach($results as $row) {
+					$movie = new Movie();
+					$movie->setId($row["FK_id_movie"]);
+					$movie->setPopularity($row["popularity"]);
+					$movie->setVoteCount($row["vote_count"]);
+					$movie->setVideo($row["video"]);
+					$movie->setPosterPath($row["poster_path"]);
+					$movie->setAdult($row["adult"]);
+					$movie->setBackdropPath($row["backdrop_path"]);
+					$movie->setOriginalLanguage($row["original_language"]);
+					$movie->setOriginalTitle($row["original_title"]);
+					$movie->setGenreIds($row["genre_ids"]);
+					$movie->setTitle($row["title"]);
+					$movie->setVoteAverage($row["vote_average"]);
+					$movie->setOverview($row["overview"]);
+					$movie->setReleaseDate($row["release_date"]);
+					$movie->setRuntime($row["runtime"]);
+					array_push($movies, $movie);
+				}			
+			}
+			catch (Exception $ex) {
+				throw $ex;
+			}
+			return $movies;
+		} 		
+
+		public function getByGenreAndDate($id, $date) {
+			$movies = array();	
+			try {
+				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON FK_id_movie = movies.id 
+																 INNER JOIN shows ON movies.id = shows.FK_id_movie
+																 WHERE (FK_id_genre = :id_genre AND shows.date_start = :date)";		
+				$parameters["id_genre"] = $id;
+				$parameters["date"] = $date;
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, $parameters);			
+				foreach($results as $row) {
+					$movie = new Movie();
+					$movie->setId($row["FK_id_movie"]);
+					$movie->setPopularity($row["popularity"]);
+					$movie->setVoteCount($row["vote_count"]);
+					$movie->setVideo($row["video"]);
+					$movie->setPosterPath($row["poster_path"]);
+					$movie->setAdult($row["adult"]);
+					$movie->setBackdropPath($row["backdrop_path"]);
+					$movie->setOriginalLanguage($row["original_language"]);
+					$movie->setOriginalTitle($row["original_title"]);
+					$movie->setGenreIds($row["genre_ids"]);
+					$movie->setTitle($row["title"]);
+					$movie->setVoteAverage($row["vote_average"]);
+					$movie->setOverview($row["overview"]);
+					$movie->setReleaseDate($row["release_date"]);
+					$movie->setRuntime($row["runtime"]);
+					array_push($movies, $movie);
+				}			
+			}
+			catch (Exception $ex) {
+				throw $ex;
+			}
+			return $movies;
+		}		
+
 		public function getGenresOfMovie(Movie $movie) {
 			$genres = array();
-
 			try {
 				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON movies.id = FK_id_movie
-																INNER JOIN genres ON FK_id_genre = genres.id						
-																WHERE (FK_id_movie = :id_movie)";			
-				
+																 INNER JOIN genres ON FK_id_genre = genres.id						
+																 WHERE (FK_id_movie = :id_movie)";							
 				$parameters["id_movie"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters);			
@@ -134,11 +203,9 @@
 		
 		public function getNameGenre($id) {			
 			$genreName = "";
-
 			try {
 				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN genres ON FK_id_genre = genres.id						
-																WHERE (FK_id_genre = :id_genre)";			
-				
+																 WHERE (FK_id_genre = :id_genre)";			
 				$parameters["id_genre"] = $id;
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters);			

@@ -18,10 +18,12 @@
 
         <div class="dashboard-container">
             <form class="content-container" action="<?= FRONT_ROOT ?>user/adminAdd" method="post">
+                
                 <label>
                     <h4>Insert Role:</h4>
                     <input type="number" name="role" id="" min="0" max="1" required>
                 </label>
+
                 <label>
                     <h4>First Name:</h4>
                     <input type="text" name="firstName" id="" required>
