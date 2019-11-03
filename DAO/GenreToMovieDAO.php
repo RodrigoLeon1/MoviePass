@@ -114,7 +114,8 @@
 			try {
 				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON FK_id_movie = movies.id 
 																 INNER JOIN shows ON movies.id = shows.FK_id_movie
-																 WHERE (shows.date_start = :date)";			
+																 WHERE (shows.date_start = :date)
+																 GROUP BY movies.id ";			
 				$parameters["date"] = $date;
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters);			

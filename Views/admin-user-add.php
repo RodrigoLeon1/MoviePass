@@ -20,8 +20,12 @@
             <form class="content-container" action="<?= FRONT_ROOT ?>user/adminAdd" method="post">
                 
                 <label>
-                    <h4>Insert Role:</h4>
-                    <input type="number" name="role" id="" min="0" max="1" required>
+                    <h4>Select Role:</h4>
+                    <select class="" name="id_role">                    
+                    <?php foreach ($roles as $role): ?>                    
+                       <option value="<?= $role->getId(); ?>"><?= ucfirst($role->getDescription()); ?></option>
+                    <?php endforeach; ?>
+				    </select>                    
                 </label>
 
                 <label>

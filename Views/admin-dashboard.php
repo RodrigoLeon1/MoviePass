@@ -24,18 +24,11 @@
             <h4>Movies now playing</h4>
             <hr>
             <div class="movies-container">
+                <?php foreach ($movies as $movie): ?>
                 <div class="movie">
-                    <img src="/MoviePass/Views/assets/img/poster2.jpg" alt="Movie poster">
-                </div>
-                <div class="movie">
-                    <img src="/MoviePass/Views/assets/img/poster2.jpg" alt="Movie poster">
-                </div>
-                <div class="movie">
-                    <img src="/MoviePass/Views/assets/img/poster2.jpg" alt="Movie poster">
-                </div>
-                <div class="movie">
-                    <img src="/MoviePass/Views/assets/img/poster2.jpg" alt="Movie poster">
-                </div>                                
+                    <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?>" alt="<?= $movie->getTitle() ?>">
+                </div>                    
+                <?php endforeach; ?>                                            
             </div>
         </div>
 

@@ -46,12 +46,18 @@
 			require_once(VIEWS_PATH . "footer.php");
         }
 
-		public function nowPlaying() {
-            $movies = $this->moviesNowPlayingOnShow();            
+		public function nowPlaying($movies = "", $title = "") {
             $genreController = new GenreToMovieController();
             $genres = $genreController->getAllGenres();            
+            
+            if($movies == NULL) {
+                $movies = $this->moviesNowPlayingOnShow();            
+            }
 
-			$title = 'Now Playing';
+            if($title == NULL) {
+                $title = 'Now Playing';
+            }
+
             $img = IMG_PATH . '/w4.png';
             
 			require_once(VIEWS_PATH . "header.php");
@@ -60,38 +66,71 @@
 			require_once(VIEWS_PATH . "now-playing.php");
 			require_once(VIEWS_PATH . "footer.php");
 		}
-
+        
         public function filterMovies($id = "", $date = "") {            
             
+            $img = IMG_PATH . '/w4.png';   
             $genreMovieController = new GenreToMovieController();            
             $genres = $genreMovieController->getAllGenres();                        
 
             if(!empty($id) && empty($date)) {                
-                // echo ' filtrar por id';
+                //Filtramos solo por genero
                 $nameGenre = $genreMovieController->getNameOfGenre($id);   
                 $title = 'Now Playing - ' . $nameGenre;         
-                $movies = $genreMovieController->searchMoviesOnShowByGenre($id);  
+                $movies = $genreMovieController->searchMoviesOnShowByGenre($id);                  
+                return $this->nowPlaying($movies, $title);
+
             } else if (!empty($date) && empty($id)) {                
-                // echo ' filtrar por fecha';
-                $title = 'Now Playing';
+                //Filtramos solo por fecha                
                 $movies = $genreMovieController->searchMoviesOnShowByDate($date); 
+                return $this->nowPlaying($movies);
+
             } else if (!empty($id) && !empty($date)) {
-                // echo ' filtrar por id y fecha';
+                //Filtramos por genero y fecha
                 $nameGenre = $genreMovieController->getNameOfGenre($id);            
                 $title = 'Now Playing - ' . $nameGenre;
-                $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);                
-            } else {
+                $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);                  
+                return $this->nowPlaying($movies, $title);
+                
+            } else {                
                 return $this->nowPlaying();
             }
             
-			$img = IMG_PATH . '/w4.png';                                
+        } 
+        
+        /* 
+        public function filterMovies2($id = "", $date = "") {
+            $genreMovieController = new GenreToMovieController();
+            $genres = $genreMovieController->getAllGenres();
 
+            if(substr($id, 4, 1) == '-') {
+                $date = $id;
+                // echo ' filtrar por fecha';
+                $title = 'Now Playing';
+                $movies = $genreMovieController->searchMoviesOnShowByDate($date); 
+            } else {
+                if(!empty($id) && empty($date)) {
+                    // echo ' filtrar por id';
+                    $nameGenre = $genreMovieController->getNameOfGenre($id);
+                    $title = 'Now Playing - ' . $nameGenre;
+                    $movies = $genreMovieController->searchMoviesOnShowByGenre($id);
+                } else if (!empty($id) && !empty($date)) {
+                    // echo ' filtrar por id y fecha';
+                    $nameGenre = $genreMovieController->getNameOfGenre($id);
+                    $title = 'Now Playing - ' . $nameGenre;
+                    $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);
+                } else {
+                    return $this->nowPlaying();
+                }
+            }
+
+            $img = IMG_PATH . '/w4.png';
             require_once(VIEWS_PATH . "header.php");
-			require_once(VIEWS_PATH . "navbar.php");
-			require_once(VIEWS_PATH . "header-s.php");
-			require_once(VIEWS_PATH . "now-playing.php");
-			require_once(VIEWS_PATH . "footer.php");
-        }        
+            require_once(VIEWS_PATH . "navbar.php");
+            require_once(VIEWS_PATH . "header-s.php");
+            require_once(VIEWS_PATH . "now-playing.php");
+            require_once(VIEWS_PATH . "footer.php");
+        }*/
 
 		public function comingSoon() {
 			$title = 'Coming Soon';

@@ -6,7 +6,7 @@
             <label>
                 Category:
                 <select name="category">
-                <option value="" selected disabled></option>
+                <option value="" selected></option>
                 <?php foreach ($genres as $genre): ?>
                     <option value="<?= $genre->getIdGenre(); ?>"><?= $genre->getName(); ?></option>
                 <?php endforeach; ?>                

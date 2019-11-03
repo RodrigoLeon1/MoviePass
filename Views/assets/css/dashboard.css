@@ -183,7 +183,8 @@ hr {
     padding: 2rem;
     display: grid;
     max-width: 65%;    
-    grid-template-columns: repeat(4, 1fr);        
+    grid-template-columns: repeat(4, 1fr);  
+    row-gap: 2rem;      
 }
 
 .movie {    
@@ -195,7 +196,6 @@ hr {
     border-radius: 5px;
     box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.75);
 }
-
 
 
 /*  */

@@ -28,19 +28,24 @@
         }
 
         public function getAll() {
-			$query = "SELECT * FROM " . $this->tableName;
-            $this->connection = Connection::GetInstance();
-            $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-            foreach($results as $row) {
-                $cinema = new Cinema();
-				$cinema->setId($row["id"]);
-                $cinema->setName($row["name"]);
-                $cinema->setAddress($row["address"]);
-                $cinema->setCapacity($row["capacity"]);
-                $cinema->setPrice($row["ticket_value"]);
-				array_push ($this->cinemaList, $cinema);
-            }
-            return $this->cinemaList;
+			try {				
+				$query = "SELECT * FROM " . $this->tableName;
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+				foreach($results as $row) {
+					$cinema = new Cinema();
+					$cinema->setId($row["id"]);
+					$cinema->setName($row["name"]);
+					$cinema->setAddress($row["address"]);
+					$cinema->setCapacity($row["capacity"]);
+					$cinema->setPrice($row["ticket_value"]);
+					array_push ($this->cinemaList, $cinema);
+				}				
+				return $this->cinemaList;
+			}
+			catch(Exception $e) {
+				throw $e;
+			}
 		}
 
 		public function deleteById($id) {

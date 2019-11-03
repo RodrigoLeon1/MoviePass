@@ -8,6 +8,7 @@
 
 	class RoleDAO {
 
+		private $roleList = array();
 		private $connection;
 		private $tableName = "roles";
 
@@ -23,6 +24,25 @@
                 $role->setDescription($row["description"]);
             }
             return $role;
-        }
+		}
+		
+		public function getAll() {
+			try {				
+				$query = "SELECT * FROM " . $this->tableName;
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, array());
+				foreach($results as $row) {
+					$role = new Role();
+					$role->setId($row["id"]);
+					$role->setDescription($row["description"]);
+					array_push ($this->roleList, $role);
+				}				
+				return $this->roleList;
+			}
+			catch(Exception $e) {
+				throw $e;
+			}
+		}
+
 	}
  ?>
