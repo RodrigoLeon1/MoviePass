@@ -8,7 +8,6 @@
         <div class="specification_Style">
             <div>
                 <p class="title1_Style">Overview</p>
-
             </div>
             <div class="synopsis-container">
                 <p class="synopsis_Style">
