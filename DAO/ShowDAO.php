@@ -63,9 +63,9 @@
 			$timeEnd = strtotime ($plusRunTime, strtotime($show->getDateStart() . $show->getTimeStart()));
 			$timeEnd += strtotime ("+15 minutes", strtotime($timeEnd));
 			// Assign time to paramenters
-			$show->setDateStart(date ('Y-d-m', $timeStart));
+			$show->setDateStart(date ('Y-m-d', $timeStart));
 			$show->setTimeStart(date ('H:i:s', $timeStart));
-			$show->setDateEnd(date ('Y-d-m', $timeEnd));
+			$show->setDateEnd(date ('Y-m-d', $timeEnd));
 			$show->setTimeEnd(date ('H:i:s', $timeEnd));
 		}
 
@@ -238,18 +238,18 @@
 
 		//new
 		public function getShowsOfMovie(Movie $movie) {
-			$shows = array();	
+			$shows = array();
 
-			try {						
-				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON shows.FK_id_movie = movies.id 
+			try {
+				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON shows.FK_id_movie = movies.id
 																INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
 																WHERE (shows.FK_id_movie = :id_movie)
-																ORDER BY shows.date_start ASC";			
+																ORDER BY shows.date_start ASC";
 				$parameters["id_movie"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
-				$results = $this->connection->Execute($query, $parameters);			
+				$results = $this->connection->Execute($query, $parameters);
 				foreach($results as $row) {
-					$show = new Show();					
+					$show = new Show();
 					$cinema = new Cinema();
 					$cinema->setName($row["name"]);
 					$cinema->setAddress($row["address"]);
@@ -258,7 +258,7 @@
 					$show->setTimeStart($row["time_start"]);
 					$show->setCinema($cinema);
 					array_push($shows, $show);
-				}			
+				}
 				return $shows;
 			}
 			catch (Exception $e) {
