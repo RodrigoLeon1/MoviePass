@@ -22,7 +22,7 @@
 
         public function add(Show $show) {
 			try {
-				if ($this->checkAndAdd($show)) {
+				if ($this->checkTime($show)) {
 					$query = "INSERT INTO " . $this->tableName . " (FK_id_cinema, FK_id_movie, date_start, time_start, date_end, time_end) VALUES (:FK_id_cinema, :FK_id_movie, :date_start, :time_start, :date_end, :time_end);";
 					$parameters["FK_id_cinema"] = $show->getCinema()->getId();
 					$parameters["FK_id_movie"] = $show->getMovie()->getId();
@@ -39,7 +39,23 @@
 			}
         }
 
-		public function timeCheck ($show) {
+		public function checkPlace (Show $show) {
+			$this->getAll();
+			if ($this->showList != null) {
+				foreach ($this->showList as $showList) {
+					if ($showList->getMovie()->getId() == $show->getMovie()->getId()) {
+						// echo "peli es el mismo <br>";
+						if ($showList->getDateStart() == $show->getDateStart()) {
+							// echo "la fecha es la misma <br>";
+							return 0;
+						}
+					}
+				}
+			}
+			return 1;
+		}
+
+		public function appendTime ($show) {
 			$movie = $this->movieDAO->getById($show->getMovie()->getId()); // Get Movie On Show In Order To Get It's Runtime
 			//Modify Time Lapse
 			$timeStart = strtotime ("-15 minutes", strtotime($show->getDateStart() . $show->getTimeStart()));
@@ -47,20 +63,19 @@
 			$timeEnd = strtotime ($plusRunTime, strtotime($show->getDateStart() . $show->getTimeStart()));
 			$timeEnd += strtotime ("+15 minutes", strtotime($timeEnd));
 			// Assign time to paramenters
-			$show->setDateStart(date ('Y-m-d', $timeStart));
+			$show->setDateStart(date ('Y-d-m', $timeStart));
 			$show->setTimeStart(date ('H:i:s', $timeStart));
-			$show->setDateEnd(date ('Y-m-d', $timeEnd));
+			$show->setDateEnd(date ('Y-d-m', $timeEnd));
 			$show->setTimeEnd(date ('H:i:s', $timeEnd));
-
 		}
 
-		public function checkAndAdd (Show $show) {
+		public function checkTime (Show $show) {
 			$existance = $this->getByCinemaId($show); // Get Shows That Belong To That Particular Cinema
-			$this->timeCheck ($show);
+			$this->appendTime ($show);
 			$flag = 1;
 			if ($existance != null) {
 				foreach ($existance as $showsOnDB) {
-					if ( ($showsOnDB["date_start"] == $show->getDateStart()) || ($showsOnDB["date_end"] == $show->getDateEnd()) ) {
+					if ( ($showsOnDB["date_start"] == $show->getDateStart()) ) {
 						if ( ($showsOnDB["time_start"] > $show->getTimeStart()) && ($showsOnDB["time_start"] > $show->getTimeEnd()) ) {
 							// echo "entra1" . "<br>";
 							// echo $showsOnDB["time_start"] . " > " . $show->getTimeStart() . "<br>";
@@ -74,11 +89,15 @@
 							$flag *= 1;
 						}
 						else {
-							// echo "entra3";
+							//echo "entra3";
 							$flag *= 0;
 						}
 					}
 				}
+			}
+			else if ($existance == null) {
+				// echo "entra al checkPlace <br>";
+				$flag *= $this->checkPlace($show);
 			}
 			return $flag;
 		}
