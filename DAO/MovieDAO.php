@@ -2,11 +2,14 @@
 
     namespace DAO;
 
+	use \Exception as Exception;
+	use DAO\Connection as Connection;
 	use Models\Movie as Movie;
 
     class MovieDAO {
 
-		private $movieList = array();
+		private $movieList = array();		
+		private $upcoming = array();
 		private $tableName = "movies";
 
 		public function add(Movie $movie) {
@@ -113,8 +116,8 @@
 
 		}
 
-		public function getKeyMovieTrailer($idMovie) {
-			$jsonPath = MOVIE_DETAILS_PATH . $idMovie . "/videos?api_key=" . API_N . "&language=en-US";
+		public function getKeyMovieTrailer(Movie $movie) {
+			$jsonPath = MOVIE_DETAILS_PATH . $movie->getId() . "/videos?api_key=" . API_N . "&language=en-US";
             $jsonContent = file_get_contents($jsonPath);
             $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
 			foreach ($arrayToDecode as $valuesArray) {
@@ -152,33 +155,25 @@
 		}
 
 		//problemas aca
-		public function getComingSoonMovies() {
-			$comingSoonMovies = array();
+		public function getComingSoonMovies() {											
             $jsonPath = COMING_SOON_PATH;
             $jsonContent = file_get_contents($jsonPath);
             $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
             foreach ($arrayToDecode as $valuesArray) {
-				foreach ($valuesArray as $values) {
-					$movie = new Movie();
-					$movie->setPopularity($values["popularity"]);
-					$movie->setVoteCount($values["vote_count"]);
-					$movie->setVideo($values["video"]);
+				foreach ($valuesArray as $values) {					
+					$movie = new Movie();										
 					$movie->setPosterPath($values["poster_path"]);
 					$movie->setId($values["id"]);
-					$movie->setAdult($values["adult"]);
-					$movie->setBackdropPath($values["backdrop_path"]);
-					$movie->setOriginalLanguage($values["original_language"]);
-					$movie->setOriginalTitle($values["original_title"]);
-					$movie->setGenreIds($values["genre_ids"]);
+					$movie->setBackdropPath($values["backdrop_path"]);					
+					$movie->setOriginalTitle($values["original_title"]);					
 					$movie->setTitle($values["title"]);
 					$movie->setVoteAverage($values["vote_average"]);
 					$movie->setOverview($values["overview"]);
-					$movie->setReleaseDate($values["release_date"]);
-					// $this->add($movie);
-					array_push($comingSoonMovies, $movie);
+					$movie->setReleaseDate($values["release_date"]);					
+					array_push($this->upcoming, $movie);
 				}
-			}
-			return $comingSoonMovies;
+			}			
+			return $this->upcoming;
 		}
 
 		public function getById($id) {

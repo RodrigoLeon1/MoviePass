@@ -2,8 +2,9 @@
 
     namespace Controllers;
 
+    use Models\Movie as Movie;    
     use DAO\MovieDAO as MovieDAO;
-    use Models\Movie as Movie;
+    use Controllers\GenreToMovieController as GenreToMovieController;
 	use Controllers\ShowController as ShowController;
 
     class MovieController {
@@ -13,7 +14,7 @@
 
         public function __construct() {
             $this->movieDAO = new MovieDAO();
-			$this->showController = new ShowController ();
+			$this->showController = new ShowController();
         }
 
         public function moviesNowPlaying() {
@@ -24,22 +25,20 @@
             return $this->showController->moviesOnShow();
         }
 
-        // $id -> Movie $movie
-        // El dao se encargar de ir a $movie->getId()
         public function showMovie($id) {
             $movies = $this->moviesNowPlaying();
-            foreach ($movies as $movie) {
-                if ($movie->getId() == $id) {
+            $genreMovieController = new GenreToMovieController();    
+            foreach ($movies as $movieRow) {
+                if ($movieRow->getId() == $id) {                                                                                
+                    $movie = new Movie();
+                    $movie = $movieRow;                    
                     $title = $movie->getTitle();
-                    $poster_path = $movie->getPosterPath();
-                    $release_date = $movie->getReleaseDate();
-                    $overview = $movie->getOverview();
-					$adult = $movie->getAdult();
-					$vote_average = $movie->getVoteAverage();
                     $img = IMG_PATH_TMDB . $movie->getBackdropPath();
-                    $urlTrailer = $this->movieDAO->getKeyMovieTrailer($id);
+                    $keyTrailer = $this->movieDAO->getKeyMovieTrailer($movie);     
+                    $shows = $this->showController->getShowsOfMovieById($id);
+                    $genres = $genreMovieController->getGenresOfMovie($movie);                                                   
                 }
-            }
+            }            
             require_once(VIEWS_PATH . "header.php");
             require_once(VIEWS_PATH . "header-s.php");
 			require_once(VIEWS_PATH . "navbar.php");
@@ -48,19 +47,46 @@
         }
 
 		public function nowPlaying() {
-            $movies = $this->moviesNowPlayingOnShow();
-            
-            $genreController = new Genre_x_MovieController();
+            $movies = $this->moviesNowPlayingOnShow();            
+            $genreController = new GenreToMovieController();
             $genres = $genreController->getAllGenres();            
 
 			$title = 'Now Playing';
-			$img = IMG_PATH . '/w4.png';
+            $img = IMG_PATH . '/w4.png';
+            
 			require_once(VIEWS_PATH . "header.php");
 			require_once(VIEWS_PATH . "navbar.php");
 			require_once(VIEWS_PATH . "header-s.php");
 			require_once(VIEWS_PATH . "now-playing.php");
 			require_once(VIEWS_PATH . "footer.php");
 		}
+
+        public function filterMovies($id, $date) {            
+            
+            $genreMovieController = new GenreToMovieController();            
+            $genres = $genreMovieController->getAllGenres();
+            $nameGenre = $genreMovieController->getNameOfGenre($id);            
+            $movies = $genreMovieController->searchMovieByGenre($id);  
+
+            if(!empty($id) && empty($date)) {
+                echo '1 - filtrar por id';
+            } else if (!empty($date) && empty($id)) {
+                echo '2 - filtrar por fecha';
+            } else if (!empty($id) && !empty($date)) {
+                echo '3 - filtrar por id y fecha';
+            } else {
+                echo 'ambos vacios - no filtrar';
+            }
+
+            $title = 'Now Playing - ' . $nameGenre;
+			$img = IMG_PATH . '/w4.png';                                
+
+            require_once(VIEWS_PATH . "header.php");
+			require_once(VIEWS_PATH . "navbar.php");
+			require_once(VIEWS_PATH . "header-s.php");
+			require_once(VIEWS_PATH . "now-playing.php");
+			require_once(VIEWS_PATH . "footer.php");
+        }        
 
 		public function comingSoon() {
 			$title = 'Coming Soon';
@@ -76,7 +102,7 @@
 		}
 
 		public function getNowPlayingMoviesFromDAO() {
-			// $this->movieDAO->getNowPlayingMoviesFromDAO();
+			$this->movieDAO->getNowPlayingMoviesFromDAO();
 			$this->movieDAO->getRunTimeMovieFromDAO();
         }
 
@@ -93,19 +119,16 @@
             }
         }        
 
-
-        public function filterMovies($id) {
+        /*
+        public function add($idMovie) {
+            $movie = new Movie();
+            $movie->setId($idMovie);
             
-            $genreMovieDAO = new Genre_x_MovieDAO();
+            $movieDetails = $this->movieDAO->getMovieDetails($movie);         
 
-            $movies = $genreMovieDAO->searchMovieByGenre($id);
-
-            // return $this->;
         }
+        */
         
-
-
-
     }
 
  ?>

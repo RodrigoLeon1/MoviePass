@@ -281,9 +281,10 @@ hr {
     justify-content: center;
     align-items: center;    
     background-position: center;    
-    background-size: cover;    
+    background-size: cover;        
     border-bottom: 1px solid #000;
     margin-bottom: 7rem;
+
 }
 
 .filter-container {
@@ -342,6 +343,13 @@ hr {
     padding-left: 1rem;
     padding-right: 1rem;
     cursor: pointer;    
+}
+
+.container > .info {
+    font-size: 3rem;
+    font-weight: 300;
+    word-spacing: 1rem;
+    margin: 5rem;    
 }
 
 .movie-container {    
@@ -654,12 +662,19 @@ hr {
     margin-bottom: 2rem;
 }
 
+.synopsis-container span {    
+    border: 1px solid rgba(255, 255, 0, .2);
+    border-radius: 5px;
+    margin: .3rem;
+    padding: .3rem;
+}
+
 .synopsis-extra {
     width: 90%;
     padding: 1rem;
     font-size: 1.5rem;
     display: grid;    
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.4fr 2fr;
     align-items: center;
     justify-content: space-between;
     row-gap: 2.5rem;    

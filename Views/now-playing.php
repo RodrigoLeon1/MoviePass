@@ -2,10 +2,11 @@
     <div class="container filter-container">
         <h4>Do you want to filter the list of movies?</h4>
 
-        <form class="filter-form" action="" method="POST">
+        <form class="filter-form" action="<?= FRONT_ROOT ?>movie/filterMovies" method="POST">
             <label>
                 Category:
                 <select name="category">
+                <option value="" selected disabled></option>
                 <?php foreach ($genres as $genre): ?>
                     <option value="<?= $genre->getIdGenre(); ?>"><?= $genre->getName(); ?></option>
                 <?php endforeach; ?>                
@@ -22,6 +23,15 @@
             </button>
         </form>
     </div>
+
+    <?php if(empty($movies)): ?>
+        <div class="container">
+            <h3 class="info">
+                No movies found
+                <i class="icon ion-md-sad"></i>
+            </h3>
+        </div>
+    <?php endif; ?>
 
     <?php foreach ($movies as $movie): ?>
     <div class="container movie-container">

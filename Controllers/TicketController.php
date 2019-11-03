@@ -6,19 +6,16 @@
 
     class TicketController {
         
-        public function purchaseTicketPath() {            
-
-            if (isset($_SESSION["loggedUser"])) {
-                
-                $title = 'Purchase ticket';
-
+        public function buyTicketPath() {            
+            if (isset($_SESSION["loggedUser"])) {                
+                $title = 'Buy ticket';
 			    require_once(VIEWS_PATH . "header.php");			
                 require_once(VIEWS_PATH . "navbar.php");
                 require_once(VIEWS_PATH . "purchase-ticket.php");
                 require_once(VIEWS_PATH . "footer.php");
             } else {
                 $userController = new UserController();
-                return $userController->loginPath("Please! Login to continue.");
+                return $userController->loginPath(LOGIN_NEEDED);
             }
         }
     }

@@ -2,12 +2,7 @@
     <div class="dataSheet_Style">
 
         <div class="poster_Style">
-            <img src="<?= IMG_PATH_TMDB . $poster_path ?> ">
-
-            <!-- <form method="POST" action="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">
-                <input id="idMovie" name="idMovie" type="hidden" value="">
-                <button class="btn-l" type="submit">Buy ticket</button>
-            </form> -->
+            <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?> ">
         </div>
 
         <div class="specification_Style">
@@ -16,58 +11,65 @@
             </div>
             <div class="synopsis-container">
                 <p class="synopsis_Style">
-                    <?= $overview ?>
+                    <?= $movie->getOverview() ?>
                     <div class="synopsis-extra">
                         <div class="movie-rating">
                             <i class="icon ion-md-star"></i>
-                            Rating <?= $vote_average ?> 
+                            Rating <?= $movie->getVoteAverage() ?> 
                         </div>
                         <div class="genres">
                             <i class="icon ion-md-color-wand"></i>
-                            Genres: Terror, adventure, family
+                            Genres:                             
+                            <?php foreach ($genres as $genre): ?>
+                                <span><?= $genre ?></span>
+                            <?php endforeach; ?>
                         </div>
                         <div class="duration">
                             <i class="icon ion-md-stopwatch"></i>
-                            Duration 90m
+                            Duration <?= $movie->getRuntime() ?>m
                         </div>
                         <div class="genres">
                             <i class="icon ion-md-calendar"></i>
                             Release date: 
-                            <?= $release_date ?>
-                        </div>          
-                        <div class="age">
-                            <i class="icon ion-md-person"></i>
-                            Age restriction:
-                            <?= $adult ?>
-                        </div>                                       
+                            <?= $movie->getReleaseDate() ?>
+                        </div>                                                
                     </div>
                 </p>
             </div>    
 
             <div class="show-container">
-
                 <h2>Movie Showtimes</h2>
 
+                <?php if(empty($shows)): ?>
+                    <p class="synopsis_Style">No shows available at the moment.</p>
+                <?php endif; ?>
+
+                <?php foreach ($shows as $show): ?>
                 <div class="show-item">
                     <div class="show-content">
-                        <h2>Paseo Aldrey</h2>
+                        <h2><?= $show->getCinema()->getName() ?></h2>
                         <p>
                             <p>
                                 <i class="icon ion-md-calendar"></i> 
-                                June18, 2019 at 8:00 
+                                <!-- June18, 2019 at 8:00  -->
+                                <?= $show->getDateStart() ?>
+                                at 
+                                <?= $show->getTimeStart() ?>
                             </p>
                             <p>-</p>
                             <p>
                                 <i class="icon ion-md-pin"></i>
-                                Sarmiento 2685
+                                <?= $show->getCinema()->getAddress() ?>
                             </p>
                         </p>
                     </div>
                     <div class="show-ticket">
-                        <a href="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">Buy Ticket</a>
+                        <a href="<?= FRONT_ROOT ?>ticket/buyTicketPath/<?= $show->getId() ?>">Buy Ticket</a>
                     </div>
-                </div>
+                </div>                    
+                <?php endforeach; ?>
                 
+                <!--
                 <div class="show-item">
                     <div class="show-content">
                         <h2>Ambassador</h2>
@@ -146,7 +148,8 @@
                     <div class="show-ticket">
                         <a href="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">Buy Ticket</a>
                     </div>
-                </div>                  
+                </div>  
+                -->                
                 <br>                
             </div>    
         </div>
@@ -161,7 +164,7 @@
         <br><hr><br>
 
         <div>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/<?= $urlTrailer ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope;" allowfullscreen></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/<?= $keyTrailer ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope;" allowfullscreen></iframe>
         </div>
     </div>
 </main>

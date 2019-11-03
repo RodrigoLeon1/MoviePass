@@ -28,7 +28,6 @@
 	define("COMING_SOON_PATH", "https://api.themoviedb.org/3/movie/upcoming?api_key=" . API_N . URL_API_LANGUAGE . "&page=1");
 	define("MOVIE_DETAILS_PATH", "https://api.themoviedb.org/3/movie/");
 
-
 	//ERR MSGS
 	define("CINEMA_EXIST", "This cinema has already been registered.");
 	define("CINEMA_ADDED", "Cinema added with success.");
@@ -43,7 +42,9 @@
 	
 	define("USER_ADDED", "User added with success.");
 	define("USER_REMOVE", "User was remove with success.");
+	define("ELIMINATE_YOURSELF", "You can't eliminate yourself.");
 
+	define("LOGIN_NEEDED", "Please! Login to continue.");
 	define("LOGIN_ERROR", "You have entered an invalid e-mail or password. Try again!");	
 	define("REGISTER_ERROR", "This email address has already been registered.");
 	define("EMPTY_FIELDS", "Complete all the fields correctly to continue.");

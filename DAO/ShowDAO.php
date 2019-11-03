@@ -17,7 +17,7 @@
 		private $movieDAO;
 
 		public function __construct () {
-			$this->movieDAO = new MovieDAO ();
+			$this->movieDAO = new MovieDAO();
 		}
 
         public function add(Show $show) {
@@ -215,6 +215,33 @@
 				}
 				return 1;
 			}
+		}
+
+		//new
+		public function getShowsOfMovie(Movie $movie) {
+			$shows = array();	
+
+			$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON shows.FK_id_movie = movies.id 
+															 INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
+															 WHERE (shows.FK_id_movie = :id_movie)
+															 ORDER BY shows.date_start ASC";			
+			$parameters["id_movie"] = $movie->getId();
+			$this->connection = Connection::GetInstance();
+			$results = $this->connection->Execute($query, $parameters);			
+			foreach($results as $row) {
+				$show = new Show();
+				
+				$cinema = new Cinema();
+				$cinema->setName($row["name"]);
+				$cinema->setAddress($row["address"]);
+
+				$show->setId($row["id"]);
+				$show->setDateStart($row["date_start"]);
+				$show->setTimeStart($row["time_start"]);
+				$show->setCinema($cinema);
+				array_push($shows, $show);
+			}			
+			return $shows;
 		}
 
 

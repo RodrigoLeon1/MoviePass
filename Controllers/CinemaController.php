@@ -45,15 +45,13 @@
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-cinema-add.php");
-				}
-				
+				}				
 			}
         }
 
 		public function listCinemaPath($success = "") {
 			if ($_SESSION["loggedUser"]) {
-				$admin = $_SESSION["loggedUser"];
-				
+				$admin = $_SESSION["loggedUser"];				
 				$this->cinemas = $this->cinemaDAO->getAll();
 				if($admin->getRole() == 1) {
 					require_once(VIEWS_PATH . "admin-head.php");

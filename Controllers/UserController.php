@@ -192,7 +192,7 @@
         public function removeUser($dni) {		
             $admin = $_SESSION["loggedUser"];
             if($admin->getDni() == $dni) {
-                return $this->listUserPath("You can not eliminate yourself.", NULL);
+                return $this->listUserPath(ELIMINATE_YOURSELF, NULL);
             } else {
                 $this->userDAO->deleteByDni($dni);
                 return $this->listUserPath(NULL, USER_REMOVE);

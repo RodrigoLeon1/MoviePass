@@ -2,6 +2,8 @@
 
     namespace DAO;
 
+    use \Exception as Exception;
+    use DAO\Connection as Connection;
     use Models\Genre as Genre;
 
     class GenreDAO {
@@ -24,7 +26,7 @@
 
         public function getAll() {
 			try {
-				$query = "SELECT * FROM " . $this->tableName;
+				$query = "SELECT * FROM " . $this->tableName . " ORDER BY name ASC";
 				$this->connection = Connection::getInstance();
                 $resultSet = $this->connection->execute($query);
 				foreach ($resultSet as $row) {

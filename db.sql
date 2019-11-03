@@ -346,7 +346,36 @@ CREATE TABLE genres (
 
 CREATE TABLE genres_x_movies (
 	`FK_id_genre` int,
-	`FK_id_movie` int
-	CONSTRAINT `FK_id_genre` FOREIGN KEY (`FK_id_genre`) REFERENCES `genres` (`id`),
-	CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`)
+	`FK_id_movie` int,
+	CONSTRAINT `FK_gm_id_genre` FOREIGN KEY (`FK_id_genre`) REFERENCES `genres` (`id`),
+	CONSTRAINT `FK_gm_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`)
 );
+
+
+DROP procedure IF EXISTS `genresxmovies_getByGenre`;					      
+DELIMITER $$
+CREATE PROCEDURE genresxmovies_getByGenre (IN id_genre INT)
+BEGIN
+	SELECT 	movies.id,
+			movies.popularity,
+			movies.vote_count,
+			movies.video,
+			movies.poster_path,
+			movies.adult,
+			movies.backdrop_path,
+			movies.original_language,
+			movies.original_title,
+			movies.genre_ids,
+			movies.title,
+			movies.vote_average,
+			movies.overview,
+			movies.release_date
+
+	FROM genres_x_movies
+	INNER JOIN movies ON genres_x_movies.FK_gm_id_movies = movies.id
+    WHERE (genres_x_movies.id_genre = movies.genre_ids);
+END$$
+
+
+
+

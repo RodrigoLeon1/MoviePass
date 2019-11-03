@@ -43,7 +43,7 @@
             if(empty($id_cinema) || empty($id_movie) || empty($day) || empty($hour)) {
                 return FALSE;
             }
-            return true;
+            return TRUE;
         }
 
         public function addShowPath($alert = "", $success = "") {
@@ -107,6 +107,13 @@
 
 		public function moviesOnShow() {
 			return $this->showDAO->moviesOnShow();
+		}
+
+
+		public function getShowsOfMovieById($id) {
+			$movie = new Movie();
+			$movie->setId($id);
+			return $this->showDAO->getShowsOfMovie($movie);
 		}
 
     }

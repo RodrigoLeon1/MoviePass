@@ -78,7 +78,7 @@
                         </div>
                     </div>   
                     <div class="movie-add">     
-                        <a href="<?= FRONT_ROOT ?>movie/addMovie/?id=${movie.id}" class="btn">
+                        <a href="<?= FRONT_ROOT ?>movie/add/?id=${movie.id}" class="btn">
                             <i class="icon ion-md-checkmark"></i>
                             Add
                         </a>       

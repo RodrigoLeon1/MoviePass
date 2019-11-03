@@ -5,6 +5,7 @@
     use Controllers\MovieController as MovieController;
 
     class HomeController {
+
         public function Index() {
             $movieController = new MovieController();
             $movies = $movieController->moviesNowPlayingOnShow();
@@ -15,5 +16,6 @@
             require_once(VIEWS_PATH . "index.php");
 			require_once(VIEWS_PATH . "footer.php");
         }
+        
     }
 ?>

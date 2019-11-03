@@ -5,8 +5,7 @@
 	use Models\Cinema as Cinema;
 	use Models\Movie as Movie;
 
-    class Show
-    {
+    class Show {
         private $id;
         private $cinema;
         private $movie;
