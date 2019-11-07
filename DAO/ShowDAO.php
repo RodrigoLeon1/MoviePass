@@ -242,9 +242,9 @@
 
 			try {
 				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON shows.FK_id_movie = movies.id
-																INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
-																WHERE (shows.FK_id_movie = :id_movie)
-																ORDER BY shows.date_start ASC";
+																 INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
+																 WHERE (shows.FK_id_movie = :id_movie)
+																 ORDER BY shows.date_start ASC";
 				$parameters["id_movie"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters);

@@ -278,6 +278,11 @@ hr {
     padding: 1.3rem;
 }
 
+.content-container > table > tbody > tr > td > img {
+    width: 50px;
+    border-radius: 5px;
+}
+
 .actions-container {
     display: flex;
     align-items: center;

@@ -25,6 +25,10 @@
             return $this->showController->moviesOnShow();
         }
 
+        public function moviesUpcoming() {
+            return $this->movieDAO->getComingSoonMovies();
+        }
+
         public function showMovie($id) {
             $movies = $this->moviesNowPlaying();
             $genreMovieController = new GenreToMovieController();    
@@ -46,19 +50,17 @@
 			require_once(VIEWS_PATH . "footer.php");
         }
 
-		public function nowPlaying($movies = "", $title = "") {
+		public function nowPlaying($movies = "", $title = "", $alert = "") {
             $genreController = new GenreToMovieController();
             $genres = $genreController->getAllGenres();            
-            
-            if($movies == NULL) {
+            $img = IMG_PATH . '/w4.png';
+                        
+            if($movies == NULL && $alert == NULL) {
                 $movies = $this->moviesNowPlayingOnShow();            
             }
-
             if($title == NULL) {
                 $title = 'Now Playing';
             }
-
-            $img = IMG_PATH . '/w4.png';
             
 			require_once(VIEWS_PATH . "header.php");
 			require_once(VIEWS_PATH . "navbar.php");
@@ -67,82 +69,50 @@
 			require_once(VIEWS_PATH . "footer.php");
 		}
         
-        public function filterMovies($id = "", $date = "") {            
-            
-            $img = IMG_PATH . '/w4.png';   
+        public function filterMovies($id = "", $date = "") {                        
             $genreMovieController = new GenreToMovieController();            
-            $genres = $genreMovieController->getAllGenres();                        
+            $genres = $genreMovieController->getAllGenres();            
+            $img = IMG_PATH . '/w4.png';   
 
-            if(!empty($id) && empty($date)) {                
+            if(!empty($id) && empty($date)) {                                
                 //Filtramos solo por genero
-                $nameGenre = $genreMovieController->getNameOfGenre($id);   
+                $nameGenre = $genreMovieController->getNameOfGenre($id);                   
                 $title = 'Now Playing - ' . $nameGenre;         
-                $movies = $genreMovieController->searchMoviesOnShowByGenre($id);                  
-                return $this->nowPlaying($movies, $title);
+                $movies = $genreMovieController->searchMoviesOnShowByGenre($id); 
 
-            } else if (!empty($date) && empty($id)) {                
+                return (!empty($movies)) ? $this->nowPlaying($movies, $title) : $this->nowPlaying($movies, $title, MOVIES_NULL);
+
+            } else if (!empty($date) && empty($id)) {                                
                 //Filtramos solo por fecha                
-                $movies = $genreMovieController->searchMoviesOnShowByDate($date); 
-                return $this->nowPlaying($movies);
+                $movies = $genreMovieController->searchMoviesOnShowByDate($date);
+                $title = 'Now Playing - ' . $date; 
 
-            } else if (!empty($id) && !empty($date)) {
+                return (!empty($movies)) ? $this->nowPlaying($movies, $title) : $this->nowPlaying($movies, $title, MOVIES_NULL);
+
+            } else if (!empty($id) && !empty($date)) {                
                 //Filtramos por genero y fecha
                 $nameGenre = $genreMovieController->getNameOfGenre($id);            
-                $title = 'Now Playing - ' . $nameGenre;
-                $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);                  
-                return $this->nowPlaying($movies, $title);
+                $title = 'Now Playing - ' . $nameGenre . ' - ' . $date;
+                $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);                                         
+
+                return (!empty($movies)) ? $this->nowPlaying($movies, $title) : $this->nowPlaying($movies, $title, MOVIES_NULL);
                 
-            } else {                
+            } else {                                
                 return $this->nowPlaying();
-            }
-            
+            }            
         } 
-        
-        /* 
-        public function filterMovies2($id = "", $date = "") {
-            $genreMovieController = new GenreToMovieController();
-            $genres = $genreMovieController->getAllGenres();
-
-            if(substr($id, 4, 1) == '-') {
-                $date = $id;
-                // echo ' filtrar por fecha';
-                $title = 'Now Playing';
-                $movies = $genreMovieController->searchMoviesOnShowByDate($date); 
-            } else {
-                if(!empty($id) && empty($date)) {
-                    // echo ' filtrar por id';
-                    $nameGenre = $genreMovieController->getNameOfGenre($id);
-                    $title = 'Now Playing - ' . $nameGenre;
-                    $movies = $genreMovieController->searchMoviesOnShowByGenre($id);
-                } else if (!empty($id) && !empty($date)) {
-                    // echo ' filtrar por id y fecha';
-                    $nameGenre = $genreMovieController->getNameOfGenre($id);
-                    $title = 'Now Playing - ' . $nameGenre;
-                    $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);
-                } else {
-                    return $this->nowPlaying();
-                }
-            }
-
-            $img = IMG_PATH . '/w4.png';
-            require_once(VIEWS_PATH . "header.php");
-            require_once(VIEWS_PATH . "navbar.php");
-            require_once(VIEWS_PATH . "header-s.php");
-            require_once(VIEWS_PATH . "now-playing.php");
-            require_once(VIEWS_PATH . "footer.php");
-        }*/
 
 		public function comingSoon() {
 			$title = 'Coming Soon';
             $img = IMG_PATH . '/w5.png';
 
-            $movies = $this->movieDAO->getComingSoonMovies();
-
+            $movies = $this->moviesUpcoming();
+            
 			require_once(VIEWS_PATH . "header.php");
 			require_once(VIEWS_PATH . "navbar.php");
 			require_once(VIEWS_PATH . "header-s.php");
 			require_once(VIEWS_PATH . "coming-soon.php");
-			require_once(VIEWS_PATH . "footer.php");
+            require_once(VIEWS_PATH . "footer.php");            
 		}
 
 		public function getNowPlayingMoviesFromDAO() {
@@ -162,17 +132,36 @@
                 return $this->userPath();
             }
         }        
-
-        /*
-        public function add($idMovie) {
-            $movie = new Movie();
-            $movie->setId($idMovie);
-            
-            $movieDetails = $this->movieDAO->getMovieDetails($movie);         
-
-        }
-        */
         
+        public function add($id) {
+            $movie = new Movie();
+            $movie->setId($id);                        
+            if($this->movieDAO->existMovie($movie) == NULL){
+                $movieDetails = $this->movieDAO->getMovieDetailsById($movie);         
+                $this->movieDAO->addMovie($movieDetails);   
+
+                $genreMovieController = new GenreToMovieController();    
+                $genreMovieController->addGenresBD($movieDetails);                
+                
+                return $this->addMoviePath(NULL, MOVIE_ADDED);
+            }            
+            return $this->addMoviePath(MOVIE_EXIST, NULL);
+        }        
+        
+        public function listMoviePath($success = "") {
+			if (isset($_SESSION["loggedUser"])) {
+                $admin = $_SESSION["loggedUser"];
+                if($admin->getRole() == 1) {
+                    $movies = $this->movieDAO->getAll();
+				    require_once(VIEWS_PATH . "admin-head.php");
+				    require_once(VIEWS_PATH . "admin-header.php");
+                    require_once(VIEWS_PATH . "admin-movie-list.php");
+                }
+			} else {
+                return $this->userPath();
+            }            
+        }
+
     }
 
  ?>

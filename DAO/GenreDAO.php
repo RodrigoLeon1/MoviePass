@@ -71,6 +71,24 @@
             return $genre;
         }
 
+        public function getNameGenre($id) {			
+			$genreName = "";
+			try {
+				$query = "SELECT * FROM " . $this->tableName . " WHERE (id = :id_genre)";			
+				$parameters["id_genre"] = $id;
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, $parameters);			
+				foreach($results as $row) {								
+					$genreName = $row["name"];				
+				}		
+			}
+			catch (Exception $ex) {
+				throw $ex;
+			}	
+			return $genreName;
+		}
+
+
     }
 
 ?>

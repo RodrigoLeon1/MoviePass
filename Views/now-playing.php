@@ -25,12 +25,12 @@
     </div>
 
     <?php if(empty($movies)): ?>
-        <div class="container">
-            <h3 class="info">
-                No movies found
-                <i class="icon ion-md-sad"></i>
-            </h3>
-        </div>
+    <div class="container">
+        <h3 class="info">
+            No movies found
+            <i class="icon ion-md-sad"></i>
+        </h3>
+    </div>
     <?php endif; ?>
 
     <?php foreach ($movies as $movie): ?>

@@ -37,9 +37,36 @@
 			}
         }
 
+		public function addMovie(Movie $movie) {
+			try {				
+				$query = "INSERT INTO " . $this->tableName . " (id, popularity, vote_count, video, poster_path, adult, backdrop_path, 												original_language, original_title, title, vote_average, overview, 													release_date, runtime) 
+																VALUES 
+																(:id, :popularity, :vote_count, :video, :poster_path, :adult, :backdrop_path, :original_language, :original_title, :title,:vote_average, :overview, :release_date, :runtime)";
+				$parameters["id"] = $movie->getId();
+				$parameters["popularity"] = $movie->getPopularity();
+				$parameters["vote_count"] = $movie->getVoteCount();
+				$parameters["video"] = $movie->getVideo();
+				$parameters["poster_path"] = $movie->getPosterPath();
+				$parameters["adult"] = $movie->getAdult();
+				$parameters["backdrop_path"] = $movie->getBackdropPath();
+				$parameters["original_language"] = $movie->getOriginalLanguage();
+				$parameters["original_title"] = $movie->getOriginalTitle();				
+				$parameters["title"] = $movie->getTitle();
+				$parameters["vote_average"] = $movie->getVoteAverage();
+				$parameters["overview"] = $movie->getOverview();
+				$parameters["release_date"] = $movie->getReleaseDate();
+				$parameters["runtime"] = $movie->getRuntime();
+				$this->connection = Connection::GetInstance();
+				$this->connection->executeNonQuery($query, $parameters);
+			}
+			catch (Exception $e) {
+				throw $ex;
+			}			
+		}
+
         public function getAll() {
 			try {
-				$query = "SELECT * FROM " . $this->tableName;
+				$query = "SELECT * FROM " . $this->tableName . " ORDER BY title ASC";
 				$this->connection = Connection::getInstance();
 				$resultSet = $this->connection->execute($query);
 				foreach ($resultSet as $row) {
@@ -127,53 +154,47 @@
         }
 
 		public function getMovieDetailsById(Movie $movie) {
-            $jsonPath = MOVIE_DETAILS_PATH . $movie->getId() . "?api_key=" . API_N . "&language=en-US";
+			$jsonPath = MOVIE_DETAILS_PATH . $movie->getId() . "?api_key=" . API_N . "&language=en-US";
             $jsonContent = file_get_contents($jsonPath);
             $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
-            foreach ($arrayToDecode as $valuesArray) {
-				foreach ($valuesArray as $values) {
-					$movie = new Movie();
-					$movie->setPopularity($values["popularity"]);
-					$movie->setVoteCount($values["vote_count"]);
-					$movie->setVideo($values["video"]);
-					$movie->setPosterPath($values["poster_path"]);
-					$movie->setId($values["id"]);
-					$movie->setAdult($values["adult"]);
-					$movie->setBackdropPath($values["backdrop_path"]);
-					$movie->setOriginalLanguage($values["original_language"]);
-					$movie->setOriginalTitle($values["original_title"]);
-					$movie->setGenreIds($values["genre_ids"]);
-					$movie->setTitle($values["title"]);
-					$movie->setVoteAverage($values["vote_average"]);
-					$movie->setOverview($values["overview"]);
-					$movie->setReleaseDate($values["release_date"]);
-
-					$movie->setRuntime($values["runtime"]);
-
-				}
-            }
+            foreach ($arrayToDecode as $valuesArray) {	
+				$movie = new Movie();
+				$movie->setPopularity($arrayToDecode["popularity"]);
+				$movie->setVoteCount($arrayToDecode["vote_count"]);
+				$movie->setVideo($arrayToDecode["video"]);
+				$movie->setPosterPath($arrayToDecode["poster_path"]);
+				$movie->setId($arrayToDecode["id"]);
+				$movie->setAdult($arrayToDecode["adult"]);
+				$movie->setBackdropPath($arrayToDecode["backdrop_path"]);
+				$movie->setOriginalLanguage($arrayToDecode["original_language"]);
+				$movie->setOriginalTitle($arrayToDecode["original_title"]);				
+				$movie->setTitle($arrayToDecode["title"]);
+				$movie->setVoteAverage($arrayToDecode["vote_average"]);
+				$movie->setOverview($arrayToDecode["overview"]);
+				$movie->setReleaseDate($arrayToDecode["release_date"]);
+				$movie->setRuntime($arrayToDecode["runtime"]);
+				
+				return $movie;				
+			}
 		}
-
-		//problemas aca
-		public function getComingSoonMovies() {											
+		
+		public function getComingSoonMovies() {		
+			$movies = array();
             $jsonPath = COMING_SOON_PATH;
             $jsonContent = file_get_contents($jsonPath);
-            $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
-            foreach ($arrayToDecode as $valuesArray) {
-				foreach ($valuesArray as $values) {					
-					$movie = new Movie();										
-					$movie->setPosterPath($values["poster_path"]);
-					$movie->setId($values["id"]);
-					$movie->setBackdropPath($values["backdrop_path"]);					
-					$movie->setOriginalTitle($values["original_title"]);					
-					$movie->setTitle($values["title"]);
-					$movie->setVoteAverage($values["vote_average"]);
-					$movie->setOverview($values["overview"]);
-					$movie->setReleaseDate($values["release_date"]);					
-					array_push($this->upcoming, $movie);
-				}
+			$arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();	
+
+            foreach ($arrayToDecode["results"] as $valuesArray) {												
+				$movie = new Movie();										
+				$movie->setPosterPath($valuesArray["poster_path"]);
+				$movie->setId($valuesArray["id"]);
+				$movie->setTitle($valuesArray["title"]);
+				$movie->setVoteAverage($valuesArray["vote_average"]);
+				$movie->setOverview($valuesArray["overview"]);									
+				array_push($movies, $movie);
 			}			
-			return $this->upcoming;
+
+			return $movies;
 		}
 
 		public function getById($id) {
@@ -206,6 +227,19 @@
 				throw $e;
 			}
 		}
+
+		public function existMovie($movie) {
+			try {
+				$query = "CALL movies_getById(?)";
+				$parameters ["id"] = $movie->getId();
+				$this->connection = Connection::GetInstance();
+				return $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);				
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
+		}
+
     }
 
  ?>
