@@ -321,6 +321,44 @@ CREATE TABLE purchases (
 	CONSTRAINT `FK_dni_purchase` FOREIGN KEY (`FK_dni`) REFERENCES `profile_users` (`dni`)
 )
 
+DROP PROCEDURE IF EXISTS 'purchases_Add';
+DELIMITER$$
+CREATE PROCEDURE tickets_Add(IN ticket_quantity int, IN discount int, IN date DATE, IN total int, IN dni_user int)
+BEGIN
+    INSERT INTO purchases(purchases.ticket_quantity, purchases.discount, purchases.date, purchases.total, purchases.FK_dni)
+    VALUES (ticket_quantity, discount, date, total, dni_user);
+END$$
+
+DROP PROCEDURE IF EXISTS 'purchases_GetById';
+DELIMITER$$
+CREATE PROCEDURE purchases_GetById(IN id int)
+BEGIN 
+    SELECT purchases.id_purchases AS purchases.id_purchases,
+           purchases.ticket_quantity AS purchases.ticket_quantity,
+           purchases.discount AS purchases.discount,
+           purchases.date AS purchases.date,
+           purchases.total AS purchases.total,
+           profile_users.dni AS profile_users.dni
+    FROM purchases
+    INNER JOIN profile_users ON profile_users.dni = purchases.FK_dni
+    WHERE(purchases.id_purchases = id);
+END$$
+
+DROP PROCEDURE IF EXISTS 'purchases_GetAll';
+DELIMITER$$
+CREATE PROCEDURE purchases_GetAll()
+BEGIN
+	SELECT purchases.id_purchases AS purchases.id_purchases,
+           purchases.ticket_quantity AS purchases.ticket_quantity,
+           purchases.discount AS purchases.discount,
+           purchases.date AS purchases.date,
+           purchases.total AS purchases.total,
+           profile_users.dni AS profile_users.dni
+		   FROM purchases
+    INNER JOIN profile_users ON profile_users.dni = purchases.FK_dni;
+END$$
+
+
 
 ----------------------------- TICKET -----------------------------
 
@@ -332,6 +370,36 @@ CREATE TABLE tickets (
 	CONSTRAINT `FK_id_purchase` FOREIGN KEY (`FK_id_purchase`) REFERENCES `purchases` (`id`),
 	CONSTRAINT `FK_id_show` FOREIGN KEY (`FK_id_show`) REFERENCES `shows` (`id`)
 );
+
+DROP PROCEDURE IF EXISTS 'tickets_Add';
+DELIMITER$$
+CREATE PROCEDURE tickets_Add(IN id_purchase int, IN id_show int)
+BEGIN
+    INSERT INTO tickets(tickets.FK_id_purchase, tickets.FK_id_show)
+    VALUES (id_purchase, id_show);
+END$$
+
+DROP PROCEDURE IF EXISTS 'tickets_GetByNumber';
+DELIMITER$$
+CREATE PROCEDURE tickets_GetByNumber(IN number int)
+BEGIN
+    SELECT tickets.ticket_number AS tickets.ticket_number,
+           tickets.QR AS tickets.QR,
+           purchases.id_purchase AS purchases.id_purchase,
+
+           shows.id AS shows_id, 
+           shows.date_start AS shows_date_start,
+           shows.time_start AS shows_time_start,
+           shows.time_end AS shows_time_end,
+           movies.id AS movies_id,
+           movies.title AS movies_title,
+           cinemas.id AS cinemas_id,
+           cinemas.name AS cinemas_name
+    FROM tickets
+    INNER JOIN movies ON movies.id = shows.FK_id_movie
+    INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
+    WHERE(tickets.ticket_number = number);
+END$$
 
 
 ----------------------------- GENRE -----------------------------
