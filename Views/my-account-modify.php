@@ -15,6 +15,10 @@
             </div>
             <div class="content-account">
                 <form class="content-container" action="<?= FRONT_ROOT ?>" method="post">
+                <label>
+                        <h4>Insert Photo:</h4>
+                        <input type="file" name="file" required>
+                    </label>
                     <label>
                         <h4>Insert Firstname:</h4>
                         <input type="text" name="firstname" value="<?= $user->getFirstName(); ?>" required>

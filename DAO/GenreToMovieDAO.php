@@ -79,7 +79,8 @@
 			try {
 				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON FK_id_movie = movies.id 
 																 INNER JOIN shows ON movies.id = shows.FK_id_movie
-																 WHERE (FK_id_genre = :id_genre)";			
+																 WHERE (FK_id_genre = :id_genre)
+																 GROUP BY movies.id";			
 				$parameters["id_genre"] = $id;
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters);			
