@@ -17,16 +17,6 @@
             $this->genresToMoviesDAO = new GenreToMovieDAO();
             $this->genresDAO = new GenreDAO();
         }
-
-        /*
-        public function addGenreMovie($id_genre, $id_movie) {            
-            $genreMovie = new Genre_x_Movie();
-            $genreMovie->setIdGenre($id_genre);
-            $genreMovie->setIdMovie($id_movie);
-           
-            $this->genresToMoviesDAO->Add($genreMovie);
-        }*/
-
     
         //Genre
         public function genreByName($name) {
@@ -44,7 +34,11 @@
         
         //GenreToMovie
         public function addGenresMovieToDb(){
-            $this->genresToMoviesDAO->infoMovie();
+            $this->genresToMoviesDAO->getGenresOfNowPlaying();
+        }
+
+        public function addGenresBD(Movie $movie) {                        
+            $this->genresToMoviesDAO->getGenresOfMovieFromApi($movie);
         }
 
         public function searchMoviesOnShowByGenre($genre) {
@@ -75,7 +69,7 @@
         }
 
         public function getNameOfGenre($id) {            
-            return $this->genresToMoviesDAO->getNameGenre($id);
+            return $this->genresDAO->getNameGenre($id);
         }
 
 

@@ -51,36 +51,14 @@
                 </button>
 
                 <div class="glider2">
+                    <?php foreach ($upcoming as $movie): ?>
                     <figure>
-                        <a href="https://www.google.com">
-                            <img src="views/assets/img/poster2.jpg" alt="">
-                            <h2>Joker</h2>
+                        <a href="<?= FRONT_ROOT ?>movie/showMovie/<?= $movie->getId() ?>">
+                            <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?>" alt="">
+                            <h2><?= $movie->getTitle(); ?></h2>
                         </a>
                     </figure>
-                    <figure>
-                        <a href="https://www.google.com">
-                            <img src="views/assets/img/poster2.jpg" alt="">
-                            <h2>Joker</h2>
-                        </a>
-                    </figure>
-                    <figure>
-                        <a href="https://www.google.com">
-                            <img src="views/assets/img/poster2.jpg" alt="">
-                            <h2>Joker</h2>
-                        </a>
-                    </figure>
-                    <figure>
-                        <a href="https://www.google.com">
-                            <img src="views/assets/img/poster2.jpg" alt="">
-                            <h2>Joker</h2>
-                        </a>
-                    </figure>
-                    <figure>
-                        <a href="https://www.google.com">
-                            <img src="views/assets/img/poster2.jpg" alt="">
-                            <h2>Joker</h2>
-                        </a>
-                    </figure>
+                    <?php endforeach; ?>
                 </div>
 
                 <button class="glider-next glider2-next">

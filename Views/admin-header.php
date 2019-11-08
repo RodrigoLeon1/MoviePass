@@ -25,7 +25,7 @@
                         </li>
                         <li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>cinema/listCinemaPath">View/Edit cinemas</a>
+                            <a href="<?= FRONT_ROOT ?>cinema/listCinemaPath">List/Edit cinemas</a>
                         </li>
                     </ul>
                 </li>
@@ -39,7 +39,7 @@
                         </li>
                         <li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>">View movies</a>
+                            <a href="<?= FRONT_ROOT ?>movie/listMoviePath">List movies</a>
                         </li>                    
                     </ul>
                 </li>
@@ -67,7 +67,7 @@
                         </li>
 						<li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>user/listUserPath">View users</a>
+                            <a href="<?= FRONT_ROOT ?>user/listUserPath">List users</a>
                         </li>
                     </ul>
                 </li>

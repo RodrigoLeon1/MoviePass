@@ -312,13 +312,17 @@ END$$
 ----------------------------- PURCHASE -----------------------------
 
 CREATE TABLE purchases (
+<<<<<<< HEAD
 	`id_purchase` int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+=======
+	`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+>>>>>>> 1312916ebfdb57f9023633fbca4eda88abdf11fe
 	`ticket_quantity` int NOT NULL,
 	`discount` int NOT NULL,
 	`date` date NOT NULL,
 	`total` int NOT NULL,
-	`FK_dni` int,
-	CONSTRAINT `FK_dni` FOREIGN KEY ('FK_dni') REFERENCES `profile_user` (`dni`);
+	`FK_dni` int NOT NULL,
+	CONSTRAINT `FK_dni_purchase` FOREIGN KEY (`FK_dni`) REFERENCES `profile_users` (`dni`)
 )
 
 DROP PROCEDURE IF EXISTS 'purchases_Add';
@@ -359,20 +363,23 @@ BEGIN
 END$$
 
 
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> 1312916ebfdb57f9023633fbca4eda88abdf11fe
 
 ----------------------------- TICKET -----------------------------
 
 CREATE TABLE tickets (
 	`ticket_number` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	`QR` int NOT NULL AUTO_INCREMENT,
+	`QR` int NOT NULL,
 	`FK_id_purchase` int NOT NULL,
 	`FK_id_show` int NOT NULL,
-	CONSTRAINT `FK_id_purchase` FOREIGN KEY (`FK_id_purchase`) REFERENCES `purchase` (`id_purchase`),
-	CONSTRAINT `FK_id_show` FOREIGN KEY (`FK_id_show`) REFERENCES `show` (`id_show`)
+	CONSTRAINT `FK_id_purchase` FOREIGN KEY (`FK_id_purchase`) REFERENCES `purchases` (`id`),
+	CONSTRAINT `FK_id_show` FOREIGN KEY (`FK_id_show`) REFERENCES `shows` (`id`)
 );
 
 DROP PROCEDURE IF EXISTS 'tickets_Add';
@@ -389,6 +396,7 @@ CREATE PROCEDURE tickets_GetByNumber(IN number int)
 BEGIN
     SELECT tickets.ticket_number AS tickets.ticket_number,
            tickets.QR AS tickets.QR,
+<<<<<<< HEAD
            purchases.FK_id_purchase AS purchases.FK_id_purchase,
            shows.FK_id_show AS shows.FK_id_show, 
     FROM tickets
@@ -407,6 +415,24 @@ BEGIN
 END$$
 
 
+=======
+           purchases.id_purchase AS purchases.id_purchase,
+
+           shows.id AS shows_id, 
+           shows.date_start AS shows_date_start,
+           shows.time_start AS shows_time_start,
+           shows.time_end AS shows_time_end,
+           movies.id AS movies_id,
+           movies.title AS movies_title,
+           cinemas.id AS cinemas_id,
+           cinemas.name AS cinemas_name
+    FROM tickets
+    INNER JOIN movies ON movies.id = shows.FK_id_movie
+    INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
+    WHERE(tickets.ticket_number = number);
+END$$
+
+>>>>>>> 1312916ebfdb57f9023633fbca4eda88abdf11fe
 
 ----------------------------- GENRE -----------------------------
 
@@ -419,8 +445,8 @@ CREATE TABLE genres (
 ----------------------------- GENRE X MOVIE -----------------------------
 
 CREATE TABLE genres_x_movies (
-	`FK_id_genre` int,
-	`FK_id_movie` int,
+	`FK_id_genre` int NOT NULL,
+	`FK_id_movie` int NOT NULL,
 	CONSTRAINT `FK_gm_id_genre` FOREIGN KEY (`FK_id_genre`) REFERENCES `genres` (`id`),
 	CONSTRAINT `FK_gm_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`)
 );

@@ -9,6 +9,7 @@
         public function Index() {
             $movieController = new MovieController();
             $movies = $movieController->moviesNowPlayingOnShow();
+            $upcoming = $movieController->moviesUpcoming();
             $title = 'MoviePass';
 			require_once(VIEWS_PATH . "header.php");
 			require_once(VIEWS_PATH . "nav-video.php");

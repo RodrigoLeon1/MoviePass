@@ -38,8 +38,9 @@
                 throw $e;
             }
         }
-
-        public function infoMovie() {
+		
+		//Recorre las peliculas de 'now playing' y carga sus respectivos generos en la bd
+        public function getGenresOfNowPlaying() {
             $jsonPath = NOW_PLAYING_PATH;
             $jsonContent = file_get_contents($jsonPath);
             $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
@@ -53,7 +54,23 @@
                     }
                 }
             }
-        }
+		}
+		
+		//Dado una pelicula, obtiene sus generos de la API y los carga en la db
+		public function getGenresOfMovieFromApi(Movie $movie) {
+			$jsonPath = $jsonPath = MOVIE_DETAILS_PATH . $movie->getId() . "?api_key=" . API_N . "&language=en-US";
+            $jsonContent = file_get_contents($jsonPath);
+            $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();						
+			
+			$genreMovie = new GenreToMovie();
+			$genreMovie->setIdMovie($movie->getId());
+			$genres = $arrayToDecode["genres"];				
+			foreach($genres as $genre) {
+				$genreMovie->setIdGenre($genre["name"]);											
+				//ERROR DB - lo demas carga bien
+				$this->Add($genreMovie);														
+			}
+		}
 
         public function getAll() {
 			try {
@@ -80,7 +97,11 @@
 				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON FK_id_movie = movies.id 
 																 INNER JOIN shows ON movies.id = shows.FK_id_movie
 																 WHERE (FK_id_genre = :id_genre)
+<<<<<<< HEAD
 																 GROUP BY movies.id";			
+=======
+																 GROUP BY movies.id ";			
+>>>>>>> 1312916ebfdb57f9023633fbca4eda88abdf11fe
 				$parameters["id_genre"] = $id;
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters);			
@@ -200,26 +221,7 @@
 				throw $ex;
 			}		
 			return $genres;
-		}
-
-		
-		public function getNameGenre($id) {			
-			$genreName = "";
-			try {
-				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN genres ON FK_id_genre = genres.id						
-																 WHERE (FK_id_genre = :id_genre)";			
-				$parameters["id_genre"] = $id;
-				$this->connection = Connection::GetInstance();
-				$results = $this->connection->Execute($query, $parameters);			
-				foreach($results as $row) {								
-					$genreName = $row["name"];				
-				}		
-			}
-			catch (Exception $ex) {
-				throw $ex;
-			}	
-			return $genreName;
-		}
+		}	
 
 	}
 

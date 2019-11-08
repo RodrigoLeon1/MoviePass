@@ -7,7 +7,7 @@
         <i class="icon ion-md-checkmark"></i>
         <h3><?= $success ?></h3>
     </div>
-    <?php endif; ?>        
+    <?php endif; ?>
 
     <?php if($alert != NULL): ?>
     <div class="alert-container error-container">
@@ -39,7 +39,8 @@
 
 			<label>
                 <h4>Insert date:</h4>
-                <input type="date" name="date" id="" required>
+				<?php $date = date('Y-m-d'); ?>	
+				<input type="date" name="date" id="" min="<?php echo $date ?>" required>
             </label>
 
 			<label>
