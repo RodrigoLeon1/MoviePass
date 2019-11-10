@@ -7,7 +7,7 @@
             <i class="icon ion-md-checkmark"></i>
             <h3><?= $success ?></h3>
         </div>
-        <?php endif; ?> 
+        <?php endif; ?>
 
         <div class="dashboard-container">
 
@@ -25,13 +25,12 @@
 					</thead>
 					<tbody>
 						<?php foreach ($shows as $show): ?>
-							<?php $time = strtotime ("+15 minutes", strtotime($show->getTimeStart())); ?>
 							<tr>
 								<td><?= $show->getId(); ?></td>
 								<td><?= $show->getCinema()->getName(); ?></td>
 								<td><?= $show->getMovie()->getTitle(); ?></td>
 								<td><?= $show->getDateStart(); ?></td>
-								<td><?= date('H:i:s', $time); ?></td>
+								<td><?= $show->getTimeStart(); ?></td>
 								<td>
 									<div class="actions-container">
 										<a href="<?php echo FRONT_ROOT . "show/remove/" . $show->getId(); ?>" class="btn btn-delete">

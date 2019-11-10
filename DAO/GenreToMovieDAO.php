@@ -102,7 +102,11 @@
 				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON FK_id_movie = movies.id 
 																 INNER JOIN shows ON movies.id = shows.FK_id_movie
 																 WHERE (FK_id_genre = :id_genre)
+<<<<<<< HEAD
+																 GROUP BY movies.id";			
+=======
 																 GROUP BY movies.id ";			
+>>>>>>> 1312916ebfdb57f9023633fbca4eda88abdf11fe
 				$parameters["id_genre"] = $id;
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters);			
