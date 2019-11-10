@@ -51,10 +51,7 @@
                     $genreMovie->setIdMovie($values["id"]);
                     foreach($values["genre_ids"] as $genre) {
                         $genreMovie->setIdGenre($genre);
-						$resultado=$this->Add($genreMovie);
-						if (!$resultado) {
-						break;
-						}						
+						$this->Add($genreMovie);												
                     }
                 }
             }
@@ -70,10 +67,8 @@
 			$genreMovie->setIdMovie($movie->getId());
 			$genres = $arrayToDecode["genres"];				
 			foreach($genres as $genre) {
-				$genreMovie->setIdGenre($genre["id"]);											
-				//ERROR DB - lo demas carga bien
-				$resultado=$this->Add($genreMovie);
-				var_dump($resultado);																	
+				$genreMovie->setIdGenre($genre["id"]);															
+				$this->Add($genreMovie);				
 			}
 		}
 
@@ -102,11 +97,7 @@
 				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON FK_id_movie = movies.id 
 																 INNER JOIN shows ON movies.id = shows.FK_id_movie
 																 WHERE (FK_id_genre = :id_genre)
-<<<<<<< HEAD
 																 GROUP BY movies.id";			
-=======
-																 GROUP BY movies.id ";			
->>>>>>> 1312916ebfdb57f9023633fbca4eda88abdf11fe
 				$parameters["id_genre"] = $id;
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters);			

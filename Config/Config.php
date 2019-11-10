@@ -41,6 +41,7 @@
 
 	define("SHOW_ADDED", "Show added with success.");
 	define("SHOW_REMOVE", "Show remove with success.");
+	define("SHOW_ERROR", "Can't add the show! Check the date, hour or the movie and try again.");
 	define("SHOW_EXIST", "This show has already been registered.");	
 	
 	define("USER_ADDED", "User added with success.");

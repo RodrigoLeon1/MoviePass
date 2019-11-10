@@ -1,13 +1,3 @@
-<body>
-    <header>
-        <div class="movie-h" style="background-image: url('<?= IMG_PATH_TMDB . $show->getMovie()->getBackdropPath() ?>');">            
-            <h3 class="section-title text-s">
-                <i class="icon ion-md-videocam"></i>
-                <?= $title ?> - <?= $show->getMovie()->getTitle() ?>
-            </h3>
-        </div>
-    </header>
-
     <main>    
         <div class="container">            
             <div class="purchase-container">
@@ -44,7 +34,12 @@
                     <div class="show-total">
                         <h3 class="cinema-name">
                             <i class="icon ion-md-cart"></i>     
-                            Total: $<span id="cart-total"></span>
+                            Total: $<span id="cart-total">0</span>
+                            <div class="ticket-information">
+                                <h4>Ticket type: General</h4>
+                                <h4>Tickets: <span id="ticket-quantity">0</span> </h4>
+                                <h4>Discount: N/A</h4>
+                            </div>
                         </h3>
                     </div>
                 </div>
@@ -86,7 +81,7 @@
 
             </div>
 
-            <div class="purchase-seats">                
+            <!-- <div class="purchase-seats">                
                 <h2>Seats cinema</h2>
                 <div class="theatre">  
                     <div class="cinema-seats left">
@@ -161,25 +156,29 @@
                         </div>                        
                     </div>                                      
                 </div>  
-            </div> 
+            </div>  -->
 
         </div>
     </main>
-<script>
+                                
+    <script>
 
-    let priceTicket = document.getElementById('price-ticket');
-    priceTicket = parseInt(priceTicket.innerHTML);
+        let priceTicket = document.getElementById('price-ticket');
+            priceTicket = parseInt(priceTicket.innerHTML);
 
-    let cartTotal = document.getElementById('cart-total');
-    let tickets = document.getElementById('numberTickets');    
-    
-    function renderTotal(price, tickets) {
-        return tickets * price;
-    }
+        let cartTotal = document.getElementById('cart-total');
+        let tickets = document.getElementById('numberTickets');    
+        let ticketQuantity = document.getElementById('ticket-quantity'); 
+        
+        
+        //Cada vez que el usuario ingrese una cantidad numerica de ticket, se renderizara el total de la compra
+        tickets.addEventListener('keyup', function getNumberTickets() {        
+            cartTotal.innerHTML = renderTotal(priceTicket, this.value);
+            ticketQuantity.innerHTML = this.value;
+        });        
+        
+        function renderTotal(price, tickets) {
+            return tickets * price;
+        }
 
-    //Cada vez que el usuario ingrese una cantidad numerica de ticket, se renderizara el total de la compra
-    tickets.addEventListener('keyup', function getNumberTickets() {        
-        cartTotal.innerHTML = renderTotal(priceTicket, this.value);
-    });        
-
-</script>
+    </script>

@@ -10,6 +10,7 @@
     use Models\Movie as Movie;
 
     class ShowController {
+
         private $showDAO;
         private $cinemaDAO;
         private $movieDAO;
@@ -21,8 +22,7 @@
         }
 
         public function add($id_cinema, $id_movie, $date, $time) {
-			if($this->validateShowForm($id_cinema, $id_movie, $date, $time)) {
-				//Validaciones aca
+			if($this->validateShowForm($id_cinema, $id_movie, $date, $time)) {				
 				$movie = new Movie ();
 				$movie->setId($id_movie);
 				$cinema = new Cinema();
@@ -36,7 +36,7 @@
 					$this->showDAO->add($show);
 					return $this->addShowPath(NULL, SHOW_ADDED);
 				}
-				return $this->addShowPath(NULL, NULL); // mensaje de no agregado
+				return $this->addShowPath(SHOW_ERROR, NULL); 
 			}
 			return $this->addShowPath(EMPTY_FIELDS);
         }

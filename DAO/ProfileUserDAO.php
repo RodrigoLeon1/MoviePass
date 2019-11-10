@@ -1,12 +1,16 @@
 <?php
     namespace DAO;
+	
 	use \Exception as Exception;
 	use DAO\Connection as Connection;
     use Models\User as User;
     use Models\ProfileUser as ProfileUser;
-    class ProfileUserDAO {
+	
+	class ProfileUserDAO {
+		
 		private $connection;
 		private $tableName = "profile_users";
+
         public function add(User $user) {
 			try {
 				$query = "INSERT INTO " . $this->tableName . " (dni, first_name, last_name) VALUES (:dni, :first_name, :last_name);";
