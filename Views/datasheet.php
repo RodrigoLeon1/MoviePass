@@ -67,89 +67,7 @@
                         <a href="<?= FRONT_ROOT ?>ticket/buyTicketPath/<?= $show->getId() ?>">Buy Ticket</a>
                     </div>
                 </div>                    
-                <?php endforeach; ?>
-                
-                <!--
-                <div class="show-item">
-                    <div class="show-content">
-                        <h2>Ambassador</h2>
-                        <p>
-                            <p>
-                                <i class="icon ion-md-calendar"></i> 
-                                June18, 2019 at 8:00 
-                            </p>
-                            <p>-</p>
-                            <p>
-                                <i class="icon ion-md-pin"></i>
-                                Cordoba DVi
-                            </p>
-                        </p>
-                    </div>
-                    <div class="show-ticket">
-                        <a href="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">Buy Ticket</a>
-                    </div>
-                </div>
-
-                <div class="show-item">
-                    <div class="show-content">
-                        <h2>CinemaCenter</h2>
-                        <p>
-                            <p>
-                                <i class="icon ion-md-calendar"></i>     
-                                June18, 2019 at 8:00 
-                            </p>
-                            <p>-</p>
-                            <p>
-                                <i class="icon ion-md-pin"></i>    
-                                Diag. Pueyrredon 3050
-                            </p>
-                        </p>
-                    </div>
-                    <div class="show-ticket">
-                        <a href="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">Buy Ticket</a>
-                    </div>
-                </div>
-
-                <div class="show-item">
-                    <div class="show-content">
-                        <h2>Cinema II</h2>
-                        <p>
-                            <p>
-                                <i class="icon ion-md-calendar"></i> 
-                                June18, 2019 at 8:00 
-                            </p>
-                            <p>-</p>
-                            <p>
-                                <i class="icon ion-md-pin"></i>
-                                Los Gallegos Shopping
-                            </p>
-                        </p>
-                    </div>
-                    <div class="show-ticket">
-                        <a href="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">Buy Ticket</a>
-                    </div>
-                </div>  
-                
-                <div class="show-item">
-                    <div class="show-content">
-                        <h2>Cine del Paseo</h2>
-                        <p>
-                            <p>
-                                <i class="icon ion-md-calendar"></i> 
-                                June18, 2019 at 8:00 
-                            </p>
-                            <p>-</p>
-                            <p>
-                                <i class="icon ion-md-pin"></i>
-                                Diagonal Pueyrredon
-                            </p>
-                        </p>
-                    </div>
-                    <div class="show-ticket">
-                        <a href="<?= FRONT_ROOT ?>ticket/purchaseTicketPath">Buy Ticket</a>
-                    </div>
-                </div>  
-                -->                
+                <?php endforeach; ?>                             
                 <br>                
             </div>    
         </div>
@@ -164,7 +82,7 @@
         <br><hr><br>
 
         <div>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/<?= $keyTrailer ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope;" allowfullscreen></iframe>
+        <iframe width="854" height="480" src="https://www.youtube.com/embed/<?= $keyTrailer ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope;" allowfullscreen></iframe>
         </div>
     </div>
 </main>

@@ -89,6 +89,13 @@
 			}
 		}
 
+		public function getShowById($id) {
+			// $show = new Show();
+			// $show->setId($id);
+			$show = $this->showDAO->getById($id);					
+			return $show;							
+		}
+
 		public function modify($id, $id_cinema, $id_movie, $date, $time) {
 			$movie = new Movie ();
 			$movie->setId($id_cinema);

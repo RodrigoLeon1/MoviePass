@@ -37,7 +37,7 @@
 								<td><?= $movie->getReleaseDate(); ?></td>								
 								<td>
 									<div class="actions-container">
-										<a href="<?php echo FRONT_ROOT . "" . $movie->getId(); ?>" class="btn btn-delete">
+										<a href="<?php echo FRONT_ROOT . "movie/remove/" . $movie->getId(); ?>" class="btn btn-delete">
 											<i class="icon ion-md-trash"></i>
 											Remove
 										</a>								

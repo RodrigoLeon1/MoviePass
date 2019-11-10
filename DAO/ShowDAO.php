@@ -169,13 +169,18 @@
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 				$show = new Show();
+								
 				foreach($results as $row) {
 					$movie = new Movie ();
 					$movie->setId($row["movies_id"]);
 					$movie->setTitle($row["movies_title"]);
+					$movie->setBackdropPath($row["movies_backdrop_path"]);
 					$cinema = new Cinema();
 					$cinema->setId($row["cinemas_id"]);
 					$cinema->setName($row["cinemas_name"]);
+					$cinema->setAddress($row["cinemas_address"]);
+					$cinema->setPrice($row["cinemas_ticket_value"]);
+					$cinema->setCapacity($row["cinemas_capacity"]);
 					$show->setId($row["shows_id"]);
 					$show->setDateStart($row["shows_date_start"]);
 					$show->setTimeStart($row["shows_time_start"]);
@@ -241,7 +246,11 @@
 			$shows = array();
 
 			try {
-				$query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON shows.FK_id_movie = movies.id
+				$query = "SELECT shows.id as show_id,
+					shows.date_start as show_date_start,
+					shows.time_start as show_time_start,
+					cinemas.name as cinema_name,
+					cinemas.address as cinema_address FROM " . $this->tableName . " INNER JOIN movies ON shows.FK_id_movie = movies.id
 																 INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
 																 WHERE (shows.FK_id_movie = :id_movie)
 																 ORDER BY shows.date_start ASC";
@@ -251,14 +260,15 @@
 				foreach($results as $row) {
 					$show = new Show();
 					$cinema = new Cinema();
-					$cinema->setName($row["name"]);
-					$cinema->setAddress($row["address"]);
-					$show->setId($row["id"]);
-					$show->setDateStart($row["date_start"]);
-					$show->setTimeStart($row["time_start"]);
+					$cinema->setName($row["cinema_name"]);
+					$cinema->setAddress($row["cinema_address"]);
+					$show->setId($row["show_id"]);
+					$show->setDateStart($row["show_date_start"]);
+					$show->setTimeStart($row["show_time_start"]);
 					$show->setCinema($cinema);
 					array_push($shows, $show);
 				}
+
 				return $shows;
 			}
 			catch (Exception $e) {

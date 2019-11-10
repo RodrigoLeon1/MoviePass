@@ -18,16 +18,16 @@
             </label>
 
             <button type="submit" class="btn-f">
-                <i class="icon ion-md-search"></i>
-                Filter
+                <i class="icon ion-md-search" style="font-size:2rem;"></i>
+                <!-- Filter -->
             </button>
         </form>
     </div>
 
-    <?php if(empty($movies)): ?>
+    <?php if($alert != NULL): ?>
     <div class="container">
         <h3 class="info">
-            No movies found
+            <?= $alert ?>
             <i class="icon ion-md-sad"></i>
         </h3>
     </div>
@@ -46,7 +46,7 @@
                 <i class="icon ion-md-star"></i>
                 <?= $movie->getVoteAverage() ?>
             </p>
-            <p><?= $movie->getOverview() ?></p>
+            <p class="overview-text"><?= $movie->getOverview() ?></p>
         </div>
         <div class="movie-cta">
             <a class="btn-l" href="<?= FRONT_ROOT ?>movie/showMovie/?id=<?= $movie->getId() ?>">  

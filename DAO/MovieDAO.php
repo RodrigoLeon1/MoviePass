@@ -59,7 +59,7 @@
 				$this->connection = Connection::GetInstance();
 				$this->connection->executeNonQuery($query, $parameters);
 			}
-			catch (Exception $e) {
+			catch (Exception $ex) {
 				throw $ex;
 			}			
 		}
@@ -180,17 +180,19 @@
 		
 		public function getComingSoonMovies() {		
 			$movies = array();
-            $jsonPath = COMING_SOON_PATH;
+			$jsonPath = COMING_SOON_PATH;
+
             $jsonContent = file_get_contents($jsonPath);
 			$arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();	
 
             foreach ($arrayToDecode["results"] as $valuesArray) {												
 				$movie = new Movie();										
-				$movie->setPosterPath($valuesArray["poster_path"]);
 				$movie->setId($valuesArray["id"]);
+				$movie->setPosterPath($valuesArray["poster_path"]);
 				$movie->setTitle($valuesArray["title"]);
 				$movie->setVoteAverage($valuesArray["vote_average"]);
-				$movie->setOverview($valuesArray["overview"]);									
+				$movie->setOverview($valuesArray["overview"]);		
+				$movie->setReleaseDate($valuesArray["release_date"]);					
 				array_push($movies, $movie);
 			}			
 
@@ -234,6 +236,18 @@
 				$parameters ["id"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				return $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);				
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
+		}
+
+		public function deleteById(Movie $movie) {
+			try {
+				$query = "DELETE FROM " . $this->tableName .  " WHERE id = :id";
+				$parameters ["id"] = $movie->getId();
+				$this->connection = Connection::GetInstance();
+				$this->connection->ExecuteNonQuery($query, $parameters);
 			}
 			catch (Exception $e) {
 				throw $e;

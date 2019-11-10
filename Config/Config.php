@@ -36,6 +36,7 @@
 
 	define("MOVIE_ADDED", "Movie added with success.");
 	define("MOVIE_EXIST", "This movie has already been registered.");
+	define("MOVIE_REMOVE", "Movie was remove with success.");
 	define("MOVIES_NULL", "No movies found");
 
 	define("SHOW_ADDED", "Show added with success.");

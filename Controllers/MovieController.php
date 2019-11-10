@@ -136,17 +136,24 @@
         public function add($id) {
             $movie = new Movie();
             $movie->setId($id);                        
-            if($this->movieDAO->existMovie($movie) == NULL){
+            if($this->movieDAO->existMovie($movie) == NULL) {            
                 $movieDetails = $this->movieDAO->getMovieDetailsById($movie);         
                 $this->movieDAO->addMovie($movieDetails);   
 
                 $genreMovieController = new GenreToMovieController();    
                 $genreMovieController->addGenresBD($movieDetails);                
                 
-                return $this->addMoviePath(NULL, MOVIE_ADDED);
+                return $this->addMoviePath(NULL, MOVIE_ADDED);                                    
             }            
             return $this->addMoviePath(MOVIE_EXIST, NULL);
         }        
+
+        public function remove($id) {
+            $movie = new Movie();
+            $movie->setId($id);
+			$this->movieDAO->deleteById($movie);
+			return $this->listMoviePath(MOVIE_REMOVE);
+		}
         
         public function listMoviePath($success = "") {
 			if (isset($_SESSION["loggedUser"])) {

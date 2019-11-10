@@ -31,7 +31,10 @@
                 <div id="dots" class="glider-dots"></div>
             </div>
 
-            <a class="more-movies" href="<?= FRONT_ROOT ?>movie/nowPlaying">More movies</a>
+            <a class="more-movies" href="<?= FRONT_ROOT ?>movie/nowPlaying">
+                <i class="icon ion-md-add"></i>
+                Movies
+            </a>
 
         </div>
     </section>
@@ -53,7 +56,7 @@
                 <div class="glider2">
                     <?php foreach ($upcoming as $movie): ?>
                     <figure>
-                        <a href="<?= FRONT_ROOT ?>movie/showMovie/<?= $movie->getId() ?>">
+                        <a href="#">
                             <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?>" alt="">
                             <h2><?= $movie->getTitle(); ?></h2>
                         </a>
@@ -68,7 +71,10 @@
                 <div id="dots2" class="glider-dots"></div>
             </div>
 
-            <a class="more-movies" href="<?= FRONT_ROOT ?>movie/comingSoon">More movies</a>
+            <a class="more-movies" href="<?= FRONT_ROOT ?>movie/comingSoon">
+                <i class="icon ion-md-add"></i>
+                Movies
+            </a>
 
         </div>
     </section>

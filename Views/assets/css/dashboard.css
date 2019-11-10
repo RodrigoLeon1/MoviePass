@@ -182,7 +182,7 @@ hr {
 .movies-container {
     padding: 2rem;
     display: grid;
-    max-width: 65%;    
+    max-width: 80%;    
     grid-template-columns: repeat(4, 1fr);  
     row-gap: 2rem;      
 }

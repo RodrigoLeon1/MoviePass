@@ -263,15 +263,30 @@ hr {
 /* Movie page */
 .more-movies {
     display: block;    
-    height: 2rem;
-    width: 10%;
+    height: 3rem;
+    width: 10rem;
     margin: 0 auto;
     margin-top: 1.5rem;
+    padding: 1rem;
     color: #fff;
-    border: 1px solid yellow;
+    border: 1px solid rgba(255, 255, 255, .5);
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 300ms linear;
+}
+
+.more-movies i {
+    font-size: 1.7rem;
+    margin-right: .3rem;
+}
+
+.more-movies:hover {
+    background-color: #fff;
+    border: 1px solid #000;    
+    color: #000;
 }
 
 .movie-h {
@@ -313,10 +328,11 @@ hr {
     padding: .5rem;
     color: #fff;
     text-align: center;
-    background-color: #171b21;
-    border: none;
-    border: 1px solid rgba(255, 255, 0, .5);
-    border-radius: 5px;
+    /* background-color: #171b21; */
+    background-color: #222831;
+    border: none;    
+    border-bottom: 1.5px solid rgba(255, 255, 0, .5);
+    /* border-radius: 5px; */
     cursor: pointer;
 }
 
@@ -335,14 +351,26 @@ hr {
 
 .btn-f {
     background-color: transparent;
+    width: 8rem;
+    height: 3rem;
     color: #fff;
     border-style: none;
     border: 1px solid yellow;
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
     cursor: pointer;    
+    transition: all 300ms linear;
+}
+
+.btn-f > i {
+    font-size: 1.3rem;
+}
+
+.btn-f:hover {
+    background-color: yellow;   
+    border: 1px solid #000;
+    color: #000;
 }
 
 .container > .info {
@@ -357,9 +385,13 @@ hr {
 .movie-container {    
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    max-height: 300px;    
+    /* max-height: 300px;     */
     margin-bottom: 4rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.movie-container-secundary {
+    grid-template-columns: .5fr 2fr;
 }
 
 .movie-img {
@@ -397,11 +429,19 @@ hr {
     font-weight: 700;
 }
 
+.movie-info > .overview-text {
+    color: #a8a8a8;
+}
+
 .movie-cta,
 .movie-cta a {
     display: flex;    
     justify-content: center;
     align-items: center;
+}
+
+.movie-cta-secundary {
+    flex-direction: column;
 }
 
 
@@ -514,8 +554,7 @@ hr {
 .btn-l:hover {
     background-color: yellow;   
     border: 1px solid #000;
-    color: #000;
-    
+    color: #000;    
 }
 
 .btn-l i {
@@ -648,9 +687,9 @@ hr {
 }
 
 .datasheet-video {
-    height: 60rem;
+    height: 70rem;
     padding: 10rem;
-    background-color: rgb(15, 15, 15);
+    background-color: #000;    
     margin: 0 auto;
     text-align: center;
     clip-path: polygon(50% 7%, 50% 7%, 100% 0, 100% 100%, 100% 100%, 0 100%, 0 100%, 0 0);
@@ -665,6 +704,7 @@ hr {
 }
 
 .synopsis-container span {    
+    display: inline-block;
     border: 1px solid rgba(255, 255, 0, .2);
     border-radius: 5px;
     margin: .3rem;
@@ -713,7 +753,7 @@ hr {
 
 .show-content p {
     color: #919191;
-    font-size: 1.45rem;
+    font-size: 1.40rem;
 }
 
 .show-ticket > a {    

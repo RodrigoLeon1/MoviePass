@@ -14,6 +14,7 @@
                 <div class="sign-header">
                     <h3> <span>.</span> Sign in to continue</h3>
                     <p>
+                        <i class="icon ion-md-hand"></i>
                         Not a member yet? 
                         <a href="<?= FRONT_ROOT ?>user/registerPath"> Register now</a>                        
                     </p>

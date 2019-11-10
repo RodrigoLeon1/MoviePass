@@ -1,9 +1,9 @@
 <body>
     <header>
-        <div class="movie-h" style="background-image: url('<?= FRONT_ROOT ?>Views/assets/img/cinema.jpg');">            
+        <div class="movie-h" style="background-image: url('<?= IMG_PATH_TMDB . $show->getMovie()->getBackdropPath() ?>');">            
             <h3 class="section-title text-s">
                 <i class="icon ion-md-videocam"></i>
-                <?= $title ?>
+                <?= $title ?> - <?= $show->getMovie()->getTitle() ?>
             </h3>
         </div>
     </header>
@@ -17,29 +17,34 @@
                     <div class="show-complete-info">
                         <h3>
                             <i class="icon ion-md-calendar"></i> 
-                            Paseo Aldrey
+                            <?= $show->getCinema()->getName() ?>
                         </h3>
                         <h3>
                             <i class="icon ion-md-videocam"></i> 
-                            Terminator 3
+                            <?= $show->getMovie()->getTitle() ?>
                         </h3>
                         <h3>
                             <i class="icon ion-logo-usd"></i> 
-                            Price for ticket: $300
+                            Price for ticket: 
+                            <span id="price-ticket">
+                                <?= $show->getCinema()->getPrice() ?>
+                            </span>  
                         </h3>
                         <h3>
                             <i class="icon ion-md-calendar"></i> 
-                            June18, 2019 at 8:00
+                            <?= date('F j, Y', strtotime($show->getDateStart())) ?>
+                            at 
+                            <?= date('H:i', strtotime($show->getTimeStart())) ?>
                         </h3>
                         <h3>
                             <i class="icon ion-md-pin"></i> 
-                            Sarmiento 2685
+                            <?= $show->getCinema()->getAddress() ?>
                         </h3>
                     </div>
                     <div class="show-total">
                         <h3 class="cinema-name">
                             <i class="icon ion-md-cart"></i>     
-                            Total: $300
+                            Total: $<span id="cart-total"></span>
                         </h3>
                     </div>
                 </div>
@@ -47,8 +52,8 @@
                 <div class="purchase-form">                    
                     <form action="" method="POST" class="register-form">                        
                         <label>
-                            <h4>Select Tickets</h4>               
-                            <input type="number" name="numberOfTickets" id="numberTickets" min="1">
+                            <h4>Insert quantity of tickets</h4>               
+                            <input type="number" name="numberOfTickets" id="numberTickets" min="1" required>
                         </label> 
 
                         <label>
@@ -61,17 +66,17 @@
 
                         <label>
                             <h4>Insert card number</h4>               
-                            <input type="text" name="" id="" maxlength="16" minlength="16">
+                            <input type="text" name="cardNumber" id="" maxlength="16" minlength="16" required>
                         </label>
 
                         <label>
                             <h4>Security code</h4>               
-                            <input type="text" name="" id="" maxlength="3" minlength="3">
+                            <input type="text" name="cardSecurity" id="" maxlength="3" minlength="3" required>
                         </label>
 
                         <label>
                             <h4>Expiration date</h4>               
-                            <input type="month" name="" id="">
+                            <input type="month" name="expirationDate" id="" required>
                         </label>
 
                         <button class="btn-l" type="submit">Buy</button>
@@ -160,3 +165,21 @@
 
         </div>
     </main>
+<script>
+
+    let priceTicket = document.getElementById('price-ticket');
+    priceTicket = parseInt(priceTicket.innerHTML);
+
+    let cartTotal = document.getElementById('cart-total');
+    let tickets = document.getElementById('numberTickets');    
+    
+    function renderTotal(price, tickets) {
+        return tickets * price;
+    }
+
+    //Cada vez que el usuario ingrese una cantidad numerica de ticket, se renderizara el total de la compra
+    tickets.addEventListener('keyup', function getNumberTickets() {        
+        cartTotal.innerHTML = renderTotal(priceTicket, this.value);
+    });        
+
+</script>

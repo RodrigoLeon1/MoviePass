@@ -33,6 +33,7 @@
 				$parameters["FK_id_movie"] = $genreToMovie->getIdMovie();
 				$this->connection = Connection::getInstance();
 				$this->connection->executeNonQuery($query, $parameters);
+				return true;
             }
             catch (Exception $e) {
                 throw $e;
@@ -50,7 +51,10 @@
                     $genreMovie->setIdMovie($values["id"]);
                     foreach($values["genre_ids"] as $genre) {
                         $genreMovie->setIdGenre($genre);
-						$this->Add($genreMovie);						
+						$resultado=$this->Add($genreMovie);
+						if (!$resultado) {
+						break;
+						}						
                     }
                 }
             }
@@ -66,9 +70,10 @@
 			$genreMovie->setIdMovie($movie->getId());
 			$genres = $arrayToDecode["genres"];				
 			foreach($genres as $genre) {
-				$genreMovie->setIdGenre($genre["name"]);											
+				$genreMovie->setIdGenre($genre["id"]);											
 				//ERROR DB - lo demas carga bien
-				$this->Add($genreMovie);														
+				$resultado=$this->Add($genreMovie);
+				var_dump($resultado);																	
 			}
 		}
 
@@ -220,6 +225,5 @@
 		}	
 
 	}
-
 
 ?>
