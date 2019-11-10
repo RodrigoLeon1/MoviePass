@@ -32,11 +32,67 @@
 				$show->setTimeStart($time);
 				$show->setMovie($movie);
 				$show->setCinema($cinema);
-				$this->showDAO->add($show);
-				return $this->addShowPath(NULL, SHOW_ADDED);
+				if ($this->checkTime($show)) {
+					$this->showDAO->add($show);
+					return $this->addShowPath(NULL, SHOW_ADDED);
+				}
+				return $this->addShowPath(NULL, NULL); // mensaje de no agregado
 			}
 			return $this->addShowPath(EMPTY_FIELDS);
         }
+
+		public function checkTime (Show $show) {
+			$existance = $this->showDAO->getByCinemaId($show); // Get Shows That Belong To That Particular Cinema
+			$this->appendTime ($show);
+			$flag = 1;
+			if ($existance != null) {
+				foreach ($existance as $showsOnDB) {
+					if ( ($showsOnDB["date_start"] == $show->getDateStart()) ) {
+						if ( ($showsOnDB["time_start"] > $show->getTimeStart()) && ($showsOnDB["time_start"] > $show->getTimeEnd()) ) {
+							$flag *= 1;
+						}
+						else if ( ($showsOnDB["time_end"] < $show->getTimeStart()) && ($showsOnDB["time_end"] < $show->getTimeEnd()) ) {
+							$flag *= 1;
+						}
+						else {
+							$flag *= 0;
+						}
+					}
+				}
+			}
+			else if ($existance == null) {
+				$flag *= $this->checkPlace($show);
+			}
+			return $flag;
+		}
+
+		public function appendTime ($show) {
+			$movie = $this->movieDAO->getById($show->getMovie()->getId()); // Get Movie On Show In Order To Get It's Runtime
+			//Modify Time Lapse
+			//$timeStart = strtotime ("-15 minutes", strtotime($show->getDateStart() . $show->getTimeStart()));
+			$plusRunTime = "+" . $movie->getRuntime() . " minutes";
+			$timeEnd = strtotime ($plusRunTime, strtotime($show->getDateStart() . $show->getTimeStart()));
+			$timeEnd += strtotime ("+15 minutes", strtotime($timeEnd));
+			// Assign time to paramenters
+			// $show->setDateStart(date ('Y-m-d', $timeStart));
+			// $show->setTimeStart(date ('H:i:s', $timeStart));
+			$show->setDateEnd(date ('Y-m-d', $timeEnd));
+			$show->setTimeEnd(date ('H:i:s', $timeEnd));
+		}
+
+		public function checkPlace (Show $show) {
+			$shows = $this->showDAO->getAll();
+			if ($shows != null) {
+				foreach ($shows as $showList) {
+					if ($showList->getMovie()->getId() == $show->getMovie()->getId()) {
+						if ($showList->getDateStart() == $show->getDateStart()) {
+							return 0;
+						}
+					}
+				}
+			}
+			return 1;
+		}
 
         private function validateShowForm($id_cinema, $id_movie, $day, $hour) {
             if(empty($id_cinema) || empty($id_movie) || empty($day) || empty($hour)) {

@@ -22,7 +22,7 @@
 
         public function add(Show $show) {
 			try {
-				if ($this->checkTime($show)) {
+				// if ($this->checkTime($show)) {
 					$query = "INSERT INTO " . $this->tableName . " (FK_id_cinema, FK_id_movie, date_start, time_start, date_end, time_end) VALUES (:FK_id_cinema, :FK_id_movie, :date_start, :time_start, :date_end, :time_end);";
 					$parameters["FK_id_cinema"] = $show->getCinema()->getId();
 					$parameters["FK_id_movie"] = $show->getMovie()->getId();
@@ -32,75 +32,65 @@
 					$parameters["time_end"] = $show->getTimeEnd();
 					$this->connection = Connection::getInstance();
 					$this->connection->executeNonQuery($query, $parameters);
-				}
+				// }
 			}
 			catch (Exception $e) {
 				throw $e;
 			}
         }
 
-		public function checkPlace (Show $show) {
-			$this->getAll();
-			if ($this->showList != null) {
-				foreach ($this->showList as $showList) {
-					if ($showList->getMovie()->getId() == $show->getMovie()->getId()) {
-						// echo "peli es el mismo <br>";
-						if ($showList->getDateStart() == $show->getDateStart()) {
-							// echo "la fecha es la misma <br>";
-							return 0;
-						}
-					}
-				}
-			}
-			return 1;
-		}
+		// public function checkPlace (Show $show) {
+		// 	$this->getAll();
+		// 	if ($this->showList != null) {
+		// 		foreach ($this->showList as $showList) {
+		// 			if ($showList->getMovie()->getId() == $show->getMovie()->getId()) {
+		// 				if ($showList->getDateStart() == $show->getDateStart()) {
+		// 					return 0;
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// 	return 1;
+		// }
 
-		public function appendTime ($show) {
-			$movie = $this->movieDAO->getById($show->getMovie()->getId()); // Get Movie On Show In Order To Get It's Runtime
-			//Modify Time Lapse
-			$timeStart = strtotime ("-15 minutes", strtotime($show->getDateStart() . $show->getTimeStart()));
-			$plusRunTime = "+" . $movie->getRuntime() . " minutes";
-			$timeEnd = strtotime ($plusRunTime, strtotime($show->getDateStart() . $show->getTimeStart()));
-			$timeEnd += strtotime ("+15 minutes", strtotime($timeEnd));
-			// Assign time to paramenters
-			$show->setDateStart(date ('Y-m-d', $timeStart));
-			$show->setTimeStart(date ('H:i:s', $timeStart));
-			$show->setDateEnd(date ('Y-m-d', $timeEnd));
-			$show->setTimeEnd(date ('H:i:s', $timeEnd));
-		}
+		// public function appendTime ($show) {
+		// 	$movie = $this->movieDAO->getById($show->getMovie()->getId()); // Get Movie On Show In Order To Get It's Runtime
+		// 	//Modify Time Lapse
+		// 	$timeStart = strtotime ("-15 minutes", strtotime($show->getDateStart() . $show->getTimeStart()));
+		// 	$plusRunTime = "+" . $movie->getRuntime() . " minutes";
+		// 	$timeEnd = strtotime ($plusRunTime, strtotime($show->getDateStart() . $show->getTimeStart()));
+		// 	$timeEnd += strtotime ("+15 minutes", strtotime($timeEnd));
+		// 	// Assign time to paramenters
+		// 	$show->setDateStart(date ('Y-m-d', $timeStart));
+		// 	$show->setTimeStart(date ('H:i:s', $timeStart));
+		// 	$show->setDateEnd(date ('Y-m-d', $timeEnd));
+		// 	$show->setTimeEnd(date ('H:i:s', $timeEnd));
+		// }
 
-		public function checkTime (Show $show) {
-			$existance = $this->getByCinemaId($show); // Get Shows That Belong To That Particular Cinema
-			$this->appendTime ($show);
-			$flag = 1;
-			if ($existance != null) {
-				foreach ($existance as $showsOnDB) {
-					if ( ($showsOnDB["date_start"] == $show->getDateStart()) ) {
-						if ( ($showsOnDB["time_start"] > $show->getTimeStart()) && ($showsOnDB["time_start"] > $show->getTimeEnd()) ) {
-							// echo "entra1" . "<br>";
-							// echo $showsOnDB["time_start"] . " > " . $show->getTimeStart() . "<br>";
-							// echo $showsOnDB["time_start"] . " > " . $show->getTimeEnd() . "<br>";
-							$flag *= 1;
-						}
-						else if ( ($showsOnDB["time_end"] < $show->getTimeStart()) && ($showsOnDB["time_end"] < $show->getTimeEnd()) ) {
-							// echo "entra2" . "<br>";
-							// echo $showsOnDB["time_end"] . " < " . $show->getTimeStart() . "<br>";
-							// echo $showsOnDB["time_end"] . " < " . $show->getTimeEnd() . "<br>";
-							$flag *= 1;
-						}
-						else {
-							//echo "entra3";
-							$flag *= 0;
-						}
-					}
-				}
-			}
-			else if ($existance == null) {
-				// echo "entra al checkPlace <br>";
-				$flag *= $this->checkPlace($show);
-			}
-			return $flag;
-		}
+		// public function checkTime (Show $show) {
+		// 	$existance = $this->getByCinemaId($show); // Get Shows That Belong To That Particular Cinema
+		// 	$this->appendTime ($show);
+		// 	$flag = 1;
+		// 	if ($existance != null) {
+		// 		foreach ($existance as $showsOnDB) {
+		// 			if ( ($showsOnDB["date_start"] == $show->getDateStart()) ) {
+		// 				if ( ($showsOnDB["time_start"] > $show->getTimeStart()) && ($showsOnDB["time_start"] > $show->getTimeEnd()) ) {
+		// 					$flag *= 1;
+		// 				}
+		// 				else if ( ($showsOnDB["time_end"] < $show->getTimeStart()) && ($showsOnDB["time_end"] < $show->getTimeEnd()) ) {
+		// 					$flag *= 1;
+		// 				}
+		// 				else {
+		// 					$flag *= 0;
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// 	else if ($existance == null) {
+		// 		$flag *= $this->checkPlace($show);
+		// 	}
+		// 	return $flag;
+		// }
 
 		public function getByMovieId (Show $show) {
 			try {
