@@ -45,12 +45,14 @@
                 </div>
 
                 <div class="purchase-form">                    
-                    <form action="" method="POST" class="register-form">                        
+                    <form action="<?= FRONT_ROOT ?>purchase/Add" method="POST" class="register-form">                        
                         <label>
                             <h4>Insert quantity of tickets</h4>               
                             <input type="number" name="numberOfTickets" id="numberTickets" min="1" required>
                         </label> 
 
+                        <input type="hidden" name="id_show" value="<?= $show->getId() ?>">
+                        <!--
                         <label>
                             <h4>Card</h4>
                             <div class="card-container">
@@ -72,7 +74,7 @@
                         <label>
                             <h4>Expiration date</h4>               
                             <input type="month" name="expirationDate" id="" required>
-                        </label>
+                        </label> -->
 
                         <button class="btn-l" type="submit">Buy</button>
                     </form> 

@@ -19,15 +19,18 @@
             $this->purchaseDAO = new PurchaseDAO();
         }
 
-        public function Add($ticket_quantity, $total, $id_show, $discount = "")
+        public function Add($ticket_quantity, $id_show, $discount = "")
         {
 
             $ticketController = new TicketController();
+            $showController = new ShowController();
             $date = date('Y-m-d');
             $user = $_SESSION["loggedUser"];
             $dni = $user->getDni();
-            if($this->validatePurchaseForm($ticket_quantity, $total, $dni)) 
-            {
+            echo 'dni: '.$dni;
+            $price = $showController->getShowById($id_show)->getCinema()->getPrice();
+            $total = $ticket_quantity * $price;
+            
 				$purchase = new Purchase();            
                 $purchase->setTicketQuantity($ticket_quantity);
                 $purchase->setDiscount($discount);
@@ -35,19 +38,20 @@
                 $purchase->setTotal($total);
                 $purchase->setDni($dni);
                 $result = $this->purchaseDAO->Add($purchase);
-
+                var_dump($result);
+                /*
                 for($i=0 ; $i<$ticket_quantity ; $i++)
                 {
-                    $ticketController->Add($id_show, );
-                }
-			}
+                    $ticketController->Add( ,$id_show, );
+                }*/
+			
         }
 
         
 
-        private function validatePurchaseForm($ticket_quantity, $total, $dni)
+        private function validatePurchaseForm($ticket_quantity)
          {
-            if(empty($ticket_quantity) || empty($total) || empty($dni)) 
+            if(empty($ticket_quantity)) 
             {
                 return FALSE;
             }

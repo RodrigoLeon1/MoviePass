@@ -321,12 +321,39 @@ CREATE TABLE purchases (
 	CONSTRAINT `FK_dni_purchase` FOREIGN KEY (`FK_dni`) REFERENCES `profile_users` (`dni`)
 )
 
+
+
+CREATE DEFINER=root@localhost PROCEDURE validar_egreso(
+    IN codigo_producto VARCHAR(100),
+    IN cantidad INT,
+    OUT valido INT(11)
+)
+BEGIN
+    DECLARE resta INT(11);
+    SET resta = 0;
+
+    SELECT (s.stock - cantidad) INTO resta
+    FROM stock AS s
+    WHERE codigo_producto = s.codigo;
+
+    IF (resta > s.stock_minimo) THEN
+        SET valido = 1;
+    ELSE
+        SET valido = -1;
+    END IF;
+    SELECT valido;
+END
+
+
+
+
 DROP PROCEDURE IF EXISTS 'purchases_Add';
 DELIMITER$$
-CREATE PROCEDURE purchases_Add(IN ticket_quantity int, IN discount int, IN date DATE, IN total int, IN dni_user int)
+CREATE PROCEDURE purchases_Add(IN ticket_quantity int, IN discount int, IN date DATE, IN total int, IN dni_user int, OUT id int)
 BEGIN
     INSERT INTO purchases(purchases.ticket_quantity, purchases.discount, purchases.date, purchases.total, purchases.FK_dni)
     VALUES (ticket_quantity, discount, date, total, dni_user);
+	SET id = SET id = SELECT LAST_INSERT_ID()
 END$$
 
 DROP PROCEDURE IF EXISTS 'purchases_GetById';

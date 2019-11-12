@@ -21,8 +21,13 @@
                 $parameters['dni'] = $purchase->getDNI();   
                 
                 $this->connection = Connection::GetInstance();
-                $results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-                var_dump($results);
+                //$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+                
+                $id = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+                var_dump($id);
+                //$id = $this->connection->lastId();
+                //return $id;
+
             } catch(Exception $e) {
                 throw $e;
             }

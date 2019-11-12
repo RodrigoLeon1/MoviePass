@@ -29,6 +29,11 @@
 			}
         }
 
+        public function ads()
+        {
+            
+        }
+
 
         
 
