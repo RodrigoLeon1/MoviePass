@@ -37,11 +37,10 @@
 			}
         }
 
+		// Tambien agrega el runtime
 		public function addMovie(Movie $movie) {
 			try {				
-				$query = "INSERT INTO " . $this->tableName . " (id, popularity, vote_count, video, poster_path, adult, backdrop_path, 												original_language, original_title, title, vote_average, overview, 													release_date, runtime) 
-																VALUES 
-																(:id, :popularity, :vote_count, :video, :poster_path, :adult, :backdrop_path, :original_language, :original_title, :title,:vote_average, :overview, :release_date, :runtime)";
+				$query = "CALL movies_add_details(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				$parameters["id"] = $movie->getId();
 				$parameters["popularity"] = $movie->getPopularity();
 				$parameters["vote_count"] = $movie->getVoteCount();
@@ -50,14 +49,15 @@
 				$parameters["adult"] = $movie->getAdult();
 				$parameters["backdrop_path"] = $movie->getBackdropPath();
 				$parameters["original_language"] = $movie->getOriginalLanguage();
-				$parameters["original_title"] = $movie->getOriginalTitle();				
+				$parameters["original_title"] = $movie->getOriginalTitle();	
+				$parameters["genre_ids"] = $movie->getGenreIds();			
 				$parameters["title"] = $movie->getTitle();
 				$parameters["vote_average"] = $movie->getVoteAverage();
 				$parameters["overview"] = $movie->getOverview();
 				$parameters["release_date"] = $movie->getReleaseDate();
 				$parameters["runtime"] = $movie->getRuntime();
 				$this->connection = Connection::GetInstance();				
-				$this->connection->ExecuteNonQuery($query, $parameters);							
+				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);							
 			}
 			catch (Exception $ex) {
 				throw $ex;
@@ -65,10 +65,10 @@
 		}
 
         public function getAll() {
-			try {
-				$query = "SELECT * FROM " . $this->tableName . " ORDER BY title ASC";
+			try {				
+				$query = "CALL movies_getAll()";
 				$this->connection = Connection::getInstance();
-				$resultSet = $this->connection->execute($query);
+				$resultSet = $this->connection->execute($query, QueryType::StoredProcedure);
 				foreach ($resultSet as $row) {
 					$movie = new Movie ();
 					$movie->setId($row["id"]);
@@ -157,6 +157,7 @@
 			$jsonPath = MOVIE_DETAILS_PATH . $movie->getId() . "?api_key=" . API_N . "&language=en-US";
             $jsonContent = file_get_contents($jsonPath);
             $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
+
             foreach ($arrayToDecode as $valuesArray) {	
 				$movie = new Movie();
 				$movie->setPopularity($arrayToDecode["popularity"]);
@@ -167,7 +168,8 @@
 				$movie->setAdult($arrayToDecode["adult"]);
 				$movie->setBackdropPath($arrayToDecode["backdrop_path"]);
 				$movie->setOriginalLanguage($arrayToDecode["original_language"]);
-				$movie->setOriginalTitle($arrayToDecode["original_title"]);				
+				$movie->setOriginalTitle($arrayToDecode["original_title"]);	
+				$movie->setGenreIds($arrayToDecode["genres"]);
 				$movie->setTitle($arrayToDecode["title"]);
 				$movie->setVoteAverage($arrayToDecode["vote_average"]);
 				$movie->setOverview($arrayToDecode["overview"]);
@@ -243,11 +245,11 @@
 		}
 
 		public function deleteById(Movie $movie) {
-			try {
-				$query = "DELETE FROM " . $this->tableName .  " WHERE id = :id";
+			try {				
+				$query = "CALL movies_deleteById(?)";
 				$parameters ["id"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
-				$this->connection->ExecuteNonQuery($query, $parameters);
+				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 			}
 			catch (Exception $e) {
 				throw $e;

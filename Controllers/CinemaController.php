@@ -66,7 +66,7 @@
 			return $this->listCinemaPath(CINEMA_REMOVE);
 		}
 
-		public function getById($id) {
+		public function modifyById($id) {
 			$cinema = $this->cinemaDAO->getById($id);
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];

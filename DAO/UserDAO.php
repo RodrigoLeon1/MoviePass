@@ -84,6 +84,7 @@
 			}
 		}		
 
+		// Falta arreglar
 		public function updateUser(User $user) {
 			try {								
 				$query = "UPDATE " . $this->tableName . " AS user 

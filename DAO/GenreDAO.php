@@ -25,8 +25,8 @@
         }
 
         public function getAll() {
-			try {
-				$query = "SELECT * FROM " . $this->tableName . " ORDER BY name ASC";
+			try {                
+                $query = "CALL genres_GetAll()";
 				$this->connection = Connection::getInstance();
                 $resultSet = $this->connection->execute($query);
 				foreach ($resultSet as $row) {
@@ -45,7 +45,7 @@
 
         public function getById($id) {
             $genre = NULL;
-            $query = "CALL genre_getById (?)";
+            $query = "CALL genres_getById (?)";
             $parameters["id"] = $id;
             $this->connection = Connection::GetInstance();
             $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
@@ -59,7 +59,7 @@
     
         public function getByName($name) {
             $genre = NULL;
-            $query = "CALL genre_getByName (?)";
+            $query = "CALL genres_getByName (?)";
             $parameters["name"] = $name;
             $this->connection = Connection::GetInstance();
             $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
@@ -74,10 +74,11 @@
         public function getNameGenre($id) {			
 			$genreName = "";
 			try {
-				$query = "SELECT * FROM " . $this->tableName . " WHERE (id = :id_genre)";			
-				$parameters["id_genre"] = $id;
+				// $query = "SELECT * FROM " . $this->tableName . " WHERE (id = :id_genre)";			
+                $query = "CALL genres_getById(?)";
+				$parameters["id"] = $id;
 				$this->connection = Connection::GetInstance();
-				$results = $this->connection->Execute($query, $parameters);			
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
 				foreach($results as $row) {								
 					$genreName = $row["name"];				
 				}		

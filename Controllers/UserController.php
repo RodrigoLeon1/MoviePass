@@ -197,10 +197,10 @@
             }
         }
 
+        // Todavia no funciona al 100%
         public function updateAccount($firstName, $lastName, $dni, $mail, $password) {
             $usr = $_SESSION["loggedUser"];
-            if($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) &&    $this->validateMailForm($mail)) {
-                
+            if($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) && $this->validateMailForm($mail)) {      
                 $user = new User();
                 $user->setFirstName($firstName);
                 $user->setLastName($lastName);
@@ -219,7 +219,6 @@
 
                 return $this->myAccountPath();
             }
-
         }
 
         public function removeUser($dni) {		

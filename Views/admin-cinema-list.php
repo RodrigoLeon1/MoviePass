@@ -37,7 +37,7 @@
 											<i class="icon ion-md-trash"></i>
 											Remove
 										</a>										
-										<a href="<?php echo FRONT_ROOT . "cinema/getById/" . $cinema->getId(); ?>" class="btn">
+										<a href="<?php echo FRONT_ROOT . "cinema/modifyById/" . $cinema->getId(); ?>" class="btn">
 											<i class="icon ion-md-build"></i>
 											Modify
 										</a>

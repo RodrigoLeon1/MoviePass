@@ -169,9 +169,7 @@
 			} else {
                 return $this->userPath();
             }            
-        }
-
-          
+        }         
 
     }
 

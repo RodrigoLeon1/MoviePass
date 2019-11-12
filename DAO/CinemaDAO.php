@@ -28,8 +28,8 @@
         }
 
         public function getAll() {
-			try {				
-				$query = "SELECT * FROM " . $this->tableName;
+			try {								
+				$query = "CALL cinemas_GetAll()";
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
 				foreach($results as $row) {
@@ -100,11 +100,11 @@
 
 		//
 		public function getByName(Cinema $cinema) {
-			try {				
-				$query = "SELECT * FROM " . $this->tableName . " WHERE name = :name";
+			try {								
+				$query = "CALL cinemas_getByName(?)";
 				$parameters["name"] = $cinema->getName();
 				$this->connection = Connection::GetInstance();
-				$results = $this->connection->ExecuteNonQuery($query, $parameters);				
+				$results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);				
 
 				return $results;
 			}
