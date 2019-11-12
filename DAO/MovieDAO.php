@@ -30,7 +30,7 @@
 				$parameters["overview"] = $movie->getOverview();
 				$parameters["release_date"] = $movie->getReleaseDate();
 				$this->connection = Connection::GetInstance();
-				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
+				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);				
 			}
 			catch (Exception $e) {
 				throw $ex;
@@ -56,8 +56,8 @@
 				$parameters["overview"] = $movie->getOverview();
 				$parameters["release_date"] = $movie->getReleaseDate();
 				$parameters["runtime"] = $movie->getRuntime();
-				$this->connection = Connection::GetInstance();
-				$this->connection->executeNonQuery($query, $parameters);
+				$this->connection = Connection::GetInstance();				
+				$this->connection->ExecuteNonQuery($query, $parameters);							
 			}
 			catch (Exception $ex) {
 				throw $ex;

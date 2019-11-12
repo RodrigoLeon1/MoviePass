@@ -24,6 +24,10 @@
             }
         }
 
+        public function lastId() {            
+            return $this->pdo->lastInsertId();            
+        }
+
         public static function GetInstance()
         {
             if(self::$instance == null)
@@ -66,7 +70,7 @@
             {
                 throw $ex;
             }
-        }
+        }        
 
         private function Prepare($query)
         {

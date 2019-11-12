@@ -21,7 +21,8 @@
                 $parameters['dni'] = $purchase->getDNI();   
                 
                 $this->connection = Connection::GetInstance();
-                $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+                $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);                   
+
             } catch(Exception $e) {
                 throw $e;
             }

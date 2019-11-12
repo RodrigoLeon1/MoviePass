@@ -197,6 +197,31 @@
             }
         }
 
+        public function updateAccount($firstName, $lastName, $dni, $mail, $password) {
+            $usr = $_SESSION["loggedUser"];
+            if($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) &&    $this->validateMailForm($mail)) {
+                
+                $user = new User();
+                $user->setFirstName($firstName);
+                $user->setLastName($lastName);
+                $user->setDni($dni);
+                $user->setMail($mail);
+                $user->setPassword($password);   
+                $user->setRole($usr->getRole());                
+            
+                // echo '<pre>';
+                // var_dump($user);
+                // echo '</pre>';
+
+                $this->userDAO->updateUser($user);
+
+                $_SESSION["loggedUser"] = $user;
+
+                return $this->myAccountPath();
+            }
+
+        }
+
         public function removeUser($dni) {		
             $admin = $_SESSION["loggedUser"];
             if($admin->getDni() == $dni) {

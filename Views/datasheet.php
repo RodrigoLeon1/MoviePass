@@ -64,7 +64,7 @@
                         </p>
                     </div>
                     <div class="show-ticket">
-                        <a href="<?= FRONT_ROOT ?>ticket/buyTicketPath/<?= $show->getId() ?>">Buy Ticket</a>
+                        <a href="<?= FRONT_ROOT ?>purchase/purchasePath/<?= $show->getId() ?>">Buy Ticket</a>
                     </div>
                 </div>                    
                 <?php endforeach; ?>                             
