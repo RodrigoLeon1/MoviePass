@@ -5,7 +5,8 @@
     use Models\Movie as Movie;    
     use DAO\MovieDAO as MovieDAO;
     use Controllers\GenreToMovieController as GenreToMovieController;
-	use Controllers\ShowController as ShowController;
+    use Controllers\ShowController as ShowController;
+    use Controllers\PurchaseController as PurchaseController;
 
     class MovieController {
 
@@ -32,6 +33,7 @@
         public function showMovie($id) {
             $movies = $this->moviesNowPlaying();
             $genreMovieController = new GenreToMovieController();    
+            $purchaseController = new PurchaseController();
             foreach ($movies as $movieRow) {
                 if ($movieRow->getId() == $id) {                                                                                
                     $movie = new Movie();
@@ -40,7 +42,7 @@
                     $img = IMG_PATH_TMDB . $movie->getBackdropPath();
                     $keyTrailer = $this->movieDAO->getKeyMovieTrailer($movie);     
                     $shows = $this->showController->getShowsOfMovieById($id);
-                    $genres = $genreMovieController->getGenresOfMovie($movie);                                                   
+                    $genres = $genreMovieController->getGenresOfMovie($movie);                                        
                 }
             }            
             require_once(VIEWS_PATH . "header.php");
@@ -168,6 +170,8 @@
                 return $this->userPath();
             }            
         }
+
+          
 
     }
 

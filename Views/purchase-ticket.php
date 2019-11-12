@@ -37,7 +37,7 @@
                             Total: $<span id="cart-total">0</span>
                             <div class="ticket-information">
                                 <h4>Ticket type: General</h4>
-                                <h4>Tickets: <span id="ticket-quantity">0</span> </h4>
+                                <h4>Tickets: <span id="ticket-quantity" max=<?php echo $available ?>>0</span> </h4>
                                 <h4>Discount: N/A</h4>
                             </div>
                         </h3>

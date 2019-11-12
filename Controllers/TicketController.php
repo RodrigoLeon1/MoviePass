@@ -12,28 +12,58 @@
         private $ticketDAO;
         
         public function __construct() {
+            
             $this->ticketDAO = new TicketDAO();            
         }
 
-        public function buyTicketPath($idShow) {            
-            if (isset($_SESSION["loggedUser"])) {                
+        public function Add($qr, $id_purchase, $id_show)
+        {
+            if($this->validateTicketForm($qr, $id_purchase, $id_show)) 
+            {
+				$ticket = new Ticket();            
+                $ticket->setQR($qr);
+                $ticket->setIdPurchase($id_purchase);
+                $ticket->setIdShow($id_show);
                 
-                $showController = new ShowController();
-                $show = $showController->getShowById($idShow);                                
-                
-                $title = 'Buy ticket - ' . $show->getMovie()->getTitle();
-                $img = IMG_PATH_TMDB . $show->getMovie()->getBackdropPath();
-
-			    require_once(VIEWS_PATH . "header.php");			
-                require_once(VIEWS_PATH . "navbar.php");
-                require_once(VIEWS_PATH . "header-s.php");
-                require_once(VIEWS_PATH . "purchase-ticket.php");
-                require_once(VIEWS_PATH . "footer.php");
-            } else {
-                $userController = new UserController();
-                return $userController->loginPath(LOGIN_NEEDED);
-            }
+                $this->ticketDAO->Add($ticket);
+			}
         }
+
+
+        
+
+        private function validateTicketForm($qr, $id_purchase, $id_show)
+         {
+            if(empty($qr) || empty($id_purchase) || empty($id_show)) 
+            {
+                return FALSE;
+            }
+            return TRUE;
+        }
+
+        public function getByNumber($number)
+        {
+            return $this->ticketDAO-GetByNumber($number);
+        }
+
+        public function getByShow($id)
+        {
+            return  $this->ticketDAO->getByShowId($id);
+        }
+
+        public function getTickets()
+        {
+            return $this->ticketDAO->getAll();
+        }
+
+        public function ticketsNumber($id)
+        {
+            $tickets = $this->getByShow($id);
+            return count($tickets);
+        }
+
+
+        
 
 
         
