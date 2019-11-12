@@ -63,9 +63,18 @@
                             </p>
                         </p>
                     </div>
-                    <div class="show-ticket">
-                        <a href="<?= FRONT_ROOT ?>purchase/purchasePath/<?= $show->getId() ?>">Buy Ticket</a>
-                    </div>
+                    <?php if($purchaseController->ticketsAvailable($show->getId())){ ?>
+                    
+                        <div class="show-ticket">
+                        <a href="<?= FRONT_ROOT ?>purchase/buyTicketPath/<?= $show->getId() ?>">Buy Ticket</a>
+                        </div>
+                    <?php }else{ ?>
+                        <div class="show-ticket">
+                        <a href="">Sold out</a>
+                        </div>
+                    <?php } ?>
+
+                    
                 </div>                    
                 <?php endforeach; ?>                             
                 <br>                

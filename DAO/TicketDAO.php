@@ -18,7 +18,8 @@
                 $parameters['id_show'] = $ticket->getIdShow();   
                 
                 $this->connection = Connection::GetInstance();
-                $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+                $results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+                var_dump($results);
             } catch(Exception $e) {
                 throw $e;
             }
@@ -65,6 +66,33 @@
                 throw $e;
             }
         }
+
+        public function getByShowId($id)
+        {
+            try {
+                $query = "CALL tickets_GetByShowId(?)";
+                $parameters['id'] = $id;
+
+                $this->connection = Connection::GetInstance();
+                $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+                $ticketList = array();
+                foreach($results as $row) {
+                    $ticket = new Ticket();
+                    $ticket->setTicketNumber($row['ticket_number']);
+                    $ticket->setQR($row['QR']);
+                    $ticket->setIdPurchase($row['FK_id_purchase']);
+                    $ticket->setIdShow($row['FK_id_show']);
+                    array_push($ticketList, $ticket);
+                }
+
+                return $ticketList;
+                
+            } catch(Exception $e) {
+                throw $e;
+            }
+        }
+
+
 
     }
 ?>

@@ -21,7 +21,12 @@
                 $parameters['dni'] = $purchase->getDNI();   
                 
                 $this->connection = Connection::GetInstance();
-                $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);                   
+                //$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+                
+                $id = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+                var_dump($id);
+                //$id = $this->connection->lastId();
+                //return $id;
 
             } catch(Exception $e) {
                 throw $e;
@@ -46,7 +51,6 @@
                     $purchase->setDni($row['dni']);
                 }
                 return $purchase;
-            }
             
         } catch(Exception $e) {
             throw $e;
@@ -75,6 +79,33 @@
             throw $e;
         }
     }
+
+    public function getByDni($dni)
+    {
+        try {
+            $query = "CALL purchases_GetByDni(?)";
+            $parameters['dni'] = $dni;
+
+            $this->connection = Connection::GetInstance();
+            $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+            $purchase = new Purchase();
+            foreach($results as $row) {
+                $purchase->setId($row['id']);
+                $purchase->setTicketQuantity($row['ticket_quantity']);
+                $purchase->setDiscount($row['discount']);
+                $purchase->setDate($row['date']);
+                $purchase->setTotal($row['total']);
+                $purchase->setDni($row['dni']);
+            }
+            return $purchase;
+        
+    } catch(Exception $e) {
+        throw $e;
+    }
+    
+    }
+
+}
 
 
 ?>
