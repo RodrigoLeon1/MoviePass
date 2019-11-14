@@ -98,7 +98,6 @@
 			}
 		}
 
-		//
 		public function getByName(Cinema $cinema) {
 			try {								
 				$query = "CALL cinemas_getByName(?)";
@@ -111,6 +110,20 @@
 			catch (Exception $e) {
 				throw $e;
 			}			
+		}
+
+		public function getShowsOfCinema(Cinema $cinema) {
+			try {								
+				$query = "CALL cinemas_hasShows(?)";
+				$parameters["id_cinema"] = $cinema->getId();
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);				
+
+				return $results;
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
 		}
 
     }

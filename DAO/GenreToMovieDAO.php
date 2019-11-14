@@ -4,6 +4,7 @@
 
 	use \Exception as Exception;
 	use DAO\Connection as Connection;
+	use Models\Genre as Genre;
 	use Models\GenreToMovie as GenreToMovie;
 	use Models\Movie as Movie;
 
@@ -210,6 +211,24 @@
 			return $genres;
 		}	
 
+		public function getGenresOfShows() {
+			$genres = array();
+			try {							
+				$query = "CALL genresxmovies_getGenresOfShows()";				
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);			
+				foreach($results as $row) {				
+					$genre = new Genre();
+                    $genre->setIdGenre($row["id"]);
+					$genre->setName($row["name"]);
+					array_push($genres, $genre);
+				}	
+			}
+			catch (Exception $ex) {
+				throw $ex;
+			}		
+			return $genres;			
+		}
 	}
 
 ?>

@@ -233,17 +233,7 @@
 		
 		public function getShowsOfMovie(Movie $movie) {
 			$shows = array();
-
 			try {
-				// $query = "SELECT shows.id as show_id,
-				// 	shows.date_start as show_date_start,
-				// 	shows.time_start as show_time_start,
-				// 	cinemas.name as cinema_name,
-				// 	cinemas.address as cinema_address FROM " . $this->tableName . " INNER JOIN movies ON shows.FK_id_movie = movies.id
-				// 												 INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
-				// 												 WHERE (shows.FK_id_movie = :id_movie)
-				// 												 ORDER BY shows.date_start ASC";
-
 				$query = "CALL shows_getShowsOfMovie(?)";
 				$parameters["id_movie"] = $movie->getId();
 				$this->connection = Connection::GetInstance();

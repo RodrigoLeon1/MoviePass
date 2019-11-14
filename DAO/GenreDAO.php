@@ -28,7 +28,7 @@
 			try {                
                 $query = "CALL genres_GetAll()";
 				$this->connection = Connection::getInstance();
-                $resultSet = $this->connection->execute($query);
+                $resultSet = $this->connection->execute($query, array(), QueryType::StoredProcedure);
 				foreach ($resultSet as $row) {
 					$genre = new Genre();
                     $genre->setIdGenre($row["id"]);
@@ -73,8 +73,7 @@
 
         public function getNameGenre($id) {			
 			$genreName = "";
-			try {
-				// $query = "SELECT * FROM " . $this->tableName . " WHERE (id = :id_genre)";			
+			try {						
                 $query = "CALL genres_getById(?)";
 				$parameters["id"] = $id;
 				$this->connection = Connection::GetInstance();

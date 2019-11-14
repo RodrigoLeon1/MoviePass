@@ -9,6 +9,21 @@
         </div>
         <?php endif; ?>    
 
+		<?php if($alert != NULL): ?>
+		<div class="alert-container error-container">
+			<i class="icon ion-md-close-circle-outline"></i>
+			<h3><?= $alert ?></h3>
+			
+			<?php if($cinemaId != NULL): ?>			
+			<a href="<?= FRONT_ROOT ?>cinema/forceDelete/<?= $cinemaId ?>">
+				<i class="icon ion-md-warning"></i>
+				Force Delete
+			</a>
+			<?php endif; ?>			
+
+		</div>
+		<?php endif; ?>
+
         <div class="dashboard-container">
 
             <div class="content-container">				

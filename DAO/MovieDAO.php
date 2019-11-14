@@ -40,7 +40,7 @@
 		// Tambien agrega el runtime
 		public function addMovie(Movie $movie) {
 			try {				
-				$query = "CALL movies_add_details(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				$query = "CALL movies_add_details(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				$parameters["id"] = $movie->getId();
 				$parameters["popularity"] = $movie->getPopularity();
 				$parameters["vote_count"] = $movie->getVoteCount();
@@ -50,7 +50,7 @@
 				$parameters["backdrop_path"] = $movie->getBackdropPath();
 				$parameters["original_language"] = $movie->getOriginalLanguage();
 				$parameters["original_title"] = $movie->getOriginalTitle();	
-				$parameters["genre_ids"] = $movie->getGenreIds();			
+				// $parameters["genre_ids"] = $movie->getGenreIds();			
 				$parameters["title"] = $movie->getTitle();
 				$parameters["vote_average"] = $movie->getVoteAverage();
 				$parameters["overview"] = $movie->getOverview();
@@ -67,8 +67,8 @@
         public function getAll() {
 			try {				
 				$query = "CALL movies_getAll()";
-				$this->connection = Connection::getInstance();
-				$resultSet = $this->connection->execute($query, QueryType::StoredProcedure);
+				$this->connection = Connection::getInstance();				
+				$resultSet = $this->connection->execute($query, array(), QueryType::StoredProcedure);
 				foreach ($resultSet as $row) {
 					$movie = new Movie ();
 					$movie->setId($row["id"]);
@@ -232,6 +232,39 @@
 			}
 		}
 
+		public function getByTitle(Movie $movie) {
+			try {
+				$movies = array();
+				$query = "CALL movies_getByTitle(?)";
+				$parameters ["title"] = $movie->getTitle();
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+				$movie = new Movie();
+				foreach ($results as $values) {
+					$movie->setPopularity($values["popularity"]);
+					$movie->setVoteCount($values["vote_count"]);
+					$movie->setVideo($values["video"]);
+					$movie->setPosterPath($values["poster_path"]);
+					$movie->setId($values["id"]);
+					$movie->setAdult($values["adult"]);
+					$movie->setBackdropPath($values["backdrop_path"]);
+					$movie->setOriginalLanguage($values["original_language"]);
+					$movie->setOriginalTitle($values["original_title"]);
+					$movie->setGenreIds($values["genre_ids"]);
+					$movie->setTitle($values["title"]);
+					$movie->setVoteAverage($values["vote_average"]);
+					$movie->setOverview($values["overview"]);
+					$movie->setReleaseDate($values["release_date"]);
+					$movie->setRuntime($values["runtime"]);
+					array_push($movies, $movie);
+				}
+				return $movies;
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
+		}		
+
 		public function existMovie($movie) {
 			try {
 				$query = "CALL movies_getById(?)";
@@ -250,6 +283,20 @@
 				$parameters ["id"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
+		}
+
+		public function getShowsOfMovie(Movie $movie) {
+			try {								
+				$query = "CALL movies_hasShows(?)";
+				$parameters["id_movie"] = $movie->getId();
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);				
+
+				return $results;
 			}
 			catch (Exception $e) {
 				throw $e;

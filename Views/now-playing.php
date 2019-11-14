@@ -6,14 +6,14 @@
             <label>
                 Category:
                 <select name="category">
-                <option value="" selected></option>
+                <option value="" selected>All</option>
                 <?php foreach ($genres as $genre): ?>
                     <option value="<?= $genre->getIdGenre(); ?>"><?= $genre->getName(); ?></option>
                 <?php endforeach; ?>                
                 </select>
             </label>
             <label>
-                Date:
+                Date of show:
                 <input type="date" name="date">
             </label>
 
