@@ -44,21 +44,6 @@
 			
         }
 
-        
-
-        private function validatePurchaseForm($ticket_quantity)
-         {
-            if(empty($ticket_quantity)) 
-            {
-                return FALSE;
-            }
-            return TRUE;
-        }
-
-
-
-        
-
         public function buyTicketPath($idShow) {            
             if (isset($_SESSION["loggedUser"])) {  
                 
@@ -93,7 +78,6 @@
             return $this->purchaseDAO->getById();
         }
 
-
         public function numberOfTicketsAvailable($id_show)
         {
             $showController = new ShowController();
@@ -102,7 +86,6 @@
             $tickets = $ticketController->ticketsNumber($id_show);
             $capacity = $showController->getShowById($id_show)->getCinema()->getCapacity();
             
-
             return $capacity - $tickets;
         }
 
@@ -110,6 +93,7 @@
         {
             $quantity = $this->numberOfTicketsAvailable($id_show);
 
+            
             if($quantity > 0)
             {
                 return true;
@@ -118,6 +102,7 @@
                 return false;
             }
             
+            // return ($quantity > 0) ? true : false;
         }
 
         public function getPurchasesByUser($user)
@@ -130,10 +115,6 @@
             $user = $_SESSION["loggedUser"];
             return $this->purchaseDAO->getByDni($user->getDni());
         }
-
-        
-
-
         
     }
 

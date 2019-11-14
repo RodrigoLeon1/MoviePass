@@ -92,9 +92,9 @@
             <hr>
 
             <div>
-                <form action="" method="post" class="search-container">
+                <form action="<?= FRONT_ROOT ?>movie/searchMovie" method="post" class="search-container">
                     <label>
-                        <input type="text" name="" id="" placeholder="Insert the name of the movie">
+                        <input type="text" name="title" placeholder="Insert the name of the movie">
                     </label>
                     <button class="btn-l" type="submit">
                         <i class="icon ion-md-search"></i>

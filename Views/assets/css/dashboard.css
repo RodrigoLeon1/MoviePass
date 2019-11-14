@@ -115,6 +115,19 @@ hr {
     margin-right: 1.3rem;
 }
 
+.alert-container a {    
+    font-size: 1.45rem;
+    font-weight: 800;
+    margin-left: 1.3rem;
+    color: #038b9a;
+    font-style: italic;
+}
+
+.alert-container a > i {    
+    margin: 0;
+    font-size: 1.8rem;
+}
+
 .success-container {
     color: #3c763d;
     background-color: #dff0d8;

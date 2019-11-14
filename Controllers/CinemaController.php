@@ -49,7 +49,7 @@
 			}
         }
 
-		public function listCinemaPath($success = "") {
+		public function listCinemaPath($success = "", $alert = "", $cinemaId = "") {
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];				
 				$this->cinemas = $this->cinemaDAO->getAll();
@@ -61,12 +61,28 @@
 			}
         }
 
-		public function remove($id) {			
-			$this->cinemaDAO->deleteById($id);
-			return $this->listCinemaPath(CINEMA_REMOVE);
+		public function remove($id) {	
+			if($this->cinemaHasShows($id)) {				
+				return $this->listCinemaPath(NULL, CINEMA_HAS_SHOWS, $id);
+			} else {
+				$this->cinemaDAO->deleteById($id);
+				return $this->listCinemaPath(CINEMA_REMOVE, NULL, NULL);
+			}
 		}
 
-		public function getById($id) {
+		public function forceDelete($id) {
+			$this->cinemaDAO->deleteById($id);
+			return $this->listCinemaPath(CINEMA_REMOVE, NULL, NULL);
+		}
+
+		private function cinemaHasShows($id) {
+			$cinema = new Cinema();
+			$cinema->setId($id);
+
+			return ($this->cinemaDAO->getShowsOfCinema($cinema)) ? TRUE : FALSE;
+		}
+
+		public function modifyById($id) {
 			$cinema = $this->cinemaDAO->getById($id);
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];

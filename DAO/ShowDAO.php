@@ -21,76 +21,76 @@
 		}
 
         public function add(Show $show) {
-			try {
-				// if ($this->checkTime($show)) {
-					$query = "INSERT INTO " . $this->tableName . " (FK_id_cinema, FK_id_movie, date_start, time_start, date_end, time_end) VALUES (:FK_id_cinema, :FK_id_movie, :date_start, :time_start, :date_end, :time_end);";
-					$parameters["FK_id_cinema"] = $show->getCinema()->getId();
-					$parameters["FK_id_movie"] = $show->getMovie()->getId();
-					$parameters["date_start"] = $show->getDateStart();
-					$parameters["time_start"] = $show->getTimeStart();
-					$parameters["date_end"] = $show->getDateEnd();
-					$parameters["time_end"] = $show->getTimeEnd();
-					$this->connection = Connection::getInstance();
-					$this->connection->executeNonQuery($query, $parameters);
-				// }
+			try {			
+				$query = "INSERT INTO " . $this->tableName . " (FK_id_cinema, FK_id_movie, date_start, time_start, date_end, time_end) VALUES (:FK_id_cinema, :FK_id_movie, :date_start, :time_start, :date_end, :time_end);";
+				$parameters["FK_id_cinema"] = $show->getCinema()->getId();
+				$parameters["FK_id_movie"] = $show->getMovie()->getId();
+				$parameters["date_start"] = $show->getDateStart();
+				$parameters["time_start"] = $show->getTimeStart();
+				$parameters["date_end"] = $show->getDateEnd();
+				$parameters["time_end"] = $show->getTimeEnd();
+				$this->connection = Connection::getInstance();
+				$this->connection->executeNonQuery($query, $parameters);				
 			}
 			catch (Exception $e) {
 				throw $e;
 			}
         }
 
-		// public function checkPlace (Show $show) {
-		// 	$this->getAll();
-		// 	if ($this->showList != null) {
-		// 		foreach ($this->showList as $showList) {
-		// 			if ($showList->getMovie()->getId() == $show->getMovie()->getId()) {
-		// 				if ($showList->getDateStart() == $show->getDateStart()) {
-		// 					return 0;
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// 	return 1;
-		// }
+		/*
+		public function checkPlace (Show $show) {
+			$this->getAll();
+			if ($this->showList != null) {
+				foreach ($this->showList as $showList) {
+					if ($showList->getMovie()->getId() == $show->getMovie()->getId()) {
+						if ($showList->getDateStart() == $show->getDateStart()) {
+							return 0;
+						}
+					}
+				}
+			}
+			return 1;
+		}
 
-		// public function appendTime ($show) {
-		// 	$movie = $this->movieDAO->getById($show->getMovie()->getId()); // Get Movie On Show In Order To Get It's Runtime
-		// 	//Modify Time Lapse
-		// 	$timeStart = strtotime ("-15 minutes", strtotime($show->getDateStart() . $show->getTimeStart()));
-		// 	$plusRunTime = "+" . $movie->getRuntime() . " minutes";
-		// 	$timeEnd = strtotime ($plusRunTime, strtotime($show->getDateStart() . $show->getTimeStart()));
-		// 	$timeEnd += strtotime ("+15 minutes", strtotime($timeEnd));
-		// 	// Assign time to paramenters
-		// 	$show->setDateStart(date ('Y-m-d', $timeStart));
-		// 	$show->setTimeStart(date ('H:i:s', $timeStart));
-		// 	$show->setDateEnd(date ('Y-m-d', $timeEnd));
-		// 	$show->setTimeEnd(date ('H:i:s', $timeEnd));
-		// }
+		public function appendTime ($show) {
+			$movie = $this->movieDAO->getById($show->getMovie()->getId()); // Get Movie On Show In Order To Get It's Runtime
+			//Modify Time Lapse
+			$timeStart = strtotime ("-15 minutes", strtotime($show->getDateStart() . $show->getTimeStart()));
+			$plusRunTime = "+" . $movie->getRuntime() . " minutes";
+			$timeEnd = strtotime ($plusRunTime, strtotime($show->getDateStart() . $show->getTimeStart()));
+			$timeEnd += strtotime ("+15 minutes", strtotime($timeEnd));
+			// Assign time to paramenters
+			$show->setDateStart(date ('Y-m-d', $timeStart));
+			$show->setTimeStart(date ('H:i:s', $timeStart));
+			$show->setDateEnd(date ('Y-m-d', $timeEnd));
+			$show->setTimeEnd(date ('H:i:s', $timeEnd));
+		}
 
-		// public function checkTime (Show $show) {
-		// 	$existance = $this->getByCinemaId($show); // Get Shows That Belong To That Particular Cinema
-		// 	$this->appendTime ($show);
-		// 	$flag = 1;
-		// 	if ($existance != null) {
-		// 		foreach ($existance as $showsOnDB) {
-		// 			if ( ($showsOnDB["date_start"] == $show->getDateStart()) ) {
-		// 				if ( ($showsOnDB["time_start"] > $show->getTimeStart()) && ($showsOnDB["time_start"] > $show->getTimeEnd()) ) {
-		// 					$flag *= 1;
-		// 				}
-		// 				else if ( ($showsOnDB["time_end"] < $show->getTimeStart()) && ($showsOnDB["time_end"] < $show->getTimeEnd()) ) {
-		// 					$flag *= 1;
-		// 				}
-		// 				else {
-		// 					$flag *= 0;
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// 	else if ($existance == null) {
-		// 		$flag *= $this->checkPlace($show);
-		// 	}
-		// 	return $flag;
-		// }
+		public function checkTime (Show $show) {
+			$existance = $this->getByCinemaId($show); // Get Shows That Belong To That Particular Cinema
+			$this->appendTime ($show);
+			$flag = 1;
+			if ($existance != null) {
+				foreach ($existance as $showsOnDB) {
+					if ( ($showsOnDB["date_start"] == $show->getDateStart()) ) {
+						if ( ($showsOnDB["time_start"] > $show->getTimeStart()) && ($showsOnDB["time_start"] > $show->getTimeEnd()) ) {
+							$flag *= 1;
+						}
+						else if ( ($showsOnDB["time_end"] < $show->getTimeStart()) && ($showsOnDB["time_end"] < $show->getTimeEnd()) ) {
+							$flag *= 1;
+						}
+						else {
+							$flag *= 0;
+						}
+					}
+				}
+			}
+			else if ($existance == null) {
+				$flag *= $this->checkPlace($show);
+			}
+			return $flag;
+		}
+		*/
 
 		public function getByMovieId (Show $show) {
 			try {
@@ -230,23 +230,14 @@
 				return 1;
 			}
 		}
-
-		//new
+		
 		public function getShowsOfMovie(Movie $movie) {
 			$shows = array();
-
 			try {
-				$query = "SELECT shows.id as show_id,
-					shows.date_start as show_date_start,
-					shows.time_start as show_time_start,
-					cinemas.name as cinema_name,
-					cinemas.address as cinema_address FROM " . $this->tableName . " INNER JOIN movies ON shows.FK_id_movie = movies.id
-																 INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
-																 WHERE (shows.FK_id_movie = :id_movie)
-																 ORDER BY shows.date_start ASC";
+				$query = "CALL shows_getShowsOfMovie(?)";
 				$parameters["id_movie"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
-				$results = $this->connection->Execute($query, $parameters);
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 				foreach($results as $row) {
 					$show = new Show();
 					$cinema = new Cinema();

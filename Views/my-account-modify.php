@@ -14,11 +14,11 @@
                 <img src="<?= IMG_PATH ?>profile.jpg" alt="Profile picture">                
             </div>
             <div class="content-account">
-                <form class="content-container" action="<?= FRONT_ROOT ?>" method="post">
-                <label>
+                <form class="content-container modify-form" action="<?= FRONT_ROOT ?>user/updateAccount" method="post">
+                    <!-- <label>
                         <h4>Insert Photo:</h4>
                         <input type="file" name="file" required>
-                    </label>
+                    </label> -->
                     <label>
                         <h4>Insert Firstname:</h4>
                         <input type="text" name="firstname" value="<?= $user->getFirstName(); ?>" required>
@@ -29,11 +29,11 @@
                     </label>
                     <label>
                         <h4>Insert DNI:</h4>
-                        <input type="number" name="dni" value="<?= $user->getDni(); ?>" required>                    
+                        <input type="number" name="dni" value="<?= $user->getDni(); ?>" required>         
                     </label>
                     <label>
                         <h4>Insert mail:</h4>
-                        <input type="email" name="mail" value="<?= $user->getMail(); ?>" required>                    
+                        <input type="email" name="mail" value="<?= $user->getMail(); ?>" required>           
                     </label>
                     <label>
                         <h4>Insert password:</h4>

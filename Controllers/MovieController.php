@@ -31,7 +31,7 @@
         }
 
         public function showMovie($id) {
-            $movies = $this->moviesNowPlaying();
+            $movies = $this->moviesNowPlayingOnShow();              //antes -> $movies = $this->moviesNowPlaying();
             $genreMovieController = new GenreToMovieController();    
             $purchaseController = new PurchaseController();
             foreach ($movies as $movieRow) {
@@ -53,8 +53,8 @@
         }
 
 		public function nowPlaying($movies = "", $title = "", $alert = "") {
-            $genreController = new GenreToMovieController();
-            $genres = $genreController->getAllGenres();            
+            $genreController = new GenreToMovieController();            
+            $genres = $genreController->getGenresOfMoviesOnShows();            
             $img = IMG_PATH . '/w4.png';
                         
             if($movies == NULL && $alert == NULL) {
@@ -141,7 +141,7 @@
             if($this->movieDAO->existMovie($movie) == NULL) {            
                 $movieDetails = $this->movieDAO->getMovieDetailsById($movie);         
                 $this->movieDAO->addMovie($movieDetails);   
-
+                
                 $genreMovieController = new GenreToMovieController();    
                 $genreMovieController->addGenresBD($movieDetails);                
                 
@@ -151,13 +151,31 @@
         }        
 
         public function remove($id) {
+            if($this->movieHasShows($id)) {
+                return $this->listMoviePath(NULL, MOVIE_HAS_SHOWS, $id);
+            } else {
+                $movie = new Movie();
+                $movie->setId($id);
+                $this->movieDAO->deleteById($movie);
+                return $this->listMoviePath(MOVIE_REMOVE, NULL, NULL);
+            }
+        }
+
+		public function forceDelete($id) {
             $movie = new Movie();
             $movie->setId($id);
 			$this->movieDAO->deleteById($movie);
-			return $this->listMoviePath(MOVIE_REMOVE);
+			return $this->listMoviePath(MOVIE_REMOVE, NULL, NULL);
+		}        
+        
+        private function movieHasShows($id) {
+			$movie = new Movie();
+			$movie->setId($id);
+
+			return ($this->movieDAO->getShowsOfMovie($movie)) ? TRUE : FALSE;
 		}
         
-        public function listMoviePath($success = "") {
+        public function listMoviePath($success = "", $alert = "", $movieId = "") {
 			if (isset($_SESSION["loggedUser"])) {
                 $admin = $_SESSION["loggedUser"];
                 if($admin->getRole() == 1) {
@@ -169,9 +187,20 @@
 			} else {
                 return $this->userPath();
             }            
-        }
+        }         
 
-          
+        public function searchMovie($title) {
+            $movieTemp = new Movie();
+            $movieTemp->setTitle($title);            
+            $movie = $this->movieDAO->getByTitle($movieTemp);
+
+            if(empty($movie)) {
+                return $this->nowPlaying($movie, MOVIES_NULL , MOVIES_NULL);
+            }
+
+            return $this->nowPlaying($movie, $title, NULL);
+        }
+    
 
     }
 

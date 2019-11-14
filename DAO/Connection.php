@@ -71,7 +71,7 @@
             {
                 throw $ex;
             }
-        }
+        }        
 
         private function Prepare($query)
         {

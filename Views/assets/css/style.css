@@ -515,7 +515,8 @@ hr {
 
 .login-form label,
 .register-form label,
-.search-container label {
+.search-container label,
+.modify-form label {
     font-size: 1.5rem;    
     padding: 1rem;
     margin-bottom: 30px;
@@ -527,7 +528,8 @@ hr {
 
 .login-form input,
 .register-form input,
-.search-container input {
+.search-container input,
+.modify-form input {
     width: 25rem;
     margin: 5px;
     padding: .6rem;
@@ -535,6 +537,15 @@ hr {
     border: none;
     border-bottom: 1px solid rgba(255, 255, 0, .5);
     color: #fff;
+}
+
+.modify-form label {
+    display: inline-block;
+    margin: 1rem;
+}
+
+.modify-form .btn-l {    
+    display: block;
 }
 
 .btn-l {
@@ -801,9 +812,15 @@ hr {
     margin: 2rem 0 0 0;
 }
 
-.purchase-seats {
-    margin: 0 auto;
+.purchase-seats {    
+    
 }
+
+.purchase-seats h2 {
+    text-transform: uppercase;
+    font-size: 2rem;
+}
+
 
 .show-info {    
     font-size: 1.4rem;
@@ -851,10 +868,15 @@ hr {
 
 /* CINEMA SEATS - TEST */
 .theatre {
+    height: 500px;
+    padding: 10rem;
+    /* position: relative;     */
     display: flex;
-    position: relative;
-    top: 25%;
-    right: 20%;
+    justify-content: center;
+    /* top: 70%; */
+    /* left: 60%; */
+    
+    
     /* transform: translate(-50%, -50%); */
   }
   

@@ -33,6 +33,10 @@
 
         
         //GenreToMovie
+        public function getGenresOfMoviesOnShows() {
+            return $this->genresToMoviesDAO->getGenresOfShows();
+        }
+
         public function addGenresMovieToDb(){
             $this->genresToMoviesDAO->getGenresOfNowPlaying();
         }

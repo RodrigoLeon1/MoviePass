@@ -57,7 +57,7 @@
                             <h4>Card</h4>
                             <div class="card-container">
                                 <input type="radio" name="card" value="visa" id="visa">Visa
-                                <input type="radio" name="card" value="mastercard" id="mastercard">MasterCard                          
+                                <input type="radio" name="card" value="mastercard" id="mastercard">MasterCard          
                             </div>
                         </label>
 
@@ -82,8 +82,8 @@
                 </div>
 
             </div>
-
-            <!-- <div class="purchase-seats">                
+        </div>
+        <!-- <div class="container purchase-seats">                
                 <h2>Seats cinema</h2>
                 <div class="theatre">  
                     <div class="cinema-seats left">
@@ -158,9 +158,7 @@
                         </div>                        
                     </div>                                      
                 </div>  
-            </div>  -->
-
-        </div>
+        </div>  -->
     </main>
                                 
     <script>
