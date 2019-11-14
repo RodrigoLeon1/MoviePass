@@ -323,27 +323,6 @@ CREATE TABLE purchases (
 
 
 
-CREATE DEFINER=root@localhost PROCEDURE validar_egreso(
-    IN codigo_producto VARCHAR(100),
-    IN cantidad INT,
-    OUT valido INT(11)
-)
-BEGIN
-    DECLARE resta INT(11);
-    SET resta = 0;
-
-    SELECT (s.stock - cantidad) INTO resta
-    FROM stock AS s
-    WHERE codigo_producto = s.codigo;
-
-    IF (resta > s.stock_minimo) THEN
-        SET valido = 1;
-    ELSE
-        SET valido = -1;
-    END IF;
-    SELECT valido;
-END
-
 
 
 
@@ -355,6 +334,17 @@ BEGIN
     VALUES (ticket_quantity, discount, date, total, dni_user);
 	SET id = SET id = SELECT LAST_INSERT_ID()
 END$$
+
+
+DROP PROCEDURE IF EXISTS 'purchases_GetByData';
+DELIMITER $$
+CREATE PROCEDURE purchases_GetByData(IN ticket_quantity int, IN discount int, IN date DATE, IN total int, IN dni_user int)
+BEGIN 
+    SELECT purchases.id_purchase AS purchases.id_purchase,
+    FROM purchases
+    WHERE(purchases.ticket_quantity = ticket_quantity AND purchases.discount = discount AND purchases.date = date AND purchases.total = total AND purchases.FK_dni = dni_user );
+END$$
+
 
 DROP PROCEDURE IF EXISTS 'purchases_GetById';
 DELIMITER$$
@@ -414,10 +404,10 @@ CREATE TABLE tickets (
 
 DROP PROCEDURE IF EXISTS 'tickets_Add';
 DELIMITER $$
-CREATE PROCEDURE tickets_Add(IN id_purchase int, IN id_show int)
+CREATE PROCEDURE tickets_Add(IN qr int, IN id_purchase int, IN id_show int)
 BEGIN
-    INSERT INTO tickets(tickets.FK_id_purchase, tickets.FK_id_show)
-    VALUES (id_purchase, id_show);
+    INSERT INTO tickets(tickets.qr, tickets.FK_id_purchase, tickets.FK_id_show)
+    VALUES (qr, id_purchase, id_show);
 END$$
 
 DROP PROCEDURE IF EXISTS 'tickets_GetByNumber';

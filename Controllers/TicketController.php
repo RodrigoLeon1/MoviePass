@@ -16,30 +16,26 @@
             $this->ticketDAO = new TicketDAO();            
         }
 
-        public function Add($qr, $id_purchase, $id_show)
+        public function Add($qr, $id_show, $id_purchase)
         {
-            if($this->validateTicketForm($qr, $id_purchase, $id_show)) 
-            {
+                
 				$ticket = new Ticket();            
-                $ticket->setQR($qr);
+                $ticket->setQr($qr);
                 $ticket->setIdPurchase($id_purchase);
                 $ticket->setIdShow($id_show);
                 
                 $this->ticketDAO->Add($ticket);
-			}
+			
         }
 
-        public function ads()
-        {
-            
-        }
+    
 
 
         
 
-        private function validateTicketForm($qr, $id_purchase, $id_show)
+        private function validateTicketForm($id_purchase, $id_show)
          {
-            if(empty($qr) || empty($id_purchase) || empty($id_show)) 
+            if(empty($id_purchase) || empty($id_show)) 
             {
                 return FALSE;
             }

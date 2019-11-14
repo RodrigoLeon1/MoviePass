@@ -18,20 +18,46 @@
                 $parameters['discount'] = $purchase->getDiscount();
                 $parameters['date'] = $purchase->getDate();
                 $parameters['total'] = $purchase->getTotal();
-                $parameters['dni'] = $purchase->getDNI();   
+                $parameters['dni'] = $purchase->getDni();   
                 
                 $this->connection = Connection::GetInstance();
-                //$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+                $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
                 
-                $id = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-                var_dump($id);
-                //$id = $this->connection->lastId();
-                //return $id;
+                $id = $this->getId($purchase->getTicketQuantity(), $purchase->getDiscount(), $purchase->getDate(), $purchase->getTotal(), $purchase->getDni());
+                return $id;
 
             } catch(Exception $e) {
                 throw $e;
             }
             
+        }
+
+        private function getId($ticket_quantity, $discount, $date, $total, $dni)
+        {
+            try {
+                $query = "SELECT * FROM " . $this->tableName . " WHERE((ticket_quantity = :ticket_quantity) AND (discount = :discount) AND (date = :date) AND (total = :total) AND (FK_dni = :dni) )";			
+                $parameters['ticket_quantity'] = $ticket_quantity;
+                $parameters['discount'] = $discount;
+                $parameters['date'] = $date;
+                $parameters['total'] = $total;
+                $parameters['dni'] = $dni;
+
+                $this->connection = Connection::GetInstance();
+                $results = $this->connection->Execute($query, $parameters);
+                $purchase = new Purchase();
+                foreach($results as $row) {
+                    $purchase->setId($row['id_purchase']);
+                    $purchase->setTicketQuantity($row['ticket_quantity']);
+                    $purchase->setDiscount($row['discount']);
+                    $purchase->setDate($row['date']);
+                    $purchase->setTotal($row['total']);
+                    $purchase->setDni($row['FK_dni']);
+                }
+                return $purchase->getId();
+            
+        } catch(Exception $e) {
+            throw $e;
+        }
         }
 
         public function GetById($id) {

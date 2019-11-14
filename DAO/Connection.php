@@ -26,6 +26,7 @@
 
         public function lastId() {
             return $this->pdo->lastInsertId();
+            //return $this->pdo->lastId();
         }
 
         public static function GetInstance()

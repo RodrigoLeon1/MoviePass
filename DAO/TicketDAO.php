@@ -13,13 +13,17 @@
 
         public function Add(Ticket $ticket) {
             try {
-                $query = "CALL tickets_Add(?, ?)";
-                $parameters['id_purchase'] = $ticket->getIdPurchase();
+                $query = "INSERT INTO " . $this->tableName . " (qr, FK_id_purchase, FK_id_show) VALUES (:qr, :id_purchase, :id_show);";
+                //$query = "CALL tickets_Add(?,?,?)";
+                $parameters['qr'] = $ticket->getQr();
                 $parameters['id_show'] = $ticket->getIdShow();   
+                $parameters['id_purchase'] = $ticket->getIdPurchase();
                 
+                //var_dump($parameters);
+
                 $this->connection = Connection::GetInstance();
-                $results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-                var_dump($results);
+                $this->connection->ExecuteNonQuery($query, $parameters);
+                
             } catch(Exception $e) {
                 throw $e;
             }

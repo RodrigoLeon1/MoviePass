@@ -27,7 +27,6 @@
             $date = date('Y-m-d');
             $user = $_SESSION["loggedUser"];
             $dni = $user->getDni();
-            echo 'dni: '.$dni;
             $price = $showController->getShowById($id_show)->getCinema()->getPrice();
             $total = $ticket_quantity * $price;
             
@@ -37,13 +36,11 @@
                 $purchase->setDate($date);
                 $purchase->setTotal($total);
                 $purchase->setDni($dni);
-                $result = $this->purchaseDAO->Add($purchase);
-                var_dump($result);
-                /*
+                $id_purchase = $this->purchaseDAO->Add($purchase);
                 for($i=0 ; $i<$ticket_quantity ; $i++)
                 {
-                    $ticketController->Add( ,$id_show, );
-                }*/
+                    $ticketController->Add(0 ,$id_show, $id_purchase);
+                }
 			
         }
 
