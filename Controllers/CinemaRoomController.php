@@ -6,14 +6,13 @@
     use Models\Cinema as CinemaRoom;
 
     class CinemaRoomController {
-        private $cinemaRoomDAO;
-		private $cinemasRoom;
+		
+		private $cinemaRoomDAO;
+		private $cinemasRoom;		
 
         public function __construct() {
             $this->cinemaRoomDAO = new CinemaRoomDAO();
-		}
-		
-		// add- borrar- modificar- get(id/all)- 
+		}			
 
         public function add($name, $capacity, $price) {
 			if($this->validateCinemaForm($name, $capacity, $price)) {
@@ -39,10 +38,14 @@
             return TRUE;
         }		
 
-        public function addCinemaPath($success = "", $alert = "") {
+        public function addCinemaRoomPath($success = "", $alert = "") {
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
+
+					$cinemaController = new CinemaController();
+					$cinemas = $cinemaController->getAllCinemas();
+
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-cinema-room-add.php");
