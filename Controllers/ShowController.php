@@ -34,11 +34,11 @@
 				$show->setCinema($cinema);
 				if ($this->checkTime($show)) {
 					$this->showDAO->add($show);
-					return $this->addShowPath(NULL, SHOW_ADDED);
+					return $this->addShowPath(NULL, SHOW_ADDED, $id_cinema, $id_movie, $date, $time);
 				}
-				return $this->addShowPath(SHOW_ERROR, NULL); 
+				return $this->addShowPath(SHOW_ERROR, NULL, $id_cinema, $id_movie, $date, $time); 
 			}
-			return $this->addShowPath(EMPTY_FIELDS);
+			return $this->addShowPath(EMPTY_FIELDS, $id_cinema, $id_movie, $date, $time);
         }
 
 		public function checkTime (Show $show) {
@@ -101,18 +101,32 @@
             return TRUE;
         }
 
-        public function addShowPath($alert = "", $success = "") {
+        public function addShowPath($alert = "", $success = "", $id_cinema="", $id_movie="", $showDate="", $time="") {
             if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
 					$movies = $this->movieDAO->getAll();
 					$cinemas = $this->cinemaDAO->getAll();
+
+					
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-show-add.php");
 				}
 			}
-        }
+		}
+		
+
+		public function checkParameters($id_cinema, $id_movie, $date, $time)
+		{
+			if(empty($id_cinema) || empty($id_movie) || empty($date) || empty($time))
+			{
+				return FALSE;
+			}else
+			{
+				return TRUE;
+			}
+		}
 
 		public function listShowsPath($success = "") {
 			if ($_SESSION["loggedUser"]) {

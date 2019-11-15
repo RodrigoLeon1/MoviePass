@@ -18,7 +18,6 @@
 
         public function Add($qr, $id_show, $id_purchase)
         {
-<<<<<<< HEAD
                 
 				$ticket = new Ticket();            
                 $ticket->setQr($qr);
@@ -41,14 +40,6 @@
                 return FALSE;
             }
             return TRUE;
-=======
-            $ticket = new Ticket();            
-            $ticket->setQR($qr);
-            $ticket->setIdPurchase($id_purchase);
-            $ticket->setIdShow($id_show);
-            
-            $this->ticketDAO->Add($ticket);
->>>>>>> f8bbe78804f810ce73479c551bf7fb1e053fb153
         }
 
         public function getByNumber($number)
