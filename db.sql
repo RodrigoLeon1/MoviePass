@@ -100,61 +100,9 @@ CREATE TABLE cinemas (
 	`address` VARCHAR(255) NOT NULL
 );
 
-INSERT INTO `cinemas` (`name`, `address`)
-VALUES	('Paseo Aldrey', 'Sarmiento 2685'),
-		('Ambassador', Cordoba DVi'),
-		('CinemaCenter', 'Diagonal Pueyrredon 3050'),
-		('Cinema II', 'Los Gallegos Shopping'),
-		('Cine del Paseo', Diagonal Pueyrredon');
 
-DROP procedure IF EXISTS `cinemas_deleteById`;
-DELIMITER $$
-CREATE PROCEDURE cinemas_deleteById (IN id INT)
-BEGIN
-	DELETE FROM `cinemas` WHERE `cinemas`.`id` = id;
-END$$
 
-DROP procedure IF EXISTS `cinemas_getById`;
-DELIMITER $$
-CREATE PROCEDURE cinemas_getById (IN id INT)
-BEGIN
-	SELECT * FROM `cinemas` WHERE `cinemas`.`id` = id;
-END$$
 
-DROP procedure IF EXISTS `cinemas_getByName`;
-DELIMITER $$
-CREATE PROCEDURE cinemas_getByName (IN name VARCHAR (255))
-BEGIN
-	SELECT * FROM `cinemas` WHERE `cinemas`.`name` = name;
-END$$
-
-DROP procedure IF EXISTS `cinemas_GetAll`;
-DELIMITER $$
-CREATE PROCEDURE cinemas_GetAll ()
-BEGIN
-	SELECT * FROM `cinemas`;
-END$$
-
-DROP procedure IF EXISTS `cinemas_modify`;
-DELIMITER $$
-CREATE PROCEDURE cinemas_modify (	IN id int,
-									IN name VARCHAR (255),
-									IN address VARCHAR (255)
-								)
-BEGIN
-	UPDATE cinemas SET cinemas.name = name, cinemas.address = address WHERE cinemas.id = id;
-END$$
-DELIMITER ;
-
-DROP procedure IF EXISTS `cinemas_hasShows`;
-DELIMITER $$
-CREATE PROCEDURE cinemas_hasShows(IN id_cinema INT)
-BEGIN
-	SELECT *
-	FROM cinemas
-	INNER JOIN shows ON cinemas.id = shows.FK_id_cinema
-	WHERE cinemas.id = id_cinema;
-END$$
 
 ----------------------------- CINEMA ROOM -----------------------------
 
@@ -166,6 +114,57 @@ CREATE TABLE cinema_rooms (
 	`FK_id_cinema` INT NOT NULL,
 	CONSTRAINT `FK_id_cinema_room` FOREIGN KEY (`FK_id_cinema`) REFERENCES `cinemas` (`id`)
 );
+
+
+DROP procedure IF EXISTS `cinemaRooms_deleteById`;
+DELIMITER $$
+CREATE PROCEDURE cinemaRooms_deleteById (IN id INT)
+BEGIN
+	DELETE FROM `cinema_rooms` WHERE `cinema_rooms`.`id` = id;
+END$$
+
+DROP procedure IF EXISTS `cinemaRooms_getById`;
+DELIMITER $$
+CREATE PROCEDURE cinemaRooms_getById (IN id INT)
+BEGIN
+	SELECT * FROM `cinema_rooms` WHERE `cinema_rooms`.`id` = id;
+END$$
+
+DROP procedure IF EXISTS `cinemaRooms_getByName`;
+DELIMITER $$
+CREATE PROCEDURE cinemaRooms_getByName (IN name VARCHAR (255))
+BEGIN
+	SELECT * FROM `cinema_rooms` WHERE `cinema_rooms`.`name` = name;
+END$$
+
+DROP procedure IF EXISTS `cinemaRooms_GetAll`;
+DELIMITER $$
+CREATE PROCEDURE cinemaRooms_GetAll ()
+BEGIN
+	SELECT * FROM `cinema_rooms`;
+END$$
+
+DROP procedure IF EXISTS `cinemaRooms_modify`;
+DELIMITER $$
+CREATE PROCEDURE cinemaRooms_modify (	IN id int,
+									IN name VARCHAR (255),
+									IN capacity int,
+									IN price int
+								)
+BEGIN
+	UPDATE cinema_rooms SET cinema_rooms.name = name, cinema_rooms.address = address,cinema_rooms.capacity = capacity, cinema_rooms.price = price  WHERE cinema_rooms.id = id;
+END$$
+DELIMITER ;
+
+DROP procedure IF EXISTS `cinemaRooms_hasShows`;
+DELIMITER $$
+CREATE PROCEDURE cinemaRooms_hasShows(IN id INT)
+BEGIN
+	SELECT *
+	FROM cinema_rooms
+	INNER JOIN shows ON cinema_rooms.id = shows.FK_id_cinemaRoom
+	WHERE cinema_rooms.id = id;
+END$$
 
 
 ----------------------------- MOVIES -----------------------------
@@ -315,13 +314,13 @@ END$$
 
 CREATE TABLE shows (
 	`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	`FK_id_cinema` int,
+	`FK_id_cinemaRoom` int,
 	`FK_id_movie` int,
 	`date_start` DATE NOT NULL,
 	`time_start` TIME NOT NULL,
 	`date_end` DATE NOT NULL,
 	`time_end` TIME NOT NULL,
-	CONSTRAINT `FK_id_cinema` FOREIGN KEY (`FK_id_cinema`) REFERENCES `cinemas` (`id`),
+	CONSTRAINT `FK_id_cinemaRoom` FOREIGN KEY (`FK_id_cinemaRoom`) REFERENCES `cinema_rooms` (`id`),
 	CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`)
 );
 
@@ -336,11 +335,11 @@ BEGIN
 			shows.time_end AS shows_time_end,
 			movies.id AS movies_id,
 			movies.title AS movies_title,
-			cinemas.id AS cinemas_id,
-			cinemas.name AS cinemas_name
+			cinema_rooms.id AS cinema_rooms_id,
+			cinema_rooms.name AS cinema_rooms_name
 	FROM `shows`
 	INNER JOIN movies ON movies.id = shows.FK_id_movie
-	INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
+	INNER JOIN cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
 	ORDER BY movies.title ASC;
 END$$
 
@@ -363,28 +362,27 @@ BEGIN
 			movies.id AS movies_id,
 			movies.title AS movies_title,
             movies.backdrop_path AS movies_backdrop_path,
-			cinemas.id AS cinemas_id,
-			cinemas.name AS cinemas_name,
-            cinemas.address AS cinemas_address,
-            cinemas.capacity AS cinemas_capacity,
-            cinemas.ticket_value AS cinemas_ticket_value
+			cinema_rooms.id AS cinema_room_id,
+			cinema_rooms.name AS cinema_rooms_name,
+            cinema_rooms.capacity AS cinema_rooms_capacity,
+            cinema_rooms.price AS cinema_rooms_price
 	FROM `shows`
 	INNER JOIN movies ON movies.id = shows.FK_id_movie
-	INNER JOIN cinemas ON cinemas.id = shows.FK_id_cinema
+	INNER JOIN cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
 	WHERE (shows.id = id);
 END$$
 
 DROP procedure IF EXISTS `shows_modify`;
 DELIMITER $$
 CREATE PROCEDURE shows_modify (		IN id int,
-									IN id_cinema INT,
+									IN id_cinemaRoom INT,
 									IN id_movie INT,
 									IN date_start DATE,
 									IN time_start TIME,
 									IN date_end DATE,
 									IN time_end TIME)
 BEGIN
-	UPDATE shows SET shows.	FK_id_cinema = id_cinema, shows.FK_id_movie = id_movie, shows.date_start = date_start, shows.time_start = time_start, shows.date_end = date_end, shows.time_end = time_end WHERE shows.id = id;
+	UPDATE shows SET shows.	FK_id_cinemaRoom = id_cinemaRoom, shows.FK_id_movie = id_movie, shows.date_start = date_start, shows.time_start = time_start, shows.date_end = date_end, shows.time_end = time_end WHERE shows.id = id;
 END$$
 DELIMITER ;
 
@@ -397,13 +395,13 @@ BEGIN
 	WHERE (shows.FK_id_movie = id_movie);
 END$$
 
-DROP procedure IF EXISTS `shows_getByCinemaId`;
+DROP procedure IF EXISTS `shows_getByCinemaRoomId`;
 DELIMITER $$
-CREATE PROCEDURE shows_getByCinemaId (IN id_movie INT)
+CREATE PROCEDURE shows_getByCinemaRoomId (IN id_movie INT)
 BEGIN
 	SELECT 	*
 	FROM `shows`
-	WHERE (shows.FK_id_cinema = id_movie);
+	WHERE (shows.FK_id_cinemaRoom = id_movie);
 END$$
 
 DROP procedure IF EXISTS `shows_getShowsOfMovie`;
@@ -414,13 +412,12 @@ BEGIN
 		shows.id as show_id,
 		shows.date_start as show_date_start,
 		shows.time_start as show_time_start,
-		cinemas.name as cinema_name,
-		cinemas.address as cinema_address 
+		cinema_rooms.name as cinema_rooms_name,
 	FROM shows 
 	INNER JOIN 
 		movies ON shows.FK_id_movie = movies.id
 	INNER JOIN 
-		cinemas ON cinemas.id = shows.FK_id_cinema
+		cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
 	WHERE ( (shows.FK_id_movie = id_movie) AND (shows.date_start >= curdate()) ) 
 	ORDER BY shows.date_start ASC, shows.time_start ASC;
 END$$
