@@ -21,7 +21,6 @@
 
         public function Add($ticket_quantity, $id_show, $discount = "")
         {
-
             $ticketController = new TicketController();
             $showController = new ShowController();
             $date = date('Y-m-d');
@@ -30,17 +29,17 @@
             $price = $showController->getShowById($id_show)->getCinema()->getPrice();
             $total = $ticket_quantity * $price;
             
-				$purchase = new Purchase();            
-                $purchase->setTicketQuantity($ticket_quantity);
-                $purchase->setDiscount($discount);
-                $purchase->setDate($date);
-                $purchase->setTotal($total);
-                $purchase->setDni($dni);
-                $id_purchase = $this->purchaseDAO->Add($purchase);
-                for($i=0 ; $i<$ticket_quantity ; $i++)
-                {
-                    $ticketController->Add(0, $id_show, $id_purchase);
-                }
+            $purchase = new Purchase();            
+            $purchase->setTicketQuantity($ticket_quantity);
+            $purchase->setDiscount($discount);
+            $purchase->setDate($date);
+            $purchase->setTotal($total);
+            $purchase->setDni($dni);
+            $id_purchase = $this->purchaseDAO->Add($purchase);
+            for($i=0 ; $i<$ticket_quantity ; $i++)
+            {
+                $ticketController->Add(0, $id_show, $id_purchase);
+            }
 			
         }
 
