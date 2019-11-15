@@ -685,3 +685,6 @@ BEGIN
 	WHERE (genres_x_movies.FK_id_movie = shows.FK_id_movie)
 	GROUP BY genres.name;
 END$$
+
+
+----------------------------- ROOMS -----------------------------
