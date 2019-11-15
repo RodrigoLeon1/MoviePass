@@ -570,6 +570,15 @@ BEGIN
 	ORDER BY name ASC; 
 END$$
 
+DROP PROCEDURE IF EXISTS `genres_getById`;
+DELIMITER $$
+CREATE PROCEDURE genres_getById(IN id int)
+BEGIN
+    SELECT * 
+    FROM genres 
+	WHERE(genres.id = id); 
+END$$
+
 ----------------------------- GENRE X MOVIE -----------------------------
 
 CREATE TABLE genres_x_movies (

@@ -23,7 +23,18 @@
 				<h4>Select cinema:</h4>
 				<select class="" name="id_cinema">
 					<?php foreach ($cinemas as $cinema): ?>
-						<option value="<?= $cinema->getId(); ?>"><?= $cinema->getName(); ?></option>
+                        
+                        <?php if($this->checkParameters($id_cinema, $id_movie, $showDate, $time)) { ?>
+                            <?php if($cinema->getId() == $id_cinema) { ?>
+                            
+                            <option selected value="<?= $cinema->getId(); ?>" ><?= $cinema->getName(); ?></option>
+                            <?php }else{ ?>
+                            <option value="<?= $cinema->getId(); ?>"><?= $cinema->getName(); ?></option>
+                            <?php } ?>
+                        <?php }else{ ?>
+                            
+						    <option value="<?= $cinema->getId(); ?>"><?= $cinema->getName() ?></option>
+                        <?php } ?>
 					<?php endforeach; ?>
 				</select>
 			</label>
@@ -32,7 +43,16 @@
 				<h4>Select Movie:</h4>
 				<select class="" name="id_movie">
 					<?php foreach ($movies as $movie): ?>
-						<option value="<?= $movie->getId(); ?>"><?= $movie->getTitle(); ?></option>
+                        <?php if($this->checkParameters($id_cinema, $id_movie, $showDate, $time)) { ?>
+                            <?php if($movie->getId() == $id_movie) { ?>
+                            <option value="<?= $movie->getId(); ?>" selected><?= $movie->getTitle(); ?></option>
+                            <?php }else{ ?>
+                            <option value="<?= $movie->getId(); ?>"><?= $movie->getTitle(); ?></option>
+                            <?php } ?>
+                        <?php }else{ ?>
+						    <option value="<?= $movie->getId(); ?>"><?= $movie->getTitle(); ?></option>
+                        <?php } ?>
+
 					<?php endforeach; ?>
 				</select>
 			</label>
@@ -40,12 +60,22 @@
 			<label>
                 <h4>Insert date:</h4>
 				<?php $date = date('Y-m-d'); ?>	
-				<input type="date" name="date" id="" min="<?php echo $date ?>" required>
+                <?php if($this->checkParameters($id_cinema, $id_movie, $showDate, $time)) { ?>
+                            <input type="date" name="date" id="" min="<?php echo $date ?>" required value=<?php echo $showDate ?>>
+                            <h1></h1>
+                        <?php }else{ ?>
+						    <input type="date" name="date" id="" min="<?php echo $date ?>" required>
+                        <?php } ?>
+				
             </label>
 
 			<label>
                 <h4>Insert hour:</h4>
-                <input type="time" name="time" id="" required>
+                <?php if($this->checkParameters($id_cinema, $id_movie, $showDate, $time)) { ?>
+                        <input type="time" name="time" id="" required value=<?php echo $time ?>>
+                        <?php }else{ ?>
+                            <input type="time" name="time" id="" required>
+                        <?php } ?>
             </label>
 
             <button type="submit" class="btn">Add show</button>

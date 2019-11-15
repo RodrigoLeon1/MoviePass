@@ -17,12 +17,28 @@
 
         public function Add($qr, $id_show, $id_purchase)
         {
-            $ticket = new Ticket();            
-            $ticket->setQR($qr);
-            $ticket->setIdPurchase($id_purchase);
-            $ticket->setIdShow($id_show);
-            
-            $this->ticketDAO->Add($ticket);
+                
+				$ticket = new Ticket();            
+                $ticket->setQr($qr);
+                $ticket->setIdPurchase($id_purchase);
+                $ticket->setIdShow($id_show);
+                
+                $this->ticketDAO->Add($ticket);
+			
+        }
+
+    
+
+
+        
+
+        private function validateTicketForm($id_purchase, $id_show)
+         {
+            if(empty($id_purchase) || empty($id_show)) 
+            {
+                return FALSE;
+            }
+            return TRUE;
         }
 
         public function getByNumber($number)
