@@ -100,8 +100,55 @@ CREATE TABLE cinemas (
 	`address` VARCHAR(255) NOT NULL
 );
 
+DROP procedure IF EXISTS `cinemas_deleteById`;
+DELIMITER $$
+CREATE PROCEDURE cinemas_deleteById (IN id INT)
+BEGIN
+	DELETE FROM `cinemas` WHERE `cinemas`.`id` = id;
+END$$
+
+DROP procedure IF EXISTS `cinemas_getById`;
+DELIMITER $$
+CREATE PROCEDURE cinemas_getById (IN id INT)
+BEGIN
+	SELECT * FROM `cinemas` WHERE `cinemas`.`id` = id;
+END$$
+
+DROP procedure IF EXISTS `cinemas_getByName`;
+DELIMITER $$
+CREATE PROCEDURE cinemas_getByName (IN name VARCHAR (255))
+BEGIN
+	SELECT * FROM `cinemas` WHERE `cinemas`.`name` = name;
+END$$
+
+DROP procedure IF EXISTS `cinemas_GetAll`;
+DELIMITER $$
+CREATE PROCEDURE cinemas_GetAll ()
+BEGIN
+	SELECT * FROM `cinemas`;
+END$$
+
+DROP procedure IF EXISTS `cinemas_modify`;
+DELIMITER $$
+CREATE PROCEDURE cinemas_modify (	IN id int,
+									IN name VARCHAR (255),									
+									IN address VARCHAR (255)
+								)
+BEGIN
+	UPDATE cinemas SET cinemas.name = name, cinemas.address = address WHERE cinemas.id = id;
+END$$
+DELIMITER ;
 
 
+DROP procedure IF EXISTS `cinemas_hasShows`;
+DELIMITER $$
+CREATE PROCEDURE cinemas_hasShows(IN id_cinema INT)
+BEGIN
+	SELECT *
+	FROM cinemas
+	INNER JOIN shows ON cinemas.id = shows.FK_id_cinema
+	WHERE cinemas.id = id_cinema;
+END$$
 
 
 ----------------------------- CINEMA ROOM -----------------------------
@@ -320,7 +367,7 @@ CREATE TABLE shows (
 	`time_start` TIME NOT NULL,
 	`date_end` DATE NOT NULL,
 	`time_end` TIME NOT NULL,
-	CONSTRAINT `FK_id_cinemaRoom` FOREIGN KEY (`FK_id_cinemaRoom`) REFERENCES `cinema_rooms` (`id`),
+	CONSTRAINT `FK_id_cinemaRoom_show` FOREIGN KEY (`FK_id_cinemaRoom`) REFERENCES `cinema_rooms` (`id`),
 	CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`)
 );
 
