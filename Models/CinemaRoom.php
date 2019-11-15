@@ -2,11 +2,10 @@
 
     namespace Models;
 
-    class Cinema {
+    class CinemaRoom {
 
         private $id;
         private $name;
-        private $address;
         private $capacity;
         private $price;
 
@@ -25,16 +24,6 @@
 
         public function setName($name) {
             $this->name = $name;
-            return $this;
-        }
-
-
-        public function getAddress() {
-            return $this->address;
-        }
-
-        public function setAddress($address) {
-            $this->address = $address;
             return $this;
         }
 
