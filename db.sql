@@ -40,6 +40,7 @@ INSERT INTO `profile_users` (`dni`, `first_name`, `last_name`)
 
 
 ----------------------------- USERS -----------------------------
+
 CREATE TABLE users (
 	`mail` VARCHAR (255) NOT NULL UNIQUE,
 	`password` VARCHAR (255) NOT NULL,
@@ -156,6 +157,7 @@ BEGIN
 END$$
 
 ----------------------------- CINEMA ROOM -----------------------------
+
 CREATE TABLE cinema_rooms (
 	`id` INT AUTO_INCREMENT PRIMARY KEY,
 	`name` VARCHAR(255) NOT NULL,
@@ -495,10 +497,6 @@ BEGIN
     FROM purchases
     WHERE(purchases.FK_dni = dni);
 END$$
-
-
-
-
 
 ----------------------------- TICKET -----------------------------
 

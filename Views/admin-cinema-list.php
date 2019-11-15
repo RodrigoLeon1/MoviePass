@@ -31,10 +31,8 @@
 					<thead>
 						<tr>
 							<th>Id</th>
-							<th>Name</th>
-							<th>Capacity</th>
-							<th>Address</th>
-							<th>Price ticket</th>
+							<th>Name</th>							
+							<th>Address</th>							
 							<th>Actions</th>
 						</tr>
 					</thead>
@@ -42,10 +40,8 @@
 						<?php foreach($this->cinemas as $cinema): ?>
 							<tr>
 								<td><?= $cinema->getId(); ?></td>
-								<td><?= $cinema->getName(); ?></td>
-								<td><?= $cinema->getCapacity(); ?></td>
-								<td><?= $cinema->getAddress(); ?></td>
-								<td><?= $cinema->getPrice(); ?></td>
+								<td><?= $cinema->getName(); ?></td>								
+								<td><?= $cinema->getAddress(); ?></td>								
 								<td>
 									<div class="actions-container">
 										<a href="<?php echo FRONT_ROOT . "cinema/remove/" . $cinema->getId(); ?>" class="btn btn-delete">

@@ -27,13 +27,8 @@
 			
         }
 
-    
-
-
-        
-
         private function validateTicketForm($id_purchase, $id_show)
-         {
+        {
             if(empty($id_purchase) || empty($id_show)) 
             {
                 return FALSE;

@@ -25,6 +25,10 @@
                         </li>
                         <li>
                             <i class="icon ion-md-remove"></i>
+                            <a href="<?= FRONT_ROOT ?>cinemaRoom/addCinemaRoomPath">Add cinema room</a>
+                        </li>
+                        <li>
+                            <i class="icon ion-md-remove"></i>
                             <a href="<?= FRONT_ROOT ?>cinema/listCinemaPath">List/Edit cinemas</a>
                         </li>
                     </ul>

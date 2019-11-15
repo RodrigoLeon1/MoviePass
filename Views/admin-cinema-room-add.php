@@ -1,5 +1,5 @@
-    <main>
-        <h2 class="dash-title">Add cinema</h2>
+<main>
+        <h2 class="dash-title">Add cinema room</h2>
         <hr>
 
         <?php if($success != NULL): ?>
@@ -17,19 +17,33 @@
         <?php endif; ?>
         
         <div class="dashboard-container">            
-            <form class="content-container" action="<?= FRONT_ROOT ?>cinema/add" method="post">
+            <form class="content-container" action="<?= FRONT_ROOT ?>cinemaRoom/add" method="post">
+                <label>
+                    <h4>Select cinema:</h4>
+                    <select name="cinema">
+                        <?php foreach($cinemas as $cinema): ?>
+                        <option value="<?= $cinema->getId() ?>"><?= $cinema->getName() ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+
                 <label>
                     <h4>Insert name:</h4>
                     <input type="text" name="name" id="" required>
                 </label>
                 <label>
-                    <h4>Address:</h4>
-                    <input type="text" name="address" id="" required>
+                    <h4>Price for ticket:</h4>
+                    <input type="number" name="price" id="" min="1" required>
+                </label>
+                <label>
+                    <h4>Capacity:</h4>
+                    <input type="number" name="capacity" id="" min="1" required>
                 </label>                
                 <button type="submit" class="btn">                
-                    Add cinema
+                    Add cinema room
                 </button>
             </form>
+
         </div>
     </main>
 
