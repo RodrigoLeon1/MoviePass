@@ -24,6 +24,7 @@
                 $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
                 
                 $id = $this->getId($purchase->getTicketQuantity(), $purchase->getDiscount(), $purchase->getDate(), $purchase->getTotal(), $purchase->getDni());
+
                 return $id;
 
             } catch(Exception $e) {
@@ -55,9 +56,9 @@
                 }
                 return $purchase->getId();
             
-        } catch(Exception $e) {
-            throw $e;
-        }
+            } catch(Exception $e) {
+                throw $e;
+            }
         }
 
         public function GetById($id) {
@@ -128,10 +129,8 @@
             } catch(Exception $e) {
                 throw $e;
             }
-    
-    }
+        }
 
 }
-
 
 ?>

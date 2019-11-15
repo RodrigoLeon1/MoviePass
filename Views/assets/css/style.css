@@ -783,6 +783,15 @@ hr {
     background-color: #fff;
 }
 
+.sold-out > a {
+    color: #d21f1f;
+    border: 2px solid #6b0606;
+}
+
+.sold-out > a:hover {
+    color: #d21f1f;
+    background-color: inherit;
+}
 
 /* Purchase ticket */
 .purchase-container {

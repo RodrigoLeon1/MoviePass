@@ -39,29 +39,27 @@
                 $id_purchase = $this->purchaseDAO->Add($purchase);
                 for($i=0 ; $i<$ticket_quantity ; $i++)
                 {
-                    $ticketController->Add(0 ,$id_show, $id_purchase);
+                    $ticketController->Add(0, $id_show, $id_purchase);
                 }
 			
         }
 
         public function buyTicketPath($idShow) {            
-            if (isset($_SESSION["loggedUser"])) {  
-                
-                
+            if (isset($_SESSION["loggedUser"])) {              
+
                 $showController = new ShowController();
-                $show = $showController->getShowById($idShow); 
-                
+                $show = $showController->getShowById($idShow);                 
                 
                 $title = 'Buy ticket - ' . $show->getMovie()->getTitle();
                 $img = IMG_PATH_TMDB . $show->getMovie()->getBackdropPath();
+                $available = $this->numberOfTicketsAvailable($idShow);
 
                 require_once(VIEWS_PATH . "header.php");			
                 require_once(VIEWS_PATH . "navbar.php");
                 require_once(VIEWS_PATH . "header-s.php");
                 require_once(VIEWS_PATH . "purchase-ticket.php");
-                require_once(VIEWS_PATH . "footer.php");    
-                
-                
+                require_once(VIEWS_PATH . "footer.php");                    
+                                
             } else {
                 $userController = new UserController();
                 return $userController->loginPath(LOGIN_NEEDED);
@@ -92,17 +90,15 @@
         public function ticketsAvailable($id_show)
         {
             $quantity = $this->numberOfTicketsAvailable($id_show);
-
             
-            if($quantity > 0)
-            {
-                return true;
-            }else
-            {
-                return false;
-            }
-            
-            // return ($quantity > 0) ? true : false;
+            // if($quantity > 0)
+            // {
+            //     return true;
+            // }else
+            // {
+            //     return false;
+            // }            
+            return ($quantity > 0) ? TRUE : FALSE;
         }
 
         public function getPurchasesByUser($user)

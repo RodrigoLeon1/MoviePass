@@ -63,18 +63,15 @@
                             </p>
                         </p>
                     </div>
-                    <?php if($purchaseController->ticketsAvailable($show->getId())){ ?>
-                    
+                    <?php if($purchaseController->ticketsAvailable($show->getId())) { ?>                    
                         <div class="show-ticket">
-                        <a href="<?= FRONT_ROOT ?>purchase/buyTicketPath/<?= $show->getId() ?>">Buy Ticket</a>
+                            <a href="<?= FRONT_ROOT ?>purchase/buyTicketPath/<?= $show->getId() ?>">Buy Ticket</a>
                         </div>
-                    <?php }else{ ?>
-                        <div class="show-ticket">
-                        <a href="">Sold out</a>
+                    <?php } else { ?>
+                        <div class="show-ticket sold-out">
+                            <a>Sold out</a>
                         </div>
-                    <?php } ?>
-
-                    
+                    <?php } ?>                    
                 </div>                    
                 <?php endforeach; ?>                             
                 <br>                

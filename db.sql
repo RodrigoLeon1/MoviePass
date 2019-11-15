@@ -40,7 +40,6 @@ INSERT INTO `profile_users` (`dni`, `first_name`, `last_name`)
 
 
 ----------------------------- USERS -----------------------------
-
 CREATE TABLE users (
 	`mail` VARCHAR (255) NOT NULL UNIQUE,
 	`password` VARCHAR (255) NOT NULL,
@@ -96,18 +95,16 @@ END$$
 
 CREATE TABLE cinemas (
 	`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	`name` VARCHAR (255) NOT NULL,
-	`capacity` int NOT NULL,
-	`address` VARCHAR (255) NOT NULL,
-	`ticket_value` int NOT NULL
+	`name` VARCHAR(255) NOT NULL,
+	`address` VARCHAR(255) NOT NULL
 );
 
-INSERT INTO `cinemas` (`name`, `capacity`, `address`, `ticket_value`)
-VALUES	('Paseo Aldrey', '1500', 'Sarmiento 2685', '300'),
-		('Ambassador', '1400', 'Cordoba DVi', '290'),
-		('CinemaCenter', '1300', 'Diagonal Pueyrredon 3050', '280'),
-		('Cinema II', '1200', 'Los Gallegos Shopping', '270'),
-		('Cine del Paseo', '1100', 'Diagonal Pueyrredon', '260');
+INSERT INTO `cinemas` (`name`, `address`)
+VALUES	('Paseo Aldrey', 'Sarmiento 2685'),
+		('Ambassador', Cordoba DVi'),
+		('CinemaCenter', 'Diagonal Pueyrredon 3050'),
+		('Cinema II', 'Los Gallegos Shopping'),
+		('Cine del Paseo', Diagonal Pueyrredon');
 
 DROP procedure IF EXISTS `cinemas_deleteById`;
 DELIMITER $$
@@ -141,14 +138,12 @@ DROP procedure IF EXISTS `cinemas_modify`;
 DELIMITER $$
 CREATE PROCEDURE cinemas_modify (	IN id int,
 									IN name VARCHAR (255),
-									IN capacity INT,
-									IN address VARCHAR (255),
-									IN ticket_value INT)
+									IN address VARCHAR (255)
+								)
 BEGIN
-	UPDATE cinemas SET cinemas.name = name, cinemas.capacity = capacity, cinemas.address = address, cinemas.ticket_value = ticket_value WHERE cinemas.id = id;
+	UPDATE cinemas SET cinemas.name = name, cinemas.address = address WHERE cinemas.id = id;
 END$$
 DELIMITER ;
-
 
 DROP procedure IF EXISTS `cinemas_hasShows`;
 DELIMITER $$
@@ -160,8 +155,15 @@ BEGIN
 	WHERE cinemas.id = id_cinema;
 END$$
 
-
-
+----------------------------- CINEMA ROOM -----------------------------
+CREATE TABLE cinema_rooms (
+	`id` INT AUTO_INCREMENT PRIMARY KEY,
+	`name` VARCHAR(255) NOT NULL,
+	`price` INT NOT NULL,
+	`capacity` INT NOT NULL,
+	`FK_id_cinema` INT NOT NULL,
+	CONSTRAINT `FK_id_cinema_room` FOREIGN KEY (`FK_id_cinema`) REFERENCES `cinemas` (`id`)
+);
 
 
 ----------------------------- MOVIES -----------------------------
@@ -417,7 +419,7 @@ BEGIN
 		movies ON shows.FK_id_movie = movies.id
 	INNER JOIN 
 		cinemas ON cinemas.id = shows.FK_id_cinema
-	WHERE (shows.FK_id_movie = id_movie) 
+	WHERE ( (shows.FK_id_movie = id_movie) AND (shows.date_start >= curdate()) ) 
 	ORDER BY shows.date_start ASC, shows.time_start ASC;
 END$$
 
@@ -433,25 +435,14 @@ CREATE TABLE purchases (
 	CONSTRAINT `FK_dni_purchase` FOREIGN KEY (`FK_dni`) REFERENCES `profile_users` (`dni`)
 )
 
-<<<<<<< HEAD
-
-
-
-
-
-DROP PROCEDURE IF EXISTS 'purchases_Add';
-DELIMITER$$
-=======
 DROP PROCEDURE IF EXISTS `purchases_Add`;
 DELIMITER $$
->>>>>>> f8bbe78804f810ce73479c551bf7fb1e053fb153
 CREATE PROCEDURE purchases_Add(IN ticket_quantity int, IN discount int, IN date DATE, IN total int, IN dni_user int, OUT id int)
 BEGIN
     INSERT INTO purchases(purchases.ticket_quantity, purchases.discount, purchases.date, purchases.total, purchases.FK_dni)
     VALUES (ticket_quantity, discount, date, total, dni_user);	
 END$$
 
-<<<<<<< HEAD
 
 DROP PROCEDURE IF EXISTS 'purchases_GetByData';
 DELIMITER $$
@@ -465,10 +456,6 @@ END$$
 
 DROP PROCEDURE IF EXISTS 'purchases_GetById';
 DELIMITER$$
-=======
-DROP PROCEDURE IF EXISTS `purchases_GetById`;
-DELIMITER $$
->>>>>>> f8bbe78804f810ce73479c551bf7fb1e053fb153
 CREATE PROCEDURE purchases_GetById(IN id int)
 BEGIN 
     SELECT purchases.id_purchase AS purchases_id_purchase,

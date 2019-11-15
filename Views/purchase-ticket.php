@@ -37,7 +37,7 @@
                             Total: $<span id="cart-total">0</span>
                             <div class="ticket-information">
                                 <h4>Ticket type: General</h4>
-                                <h4>Tickets: <span id="ticket-quantity" max=<?php echo $available ?>>0</span> </h4>
+                                <h4>Tickets: <span id="ticket-quantity">0</span> </h4>
                                 <h4>Discount: N/A</h4>
                             </div>
                         </h3>
@@ -48,7 +48,7 @@
                     <form action="<?= FRONT_ROOT ?>purchase/Add" method="POST" class="register-form">                        
                         <label>
                             <h4>Insert quantity of tickets</h4>               
-                            <input type="number" name="numberOfTickets" id="numberTickets" min="1" required>
+                            <input type="number" name="numberOfTickets" id="numberTickets" min="1" max="<?= $available ?>" required>
                         </label> 
 
                         <input type="hidden" name="id_show" value="<?= $show->getId() ?>">
