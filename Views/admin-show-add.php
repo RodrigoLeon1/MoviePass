@@ -22,18 +22,18 @@
 			<label>
 				<h4>Select cinema:</h4>
 				<select class="" name="id_cinema">
-					<?php foreach ($cinemas as $cinema): ?>
+					<?php foreach ($cinemaRooms as $cinemaRoom): ?>
                         
-                        <?php if($this->checkParameters($id_cinema, $id_movie, $showDate, $time)) { ?>
-                            <?php if($cinema->getId() == $id_cinema) { ?>
+                        <?php if($this->checkParameters($id_cinemaRoom, $id_movie, $showDate, $time)) { ?>
+                            <?php if($cinemaRoom->getId() == $id_cinemaRoom) { ?>
                             
-                            <option selected value="<?= $cinema->getId(); ?>" ><?= $cinema->getName(); ?></option>
+                            <option selected value="<?= $cinemaRoom->getId(); ?>" ><?= $cinemaRoom->getName(); ?></option>
                             <?php }else{ ?>
-                            <option value="<?= $cinema->getId(); ?>"><?= $cinema->getName(); ?></option>
+                            <option value="<?= $cinemaRoom->getId(); ?>"><?= $cinemaRoom->getName(); ?></option>
                             <?php } ?>
                         <?php }else{ ?>
                             
-						    <option value="<?= $cinema->getId(); ?>"><?= $cinema->getName() ?></option>
+						    <option value="<?= $cinemaRoom->getId(); ?>"><?= $cinemaRoom->getName() ?></option>
                         <?php } ?>
 					<?php endforeach; ?>
 				</select>
@@ -43,7 +43,7 @@
 				<h4>Select Movie:</h4>
 				<select class="" name="id_movie">
 					<?php foreach ($movies as $movie): ?>
-                        <?php if($this->checkParameters($id_cinema, $id_movie, $showDate, $time)) { ?>
+                        <?php if($this->checkParameters($id_cinemaRoom, $id_movie, $showDate, $time)) { ?>
                             <?php if($movie->getId() == $id_movie) { ?>
                             <option value="<?= $movie->getId(); ?>" selected><?= $movie->getTitle(); ?></option>
                             <?php }else{ ?>
@@ -60,7 +60,7 @@
 			<label>
                 <h4>Insert date:</h4>
 				<?php $date = date('Y-m-d'); ?>	
-                <?php if($this->checkParameters($id_cinema, $id_movie, $showDate, $time)) { ?>
+                <?php if($this->checkParameters($id_cinemaRoom, $id_movie, $showDate, $time)) { ?>
                             <input type="date" name="date" id="" min="<?php echo $date ?>" required value=<?php echo $showDate ?>>
                             <h1></h1>
                         <?php }else{ ?>
@@ -71,7 +71,7 @@
 
 			<label>
                 <h4>Insert hour:</h4>
-                <?php if($this->checkParameters($id_cinema, $id_movie, $showDate, $time)) { ?>
+                <?php if($this->checkParameters($id_cinemaRoom, $id_movie, $showDate, $time)) { ?>
                         <input type="time" name="time" id="" required value=<?php echo $time ?>>
                         <?php }else{ ?>
                             <input type="time" name="time" id="" required>
