@@ -177,6 +177,15 @@ BEGIN
 	SELECT * FROM `cinema_rooms` WHERE `cinema_rooms`.`id` = id;
 END$$
 
+DROP procedure IF EXISTS `cinemaRooms_getByNameAndCinema`;
+DELIMITER $$
+CREATE PROCEDURE cinemaRooms_getByNameAndCinema (IN name VARCHAR(255),
+												 IN id_cinema INT
+												)
+BEGIN
+	SELECT * FROM `cinema_rooms` WHERE `cinema_rooms`.`name` = `name` AND `cinema_rooms`.`FK_id_cinema` = `id_cinema`;
+END$$
+
 DROP procedure IF EXISTS `cinemaRooms_getByName`;
 DELIMITER $$
 CREATE PROCEDURE cinemaRooms_getByName (IN name VARCHAR (255))
@@ -188,7 +197,16 @@ DROP procedure IF EXISTS `cinemaRooms_GetAll`;
 DELIMITER $$
 CREATE PROCEDURE cinemaRooms_GetAll ()
 BEGIN
-	SELECT * FROM `cinema_rooms`;
+	SELECT 
+		cinema_rooms.id as cinema_room_id,
+		cinema_rooms.name as cinema_room_name,
+		cinema_rooms.capacity as cinema_room_capacity,
+		cinema_rooms.price as cinema_room_price,
+		cinemas.id as cinema_id,
+		cinemas.name as cinema_name,
+		cinemas.address as cinema_address
+	FROM cinema_rooms
+	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id;
 END$$
 
 DROP procedure IF EXISTS `cinemaRooms_modify`;

@@ -20,7 +20,7 @@
             <form class="content-container" action="<?= FRONT_ROOT ?>cinemaRoom/add" method="post">
                 <label>
                     <h4>Select cinema:</h4>
-                    <select name="cinema">
+                    <select name="id_cinema">
                         <?php foreach($cinemas as $cinema): ?>
                         <option value="<?= $cinema->getId() ?>"><?= $cinema->getName() ?></option>
                         <?php endforeach; ?>
@@ -40,7 +40,7 @@
                     <input type="number" name="capacity" id="" min="1" required>
                 </label>                
                 <button type="submit" class="btn">                
-                    Add cinema room
+                    Add room
                 </button>
             </form>
 

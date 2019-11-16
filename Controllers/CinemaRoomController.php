@@ -3,26 +3,32 @@
     namespace Controllers;
 
     use DAO\CinemaRoomDAO as cinemaRoomDAO;
-    use Models\CinemaRoom as CinemaRoom;
+	use Models\CinemaRoom as CinemaRoom;
+	use Models\Cinema as Cinema;
 
     class CinemaRoomController {
 		
-		private $cinemaRoomDAO;
-		private $cinemasRoom;		
+		private $cinemaRoomDAO;			
 
         public function __construct() {
             $this->cinemaRoomDAO = new CinemaRoomDAO();
 		}			
 
-        public function add($name, $capacity, $price) {
-			if($this->validateCinemaForm($name, $capacity, $price)) {
+        public function add($id_cinema, $name, $capacity, $price) {
+			if($this->validateCinemaRoomForm($id_cinema, $name, $capacity, $price)) {
 				$cinemaRoom = new CinemaRoom();            
 				$cinemaRoom->setName($name);
-				if($this->cinemaRoomDAO->getByName($cinemaRoom) == NULL) {
+				if($this->cinemaRoomDAO->checkNameInCinema($name, $id_cinema) == NULL) {
 					$cinemaRoom = new CinemaRoom();
 					$cinemaRoom->setName($name);
 					$cinemaRoom->setCapacity($capacity);
 					$cinemaRoom->setPrice($price);
+
+					$cinema = new Cinema();
+					$cinema->setId($id_cinema);
+
+					$cinemaRoom->setCinema($cinema);
+
 					$this->cinemaRoomDAO->add($cinemaRoom);
 					return $this->addCinemaRoomPath(CINEMA_ROOM_ADDED, NULL);
 				}
@@ -31,8 +37,8 @@
 			return $this->addCinemaRoomPath(NULL, EMPTY_FIELDS);
 		}
 		
-        private function validateCinemaForm($name, $capacity, $price) {
-            if(empty($name) || empty($capacity) || empty($price)) {
+        private function validateCinemaRoomForm($id_cinema, $name, $capacity, $price) {
+            if(empty($id_cinema) || empty($name) || empty($capacity) || empty($price)) {
                 return FALSE;
             }
             return TRUE;
@@ -55,9 +61,11 @@
 
 		public function listCinemaRoomPath($success = "", $alert = "", $cinemaId = "") {
 			if ($_SESSION["loggedUser"]) {
-				$admin = $_SESSION["loggedUser"];				
-				$this->cinemas = $this->cinemaRoomDAO->getAll();
+				$admin = $_SESSION["loggedUser"];								
 				if($admin->getRole() == 1) {
+					
+					$cinemasRooms = $this->cinemaRoomDAO->getAll();
+
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-cinema-room-list.php");
@@ -66,12 +74,14 @@
         }
 
 		public function remove($id) {	
+			/*
 			if($this->cinemaHasShows($id)) {				
 				return $this->listCinemaRoomPath(NULL, CINEMA_ROOM_HAS_SHOWS, $id);
-			} else {
-				$this->cinemaRoomDAO->deleteById($id);
-				return $this->listCinemaRoomPath(CINEMA_ROOM_REMOVE, NULL, NULL);
+			} else {				
 			}
+			*/
+			$this->cinemaRoomDAO->deleteById($id);
+			return $this->listCinemaRoomPath(CINEMA_ROOM_REMOVE, NULL, NULL);
 		}
 
 		public function forceDelete($id) {

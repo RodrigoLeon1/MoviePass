@@ -2,12 +2,15 @@
 
     namespace Models;
 
+    use Models\Cinema as Cinema;
+
     class CinemaRoom {
 
         private $id;
         private $name;
         private $capacity;
         private $price;
+        private $cinema;
 
         public function getId() {
             return $this->id;
@@ -27,7 +30,6 @@
             return $this;
         }
 
-
         public function getCapacity() {
             return $this->capacity;
         }
@@ -37,13 +39,21 @@
             return $this;
         }
 
-
         public function getPrice() {
             return $this->price;
         }
 
         public function setPrice($price) {
             $this->price = $price;
+            return $this;
+        }
+
+        public function getCinema() {
+            return $this->cinema;
+        }
+
+        public function setCinema(Cinema $cinema) {
+            $this->cinema = $cinema;
             return $this;
         }
 

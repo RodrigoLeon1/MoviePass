@@ -34,6 +34,12 @@
 	define("CINEMA_MODIFY", "The cinema was modified with success.");
 	define("CINEMA_HAS_SHOWS", "Can't remove the cinema because has next shows.");
 
+	define("CINEMA_ROOM_EXIST", "This cinema room has already been registered in this cinema.");
+	define("CINEMA_ROOM_ADDED", "Cinema room added with success.");
+	define("CINEMA_ROOM_REMOVE", "The cinema room was remove with success.");
+	define("CINEMA_ROOM_MODIFY", "The cinema room was modified with success.");
+	define("CINEMA_ROOM_HAS_SHOWS", "Can't remove the cinema room because has next shows.");
+
 	define("MOVIE_ADDED", "Movie added with success.");
 	define("MOVIE_EXIST", "This movie has already been registered.");
 	define("MOVIE_REMOVE", "Movie was remove with success.");

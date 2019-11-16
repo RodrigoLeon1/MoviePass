@@ -7,12 +7,13 @@
     use DAO\CinemaRoomDAO as CinemaRoomDAO;
     use Models\CinemaRoom as CinemaRoom;
     use DAO\MovieDAO as MovieDAO;
-    use Models\Movie as Movie;
+	use Models\Movie as Movie;
+	use Controllers\CinemaController as CinemaController;
 
     class ShowController {
 
         private $showDAO;
-        private $cinemaRoomDAO;
+		private $cinemaRoomDAO;		
         private $movieDAO;
 
         public function __construct() {
@@ -105,10 +106,16 @@
             if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
-					$movies = $this->movieDAO->getAll();
-					$cinemaRooms = $this->cinemaRoomDAO->getAll();
+					$cinemas = new CinemaController();
+					$cinemas = $cinemas->getAllCinemas();					
 
+					$movies = $this->movieDAO->getAll();					
+					$cinemaRooms = $this->cinemaRoomDAO->getAll();
 					
+					// echo '<pre>';
+					// var_dump($cinemaRooms);
+					// echo '</pre>';
+
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-show-add.php");
@@ -116,7 +123,6 @@
 			}
 		}
 		
-
 		public function checkParameters($id_cinemaRoom, $id_movie, $date, $time)
 		{
 			if(empty($id_cinemaRoom) || empty($id_movie) || empty($date) || empty($time))

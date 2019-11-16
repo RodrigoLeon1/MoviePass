@@ -55,7 +55,22 @@ hr {
     width: 15%;
     display: inline-block;
     position: fixed;
+    overflow-y: scroll;
 }
+
+.nav-container::-webkit-scrollbar {
+    width: 7px;
+}
+
+.nav-container::-webkit-scrollbar-track {
+    background-color: #fff;
+    color: #038b9a;
+}
+
+.nav-container::-webkit-scrollbar-thumb {
+    background-color: rgba(3, 139, 154, .5);
+    
+} 
 
 .nav-brand {    
     height: 9rem;
