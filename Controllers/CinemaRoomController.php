@@ -3,7 +3,7 @@
     namespace Controllers;
 
     use DAO\CinemaRoomDAO as cinemaRoomDAO;
-    use Models\Cinema as CinemaRoom;
+    use Models\CinemaRoom as CinemaRoom;
 
     class CinemaRoomController {
 		
@@ -19,7 +19,7 @@
 				$cinemaRoom = new CinemaRoom();            
 				$cinemaRoom->setName($name);
 				if($this->cinemaRoomDAO->getByName($cinemaRoom) == NULL) {
-					$cinemaRoom = new Cinema();
+					$cinemaRoom = new CinemaRoom();
 					$cinemaRoom->setName($name);
 					$cinemaRoom->setCapacity($capacity);
 					$cinemaRoom->setPrice($price);

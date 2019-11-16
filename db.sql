@@ -217,7 +217,7 @@ END$$
 ----------------------------- MOVIES -----------------------------
 
 CREATE TABLE movies (
-	`id` int NOT NULL UNIQUE PRIMARY KEY,
+	`id` int NOT NULL PRIMARY KEY,
 	`popularity` VARCHAR (255) NOT NULL,
 	`vote_count` VARCHAR (255) NOT NULL,
 	`video` VARCHAR (255) NOT NULL,
@@ -459,7 +459,7 @@ BEGIN
 		shows.id as show_id,
 		shows.date_start as show_date_start,
 		shows.time_start as show_time_start,
-		cinema_rooms.name as cinema_rooms_name,
+		cinema_rooms.name as cinema_rooms_name
 	FROM shows 
 	INNER JOIN 
 		movies ON shows.FK_id_movie = movies.id
@@ -494,14 +494,14 @@ DROP PROCEDURE IF EXISTS 'purchases_GetByData';
 DELIMITER $$
 CREATE PROCEDURE purchases_GetByData(IN ticket_quantity int, IN discount int, IN date DATE, IN total int, IN dni_user int)
 BEGIN 
-    SELECT purchases.id_purchase AS purchases.id_purchase,
+    SELECT purchases.id_purchase AS purchases_id_purchase,
     FROM purchases
     WHERE(purchases.ticket_quantity = ticket_quantity AND purchases.discount = discount AND purchases.date = date AND purchases.total = total AND purchases.FK_dni = dni_user );
 END$$
 
 
 DROP PROCEDURE IF EXISTS 'purchases_GetById';
-DELIMITER$$
+DELIMITER $$
 CREATE PROCEDURE purchases_GetById(IN id int)
 BEGIN 
     SELECT purchases.id_purchase AS purchases_id_purchase,
@@ -525,19 +525,19 @@ BEGIN
            purchases.date AS purchases_date,
            purchases.total AS purchases_total,
            purchases.FK_dni AS purchases_FK_dni
-	FROM purchases
+	FROM purchases;
 END$$
 
 DROP PROCEDURE IF EXISTS `purchases_GetByDni`;
 DELIMITER $$
 CREATE PROCEDURE purchases_GetByDni(IN dni int)
 BEGIN 
-    SELECT purchases.id_purchase AS purchases.id_purchase,
-           purchases.ticket_quantity AS purchases.ticket_quantity,
-           purchases.discount AS purchases.discount,
-           purchases.date AS purchases.date,
-           purchases.total AS purchases.total,
-           purchases.FK_dni AS purchases.FK_dni
+    SELECT purchases.id_purchase AS purchases_id_purchase,
+           purchases.ticket_quantity AS purchases_ticket_quantity,
+           purchases.discount AS purchases_discount,
+           purchases.date AS purchases_date,
+           purchases.total AS purchases_total,
+           purchases.FK_dni AS purchases_FK_dni
     FROM purchases
     WHERE(purchases.FK_dni = dni);
 END$$
@@ -582,7 +582,7 @@ BEGIN
            tickets.QR AS tickets_QR,
            tickets.FK_id_purchase AS tickets_FK_id_purchase,
            tickets.FK_id_show AS tickets_FK_id_show
-	FROM tickets
+	FROM tickets;
 END$$
 
 DROP PROCEDURE IF EXISTS `tickets_GetByShowId`;
