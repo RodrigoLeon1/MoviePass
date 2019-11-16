@@ -112,10 +112,6 @@
 					$movies = $this->movieDAO->getAll();					
 					$cinemaRooms = $this->cinemaRoomDAO->getAll();
 					
-					// echo '<pre>';
-					// var_dump($cinemaRooms);
-					// echo '</pre>';
-
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-show-add.php");
@@ -139,6 +135,7 @@
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
 					$shows = $this->showDAO->getAll();
+
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-show-list.php");

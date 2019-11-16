@@ -17,6 +17,7 @@
 						<tr>
 							<th>Id</th>
 							<th>Cinema</th>
+							<th>Room</th>
 							<th>Movie</th>
 							<th>Date</th>
 							<th>Hour</th>
@@ -27,7 +28,8 @@
 						<?php foreach ($shows as $show): ?>
 							<tr>
 								<td><?= $show->getId(); ?></td>
-								<td><?= $show->getCinema()->getName(); ?></td>
+								<td><?= $show->getCinemaRoom()->getCinema()->getName() ?></td>
+								<td><?= $show->getCinemaRoom()->getName(); ?></td>
 								<td><?= $show->getMovie()->getTitle(); ?></td>
 								<td><?= $show->getDateStart(); ?></td>
 								<td><?= $show->getTimeStart(); ?></td>

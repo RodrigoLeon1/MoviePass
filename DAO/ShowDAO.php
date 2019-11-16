@@ -7,7 +7,8 @@
 	use DAO\MovieDAO as MovieDAO;
     use Models\Show as Show;
     use Models\Movie as Movie;
-    use Models\CinemaRoom as CinemaRoom;
+	use Models\CinemaRoom as CinemaRoom;
+	use Models\Cinema as Cinema;
 
     class ShowDAO {
 
@@ -117,17 +118,22 @@
 		}
 
         public function getAll () {
-			$query = "CALL shows_getAll";
+			$query = "CALL shows_getAll()";
             $this->connection = Connection::GetInstance();
             $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-            foreach($results as $row) {
-				$movie = new Movie ();
+            foreach($results as $row) {				
+				$movie = new Movie();
 				$movie->setId($row["movies_id"]);
 				$movie->setTitle($row["movies_title"]);
 				$cinemaRoom = new CinemaRoom();
 				$cinemaRoom->setId($row["cinema_rooms_id"]);
 				$cinemaRoom->setName($row["cinema_rooms_name"]);
-				$show = new Show ();
+				
+				$cinema = new Cinema();
+				$cinema->setName($row["cinema_name"]);
+				$cinemaRoom->setCinema($cinema);
+				
+				$show = new Show();
 				$show->setId($row["shows_id"]);
 				$show->setDateStart($row["shows_date_start"]);
 				$show->setTimeStart($row["shows_time_start"]);

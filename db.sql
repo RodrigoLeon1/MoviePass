@@ -206,7 +206,8 @@ BEGIN
 		cinemas.name as cinema_name,
 		cinemas.address as cinema_address
 	FROM cinema_rooms
-	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id;
+	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
+	ORDER BY cinemas.name ASC;
 END$$
 
 DROP procedure IF EXISTS `cinemaRooms_modify`;
@@ -401,10 +402,12 @@ BEGIN
 			movies.id AS movies_id,
 			movies.title AS movies_title,
 			cinema_rooms.id AS cinema_rooms_id,
-			cinema_rooms.name AS cinema_rooms_name
+			cinema_rooms.name AS cinema_rooms_name,
+			cinemas.name AS cinema_name
 	FROM `shows`
 	INNER JOIN movies ON movies.id = shows.FK_id_movie
 	INNER JOIN cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
+	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
 	ORDER BY movies.title ASC;
 END$$
 

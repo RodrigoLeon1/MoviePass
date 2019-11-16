@@ -18,32 +18,22 @@
 
     <div class="dashboard-container">
         <form class="content-container" action="<?= FRONT_ROOT ?>show/add" method="post">
-
-            <label>
-                <h4>Select cinema:</h4>
-                <select id="cinemas">
-                    <?php foreach($cinemas as $cinema): ?>
-                        <option value="<?= $cinema->getId() ?>"><?= $cinema->getName() ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </label>
-
 			<label>
 				<h4>Select cinema room:</h4>
-				<select class="" id="cinema_rooms" name="id_cinemaRoom">
+				<select id="cinema_rooms" name="id_cinemaRoom">
 					<?php foreach ($cinemaRooms as $cinemaRoom): ?>
                         
                         <?php if($this->checkParameters($id_cinemaRoom, $id_movie, $showDate, $time)) { ?>
-                            <?php if($cinemaRoom->getId() == $id_cinemaRoom) { ?>
                             
+                            <?php if($cinemaRoom->getId() == $id_cinemaRoom) { ?>                            
                             <option selected value="<?= $cinemaRoom->getId(); ?>" ><?= $cinemaRoom->getName(); ?></option>
-                            <?php } else{ ?>
+                            <?php } else { ?>
                             <option value="<?= $cinemaRoom->getId(); ?>"><?= $cinemaRoom->getName(); ?></option>
                             <?php } ?>
-                        <?php }else{ ?>
+
+                        <?php } else { ?>
                             
-                            <!-- <option value="<?= $cinemaRoom->getId(); ?>"><?= $cinemaRoom->getName() ?></option> -->
-                            <option value="<?= $cinemaRoom->getCinema()->getId(); ?>"><?= $cinemaRoom->getName() ?></option>
+                            <option value="<?= $cinemaRoom->getId(); ?>"><?= $cinemaRoom->getCinema()->getName() . ' - ' . $cinemaRoom->getName() ?></option>                            
                             
                         <?php } ?>
 					<?php endforeach; ?>
@@ -55,13 +45,17 @@
 				<select class="" name="id_movie">
 					<?php foreach ($movies as $movie): ?>
                         <?php if($this->checkParameters($id_cinemaRoom, $id_movie, $showDate, $time)) { ?>
+                            
                             <?php if($movie->getId() == $id_movie) { ?>
                             <option value="<?= $movie->getId(); ?>" selected><?= $movie->getTitle(); ?></option>
-                            <?php }else{ ?>
+                            <?php } else { ?>
                             <option value="<?= $movie->getId(); ?>"><?= $movie->getTitle(); ?></option>
                             <?php } ?>
-                        <?php }else{ ?>
-						    <option value="<?= $movie->getId(); ?>"><?= $movie->getTitle(); ?></option>
+
+                        <?php } else { ?>
+						    
+                            <option value="<?= $movie->getId(); ?>"><?= $movie->getTitle(); ?></option>
+
                         <?php } ?>
 
 					<?php endforeach; ?>
@@ -72,44 +66,23 @@
                 <h4>Insert date:</h4>
 				<?php $date = date('Y-m-d'); ?>	
                 <?php if($this->checkParameters($id_cinemaRoom, $id_movie, $showDate, $time)) { ?>
-                            <input type="date" name="date" id="" min="<?php echo $date ?>" required value=<?php echo $showDate ?>>
-                            <h1></h1>
-                        <?php }else{ ?>
-						    <input type="date" name="date" id="" min="<?php echo $date ?>" required>
-                        <?php } ?>
+                    <input type="date" name="date" id="" min="<?= $date ?>" required value=<?= $showDate ?>>             
+                <?php } else { ?>
+                    <input type="date" name="date" id="" min="<?= $date ?>" required>
+                <?php } ?>
 				
             </label>
 
 			<label>
                 <h4>Insert hour:</h4>
                 <?php if($this->checkParameters($id_cinemaRoom, $id_movie, $showDate, $time)) { ?>
-                        <input type="time" name="time" id="" required value=<?php echo $time ?>>
-                        <?php }else{ ?>
-                            <input type="time" name="time" id="" required>
-                        <?php } ?>
+                <input type="time" name="time" id="" required value=<?= $time ?>>
+                <?php } else { ?>
+                    <input type="time" name="time" id="" required>
+                <?php } ?>
             </label>
 
             <button type="submit" class="btn">Add show</button>
         </form>
     </div>
 </main>
-
-<script>
-
-    let cinemas = document.getElementById("cinemas");
-    let cinemaRooms = document.getElementById("cinema_rooms");
-    
-    cinemas.addEventListener('click', function test() {
-        // console.log(this.value);
-        for (let i = 0; i < cinemaRooms.length; i++) {            
-            if(cinemaRooms.options[i].value == this.value) {                
-                console.log(`${cinemaRooms.options[i].text}`);
-                var opt = document.createElement('option');
-                opt.value = i;
-                opt.innerHTML = i;
-                cinemaRooms.appendChild(opt)
-            }
-        }
-    });                
-
-</script>
