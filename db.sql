@@ -444,11 +444,11 @@ END$$
 
 DROP procedure IF EXISTS `shows_getByCinemaRoomId`;
 DELIMITER $$
-CREATE PROCEDURE shows_getByCinemaRoomId (IN id_movie INT)
+CREATE PROCEDURE shows_getByCinemaRoomId (IN id_cinemaRoom INT)
 BEGIN
 	SELECT 	*
 	FROM `shows`
-	WHERE (shows.FK_id_cinemaRoom = id_movie);
+	WHERE (shows.FK_id_cinemaRoom = id_cinemaRoom);
 END$$
 
 DROP procedure IF EXISTS `shows_getShowsOfMovie`;

@@ -81,7 +81,7 @@
             $ticketController = new TicketController();
             
             $tickets = $ticketController->ticketsNumber($id_show);
-            $capacity = $showController->getShowById($id_show)->getCinema()->getCapacity();
+            $capacity = $showController->getShowById($id_show)->getCinemaRoom()->getCapacity();
             
             return $capacity - $tickets;
         }

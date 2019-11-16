@@ -7,7 +7,7 @@
 	use DAO\MovieDAO as MovieDAO;
     use Models\Show as Show;
     use Models\Movie as Movie;
-    use Models\Cinema as Cinema;
+    use Models\CinemaRoom as CinemaRoom;
 
     class ShowDAO {
 
@@ -22,8 +22,8 @@
 
         public function add(Show $show) {
 			try {			
-				$query = "INSERT INTO " . $this->tableName . " (FK_id_cinema, FK_id_movie, date_start, time_start, date_end, time_end) VALUES (:FK_id_cinema, :FK_id_movie, :date_start, :time_start, :date_end, :time_end);";
-				$parameters["FK_id_cinema"] = $show->getCinema()->getId();
+				$query = "INSERT INTO " . $this->tableName . " (FK_id_cinemaRoom, FK_id_movie, date_start, time_start, date_end, time_end) VALUES (:FK_id_cinemaRoom, :FK_id_movie, :date_start, :time_start, :date_end, :time_end);";
+				$parameters["FK_id_cinemaRoom"] = $show->getCinemaRoom()->getId();
 				$parameters["FK_id_movie"] = $show->getMovie()->getId();
 				$parameters["date_start"] = $show->getDateStart();
 				$parameters["time_start"] = $show->getTimeStart();
@@ -104,10 +104,10 @@
 			}
 		}
 
-		public function getByCinemaId (Show $show) {
+		public function getByCinemaRoomId (Show $show) {
 			try {
-				$query = "CALL shows_getByCinemaId (?)";
-				$parameters ["id_cinema"] = $show->getCinema()->getId();
+				$query = "CALL shows_getByCinemaRoomId (?)";
+				$parameters ["id_cinemaRoom"] = $show->getCinemaRoom()->getId();
 				$this->connection = Connection::GetInstance();
 				return $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 			}
@@ -124,9 +124,9 @@
 				$movie = new Movie ();
 				$movie->setId($row["movies_id"]);
 				$movie->setTitle($row["movies_title"]);
-				$cinema = new Cinema();
-				$cinema->setId($row["cinemas_id"]);
-				$cinema->setName($row["cinemas_name"]);
+				$cinemaRoom = new CinemaRoom();
+				$cinemaRoom->setId($row["cinema_rooms_id"]);
+				$cinemaRoom->setName($row["cinema_rooms_name"]);
 				$show = new Show ();
 				$show->setId($row["shows_id"]);
 				$show->setDateStart($row["shows_date_start"]);
@@ -134,7 +134,7 @@
 				$show->setDateEnd($row["shows_date_end"]);
 				$show->setTimeEnd($row["shows_time_end"]);
 				$show->setMovie($movie);
-				$show->setCinema($cinema);
+				$show->setCinemaRoom($cinemaRoom);
 				array_push ($this->showList, $show);
             }
             return $this->showList;
@@ -165,19 +165,18 @@
 					$movie->setId($row["movies_id"]);
 					$movie->setTitle($row["movies_title"]);
 					$movie->setBackdropPath($row["movies_backdrop_path"]);
-					$cinema = new Cinema();
-					$cinema->setId($row["cinemas_id"]);
-					$cinema->setName($row["cinemas_name"]);
-					$cinema->setAddress($row["cinemas_address"]);
-					$cinema->setPrice($row["cinemas_ticket_value"]);
-					$cinema->setCapacity($row["cinemas_capacity"]);
+					$cinemaRoom = new CinemaRoom();
+					$cinemaRoom->setId($row["cinema_room_id"]);
+					$cinemaRoom->setName($row["cinema_room_name"]);
+					$cinemaRoom->setCapacity($row["cinemas_capacity"]);
+					$cinemaRoom->setPrice($row["cinema_room_price"]);
 					$show->setId($row["shows_id"]);
 					$show->setDateStart($row["shows_date_start"]);
 					$show->setTimeStart($row["shows_time_start"]);
 					$show->setDateEnd($row["shows_date_end"]);
 					$show->setTimeEnd($row["shows_time_end"]);
 					$show->setMovie($movie);
-					$show->setCinema($cinema);
+					$show->setCinemaRoom($cinemaRoom);
 				}
 				return $show;
 			}
@@ -190,7 +189,7 @@
 			try {
 				$query = "CALL shows_modify(?, ?, ?, ?, ?, ?, ?)";
 				$parameters["id"] = $show->getId();
-				$parameters["id_cinema"] = $show->getCinema()->getId();
+				$parameters["id_cinemaRoom"] = $show->getCinemaRoom()->getId();
 				$parameters["id_movie"] = $show->getMovie()->getId();
 				$this->timeCheck($show);
 				$parameters["date_start"] = $show->getDateStart();
@@ -240,13 +239,12 @@
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 				foreach($results as $row) {
 					$show = new Show();
-					$cinema = new Cinema();
-					$cinema->setName($row["cinema_name"]);
-					$cinema->setAddress($row["cinema_address"]);
+					$cinemaRoom = new CinemaRoom();
+					$cinemaRoom->setName($row["cinema_rooms_name"]);
 					$show->setId($row["show_id"]);
 					$show->setDateStart($row["show_date_start"]);
 					$show->setTimeStart($row["show_time_start"]);
-					$show->setCinema($cinema);
+					$show->setCinemaRoom($cinemaRoom);
 					array_push($shows, $show);
 				}
 

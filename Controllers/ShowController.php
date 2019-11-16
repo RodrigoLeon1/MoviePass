@@ -4,45 +4,45 @@
 
     use DAO\ShowDAO as ShowDAO;
     use Models\Show as Show;
-    use DAO\CinemaDAO as CinemaDAO;
-    use Models\Cinema as Cinema;
+    use DAO\CinemaRoomDAO as CinemaRoomDAO;
+    use Models\CinemaRoom as CinemaRoom;
     use DAO\MovieDAO as MovieDAO;
     use Models\Movie as Movie;
 
     class ShowController {
 
         private $showDAO;
-        private $cinemaDAO;
+        private $cinemaRoomDAO;
         private $movieDAO;
 
         public function __construct() {
             $this->showDAO = new ShowDAO();
-            $this->cinemaDAO = new CinemaDAO();
+            $this->cinemaRoomDAO = new CinemaRoomDAO();
             $this->movieDAO = new MovieDAO();
         }
 
-        public function add($id_cinema, $id_movie, $date, $time) {
-			if($this->validateShowForm($id_cinema, $id_movie, $date, $time)) {				
+        public function add($id_cinemaRoom, $id_movie, $date, $time) {
+			if($this->validateShowForm($id_cinemaRoom, $id_movie, $date, $time)) {				
 				$movie = new Movie ();
 				$movie->setId($id_movie);
-				$cinema = new Cinema();
-				$cinema->setId($id_cinema);
+				$cinemaRoom = new CinemaRoom();
+				$cinemaRoom->setId($id_cinemaRoom);
 				$show = new Show();
 				$show->setDateStart($date);
 				$show->setTimeStart($time);
 				$show->setMovie($movie);
-				$show->setCinema($cinema);
+				$show->setCinemaRoom($cinemaRoom);
 				if ($this->checkTime($show)) {
 					$this->showDAO->add($show);
-					return $this->addShowPath(NULL, SHOW_ADDED, $id_cinema, $id_movie, $date, $time);
+					return $this->addShowPath(NULL, SHOW_ADDED, $id_cinemaRoom, $id_movie, $date, $time);
 				}
-				return $this->addShowPath(SHOW_ERROR, NULL, $id_cinema, $id_movie, $date, $time); 
+				return $this->addShowPath(SHOW_ERROR, NULL, $id_cinemaRoom, $id_movie, $date, $time); 
 			}
-			return $this->addShowPath(EMPTY_FIELDS, $id_cinema, $id_movie, $date, $time);
+			return $this->addShowPath(EMPTY_FIELDS, $id_cinemaRoom, $id_movie, $date, $time);
         }
 
 		public function checkTime (Show $show) {
-			$existance = $this->showDAO->getByCinemaId($show); // Get Shows That Belong To That Particular Cinema
+			$existance = $this->showDAO->getByCinemaRoomId($show); // Get Shows That Belong To That Particular Cinema
 			$this->appendTime ($show);
 			$flag = 1;
 			if ($existance != null) {
@@ -94,19 +94,19 @@
 			return 1;
 		}
 
-        private function validateShowForm($id_cinema, $id_movie, $day, $hour) {
-            if(empty($id_cinema) || empty($id_movie) || empty($day) || empty($hour)) {
+        private function validateShowForm($id_cinemaRoom, $id_movie, $day, $hour) {
+            if(empty($id_cinemaRoom) || empty($id_movie) || empty($day) || empty($hour)) {
                 return FALSE;
             }
             return TRUE;
         }
 
-        public function addShowPath($alert = "", $success = "", $id_cinema="", $id_movie="", $showDate="", $time="") {
+        public function addShowPath($alert = "", $success = "", $id_cinemaRoom="", $id_movie="", $showDate="", $time="") {
             if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
 					$movies = $this->movieDAO->getAll();
-					$cinemas = $this->cinemaDAO->getAll();
+					$cinemaRooms = $this->cinemaRoomDAO->getAll();
 
 					
 					require_once(VIEWS_PATH . "admin-head.php");
@@ -117,9 +117,9 @@
 		}
 		
 
-		public function checkParameters($id_cinema, $id_movie, $date, $time)
+		public function checkParameters($id_cinemaRoom, $id_movie, $date, $time)
 		{
-			if(empty($id_cinema) || empty($id_movie) || empty($date) || empty($time))
+			if(empty($id_cinemaRoom) || empty($id_movie) || empty($date) || empty($time))
 			{
 				return FALSE;
 			}else
@@ -151,7 +151,7 @@
 				if($admin->getRole() == 1) {
 					$show = $this->showDAO->getById($id);
 					$movies = $this->movieDAO->getAll();
-					$cinemas = $this->cinemaDAO->getAll();
+					$cinemaRooms = $this->cinemaRoomDAO->getAll();
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-show-modify.php");
@@ -166,17 +166,17 @@
 			return $show;							
 		}
 
-		public function modify($id, $id_cinema, $id_movie, $date, $time) {
+		public function modify($id, $id_cinemaRoom, $id_movie, $date, $time) {
 			$movie = new Movie ();
 			$movie->setId($id_cinema);
-			$cinema = new Cinema ();
-			$cinema->setId ($id_cinema);
+			$cinemaRoom = new CinemaRoom ();
+			$cinemaRoom->setId ($id_cinemaRoom);
 			$show = new Show();
 			$show->setId($id);
 			$show->setDateStart($date);
 			$show->setTimeStart($time);
 			$show->setMovie($movie);
-			$show->setCinema($cinema);
+			$show->setCinemaRoom($cinemaRoom);
 			$this->showDAO->modify($show);
 			return $this->listShowsPath();
 		}

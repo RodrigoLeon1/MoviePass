@@ -2,12 +2,12 @@
 
     namespace Models;
 
-	use Models\Cinema as Cinema;
+	use Models\CinemaRoom as CinemaRoom;
 	use Models\Movie as Movie;
 
     class Show {
         private $id;
-        private $cinema;
+        private $cinemaRoom;
         private $movie;
         private $dateStart;
         private $timeStart;
@@ -28,12 +28,12 @@
             return $this;
         }
 
-		public function getCinema() {
-			return $this->cinema;
+		public function getCinemaRoom() {
+			return $this->cinemaRoom;
 		}
 
-		public function setCinema(Cinema $cinema) {
-			$this->cinema = $cinema;
+		public function setCinemaRoom(CinemaRoom $cinemaRoom) {
+			$this->cinemaRoom = $cinemaRoom;
 			return $this;
 		}
 
