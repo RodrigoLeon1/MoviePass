@@ -10,19 +10,11 @@
                 <label>
                     <h4>Insert name:</h4>
                     <input type="text" name="name" id="" value="<?php echo $cinema->getName(); ?>">
-                </label>
-                <label>
-                    <h4>Capacity:</h4>
-                    <input type="number" name="capacity" id="" value="<?php echo $cinema->getCapacity(); ?>">
-                </label>
+                </label>                
                 <label>
                     <h4>Address:</h4>
                     <input type="text" name="address" id="" value="<?php echo $cinema->getAddress(); ?>">
-                </label>
-                <label>
-                    <h4>Price for ticket:</h4>
-                    <input type="number" name="price" id="" value="<?php echo $cinema->getPrice(); ?>">
-                </label>
+                </label>                
                 <button type="submit" class="btn">Modify</button>
             </form>
         </div>

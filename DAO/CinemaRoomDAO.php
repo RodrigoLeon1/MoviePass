@@ -97,7 +97,7 @@
 		public function getByName(CinemaRoom $cinemaRoom) {
 			try {								
 				$query = "CALL cinemaRooms_getByName(?)";
-				$parameters["name"] = $cinema->getName();
+				$parameters["name"] = $cinemaRoom->getName();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);				
 

@@ -100,7 +100,7 @@
             $cinema = new Cinema();
             $cinema->setId($id);
             $cinema->setName($name);            
-            $cinema->setPrice($address);
+            $cinema->setAddress($address);
 	        $this->cinemaDAO->modify($cinema);
             return $this->listCinemaPath(CINEMA_MODIFY);
         }
