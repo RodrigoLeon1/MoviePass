@@ -57,9 +57,19 @@
             return count($tickets);
         }
 
-        // 
-        private function generateQR() {
+        // Tickes vendidos
+        public function ticketsSoldPath() {
+			if ($_SESSION["loggedUser"]) {
+				$admin = $_SESSION["loggedUser"];
+				if($admin->getRole() == 1) {
 
+                    
+
+					require_once(VIEWS_PATH . "admin-head.php");
+					require_once(VIEWS_PATH . "admin-header.php");
+					require_once(VIEWS_PATH . "admin-tickets-sold.php");
+				}
+			}
         }
         
         

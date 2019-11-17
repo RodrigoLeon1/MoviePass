@@ -194,11 +194,11 @@
             $movieTemp->setTitle($title);            
             $movie = $this->movieDAO->getByTitle($movieTemp);
 
-            if(empty($movie)) {
+            if($movie->getId() == NULL) {
                 return $this->nowPlaying($movie, MOVIES_NULL , MOVIES_NULL);
+            } else {
+                return $this->showMovie($movie->getId());
             }
-
-            return $this->nowPlaying($movie, $title, NULL);
         }
     
 

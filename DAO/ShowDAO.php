@@ -163,24 +163,33 @@
 				$query = "CALL shows_getById(?)";
 				$parameters ["id"] = $id;
 				$this->connection = Connection::GetInstance();
-				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-				$show = new Show();
-								
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
+
 				foreach($results as $row) {
+					$show = new Show();
+					
 					$movie = new Movie ();
 					$movie->setId($row["movies_id"]);
 					$movie->setTitle($row["movies_title"]);
 					$movie->setBackdropPath($row["movies_backdrop_path"]);
+
+					$cinema = new Cinema();
+					$cinema->setName($row["cinema_name"]);	
+					$cinema->setAddress($row["cinema_address"]);
+
 					$cinemaRoom = new CinemaRoom();
-					$cinemaRoom->setId($row["cinema_room_id"]);
-					$cinemaRoom->setName($row["cinema_room_name"]);
-					$cinemaRoom->setCapacity($row["cinemas_capacity"]);
-					$cinemaRoom->setPrice($row["cinema_room_price"]);
+					$cinemaRoom->setId($row["cinema_rooms_id"]);
+					$cinemaRoom->setName($row["cinema_rooms_name"]);
+					$cinemaRoom->setCapacity($row["cinema_rooms_capacity"]);
+					$cinemaRoom->setPrice($row["cinema_rooms_price"]);
+					$cinemaRoom->setCinema($cinema);
+
 					$show->setId($row["shows_id"]);
 					$show->setDateStart($row["shows_date_start"]);
 					$show->setTimeStart($row["shows_time_start"]);
 					$show->setDateEnd($row["shows_date_end"]);
 					$show->setTimeEnd($row["shows_time_end"]);
+					
 					$show->setMovie($movie);
 					$show->setCinemaRoom($cinemaRoom);
 				}
@@ -245,12 +254,16 @@
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 				foreach($results as $row) {
 					$show = new Show();
+					$cinema = new Cinema();
+					$cinema->setName($row["cinema_name"]);	
+					$cinema->setAddress($row["cinema_address"]);
 					$cinemaRoom = new CinemaRoom();
 					$cinemaRoom->setName($row["cinema_rooms_name"]);
+					$cinemaRoom->setCinema($cinema);
 					$show->setId($row["show_id"]);
 					$show->setDateStart($row["show_date_start"]);
 					$show->setTimeStart($row["show_time_start"]);
-					$show->setCinemaRoom($cinemaRoom);
+					$show->setCinemaRoom($cinemaRoom);					
 					array_push($shows, $show);
 				}
 

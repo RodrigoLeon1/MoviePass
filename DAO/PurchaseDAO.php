@@ -70,12 +70,12 @@
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $purchase = new Purchase();
                 foreach($results as $row) {
-                    $purchase->setId($row['id']);
-                    $purchase->setTicketQuantity($row['ticket_quantity']);
-                    $purchase->setDiscount($row['discount']);
-                    $purchase->setDate($row['date']);
-                    $purchase->setTotal($row['total']);
-                    $purchase->setDni($row['dni']);
+                    $purchase->setId($row['purchases_id_purchase']);
+                    $purchase->setTicketQuantity($row['purchases_ticket_quantity']);
+                    $purchase->setDiscount($row['purchases_discount']);
+                    $purchase->setDate($row['purchases_date']);
+                    $purchase->setTotal($row['purchases_total']);
+                    $purchase->setDni($row['purchases_FK_dni']);
                 }
                 return $purchase;
             
@@ -115,16 +115,18 @@
 
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-                $purchase = new Purchase();
+                $purchases = array();
                 foreach($results as $row) {
-                    $purchase->setId($row['id']);
-                    $purchase->setTicketQuantity($row['ticket_quantity']);
-                    $purchase->setDiscount($row['discount']);
-                    $purchase->setDate($row['date']);
-                    $purchase->setTotal($row['total']);
-                    $purchase->setDni($row['dni']);
+                    $purchase = new Purchase();
+                    $purchase->setId($row['purchases_id_purchase']);
+                    $purchase->setTicketQuantity($row['purchases_ticket_quantity']);
+                    $purchase->setDiscount($row['purchases_discount']);
+                    $purchase->setDate($row['purchases_date']);
+                    $purchase->setTotal($row['purchases_total']);
+                    $purchase->setDni($row['purchases_FK_dni']);
+                    array_push ($purchases, $purchase);
                 }
-                return $purchase;
+                return $purchases;
             
             } catch(Exception $e) {
                 throw $e;

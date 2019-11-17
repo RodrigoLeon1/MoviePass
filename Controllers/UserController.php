@@ -8,6 +8,7 @@
     use Controllers\HomeController as HomeController;
     use Controllers\MovieController as MovieController;
     use Controllers\RoleController as RoleController;    
+    use Controllers\PurchaseController as PurchaseController;    
 
     class UserController {
 
@@ -124,6 +125,7 @@
         public function adminPath() {
 			if (isset($_SESSION["loggedUser"])) {
                 $admin = $_SESSION["loggedUser"];
+
                 if($admin->getRole() == 1) {
                     $movieController = new MovieController();
                     $movies = $movieController->moviesNowPlayingOnShow();  
@@ -174,7 +176,8 @@
         public function myAccountPath() {
 			if (isset($_SESSION["loggedUser"])) {
                 $user = $_SESSION["loggedUser"];
-                $title = "My account";                            
+                $title = "My account";                                      
+                
 				require_once(VIEWS_PATH . "header.php");
                 require_once(VIEWS_PATH . "navbar.php");
                 require_once(VIEWS_PATH . "my-account.php");
@@ -195,6 +198,23 @@
 			} else {
                 return $this->loginPath();
             }
+        }
+
+        public function myCartPath() {
+            if (isset($_SESSION["loggedUser"])) {
+                $user = $_SESSION["loggedUser"];
+                $title = "My Cart";                      
+                
+                $purchaseController = new PurchaseController();
+                $purchases = $purchaseController->getPurchasesByThisUser();                                
+                
+				require_once(VIEWS_PATH . "header.php");
+                require_once(VIEWS_PATH . "navbar.php");
+                require_once(VIEWS_PATH . "my-cart.php");
+                require_once(VIEWS_PATH . "footer.php");
+			} else {
+                return $this->loginPath();
+            }         
         }
 
         // Todavia no funciona al 100%

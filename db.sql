@@ -302,7 +302,11 @@ DROP procedure IF EXISTS `movies_getByTitle`;
 DELIMITER $$
 CREATE PROCEDURE movies_getByTitle (IN title VARCHAR(255))
 BEGIN
-	SELECT * FROM `movies` WHERE `movies`.`title` = title;
+	SELECT
+		movies.id AS movie_id
+	FROM movies 
+	INNER JOIN shows ON movies.id = shows.FK_id_movie
+	WHERE movies.title = title;
 END$$
 
 DROP procedure IF EXISTS `movies_getAll`;
@@ -430,13 +434,16 @@ BEGIN
 			movies.id AS movies_id,
 			movies.title AS movies_title,
             movies.backdrop_path AS movies_backdrop_path,
-			cinema_rooms.id AS cinema_room_id,
+			cinema_rooms.id AS cinema_rooms_id,
 			cinema_rooms.name AS cinema_rooms_name,
             cinema_rooms.capacity AS cinema_rooms_capacity,
-            cinema_rooms.price AS cinema_rooms_price
+            cinema_rooms.price AS cinema_rooms_price,
+			cinemas.name AS cinema_name,
+			cinemas.address AS cinema_address
 	FROM `shows`
 	INNER JOIN movies ON movies.id = shows.FK_id_movie
 	INNER JOIN cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
+	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
 	WHERE (shows.id = id);
 END$$
 
@@ -480,12 +487,16 @@ BEGIN
 		shows.id as show_id,
 		shows.date_start as show_date_start,
 		shows.time_start as show_time_start,
-		cinema_rooms.name as cinema_rooms_name
+		cinema_rooms.name as cinema_rooms_name,
+		cinemas.name as cinema_name,
+		cinemas.address as cinema_address
 	FROM shows 
 	INNER JOIN 
 		movies ON shows.FK_id_movie = movies.id
 	INNER JOIN 
 		cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
+	INNER JOIN
+		cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
 	WHERE ( (shows.FK_id_movie = id_movie) AND (shows.date_start >= curdate()) ) 
 	ORDER BY shows.date_start ASC, shows.time_start ASC;
 END$$
@@ -504,7 +515,7 @@ CREATE TABLE purchases (
 
 DROP PROCEDURE IF EXISTS `purchases_Add`;
 DELIMITER $$
-CREATE PROCEDURE purchases_Add(IN ticket_quantity int, IN discount int, IN date DATE, IN total int, IN dni_user int, OUT id int)
+CREATE PROCEDURE purchases_Add(IN ticket_quantity int, IN discount int, IN date DATE, IN total int, IN dni_user int)
 BEGIN
     INSERT INTO purchases(purchases.ticket_quantity, purchases.discount, purchases.date, purchases.total, purchases.FK_dni)
     VALUES (ticket_quantity, discount, date, total, dni_user);	
@@ -520,8 +531,7 @@ BEGIN
     WHERE(purchases.ticket_quantity = ticket_quantity AND purchases.discount = discount AND purchases.date = date AND purchases.total = total AND purchases.FK_dni = dni_user );
 END$$
 
-
-DROP PROCEDURE IF EXISTS 'purchases_GetById';
+DROP PROCEDURE IF EXISTS `purchases_GetById`;
 DELIMITER $$
 CREATE PROCEDURE purchases_GetById(IN id int)
 BEGIN 
@@ -532,10 +542,9 @@ BEGIN
            purchases.total AS purchases_total,
            purchases.FK_dni AS purchases_FK_dni
     FROM purchases
-    WHERE(purchases.id_purchases = id);
+    WHERE(purchases.id_purchase = id);
 END$$
 
--- NO ME ANDA
 DROP PROCEDURE IF EXISTS `purchases_GetAll`;
 DELIMITER $$
 CREATE PROCEDURE purchases_GetAll()
@@ -594,7 +603,6 @@ BEGIN
     WHERE(tickets.ticket_number = number);
 END$$
 
--- NO ME ANDA
 DROP PROCEDURE IF EXISTS `tickets_GetAll`;
 DELIMITER $$
 CREATE PROCEDURE tickets_GetAll()
@@ -615,6 +623,37 @@ BEGIN
     WHERE(tickets.FK_id_show = id_show);
 END$$
 
+
+-- c) Consultar cantidades vendidas y remanentes de las proyecciones (Película, Cine, Turno)
+
+SELECT 
+	shows.id AS show_id,
+	cinemas.name AS cinema_name,
+	cinema_rooms.name AS cinema_room_name,
+	movies.title AS movie_title	
+FROM tickets 
+INNER JOIN shows ON tickets.FK_id_show = shows.id
+INNER JOIN purchases ON tickets.FK_id_purchase = purchases.id_purchase
+INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
+INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
+INNER JOIN movies ON shows.FK_id_movie = movies.id
+
+
+-- Cuento la cantidad de tickets comprados que tiene un show
+SELECT
+	count(FK_id_show)
+FROM tickets
+WHERE tickets.FK_id_show = id_show
+
+
+SELECT
+	cinema_rooms.capacity
+FROM cinema_rooms
+WHERE id = 11
+
+
+
+-- d) Consultar totales vendidos en pesos (por película ó por cine, entre fechas)
 
 
 ----------------------------- GENRE -----------------------------

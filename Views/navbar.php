@@ -39,6 +39,10 @@
                             <a href="<?= FRONT_ROOT ?>user/myAccountPath" class="nav-link">Account</a>                            
                         </li>
 
+                        <li>
+                            <a href="<?= FRONT_ROOT ?>user/myCartPath" class="nav-link">My cart</a>                            
+                        </li>
+
                         <?php if($user->getRole() == 1): ?>
                         <li>
                             <a href="<?= FRONT_ROOT ?>user/adminpath" class="nav-link">Dashboard</a>

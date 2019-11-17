@@ -804,6 +804,27 @@ hr {
     margin: 0 auto;
 }
 
+.purchase-success > i {
+    font-size: 10rem;
+}
+
+.purchase-success > h2 {
+    font-size: 4rem;
+}
+
+.purchase-details {
+    font-size: 1.5rem;    
+    width: 40%;
+    margin: 5rem auto;
+    padding: 3rem;
+    border: 1px solid rgba(255, 255, 0, .2);
+}
+
+.purchase-details > h3 {
+    font-weight: 300;    
+    margin: 1rem;
+}
+
 .purchase-form {
     margin: 0 auto;    
 }
@@ -1077,3 +1098,29 @@ hr {
     border-bottom: 1px solid rgba(255, 255, 0, .5);    
 }
 
+/* MIS COMPRAS */
+.container > table > tbody > td > a {
+    display: inline-block;
+}
+
+.container table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.5rem;
+    font-weight: 300;     
+}
+
+.container tr > th,
+.container tr > td {    
+    border: 1px solid rgba(152, 164, 185, 0.25);
+    height: 4rem;
+}
+
+.container td, th {
+    padding: 1.3rem;
+}
+
+.container > table > tbody > tr > td > img {
+    width: 50px;
+    border-radius: 5px;
+}

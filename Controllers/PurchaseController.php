@@ -5,28 +5,27 @@
     use DAO\PurchaseDAO as PurchaseDAO;
     use Models\Purchase as Purchase;
     use Models\Show as Show;
-    use Models\User as User;
+    use Models\User as User;    
     use Controllers\ShowController as ShowController;
     use Controllers\TicketController as TicketController;
     
 
-    class PurchaseController
-    {
+    class PurchaseController {
+
         private $purchaseDAO;
 
-        public function __construct()
-        {
+        public function __construct() {
             $this->purchaseDAO = new PurchaseDAO();
         }
 
-        public function Add($ticket_quantity, $id_show, $discount = "")
-        {
+        public function Add($ticket_quantity, $id_show, $discount = "") {
+            
             $ticketController = new TicketController();
             $showController = new ShowController();
             $date = date('Y-m-d');
             $user = $_SESSION["loggedUser"];
             $dni = $user->getDni();
-            $price = $showController->getShowById($id_show)->getCinema()->getPrice();
+            $price = $showController->getShowById($id_show)->getCinemaRoom()->getPrice();
             $total = $ticket_quantity * $price;
             
             $purchase = new Purchase();            
@@ -36,18 +35,19 @@
             $purchase->setTotal($total);
             $purchase->setDni($dni);
             $id_purchase = $this->purchaseDAO->Add($purchase);
-            for($i=0 ; $i<$ticket_quantity ; $i++)
-            {
+            
+            for($i=0; $i<$ticket_quantity; $i++) {
                 $ticketController->Add(0, $id_show, $id_purchase);
-            }
-			
+            }                            
+
+			return $this->purchaseSuccess($id_purchase);
         }
 
         public function buyTicketPath($idShow) {            
             if (isset($_SESSION["loggedUser"])) {              
 
                 $showController = new ShowController();
-                $show = $showController->getShowById($idShow);                 
+                $show = $showController->getShowById($idShow);      
                 
                 $title = 'Buy ticket - ' . $show->getMovie()->getTitle();
                 $img = IMG_PATH_TMDB . $show->getMovie()->getBackdropPath();
@@ -65,18 +65,26 @@
             }
         }
 
-        public function getPurchases()
-        {
+        public function purchaseSuccess($id) {
+            
+            $title = 'Purchase';
+            $purchase = $this->purchaseDAO->GetById($id);
+
+            require_once(VIEWS_PATH . "header.php");			            
+            require_once(VIEWS_PATH . "navbar.php");            
+            require_once(VIEWS_PATH . "purchase-success.php");
+            require_once(VIEWS_PATH . "footer.php"); 
+        }
+
+        public function getPurchases() {
             return $this->purchaseDAO->getAll();
         }
 
-        public function getById($id)
-        {
+        public function getById($id) {
             return $this->purchaseDAO->getById();
         }
 
-        public function numberOfTicketsAvailable($id_show)
-        {
+        public function numberOfTicketsAvailable($id_show) {
             $showController = new ShowController();
             $ticketController = new TicketController();
             
@@ -86,27 +94,17 @@
             return $capacity - $tickets;
         }
 
-        public function ticketsAvailable($id_show)
-        {
+        public function ticketsAvailable($id_show) {
             $quantity = $this->numberOfTicketsAvailable($id_show);
-            
-            // if($quantity > 0)
-            // {
-            //     return true;
-            // }else
-            // {
-            //     return false;
-            // }            
+              
             return ($quantity > 0) ? TRUE : FALSE;
         }
 
-        public function getPurchasesByUser($user)
-        {
+        public function getPurchasesByUser($user) {
             return $this->purchaseDAO->getByDni($user->getDni());
         }
 
-        public function getPurchasesByThisUser()
-        {
+        public function getPurchasesByThisUser() {
             $user = $_SESSION["loggedUser"];
             return $this->purchaseDAO->getByDni($user->getDni());
         }

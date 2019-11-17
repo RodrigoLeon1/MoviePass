@@ -1,4 +1,4 @@
-<main>
+	<main>
         <h2 class="dash-title">Cinemas rooms</h2>
         <hr>
 

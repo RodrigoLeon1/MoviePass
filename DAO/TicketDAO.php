@@ -17,9 +17,7 @@
                 //$query = "CALL tickets_Add(?,?,?)";
                 $parameters['qr'] = $ticket->getQr();
                 $parameters['id_show'] = $ticket->getIdShow();   
-                $parameters['id_purchase'] = $ticket->getIdPurchase();
-                
-                //var_dump($parameters);
+                $parameters['id_purchase'] = $ticket->getIdPurchase();                            
 
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query, $parameters);
@@ -71,8 +69,7 @@
             }
         }
 
-        public function getByShowId($id)
-        {
+        public function getByShowId($id) {
             try {
                 $query = "CALL tickets_GetByShowId(?)";
                 $parameters['id'] = $id;
@@ -95,8 +92,6 @@
                 throw $e;
             }
         }
-
-
 
     }
 ?>

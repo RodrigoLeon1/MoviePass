@@ -36,7 +36,7 @@
     <?php foreach ($movies as $movie): ?>
     <div class="container movie-container">
         <div class="movie-img">
-            <a href="<?= FRONT_ROOT ?>movie/showMovie/?id=<?= $movie->getId() ?>">
+            <a href="<?= FRONT_ROOT ?>movie/showMovie/<?= $movie->getId() ?>">
                 <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?>" alt="">
             </a>
         </div>
@@ -49,7 +49,7 @@
             <p class="overview-text"><?= $movie->getOverview() ?></p>
         </div>
         <div class="movie-cta">
-            <a class="btn-l" href="<?= FRONT_ROOT ?>movie/showMovie/?id=<?= $movie->getId() ?>">  
+            <a class="btn-l" href="<?= FRONT_ROOT ?>movie/showMovie/<?= $movie->getId() ?>">  
                 <i class="icon ion-md-add"></i>More info
             </a>
         </div>

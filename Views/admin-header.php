@@ -81,11 +81,11 @@
                 </li>
                 <li>
                     <i class="icon ion-logo-usd"></i>
-                    Sales
+                    Tickets
                     <ul>
 						<li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>">View</a>
+                            <a href="<?= FRONT_ROOT ?>ticket/ticketsSoldPath">Tickets sold and remainder</a>
                         </li>
                     </ul>
                 </li>

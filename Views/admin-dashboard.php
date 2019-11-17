@@ -2,7 +2,7 @@
         <h2>Dashboard</h2>
         <hr>
         <div class="dashboard-container">            
-            <div class="dash-item">
+            <!-- <div class="dash-item">
                 <h4>Total Users</h4>
                 <p>150</p>
             </div>
@@ -17,7 +17,11 @@
             <div class="dash-item">
                 <h4>Total Movies</h4>
                 <p>150</p>
-            </div>             
+            </div>              -->
+            <h1>
+                <i class="icon ion-md-hand"></i>
+                Welcome <?= $admin->getFirstName() ?> <?= $admin->getLastName() ?> to the dashboard main page.
+            </h1>
         </div>       
         
         <div class="dashboard-movies">

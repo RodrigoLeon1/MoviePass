@@ -7,7 +7,7 @@
                     <div class="show-complete-info">
                         <h3>
                             <i class="icon ion-md-calendar"></i> 
-                            <?= $show->getCinema()->getName() ?>
+                            <?= $show->getCinemaRoom()->getCinema()->getName() ?> - <?= $show->getCinemaRoom()->getName() ?>
                         </h3>
                         <h3>
                             <i class="icon ion-md-videocam"></i> 
@@ -17,7 +17,7 @@
                             <i class="icon ion-logo-usd"></i> 
                             Price for ticket: 
                             <span id="price-ticket">
-                                <?= $show->getCinema()->getPrice() ?>
+                                <?= $show->getCinemaRoom()->getPrice() ?>
                             </span>  
                         </h3>
                         <h3>
@@ -28,7 +28,7 @@
                         </h3>
                         <h3>
                             <i class="icon ion-md-pin"></i> 
-                            <?= $show->getCinema()->getAddress() ?>
+                            <?= $show->getCinemaRoom()->getCinema()->getAddress() ?>
                         </h3>
                     </div>
                     <div class="show-total">

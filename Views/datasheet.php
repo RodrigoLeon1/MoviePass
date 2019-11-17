@@ -47,7 +47,7 @@
                 <?php foreach ($shows as $show): ?>
                 <div class="show-item">
                     <div class="show-content">
-                        <h2><?= $show->getCinema()->getName() ?></h2>
+                        <h2><?= $show->getCinemaRoom()->getCinema()->getName() ?> - <?= $show->getCinemaRoom()->getName() ?></h2>
                         <p>
                             <p>
                                 <i class="icon ion-md-calendar"></i> 
@@ -59,7 +59,7 @@
                             <p>-</p>
                             <p>
                                 <i class="icon ion-md-pin"></i>
-                                <?= $show->getCinema()->getAddress() ?>
+                                <?= $show->getCinemaRoom()->getCinema()->getAddress() ?>
                             </p>
                         </p>
                     </div>

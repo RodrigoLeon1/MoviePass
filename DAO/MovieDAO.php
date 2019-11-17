@@ -241,24 +241,9 @@
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 				$movie = new Movie();
 				foreach ($results as $values) {
-					$movie->setPopularity($values["popularity"]);
-					$movie->setVoteCount($values["vote_count"]);
-					$movie->setVideo($values["video"]);
-					$movie->setPosterPath($values["poster_path"]);
-					$movie->setId($values["id"]);
-					$movie->setAdult($values["adult"]);
-					$movie->setBackdropPath($values["backdrop_path"]);
-					$movie->setOriginalLanguage($values["original_language"]);
-					$movie->setOriginalTitle($values["original_title"]);
-					$movie->setGenreIds($values["genre_ids"]);
-					$movie->setTitle($values["title"]);
-					$movie->setVoteAverage($values["vote_average"]);
-					$movie->setOverview($values["overview"]);
-					$movie->setReleaseDate($values["release_date"]);
-					$movie->setRuntime($values["runtime"]);
-					array_push($movies, $movie);
+					$movie->setId($values["movie_id"]);
 				}
-				return $movies;
+				return $movie;
 			}
 			catch (Exception $e) {
 				throw $e;
