@@ -177,6 +177,18 @@ BEGIN
 	SELECT * FROM `cinema_rooms` WHERE `cinema_rooms`.`id` = id;
 END$$
 
+
+DROP procedure IF EXISTS `cinemaRooms_getByIdShow`;
+DELIMITER $$
+CREATE PROCEDURE cinemaRooms_getByIdShow (IN id INT)
+BEGIN
+	SELECT * FROM `cinema_rooms`
+	INNER JOIN shows ON shows.FK_id_cinemaRoom = cinema_rooms.id
+	WHERE shows.id = id;
+END$$
+
+
+
 DROP procedure IF EXISTS `cinemaRooms_getByNameAndCinema`;
 DELIMITER $$
 CREATE PROCEDURE cinemaRooms_getByNameAndCinema (IN name VARCHAR(255),
@@ -626,32 +638,38 @@ END$$
 
 -- c) Consultar cantidades vendidas y remanentes de las proyecciones (Película, Cine, Turno)
 
-SELECT 
-	shows.id AS show_id,
-	cinemas.name AS cinema_name,
-	cinema_rooms.name AS cinema_room_name,
-	movies.title AS movie_title	
-FROM tickets 
-INNER JOIN shows ON tickets.FK_id_show = shows.id
-INNER JOIN purchases ON tickets.FK_id_purchase = purchases.id_purchase
-INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
-INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
-INNER JOIN movies ON shows.FK_id_movie = movies.id
+DROP PROCEDURE IF EXISTS `tickets_GetInfoTicket`;
+DELIMITER $$
+CREATE PROCEDURE tickets_GetInfoTicket()
+BEGIN
+	SELECT 
+		shows.id AS show_id,
+		shows.date_start AS show_date_start,
+		shows.time_start AS show_time_start,
+		cinemas.name AS cinema_name,
+		cinemas.id AS cinema_id,
+		cinema_rooms.name AS cinema_room_name,
+		movies.title AS movie_title	
+	FROM tickets 
+	INNER JOIN shows ON tickets.FK_id_show = shows.id
+	INNER JOIN purchases ON tickets.FK_id_purchase = purchases.id_purchase
+	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
+	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
+	INNER JOIN movies ON shows.FK_id_movie = movies.id
+	GROUP BY shows.id;
+END$$
 
 
 -- Cuento la cantidad de tickets comprados que tiene un show
-SELECT
-	count(FK_id_show)
-FROM tickets
-WHERE tickets.FK_id_show = id_show
-
-
-SELECT
-	cinema_rooms.capacity
-FROM cinema_rooms
-WHERE id = 11
-
-
+DROP PROCEDURE IF EXISTS `tickets_getTicketsOfShows`;
+DELIMITER $$
+CREATE PROCEDURE tickets_getTicketsOfShows(IN id_show INT)
+BEGIN
+	SELECT
+		count(FK_id_show)
+	FROM tickets
+	WHERE tickets.FK_id_show = id_show;
+END$$
 
 -- d) Consultar totales vendidos en pesos (por película ó por cine, entre fechas)
 

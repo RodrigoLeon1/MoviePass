@@ -5,6 +5,7 @@
     use DAO\CinemaRoomDAO as cinemaRoomDAO;
 	use Models\CinemaRoom as CinemaRoom;
 	use Models\Cinema as Cinema;
+	use Models\Show as Show;
 
     class CinemaRoomController {
 		
@@ -116,6 +117,13 @@
 	        $this->cinemaRoomDAO->modify($cinemaRoom);
             return $this->listCinemaRoomPath(CINEMA_ROOM_MODIFY);
         }
+
+		public function getCinemaRoomByShowId($id_show) {
+			$show = new Show();
+			$show->setId($id_show);
+
+			return $this->cinemaRoomDAO->getByIdShow($show);
+		}
 
     }
 

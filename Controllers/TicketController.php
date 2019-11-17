@@ -2,10 +2,11 @@
 
     namespace Controllers;    
 
+    use Models\Show as Show;
     use DAO\TicketDAO as TicketDAO;
     use Models\Ticket as Ticket;
     use Controllers\ShowController as ShowController;
-    use Controllers\UserController as UserController;
+    use Controllers\UserController as UserController;    
 
     class TicketController {
         
@@ -21,7 +22,10 @@
 				$ticket = new Ticket();            
                 $ticket->setQr($qr);
                 $ticket->setIdPurchase($id_purchase);
-                $ticket->setIdShow($id_show);
+
+                $show = new Show();
+                $show->setId($id_show);
+                $ticket->setShow($show);
                 
                 $this->ticketDAO->Add($ticket);
 			
@@ -62,8 +66,8 @@
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
-
                     
+                    $tickets = $this->ticketDAO->getGeneralInfo();                                    
 
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
@@ -72,6 +76,23 @@
 			}
         }
         
+        public function getTicketsSold($id_show) {
+            $show = new Show();
+            $show->setId($id_show);
+
+            return $this->ticketDAO->getTicketsOfShows($show);
+        }
         
+        public function getTickesRemainder($id_show) {
+            $cinemaRoomController = new CinemaRoomController();
+            
+            $show = new Show();
+            $show->setId($id_show);
+            $cinemaRoom = $cinemaRoomController->getCinemaRoomByShowId($id_show);
+            $tickesSold = $this->getTicketsSold($id_show);
+            
+            return ($cinemaRoom->getCapacity() - $tickesSold);
+        }
+
     }
 ?>

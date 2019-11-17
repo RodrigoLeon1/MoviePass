@@ -6,6 +6,7 @@
 	use DAO\Connection as Connection;
 	use Models\CinemaRoom as CinemaRoom;
 	use Models\Cinema as Cinema;
+	use Models\Show as Show;
 
     class CinemaRoomDAO {
 
@@ -142,6 +143,24 @@
 				$results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);				
 
 				return $results;
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
+		}
+
+		public function getByIdShow(Show $show) {
+			try {
+				$query = "CALL cinemaRooms_getByIdShow(?)";
+				$parameters ["id_show"] = $show->getId();
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+				
+				$cinemaRoom = new CinemaRoom();
+				foreach($results as $row) {					
+					$cinemaRoom->setCapacity($row["capacity"]);
+				}
+				return $cinemaRoom;
 			}
 			catch (Exception $e) {
 				throw $e;
