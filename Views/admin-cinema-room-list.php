@@ -44,7 +44,7 @@
                                 <td><?= $cinemaRoom->getId(); ?></td>
                                 <td><?= $cinemaRoom->getCinema()->getName(); ?></td>
 								<td><?= $cinemaRoom->getName(); ?></td>								
-								<td><?= $cinemaRoom->getPrice(); ?></td>	
+								<td>$<?= $cinemaRoom->getPrice(); ?></td>	
 								<td><?= $cinemaRoom->getCapacity(); ?></td>								
 								<td>
 									<div class="actions-container">

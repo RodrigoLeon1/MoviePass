@@ -43,6 +43,7 @@
 			}
         }
 
+        // PASAR A OBJ
         public function getById($id) {
             $genre = NULL;
             $query = "CALL genres_getById (?)";
@@ -57,6 +58,7 @@
             return $genre;
         }
     
+        // PASAR A OBJ
         public function getByName($name) {
             $genre = NULL;
             $query = "CALL genres_getByName (?)";
@@ -71,6 +73,7 @@
             return $genre;
         }
 
+        // PASAR A OBJ
         public function getNameGenre($id) {			
 			$genreName = "";
 			try {						

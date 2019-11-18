@@ -93,7 +93,7 @@
 		}
 		*/
 
-		public function getByMovieId (Show $show) {
+		public function getByMovieId(Show $show) {
 			try {
 				$query = "CALL shows_getByMovieId (?)";
 				$parameters ["id_movie"] = $show->getMovie()->getId();
@@ -105,7 +105,7 @@
 			}
 		}
 
-		public function getByCinemaRoomId (Show $show) {
+		public function getByCinemaRoomId(Show $show) {
 			try {
 				$query = "CALL shows_getByCinemaRoomId (?)";
 				$parameters ["id_cinemaRoom"] = $show->getCinemaRoom()->getId();
@@ -117,7 +117,7 @@
 			}
 		}
 
-        public function getAll () {
+        public function getAll() {
 			$query = "CALL shows_getAll()";
             $this->connection = Connection::GetInstance();
             $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
@@ -146,6 +146,7 @@
             return $this->showList;
 		}
 
+		//PASAR A OBJ
 		public function deleteById ($id) {
 			try {
 				$query = "CALL shows_deleteById(?)";
@@ -158,6 +159,7 @@
 			}
 		}
 
+		//PASAR A OBJ
 		public function getById ($id) {
 			try {
 				$query = "CALL shows_getById(?)";

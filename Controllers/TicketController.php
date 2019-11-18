@@ -16,47 +16,38 @@
             $this->ticketDAO = new TicketDAO();            
         }
 
-        public function Add($qr, $id_show, $id_purchase)
-        {
-                
-				$ticket = new Ticket();            
-                $ticket->setQr($qr);
-                $ticket->setIdPurchase($id_purchase);
+        public function Add($qr, $id_show, $id_purchase) {
+            $ticket = new Ticket();            
+            $ticket->setQr($qr);
+            $ticket->setIdPurchase($id_purchase);
 
-                $show = new Show();
-                $show->setId($id_show);
-                $ticket->setShow($show);
-                
-                $this->ticketDAO->Add($ticket);
-			
+            $show = new Show();
+            $show->setId($id_show);
+            $ticket->setShow($show);
+            
+            $this->ticketDAO->Add($ticket);			
         }
 
-        private function validateTicketForm($id_purchase, $id_show)
-        {
-            if(empty($id_purchase) || empty($id_show)) 
-            {
+        private function validateTicketForm($id_purchase, $id_show) {
+            if(empty($id_purchase) || empty($id_show)) {
                 return FALSE;
             }
             return TRUE;
         }
 
-        public function getByNumber($number)
-        {
+        public function getByNumber($number) {
             return $this->ticketDAO-GetByNumber($number);
         }
 
-        public function getByShow($id)
-        {
+        public function getByShow($id) {
             return  $this->ticketDAO->getByShowId($id);
         }
 
-        public function getTickets()
-        {
+        public function getTickets() {
             return $this->ticketDAO->getAll();
         }
 
-        public function ticketsNumber($id)
-        {
+        public function ticketsNumber($id) {
             $tickets = $this->getByShow($id);
             return count($tickets);
         }

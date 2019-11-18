@@ -87,6 +87,18 @@
                             <i class="icon ion-md-remove"></i>
                             <a href="<?= FRONT_ROOT ?>ticket/ticketsSoldPath">Tickets sold and remainder</a>
                         </li>
+                        <li>
+                            <i class="icon ion-md-remove"></i>
+                            <a href="<?= FRONT_ROOT ?>movie/sales">Movie sales</a>
+                        </li>
+                        <li>
+                            <i class="icon ion-md-remove"></i>
+                            <a href="<?= FRONT_ROOT ?>cinema/sales">Cinema sales</a>
+                        </li>
+                        <li>
+                            <i class="icon ion-md-remove"></i>
+                            <a href="<?= FRONT_ROOT ?>cinemaRoom/sales">Cinema rooms sales</a>
+                        </li>
                     </ul>
                 </li>
             </ul>

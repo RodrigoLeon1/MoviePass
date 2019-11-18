@@ -673,6 +673,59 @@ END$$
 
 -- d) Consultar totales vendidos en pesos (por película ó por cine, entre fechas)
 
+-- Movies sales
+DROP PROCEDURE IF EXISTS `tickets_getTicketsOfMovie`;
+DELIMITER $$
+CREATE PROCEDURE tickets_getTicketsOfMovie(IN id_movie INT)
+BEGIN	
+	SELECT 		
+		count(tickets.FK_id_show) AS count_tickets,
+		cinema_rooms.name,
+		cinema_rooms.price
+	FROM tickets
+	INNER JOIN shows ON tickets.FK_id_show = shows.id
+	INNER JOIN movies ON shows.FK_id_movie = movies.id
+	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
+	WHERE movies.id = id_movie
+	GROUP BY cinema_rooms.id;
+END$$
+
+-- Cinema sales
+DROP PROCEDURE IF EXISTS `tickets_getTicketsOfCinema`;
+DELIMITER $$
+CREATE PROCEDURE tickets_getTicketsOfCinema(IN id_cinema INT)
+BEGIN	
+	SELECT 		
+		count(tickets.FK_id_show) AS count_tickets,
+		cinema_rooms.name,
+		cinema_rooms.price
+	FROM tickets
+	INNER JOIN shows ON tickets.FK_id_show = shows.id
+	INNER JOIN movies ON shows.FK_id_movie = movies.id
+	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
+	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
+	WHERE cinemas.id = id_cinema
+	GROUP BY cinema_rooms.id;
+END$$
+
+-- Cinema rooms sales
+DROP PROCEDURE IF EXISTS `tickets_getTicketsOfCinemaRoom`;
+DELIMITER $$
+CREATE PROCEDURE tickets_getTicketsOfCinemaRoom(IN id_cinema_room INT)
+BEGIN	
+	SELECT 		
+		count(tickets.FK_id_show) AS count_tickets,
+		cinema_rooms.name,
+		cinema_rooms.price
+	FROM tickets
+	INNER JOIN shows ON tickets.FK_id_show = shows.id
+	INNER JOIN movies ON shows.FK_id_movie = movies.id
+	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
+	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
+	WHERE cinema_rooms.id = id_cinema_room
+	GROUP BY cinema_rooms.id;
+END$$
+
 
 ----------------------------- GENRE -----------------------------
 

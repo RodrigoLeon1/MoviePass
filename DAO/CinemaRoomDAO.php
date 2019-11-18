@@ -57,6 +57,7 @@
 			}
 		}
 
+		// PASAR A OBJ
 		public function deleteById($id) {
 			try {
 				$query = "CALL cinemaRooms_deleteById(?)";
@@ -69,6 +70,7 @@
 			}
 		}
 
+		// PASA A OBJ
 		public function getById($id) {
 			try {
 				$query = "CALL cinemaRooms_getById(?)";
@@ -161,6 +163,27 @@
 					$cinemaRoom->setCapacity($row["capacity"]);
 				}
 				return $cinemaRoom;
+			}
+			catch (Exception $e) {
+				throw $e;
+			}
+		}
+
+
+		public function getSales(CinemaRoom $cinemaRoom) {
+			try {								
+				$query = "CALL tickets_getTicketsOfCinemaRoom(?)";
+				$parameters["id_cinema"] = $cinemaRoom->getId();
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);				
+				
+				$total = 0;
+				
+				foreach ($results as $values) {
+					$total += $values["count_tickets"] * $values["price"];
+				}				
+
+				return $total;
 			}
 			catch (Exception $e) {
 				throw $e;

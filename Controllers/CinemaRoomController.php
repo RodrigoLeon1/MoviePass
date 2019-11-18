@@ -124,6 +124,20 @@
 
 			return $this->cinemaRoomDAO->getByIdShow($show);
 		}
+		
+		public function sales() {
+			if ($_SESSION["loggedUser"]) {
+				$admin = $_SESSION["loggedUser"];
+				if($admin->getRole() == 1) {
+					
+					$rooms = $this->cinemaRoomDAO->getAll();
+					
+					require_once(VIEWS_PATH . "admin-head.php");
+					require_once(VIEWS_PATH . "admin-header.php");
+					require_once(VIEWS_PATH . "admin-cinema-room-sales.php");
+				}
+			}
+		}
 
     }
 

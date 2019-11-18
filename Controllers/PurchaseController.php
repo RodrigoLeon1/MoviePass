@@ -22,6 +22,7 @@
             
             $ticketController = new TicketController();
             $showController = new ShowController();
+
             $date = date('Y-m-d');
             $user = $_SESSION["loggedUser"];
             $dni = $user->getDni();
@@ -44,7 +45,7 @@
         }
 
         public function buyTicketPath($idShow) {            
-            if (isset($_SESSION["loggedUser"])) {              
+            if(isset($_SESSION["loggedUser"])) {              
 
                 $showController = new ShowController();
                 $show = $showController->getShowById($idShow);      
@@ -66,14 +67,18 @@
         }
 
         public function purchaseSuccess($id) {
-            
-            $title = 'Purchase';
-            $purchase = $this->purchaseDAO->GetById($id);
+            if(isset($_SESSION["loggedUser"])) {  
+                $title = 'Purchase';
+                $purchase = $this->purchaseDAO->GetById($id);
 
-            require_once(VIEWS_PATH . "header.php");			            
-            require_once(VIEWS_PATH . "navbar.php");            
-            require_once(VIEWS_PATH . "purchase-success.php");
-            require_once(VIEWS_PATH . "footer.php"); 
+                require_once(VIEWS_PATH . "header.php");			            
+                require_once(VIEWS_PATH . "navbar.php");            
+                require_once(VIEWS_PATH . "purchase-success.php");
+                require_once(VIEWS_PATH . "footer.php"); 
+            } else {
+                $userController = new UserController();
+                return $userController->loginPath(LOGIN_NEEDED);
+            }
         }
 
         public function getPurchases() {

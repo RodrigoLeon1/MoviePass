@@ -60,29 +60,6 @@
                 throw $e;
             }
         }
-
-        public function GetById($id) {
-            try {
-                $query = "CALL purchases_GetById(?)";
-                $parameters['id'] = $id;
-
-                $this->connection = Connection::GetInstance();
-                $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-                $purchase = new Purchase();
-                foreach($results as $row) {
-                    $purchase->setId($row['purchases_id_purchase']);
-                    $purchase->setTicketQuantity($row['purchases_ticket_quantity']);
-                    $purchase->setDiscount($row['purchases_discount']);
-                    $purchase->setDate($row['purchases_date']);
-                    $purchase->setTotal($row['purchases_total']);
-                    $purchase->setDni($row['purchases_FK_dni']);
-                }
-                return $purchase;
-            
-            } catch(Exception $e) {
-                throw $e;
-            }
-        }
         
         public function getAll() {
             try {		
@@ -103,6 +80,30 @@
                 return $purchaseList;
             }
             catch(Exception $e) {
+                throw $e;
+            }
+        }
+
+        //PASAR A OBJ
+        public function GetById($id) {
+            try {
+                $query = "CALL purchases_GetById(?)";
+                $parameters['id'] = $id;
+
+                $this->connection = Connection::GetInstance();
+                $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+                $purchase = new Purchase();
+                foreach($results as $row) {
+                    $purchase->setId($row['purchases_id_purchase']);
+                    $purchase->setTicketQuantity($row['purchases_ticket_quantity']);
+                    $purchase->setDiscount($row['purchases_discount']);
+                    $purchase->setDate($row['purchases_date']);
+                    $purchase->setTotal($row['purchases_total']);
+                    $purchase->setDni($row['purchases_FK_dni']);
+                }
+                return $purchase;
+            
+            } catch(Exception $e) {
                 throw $e;
             }
         }

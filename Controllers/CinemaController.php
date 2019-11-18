@@ -50,7 +50,7 @@
 		public function listCinemaPath($success = "", $alert = "", $cinemaId = "") {
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];				
-				$this->cinemas = $this->cinemaDAO->getAll();
+				$cinemas = $this->cinemaDAO->getAll();
 				if($admin->getRole() == 1) {
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
@@ -104,6 +104,20 @@
 	        $this->cinemaDAO->modify($cinema);
             return $this->listCinemaPath(CINEMA_MODIFY);
         }
+
+		public function sales() {
+			if ($_SESSION["loggedUser"]) {
+				$admin = $_SESSION["loggedUser"];
+				if($admin->getRole() == 1) {
+
+					$cinemas = $this->cinemaDAO->getAll();
+					
+					require_once(VIEWS_PATH . "admin-head.php");
+					require_once(VIEWS_PATH . "admin-header.php");
+					require_once(VIEWS_PATH . "admin-cinema-sales.php");
+				}
+			}
+		}
 
     }
 

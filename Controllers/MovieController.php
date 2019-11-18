@@ -31,7 +31,7 @@
         }
 
         public function showMovie($id) {
-            $movies = $this->moviesNowPlayingOnShow();              //antes -> $movies = $this->moviesNowPlaying();
+            $movies = $this->moviesNowPlayingOnShow();              
             $genreMovieController = new GenreToMovieController();    
             $purchaseController = new PurchaseController();
             foreach ($movies as $movieRow) {
@@ -52,7 +52,7 @@
 			require_once(VIEWS_PATH . "footer.php");
         }
 
-		public function nowPlaying($movies = "", $title = "", $alert = "") {
+		public function nowPlaying($movies = "", $title = "", $alert = "") {            
             $genreController = new GenreToMovieController();            
             $genres = $genreController->getGenresOfMoviesOnShows();            
             $img = IMG_PATH . '/w4.png';
@@ -190,8 +190,10 @@
         }         
 
         public function searchMovie($title) {
+            
             $movieTemp = new Movie();
             $movieTemp->setTitle($title);            
+           
             $movie = $this->movieDAO->getByTitle($movieTemp);
 
             if($movie->getId() == NULL) {
@@ -201,6 +203,19 @@
             }
         }
     
+        public function sales() {
+			if ($_SESSION["loggedUser"]) {
+				$admin = $_SESSION["loggedUser"];
+				if($admin->getRole() == 1) {
+
+                    $movies = $this->moviesNowPlayingOnShow();
+
+					require_once(VIEWS_PATH . "admin-head.php");
+					require_once(VIEWS_PATH . "admin-header.php");
+					require_once(VIEWS_PATH . "admin-movie-sales.php");
+				}
+			}
+		}
 
     }
 

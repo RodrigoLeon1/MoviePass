@@ -38,6 +38,7 @@
 			}
         }
 
+		//PASAR A OBJ
 		public function getByMail($mail) {
             $user = NULL;
             $query = "CALL users_getByMail (?)";
@@ -72,6 +73,7 @@
 			return $this->userList;
 		}
 
+		//PASAR A OBJ
 		public function deleteByDni($dni) {
 			try {
 				$query = "CALL users_deleteByDni(?)";

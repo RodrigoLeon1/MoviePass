@@ -37,7 +37,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach($this->cinemas as $cinema): ?>
+						<?php foreach($cinemas as $cinema): ?>
 							<tr>
 								<td><?= $cinema->getId(); ?></td>
 								<td><?= $cinema->getName(); ?></td>								
