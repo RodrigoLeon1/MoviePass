@@ -4,14 +4,15 @@
 
     use Models\Purchase as Purchase;
     use DAO\Connection as Connection;
+    use DAO\IPurchaseDAO as IPurchaseDAO;
     use DAO\QueryType as QueryType;
 
-    class PurchaseDAO {
+    class PurchaseDAO implements IPurchaseDAO {
 
         private $tableName = "purchases";
         private $connection;
         
-        public function Add(Purchase $purchase) {
+        public function add(Purchase $purchase) {
             try {
                 $query = "CALL purchases_Add(?, ?, ?, ?, ?)";
                 $parameters['ticket_quantity'] = $purchase->getTicketQuantity();
@@ -33,7 +34,7 @@
             
         }
 
-        private function getId($ticket_quantity, $discount, $date, $total, $dni)
+        public function getId($ticket_quantity, $discount, $date, $total, $dni)
         {
             try {
                 $query = "SELECT * FROM " . $this->tableName . " WHERE((ticket_quantity = :ticket_quantity) AND (discount = :discount) AND (date = :date) AND (total = :total) AND (FK_dni = :dni) )";			
@@ -85,7 +86,7 @@
         }
 
         //PASAR A OBJ
-        public function GetById($id) {
+        public function getById($id) {
             try {
                 $query = "CALL purchases_GetById(?)";
                 $parameters['id'] = $id;

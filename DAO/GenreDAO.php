@@ -4,14 +4,15 @@
 
     use \Exception as Exception;
     use DAO\Connection as Connection;
+    use DAO\IGenreDAO as IGenreDAO;
     use Models\Genre as Genre;
 
-    class GenreDAO {
+    class GenreDAO implements IGenreDAO {
 
         private $genreList = array();
         private $tableName = "genres";
 
-        public function Add(Genre $genre) {
+        public function add(Genre $genre) {
             try {
 				$query = "CALL genres(?, ?)";
                 $parameters["id_genre"] = $genre->getIdGenre();
@@ -42,12 +43,11 @@
 				throw $ex;
 			}
         }
-
-        // PASAR A OBJ
-        public function getById($id) {
+        
+        public function getById(Genre $genre) {
             $genre = NULL;
             $query = "CALL genres_getById (?)";
-            $parameters["id"] = $id;
+            $parameters["id"] = $genre->getId();
             $this->connection = Connection::GetInstance();
             $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
             foreach($results as $row) {
@@ -57,12 +57,11 @@
             }
             return $genre;
         }
-    
-        // PASAR A OBJ
-        public function getByName($name) {
+            
+        public function getByName(Genre $genre) {
             $genre = NULL;
             $query = "CALL genres_getByName (?)";
-            $parameters["name"] = $name;
+            $parameters["name"] = $genre->getName();
             $this->connection = Connection::GetInstance();
             $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
             foreach($results as $row) {
@@ -72,13 +71,12 @@
             }
             return $genre;
         }
-
-        // PASAR A OBJ
-        public function getNameGenre($id) {			
+        
+        public function getNameGenre(Genre $genre) {			
 			$genreName = "";
 			try {						
                 $query = "CALL genres_getById(?)";
-				$parameters["id"] = $id;
+				$parameters["id"] = $genre->getIdGenre();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
 				foreach($results as $row) {								

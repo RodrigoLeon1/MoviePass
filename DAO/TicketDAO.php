@@ -2,21 +2,21 @@
 
     namespace DAO;
 
-    use DAO\Connection as Connection;
     use DAO\QueryType as QueryType;
-
+    use DAO\Connection as Connection;
+    use DAO\ITicketDAO as ITicketDAO;
     use Models\Ticket as Ticket;
     use Models\Show as Show;
     use Models\Movie as Movie;
 	use Models\CinemaRoom as CinemaRoom;
     use Models\Cinema as Cinema;
     
-    class TicketDAO {
+    class TicketDAO implements ITicketDAO {
         
         private $tableName = "tickets";
         private $connection;
 
-        public function Add(Ticket $ticket) {
+        public function add(Ticket $ticket) {
             try {
                 $query = "INSERT INTO " . $this->tableName . " (qr, FK_id_purchase, FK_id_show) VALUES (:qr, :id_purchase, :id_show);";
                 //$query = "CALL tickets_Add(?,?,?)";
@@ -32,7 +32,7 @@
             }
         }
 
-        public function GetByNumber($number) {
+        public function getByNumber($number) {
             try {
                 $query = "CALL tickets_GetByNumber(?)";
                 $parameters['number'] = $number;

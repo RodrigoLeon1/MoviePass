@@ -4,16 +4,17 @@
 
 	use \Exception as Exception;
 	use DAO\Connection as Connection;
+	use DAO\IGenreToMovieDAO as IGenreToMovieDAO;
 	use Models\Genre as Genre;
 	use Models\GenreToMovie as GenreToMovie;
 	use Models\Movie as Movie;
 
-    class GenreToMovieDAO {
+    class GenreToMovieDAO implements IGenreToMovieDAO {
 
 		private $genreToMovieList = array();		
         private $tableName = "genres_x_movies";
 
-		public function Add(GenreToMovie $genreToMovie) {
+		public function add(GenreToMovie $genreToMovie) {
             try {
 				$query = "INSERT INTO " . $this->tableName . " (FK_id_genre, FK_id_movie) VALUES (:FK_id_genre, :FK_id_movie);";
 				$parameters["FK_id_genre"] = $genreToMovie->getIdGenre();

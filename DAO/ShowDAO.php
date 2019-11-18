@@ -4,13 +4,14 @@
 
 	use \Exception as Exception;
 	use DAO\Connection as Connection;
+	use DAO\IShowDAO as IShowDAO;
 	use DAO\MovieDAO as MovieDAO;
     use Models\Show as Show;
     use Models\Movie as Movie;
 	use Models\CinemaRoom as CinemaRoom;
 	use Models\Cinema as Cinema;
 
-    class ShowDAO {
+    class ShowDAO implements IShowDAO {
 
         private $showList = array();
         private $moviesOnShowList = array();
@@ -37,61 +38,6 @@
 				throw $e;
 			}
         }
-
-		/*
-		public function checkPlace (Show $show) {
-			$this->getAll();
-			if ($this->showList != null) {
-				foreach ($this->showList as $showList) {
-					if ($showList->getMovie()->getId() == $show->getMovie()->getId()) {
-						if ($showList->getDateStart() == $show->getDateStart()) {
-							return 0;
-						}
-					}
-				}
-			}
-			return 1;
-		}
-
-		public function appendTime ($show) {
-			$movie = $this->movieDAO->getById($show->getMovie()->getId()); // Get Movie On Show In Order To Get It's Runtime
-			//Modify Time Lapse
-			$timeStart = strtotime ("-15 minutes", strtotime($show->getDateStart() . $show->getTimeStart()));
-			$plusRunTime = "+" . $movie->getRuntime() . " minutes";
-			$timeEnd = strtotime ($plusRunTime, strtotime($show->getDateStart() . $show->getTimeStart()));
-			$timeEnd += strtotime ("+15 minutes", strtotime($timeEnd));
-			// Assign time to paramenters
-			$show->setDateStart(date ('Y-m-d', $timeStart));
-			$show->setTimeStart(date ('H:i:s', $timeStart));
-			$show->setDateEnd(date ('Y-m-d', $timeEnd));
-			$show->setTimeEnd(date ('H:i:s', $timeEnd));
-		}
-
-		public function checkTime (Show $show) {
-			$existance = $this->getByCinemaId($show); // Get Shows That Belong To That Particular Cinema
-			$this->appendTime ($show);
-			$flag = 1;
-			if ($existance != null) {
-				foreach ($existance as $showsOnDB) {
-					if ( ($showsOnDB["date_start"] == $show->getDateStart()) ) {
-						if ( ($showsOnDB["time_start"] > $show->getTimeStart()) && ($showsOnDB["time_start"] > $show->getTimeEnd()) ) {
-							$flag *= 1;
-						}
-						else if ( ($showsOnDB["time_end"] < $show->getTimeStart()) && ($showsOnDB["time_end"] < $show->getTimeEnd()) ) {
-							$flag *= 1;
-						}
-						else {
-							$flag *= 0;
-						}
-					}
-				}
-			}
-			else if ($existance == null) {
-				$flag *= $this->checkPlace($show);
-			}
-			return $flag;
-		}
-		*/
 
 		public function getByMovieId(Show $show) {
 			try {
@@ -145,12 +91,11 @@
             }
             return $this->showList;
 		}
-
-		//PASAR A OBJ
-		public function deleteById ($id) {
+		
+		public function deleteById(Show $show) {
 			try {
 				$query = "CALL shows_deleteById(?)";
-				$parameters ["id"] = $id;
+				$parameters ["id"] = $show->getId();
 				$this->connection = Connection::GetInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 			}
@@ -159,8 +104,9 @@
 			}
 		}
 
-		//PASAR A OBJ
-		public function getById ($id) {
+		//No lo cambie para no romper algunas funciones en showcontroller
+		//Mas adelante pasar como parametro Movie $movie en lugar del id
+		public function getById($id) {
 			try {
 				$query = "CALL shows_getById(?)";
 				$parameters ["id"] = $id;
@@ -202,7 +148,7 @@
 			}
 		}
 
-		public function modify (Show $show) {
+		public function modify(Show $show) {
 			try {
 				$query = "CALL shows_modify(?, ?, ?, ?, ?, ?, ?)";
 				$parameters["id"] = $show->getId();
@@ -221,12 +167,14 @@
 			}
 		}
 
-		public function moviesOnShow () {
+		public function moviesOnShow() {
 			$this->getAll();
 			foreach ($this->showList as $show) {
 				$id = $show->getMovie()->getId();
 				if($this->getMoviesIdWithoutRepeating($id)) {
-					$movie = $this->movieDAO->getById($id);
+					$movieAux = new Movie();
+					$movieAux->setId($id);
+					$movie = $this->movieDAO->getById($movieAux);
 					array_push($this->moviesOnShowList, $movie);
 				}
 			}

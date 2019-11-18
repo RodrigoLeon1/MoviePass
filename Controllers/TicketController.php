@@ -16,7 +16,7 @@
             $this->ticketDAO = new TicketDAO();            
         }
 
-        public function Add($qr, $id_show, $id_purchase) {
+        public function add($qr, $id_show, $id_purchase) {
             $ticket = new Ticket();            
             $ticket->setQr($qr);
             $ticket->setIdPurchase($id_purchase);
@@ -25,7 +25,7 @@
             $show->setId($id_show);
             $ticket->setShow($show);
             
-            $this->ticketDAO->Add($ticket);			
+            $this->ticketDAO->add($ticket);			
         }
 
         private function validateTicketForm($id_purchase, $id_show) {
@@ -36,7 +36,7 @@
         }
 
         public function getByNumber($number) {
-            return $this->ticketDAO-GetByNumber($number);
+            return $this->ticketDAO-getByNumber($number);
         }
 
         public function getByShow($id) {

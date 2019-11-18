@@ -4,9 +4,10 @@
 
 	use \Exception as Exception;
 	use DAO\Connection as Connection;
+	use DAO\ICinemaDAO as ICinemaDAO;
     use Models\Cinema as Cinema;
 
-    class CinemaDAO {
+    class CinemaDAO implements ICinemaDAO {
 
         private $cinemaList = array();
 		private $connection;
@@ -43,12 +44,11 @@
 				throw $e;
 			}
 		}
-
-		// PASAR A OBJ
-		public function deleteById($id) {
+		
+		public function deleteById(Cinema $cinema) {
 			try {
 				$query = "CALL cinemas_deleteById(?)";
-				$parameters ["id"] = $id;
+				$parameters ["id"] = $cinema->getId();
 				$this->connection = Connection::GetInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 			}
@@ -56,12 +56,11 @@
 				throw $e;
 			}
 		}
-
-		// PASAR A OBJ
-		public function getById($id) {
+		
+		public function getById(Cinema $cinema) {
 			try {
 				$query = "CALL cinemas_getById(?)";
-				$parameters ["id"] = $id;
+				$parameters ["id"] = $cinema->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 				
@@ -105,8 +104,7 @@
 				throw $e;
 			}			
 		}
-
-        // MODIFICAR??????????'
+        
 		public function getShowsOfCinema(Cinema $cinema) {
 			try {								
 				$query = "CALL cinemas_hasShows(?)";

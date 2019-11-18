@@ -74,23 +74,27 @@
 			}
         }
 
-		public function remove($id) {	
-			/*
-			if($this->cinemaHasShows($id)) {				
+		public function remove($id) {				
+			if($this->cinemaRoomHasShows($id)) {								
 				return $this->listCinemaRoomPath(NULL, CINEMA_ROOM_HAS_SHOWS, $id);
-			} else {				
+			} else {								
+				$cinemaRoom = new CinemaRoom();
+				$cinemaRoom->setId($id);
+				
+				$this->cinemaRoomDAO->deleteById($cinemaRoom);
+				return $this->listCinemaRoomPath(CINEMA_ROOM_REMOVE, NULL, NULL);
 			}
-			*/
-			$this->cinemaRoomDAO->deleteById($id);
-			return $this->listCinemaRoomPath(CINEMA_ROOM_REMOVE, NULL, NULL);
 		}
 
 		public function forceDelete($id) {
-			$this->cinemaRoomDAO->deleteById($id);
+			$cinemaRoom = new CinemaRoom();
+			$cinemaRoom->setId($id);
+
+			$this->cinemaRoomDAO->deleteById($cinemaRoom);
 			return $this->listCinemaRoomPath(CINEMA_ROOM_REMOVE, NULL, NULL);
 		}
 
-		private function cinemaHasShows($id) {
+		private function cinemaRoomHasShows($id) {
 			$cinemaRoom = new CinemaRoom();
 			$cinemaRoom->setId($id);
 
@@ -98,7 +102,9 @@
 		}
 
 		public function modifyById($id) {
-			$cinemaRoom = $this->cinemaRoomDAO->getById($id);
+			$cinemaRoom = new CinemaRoom();
+			$cinemaRoom->setId($id);
+			$cinemaRoom = $this->cinemaRoomDAO->getById($cinemaRoom);
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {

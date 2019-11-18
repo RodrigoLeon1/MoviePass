@@ -139,14 +139,14 @@ BEGIN
 END$$
 DELIMITER ;
 
-
 DROP procedure IF EXISTS `cinemas_hasShows`;
 DELIMITER $$
 CREATE PROCEDURE cinemas_hasShows(IN id_cinema INT)
 BEGIN
 	SELECT *
 	FROM cinemas
-	INNER JOIN shows ON cinemas.id = shows.FK_id_cinema
+	INNER JOIN cinema_rooms ON cinemas.id = cinema_rooms.FK_id_cinema
+	INNER JOIN shows ON cinema_rooms.id = shows.FK_id_cinemaRoom
 	WHERE cinemas.id = id_cinema;
 END$$
 

@@ -4,11 +4,12 @@
 
 	use \Exception as Exception;
 	use DAO\Connection as Connection;
+	use DAO\ICinemaRoomDAO as ICinemaRoomDAO;
 	use Models\CinemaRoom as CinemaRoom;
 	use Models\Cinema as Cinema;
 	use Models\Show as Show;
 
-    class CinemaRoomDAO {
+    class CinemaRoomDAO implements ICinemaRoomDAO {
 
         private $cinemaRoomList = array();
 		private $connection;
@@ -56,12 +57,11 @@
 				throw $e;
 			}
 		}
-
-		// PASAR A OBJ
-		public function deleteById($id) {
+		
+		public function deleteById(CinemaRoom $cinemaRoom) {
 			try {
 				$query = "CALL cinemaRooms_deleteById(?)";
-				$parameters ["id"] = $id;
+				$parameters ["id"] = $cinemaRoom->getId();
 				$this->connection = Connection::GetInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 			}
@@ -69,12 +69,11 @@
 				throw $e;
 			}
 		}
-
-		// PASA A OBJ
-		public function getById($id) {
+		
+		public function getById(CinemaRoom $cinemaRoom) {
 			try {
 				$query = "CALL cinemaRooms_getById(?)";
-				$parameters ["id"] = $id;
+				$parameters ["id"] = $cinemaRoom->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 				
@@ -137,7 +136,7 @@
 			}			
 		}
 
-		public function getShowsOfCinema(CinemaRoom $cinemaRoom) {
+		public function getShowsOfCinemaRoom(CinemaRoom $cinemaRoom) {
 			try {								
 				$query = "CALL cinemaRooms_hasShows(?)";
 				$parameters["id"] = $cinemaRoom->getId();

@@ -67,13 +67,21 @@
 			if($this->cinemaHasShows($id)) {				
 				return $this->listCinemaPath(NULL, CINEMA_HAS_SHOWS, $id);
 			} else {
-				$this->cinemaDAO->deleteById($id);
+				
+				$cinema = new Cinema();
+				$cinema->setId($id);
+				$this->cinemaDAO->deleteById($cinema);
+
 				return $this->listCinemaPath(CINEMA_REMOVE, NULL, NULL);
 			}
 		}
 
 		public function forceDelete($id) {
-			$this->cinemaDAO->deleteById($id);
+
+			$cinema = new Cinema();
+			$cinema->setId($id);
+			$this->cinemaDAO->deleteById($cinema);
+
 			return $this->listCinemaPath(CINEMA_REMOVE, NULL, NULL);
 		}
 
@@ -85,7 +93,11 @@
 		}
 
 		public function modifyById($id) {
-			$cinema = $this->cinemaDAO->getById($id);
+			
+			$cinemaAux = new Cinema();
+			$cinemaAux->setId($id);
+
+			$cinema = $this->cinemaDAO->getById($cinemaAux);
 			if ($_SESSION["loggedUser"]) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {

@@ -4,9 +4,10 @@
 
 	use \Exception as Exception;
 	use DAO\Connection as Connection;
+	use DAO\IMovieDAO as IMovieDAO;
 	use Models\Movie as Movie;
 
-    class MovieDAO {
+    class MovieDAO implements IMovieDAO {
 
 		private $movieList = array();		
 		private $upcoming = array();
@@ -121,7 +122,7 @@
             }
 		}
 
-		public function getRunTimeMovieFromDAO () {
+		public function getRunTimeMovieFromDAO() {
 			try {
 				$query = "SELECT id FROM " . $this->tableName;
 				$this->connection = Connection::getInstance();
@@ -200,12 +201,11 @@
 
 			return $movies;
 		}
-
-		// PASAR A OBJ
-		public function getById($id) {
+		
+		public function getById(Movie $movie) {
 			try {
 				$query = "CALL movies_getById(?)";
-				$parameters ["id"] = $id;
+				$parameters ["id"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 				$movie = new Movie();
@@ -250,9 +250,9 @@
 				throw $e;
 			}
 		}		
-
-		// PASAR A OBJ
-		public function existMovie($movie) {
+		
+		/*
+		public function existMovie(Movie $movie) {
 			try {
 				$query = "CALL movies_getById(?)";
 				$parameters ["id"] = $movie->getId();
@@ -262,7 +262,7 @@
 			catch (Exception $e) {
 				throw $e;
 			}
-		}
+		}*/
 
 		public function deleteById(Movie $movie) {
 			try {				

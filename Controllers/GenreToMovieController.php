@@ -20,7 +20,9 @@
     
         //Genre
         public function genreByName($name) {
-            return $this->genreDAO->getByName($name);
+            $genre = new Genre();
+            $genre->setName($name);
+            return $this->genreDAO->getByName($genre);
         }
 
         public function genreById($id) {
@@ -72,8 +74,10 @@
             return $this->genresToMoviesDAO->getGenresOfMovie($movie);
         }
 
-        public function getNameOfGenre($id) {            
-            return $this->genresDAO->getNameGenre($id);
+        public function getNameOfGenre($id) {                     
+            $genre = new Genre();
+            $genre->setIdGenre($id);
+            return $this->genresDAO->getNameGenre($genre);
         }
 
 

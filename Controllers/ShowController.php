@@ -144,7 +144,9 @@
 		}
 
 		public function remove($id) {
-			$this->showDAO->deleteById($id);
+			$show = new Show();
+			$show->setId($id);
+			$this->showDAO->deleteById($show);
 			return $this->listShowsPath(SHOW_REMOVE);
 		}
 

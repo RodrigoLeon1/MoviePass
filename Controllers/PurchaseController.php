@@ -35,10 +35,10 @@
             $purchase->setDate($date);
             $purchase->setTotal($total);
             $purchase->setDni($dni);
-            $id_purchase = $this->purchaseDAO->Add($purchase);
+            $id_purchase = $this->purchaseDAO->add($purchase);
             
             for($i=0; $i<$ticket_quantity; $i++) {
-                $ticketController->Add(0, $id_show, $id_purchase);
+                $ticketController->add(0, $id_show, $id_purchase);
             }                            
 
 			return $this->purchaseSuccess($id_purchase);
@@ -69,7 +69,7 @@
         public function purchaseSuccess($id) {
             if(isset($_SESSION["loggedUser"])) {  
                 $title = 'Purchase';
-                $purchase = $this->purchaseDAO->GetById($id);
+                $purchase = $this->purchaseDAO->getById($id);
 
                 require_once(VIEWS_PATH . "header.php");			            
                 require_once(VIEWS_PATH . "navbar.php");            

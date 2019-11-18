@@ -4,9 +4,10 @@
 
 	use \Exception as Exception;
 	use DAO\Connection as Connection;
+	use DAO\IRoleDAO as IRoleDAO;
 	use Models\Role as Role;
 
-	class RoleDAO {
+	class RoleDAO implements IRoleDAO {
 
 		private $roleList = array();
 		private $connection;

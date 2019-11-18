@@ -4,11 +4,12 @@
 
 	use \Exception as Exception;
 	use DAO\Connection as Connection;
+	use DAO\IUserDAO as IUserDAO;
     use Models\User as User;
 	use DAO\ProfileUserDAO as ProfileUserDAO;
 	use DAO\RoleDAO as RoleDAO;
 
-    class UserDAO {
+    class UserDAO implements IUserDAO  {
 
 		private $userList = array();
 		private $connection;
