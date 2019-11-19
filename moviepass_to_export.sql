@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-11-2019 a las 22:22:56
+-- Tiempo de generación: 19-11-2019 a las 01:05:44
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.9
 
@@ -73,6 +73,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemaRooms_modify` (IN `id` INT, I
 	UPDATE cinema_rooms SET cinema_rooms.name = name, cinema_rooms.address = address,cinema_rooms.capacity = capacity, cinema_rooms.price = price  WHERE cinema_rooms.id = id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemas_add` (IN `name` VARCHAR(255), IN `address` VARCHAR(255))  BEGIN
+	INSERT INTO cinemas (
+			cinemas.name,
+			cinemas.address
+	)
+    VALUES
+        (name, address);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemas_deleteById` (IN `id` INT)  BEGIN
 	DELETE FROM `cinemas` WHERE `cinemas`.`id` = id;
 END$$
@@ -101,12 +110,32 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemas_modify` (IN `id` INT, IN `n
 	UPDATE cinemas SET cinemas.name = name, cinemas.address = address WHERE cinemas.id = id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cinema_rooms_add` (IN `name` VARCHAR(255), IN `price` INT, IN `capacity` INT, IN `id_cinema` INT)  BEGIN
+	INSERT INTO cinema_rooms (
+			cinema_rooms.name,
+			cinema_rooms.price,
+			cinema_rooms.capacity,
+			cinema_rooms.FK_id_cinema
+	)
+    VALUES
+        (name, price, capacity, id_cinema);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `genreMovie_add` (IN `FK_gxm_id_genre` INT, IN `FK_gxm_id_movie` INT)  BEGIN
 	INSERT INTO genres_x_movies (
 			genres_x_movies.FK_gxm_id_genre,
 			genres_x_movies.FK_gxm_id_movie)
     VALUES
         (FK_gxm_id_genre, FK_gxm_id_movie);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_add` (IN `FK_id_genre` INT, IN `FK_id_movie` INT)  BEGIN
+	INSERT INTO genres_x_movies (
+			genres_x_movies.FK_id_genre,
+			genres_x_movies.FK_id_movie
+	)
+    VALUES
+        (FK_id_genre, FK_id_movie);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getByDate` (IN `date` INT)  BEGIN
@@ -191,6 +220,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getGenresOfShows` () 
 	INNER JOIN shows ON shows.FK_id_movie = genres_x_movies.FK_id_movie						
 	WHERE (genres_x_movies.FK_id_movie = shows.FK_id_movie)
 	GROUP BY genres.name;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `genres_add` (IN `id` INT, IN `name` VARCHAR(255))  BEGIN
+	INSERT INTO genres (
+			genres.id,
+			genres.name
+	)
+    VALUES
+        (id, name);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `genres_GetAll` ()  BEGIN
@@ -310,6 +348,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_hasShows` (IN `id_movie` INT
 	WHERE movies.id = id_movie;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `profile_users_add` (IN `dni` INT, IN `first_name` VARCHAR(255), IN `last_name` VARCHAR(255))  BEGIN
+	INSERT INTO profile_users (
+			profile_users.dni,
+			profile_users.first_name,
+			profile_users.last_name
+	)
+    VALUES
+        (dni, first_name, last_name);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_Add` (IN `ticket_quantity` INT, IN `discount` INT, IN `date` DATE, IN `total` INT, IN `dni_user` INT)  BEGIN
     INSERT INTO purchases(purchases.ticket_quantity, purchases.discount, purchases.date, purchases.total, purchases.FK_dni)
     VALUES (ticket_quantity, discount, date, total, dni_user);	
@@ -347,10 +395,28 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_GetById` (IN `id` INT)  B
     WHERE(purchases.id_purchase = id);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `roles_getAll` ()  BEGIN
+	SELECT *
+    FROM roles;    
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `roles_getById` (IN `id` INT)  BEGIN
 	SELECT roles.id, roles.description
     FROM roles
     WHERE (roles.id = id);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_add` (IN `FK_id_cinemaRoom` INT, IN `FK_id_movie` INT, IN `date_start` DATE, IN `time_start` DATE, IN `date_end` DATE, IN `time_end` DATE)  BEGIN
+	INSERT INTO shows (
+			shows.FK_id_cinemaRoom,
+			shows.FK_id_movie,
+			shows.date_start,
+			shows.time_start,
+			shows.date_end,
+			shows.time_end
+	)
+    VALUES
+        (FK_id_cinemaRoom, FK_id_movie, date_start, time_start, date_end, time_end);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_deleteById` (IN `id` INT)  BEGIN
@@ -708,7 +774,9 @@ INSERT INTO `genres_x_movies` (`FK_id_genre`, `FK_id_movie`) VALUES
 (10749, 515195),
 (12, 157336),
 (18, 157336),
-(878, 157336);
+(878, 157336),
+(9648, 77),
+(53, 77);
 
 -- --------------------------------------------------------
 
@@ -739,6 +807,7 @@ CREATE TABLE `movies` (
 --
 
 INSERT INTO `movies` (`id`, `popularity`, `vote_count`, `video`, `poster_path`, `adult`, `backdrop_path`, `original_language`, `original_title`, `title`, `vote_average`, `overview`, `release_date`, `runtime`, `genre_ids`) VALUES
+(77, '15.923', '8417', '', '/fQMSaP88cf1nz4qwuNEEFtazuDM.jpg', '', '/q2CtXYjp9IlnfBcPktNkBPsuAEO.jpg', 'en', 'Memento', 'Memento', '8.2', 'Leonard Shelby is tracking down the man who raped and murdered his wife. The difficulty of locating his wife\'s killer, however, is compounded by the fact that he suffers from a rare, untreatable form of short-term memory loss. Although he can recall detai', '2000-10-11', 113, NULL),
 (157336, '41.105', '19972', '', '/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg', '', '/xu9zaAevzQ5nnrsXN6JcahLnG4i.jpg', 'en', 'Interstellar', 'Interstellar', '8.3', 'Interstellar chronicles the adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.', '2014-11-05', 169, 0),
 (290859, '315.137', '159', '', '/vqzNJRH4YyquRiWxCCOH0aXggHI.jpg', '', '/a6cDxdwaQIFjSkXf7uskg78ZyTq.jpg', 'en', 'Terminator: Dark Fate', 'Terminator: Dark Fate', '6.6', 'More than two decades have passed since Sarah Connor prevented Judgment Day, changed the future, and re-wrote the fate of the human race. Dani Ramos is living a simple life in Mexico City with her brother and father when a highly advanced and deadly new T', '2019-11-01', 128, 0),
 (295151, '95.424', '125', '', '/tXTccijjTnpXWFEMaHC1gp59cNc.jpg', '', '/9REB0BCTk2RueTj5PuELYRYJN5e.jpg', 'en', 'Let It Snow', 'Let It Snow', '6.3', 'When a huge blizzard (that doesn\'t show signs of stopping) hits, Gracetown is completely snowed in. But even though it\'s cold outside, things are heating up inside, proving that Christmas is magical when it comes to love.', '2019-11-08', 93, 0),
@@ -777,7 +846,9 @@ CREATE TABLE `profile_users` (
 
 INSERT INTO `profile_users` (`dni`, `first_name`, `last_name`) VALUES
 (0, 'user', 'user'),
+(2, 'x', 'x'),
 (404040, 'Mr pepe', 'Peposo'),
+(615124, 'Rodrigo', 'Leon'),
 (11111111, 'Rodrigo', 'Leon');
 
 -- --------------------------------------------------------
@@ -824,7 +895,9 @@ INSERT INTO `purchases` (`id_purchase`, `ticket_quantity`, `discount`, `date`, `
 (22, 3, 0, '2019-11-17', 45, 11111111),
 (23, 10, 0, '2019-11-17', 500, 11111111),
 (24, 4, 0, '2019-11-18', 60, 11111111),
-(25, 3, 0, '2019-11-18', 90, 11111111);
+(25, 3, 0, '2019-11-18', 90, 11111111),
+(26, 2, 0, '2019-11-18', 60, 11111111),
+(27, 5, 0, '2019-11-19', 150, 615124);
 
 -- --------------------------------------------------------
 
@@ -870,7 +943,9 @@ INSERT INTO `shows` (`id`, `FK_id_cinemaRoom`, `FK_id_movie`, `date_start`, `tim
 (2, 12, 521777, '2020-01-01', '00:10:00', '2020-01-01', '01:54:00'),
 (3, 12, 480105, '2019-12-28', '15:00:00', '2019-12-28', '16:45:00'),
 (5, 11, 475557, '2019-12-24', '21:00:00', '2019-12-24', '23:17:00'),
-(6, 14, 475557, '2019-12-31', '13:00:00', '2019-12-31', '15:17:00');
+(6, 14, 475557, '2019-12-31', '13:00:00', '2019-12-31', '15:17:00'),
+(9, 13, 338967, '2019-12-31', '00:00:00', '2019-12-31', '00:00:00'),
+(10, 13, 77, '2019-12-26', '00:00:00', '2019-12-26', '00:00:00');
 
 -- --------------------------------------------------------
 
@@ -1089,7 +1164,14 @@ INSERT INTO `tickets` (`ticket_number`, `QR`, `FK_id_purchase`, `FK_id_show`) VA
 (229, 0, 24, 6),
 (230, 0, 25, 1),
 (231, 0, 25, 1),
-(232, 0, 25, 1);
+(232, 0, 25, 1),
+(233, 0, 26, 1),
+(234, 0, 26, 1),
+(235, 0, 27, 1),
+(236, 0, 27, 1),
+(237, 0, 27, 1),
+(238, 0, 27, 1),
+(239, 0, 27, 1);
 
 -- --------------------------------------------------------
 
@@ -1199,31 +1281,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `cinemas`
 --
 ALTER TABLE `cinemas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `cinema_rooms`
 --
 ALTER TABLE `cinema_rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id_purchase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_purchase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT de la tabla `shows`
 --
 ALTER TABLE `shows`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=233;
+  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=240;
 
 --
 -- Restricciones para tablas volcadas
