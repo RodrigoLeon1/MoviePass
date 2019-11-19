@@ -68,15 +68,18 @@
             $this->connection = Connection::GetInstance();
             $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
             foreach($results as $row) {				
+				
 				$movie = new Movie();
 				$movie->setId($row["movies_id"]);
 				$movie->setTitle($row["movies_title"]);
+
+				$cinema = new Cinema();
+				$cinema->setId($row["cinema_id"]);
+				$cinema->setName($row["cinema_name"]);
+				
 				$cinemaRoom = new CinemaRoom();
 				$cinemaRoom->setId($row["cinema_rooms_id"]);
-				$cinemaRoom->setName($row["cinema_rooms_name"]);
-				
-				$cinema = new Cinema();
-				$cinema->setName($row["cinema_name"]);
+				$cinemaRoom->setName($row["cinema_rooms_name"]);	
 				$cinemaRoom->setCinema($cinema);
 				
 				$show = new Show();

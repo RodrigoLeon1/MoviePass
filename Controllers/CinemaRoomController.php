@@ -2,10 +2,11 @@
 
     namespace Controllers;
 
-    use DAO\CinemaRoomDAO as cinemaRoomDAO;
+    use DAO\CinemaRoomDAO as CinemaRoomDAO;
 	use Models\CinemaRoom as CinemaRoom;
 	use Models\Cinema as Cinema;
 	use Models\Show as Show;
+	use Controllers\UserController as UserController;   
 
     class CinemaRoomController {
 		
@@ -46,7 +47,7 @@
         }		
 
         public function addCinemaRoomPath($success = "", $alert = "") {
-			if ($_SESSION["loggedUser"]) {
+			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
 
@@ -57,11 +58,14 @@
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-cinema-room-add.php");
 				}				
-			}
+			} else {
+                $userController = new UserController();
+                return $userController->userPath();
+            }
         }
 
 		public function listCinemaRoomPath($success = "", $alert = "", $cinemaId = "") {
-			if ($_SESSION["loggedUser"]) {
+			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];								
 				if($admin->getRole() == 1) {
 					
@@ -71,7 +75,10 @@
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-cinema-room-list.php");
 				}
-			}
+			} else {
+                $userController = new UserController();
+                return $userController->userPath();
+            }
         }
 
 		public function remove($id) {				
@@ -105,14 +112,17 @@
 			$cinemaRoom = new CinemaRoom();
 			$cinemaRoom->setId($id);
 			$cinemaRoom = $this->cinemaRoomDAO->getById($cinemaRoom);
-			if ($_SESSION["loggedUser"]) {
+			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-cinema-modify.php");
 				}
-			}
+			} else {
+                $userController = new UserController();
+                return $userController->userPath();
+            }
 		}
 
 		public function modify($id, $name, $capacity, $price) {			
@@ -132,7 +142,7 @@
 		}
 		
 		public function sales() {
-			if ($_SESSION["loggedUser"]) {
+			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
 					
@@ -142,9 +152,22 @@
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-cinema-room-sales.php");
 				}
-			}
+			} else {
+                $userController = new UserController();
+                return $userController->userPath();
+            }
+		}
+		
+		public function getAllCinemaRooms() {
+			return $this->cinemaRoomDAO->getAll();
 		}
 
+		public function getCinemaRoomById($id) {
+			$cinemaRoom = new CinemaRoom();
+			$cinemaRoom->setId($id);
+
+			return $this->cinemaRoomDAO->getById($cinemaRoom);
+		}
     }
 
  ?>

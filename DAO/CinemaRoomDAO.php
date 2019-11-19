@@ -83,6 +83,12 @@
 					$cinemaRoom->setName($row["name"]);
 					$cinemaRoom->setCapacity($row["capacity"]);
 					$cinemaRoom->setPrice($row["price"]);
+
+					$cinema = new Cinema();
+					$cinema->setId($row["FK_id_cinema"]);
+
+					$cinemaRoom->setCinema($cinema);
+
 				}
 				return $cinemaRoom;
 			}

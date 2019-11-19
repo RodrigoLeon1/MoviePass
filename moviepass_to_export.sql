@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-11-2019 a las 15:31:00
+-- Tiempo de generación: 19-11-2019 a las 18:33:33
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.9
 
@@ -407,7 +407,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `roles_getById` (IN `id` INT)  BEGIN
     WHERE (roles.id = id);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_add` (IN `FK_id_cinemaRoom` INT, IN `FK_id_movie` INT, IN `date_start` DATE, IN `time_start` DATE, IN `date_end` DATE, IN `time_end` DATE)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_add` (IN `FK_id_cinemaRoom` INT, IN `FK_id_movie` INT, IN `date_start` DATE, IN `time_start` TIME, IN `date_end` DATE, IN `time_end` TIME)  BEGIN
 	INSERT INTO shows (
 			shows.FK_id_cinemaRoom,
 			shows.FK_id_movie,
@@ -434,7 +434,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_getAll` ()  BEGIN
 			movies.title AS movies_title,
 			cinema_rooms.id AS cinema_rooms_id,
 			cinema_rooms.name AS cinema_rooms_name,
-			cinemas.name AS cinema_name
+			cinemas.name AS cinema_name,
+			cinemas.id AS cinema_id
 	FROM `shows`
 	INNER JOIN movies ON movies.id = shows.FK_id_movie
 	INNER JOIN cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
@@ -777,7 +778,10 @@ INSERT INTO `genres_x_movies` (`FK_id_genre`, `FK_id_movie`) VALUES
 (18, 157336),
 (878, 157336),
 (9648, 77),
-(53, 77);
+(53, 77),
+(28, 14161),
+(12, 14161),
+(878, 14161);
 
 -- --------------------------------------------------------
 
@@ -809,6 +813,7 @@ CREATE TABLE `movies` (
 
 INSERT INTO `movies` (`id`, `popularity`, `vote_count`, `video`, `poster_path`, `adult`, `backdrop_path`, `original_language`, `original_title`, `title`, `vote_average`, `overview`, `release_date`, `runtime`, `genre_ids`) VALUES
 (77, '15.923', '8417', '', '/fQMSaP88cf1nz4qwuNEEFtazuDM.jpg', '', '/q2CtXYjp9IlnfBcPktNkBPsuAEO.jpg', 'en', 'Memento', 'Memento', '8.2', 'Leonard Shelby is tracking down the man who raped and murdered his wife. The difficulty of locating his wife\'s killer, however, is compounded by the fact that he suffers from a rare, untreatable form of short-term memory loss. Although he can recall detai', '2000-10-11', 113, NULL),
+(14161, '20.281', '8068', '', '/zf1idF1ys8zuaAzEEzghre5A4m3.jpg', '', '/ywxrdkfbr8Dg3SBW2gi4kC59qOb.jpg', 'en', '2012', '2012', '5.7', 'Dr. Adrian Helmsley, part of a worldwide geophysical team investigating the effect on the earth of radiation from unprecedented solar storms, learns that the earth\'s core is heating up. He warns U.S. President Thomas Wilson that the crust of the earth is ', '2009-10-10', 158, NULL),
 (157336, '41.105', '19972', '', '/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg', '', '/xu9zaAevzQ5nnrsXN6JcahLnG4i.jpg', 'en', 'Interstellar', 'Interstellar', '8.3', 'Interstellar chronicles the adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.', '2014-11-05', 169, 0),
 (290859, '315.137', '159', '', '/vqzNJRH4YyquRiWxCCOH0aXggHI.jpg', '', '/a6cDxdwaQIFjSkXf7uskg78ZyTq.jpg', 'en', 'Terminator: Dark Fate', 'Terminator: Dark Fate', '6.6', 'More than two decades have passed since Sarah Connor prevented Judgment Day, changed the future, and re-wrote the fate of the human race. Dani Ramos is living a simple life in Mexico City with her brother and father when a highly advanced and deadly new T', '2019-11-01', 128, 0),
 (295151, '95.424', '125', '', '/tXTccijjTnpXWFEMaHC1gp59cNc.jpg', '', '/9REB0BCTk2RueTj5PuELYRYJN5e.jpg', 'en', 'Let It Snow', 'Let It Snow', '6.3', 'When a huge blizzard (that doesn\'t show signs of stopping) hits, Gracetown is completely snowed in. But even though it\'s cold outside, things are heating up inside, proving that Christmas is magical when it comes to love.', '2019-11-08', 93, 0),
@@ -898,7 +903,8 @@ INSERT INTO `purchases` (`id_purchase`, `ticket_quantity`, `discount`, `date`, `
 (24, 4, 0, '2019-11-18', 60, 11111111),
 (25, 3, 0, '2019-11-18', 90, 11111111),
 (26, 2, 0, '2019-11-18', 60, 11111111),
-(27, 5, 0, '2019-11-19', 150, 615124);
+(27, 5, 0, '2019-11-19', 150, 615124),
+(28, 4, 0, '2019-11-19', 120, 11111111);
 
 -- --------------------------------------------------------
 
@@ -940,13 +946,10 @@ CREATE TABLE `shows` (
 --
 
 INSERT INTO `shows` (`id`, `FK_id_cinemaRoom`, `FK_id_movie`, `date_start`, `time_start`, `date_end`, `time_end`) VALUES
-(1, 12, 480105, '2019-12-31', '23:59:00', '2020-01-01', '01:44:00'),
-(2, 12, 521777, '2020-01-01', '00:10:00', '2020-01-01', '01:54:00'),
-(3, 12, 480105, '2019-12-28', '15:00:00', '2019-12-28', '16:45:00'),
-(5, 11, 475557, '2019-12-24', '21:00:00', '2019-12-24', '23:17:00'),
-(6, 14, 475557, '2019-12-31', '13:00:00', '2019-12-31', '15:17:00'),
-(9, 13, 338967, '2019-12-31', '00:00:00', '2019-12-31', '00:00:00'),
-(10, 13, 77, '2019-12-26', '00:00:00', '2019-12-26', '00:00:00');
+(24, 13, 14161, '2019-12-28', '10:10:00', '2019-12-28', '13:03:00'),
+(25, 13, 14161, '2019-12-28', '15:15:00', '2019-12-28', '18:08:00'),
+(26, 14, 14161, '2019-12-28', '10:25:00', '2019-12-28', '13:18:00'),
+(37, 11, 14161, '2019-12-28', '17:30:00', '2019-12-28', '20:23:00');
 
 -- --------------------------------------------------------
 
@@ -960,219 +963,6 @@ CREATE TABLE `tickets` (
   `FK_id_purchase` int(11) NOT NULL,
   `FK_id_show` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `tickets`
---
-
-INSERT INTO `tickets` (`ticket_number`, `QR`, `FK_id_purchase`, `FK_id_show`) VALUES
-(33, 0, 12, 5),
-(34, 0, 12, 5),
-(35, 0, 12, 5),
-(36, 0, 13, 5),
-(37, 0, 13, 5),
-(38, 0, 13, 5),
-(39, 0, 14, 5),
-(40, 0, 14, 5),
-(41, 0, 14, 5),
-(42, 0, 15, 5),
-(43, 0, 15, 5),
-(44, 0, 15, 5),
-(45, 0, 16, 5),
-(46, 0, 16, 5),
-(47, 0, 16, 5),
-(48, 0, 17, 2),
-(49, 0, 17, 2),
-(50, 0, 17, 2),
-(51, 0, 18, 1),
-(52, 0, 18, 1),
-(53, 0, 19, 3),
-(54, 0, 20, 3),
-(55, 0, 20, 3),
-(56, 0, 20, 3),
-(57, 0, 20, 3),
-(58, 0, 20, 3),
-(59, 0, 20, 3),
-(60, 0, 20, 3),
-(61, 0, 20, 3),
-(62, 0, 20, 3),
-(63, 0, 20, 3),
-(64, 0, 20, 3),
-(65, 0, 20, 3),
-(66, 0, 20, 3),
-(67, 0, 20, 3),
-(68, 0, 20, 3),
-(69, 0, 20, 3),
-(70, 0, 20, 3),
-(71, 0, 20, 3),
-(72, 0, 20, 3),
-(73, 0, 20, 3),
-(74, 0, 20, 3),
-(75, 0, 20, 3),
-(76, 0, 20, 3),
-(77, 0, 20, 3),
-(78, 0, 20, 3),
-(79, 0, 20, 3),
-(80, 0, 20, 3),
-(81, 0, 20, 3),
-(82, 0, 20, 3),
-(83, 0, 20, 3),
-(84, 0, 20, 3),
-(85, 0, 20, 3),
-(86, 0, 20, 3),
-(87, 0, 20, 3),
-(88, 0, 20, 3),
-(89, 0, 20, 3),
-(90, 0, 20, 3),
-(91, 0, 20, 3),
-(92, 0, 20, 3),
-(93, 0, 20, 3),
-(94, 0, 20, 3),
-(95, 0, 20, 3),
-(96, 0, 20, 3),
-(97, 0, 20, 3),
-(98, 0, 20, 3),
-(99, 0, 20, 3),
-(100, 0, 20, 3),
-(101, 0, 20, 3),
-(102, 0, 20, 3),
-(103, 0, 20, 3),
-(104, 0, 20, 3),
-(105, 0, 20, 3),
-(106, 0, 20, 3),
-(107, 0, 20, 3),
-(108, 0, 20, 3),
-(109, 0, 20, 3),
-(110, 0, 20, 3),
-(111, 0, 20, 3),
-(112, 0, 20, 3),
-(113, 0, 20, 3),
-(114, 0, 20, 3),
-(115, 0, 20, 3),
-(116, 0, 20, 3),
-(117, 0, 20, 3),
-(118, 0, 20, 3),
-(119, 0, 20, 3),
-(120, 0, 20, 3),
-(121, 0, 20, 3),
-(122, 0, 20, 3),
-(123, 0, 20, 3),
-(124, 0, 20, 3),
-(125, 0, 20, 3),
-(126, 0, 20, 3),
-(127, 0, 20, 3),
-(128, 0, 20, 3),
-(129, 0, 20, 3),
-(130, 0, 20, 3),
-(131, 0, 20, 3),
-(132, 0, 20, 3),
-(133, 0, 20, 3),
-(134, 0, 20, 3),
-(135, 0, 20, 3),
-(136, 0, 20, 3),
-(137, 0, 20, 3),
-(138, 0, 20, 3),
-(139, 0, 20, 3),
-(140, 0, 20, 3),
-(141, 0, 20, 3),
-(142, 0, 20, 3),
-(143, 0, 20, 3),
-(144, 0, 20, 3),
-(145, 0, 20, 3),
-(146, 0, 20, 3),
-(147, 0, 20, 3),
-(148, 0, 20, 3),
-(149, 0, 20, 3),
-(150, 0, 20, 3),
-(151, 0, 20, 3),
-(152, 0, 20, 3),
-(153, 0, 20, 3),
-(154, 0, 20, 3),
-(155, 0, 20, 3),
-(156, 0, 20, 3),
-(157, 0, 20, 3),
-(158, 0, 20, 3),
-(159, 0, 20, 3),
-(160, 0, 20, 3),
-(161, 0, 20, 3),
-(162, 0, 20, 3),
-(163, 0, 20, 3),
-(164, 0, 20, 3),
-(165, 0, 20, 3),
-(166, 0, 20, 3),
-(167, 0, 20, 3),
-(168, 0, 20, 3),
-(169, 0, 20, 3),
-(170, 0, 20, 3),
-(171, 0, 20, 3),
-(172, 0, 20, 3),
-(173, 0, 20, 3),
-(174, 0, 20, 3),
-(175, 0, 20, 3),
-(176, 0, 20, 3),
-(177, 0, 20, 3),
-(178, 0, 20, 3),
-(179, 0, 20, 3),
-(180, 0, 20, 3),
-(181, 0, 20, 3),
-(182, 0, 20, 3),
-(183, 0, 20, 3),
-(184, 0, 20, 3),
-(185, 0, 20, 3),
-(186, 0, 20, 3),
-(187, 0, 20, 3),
-(188, 0, 20, 3),
-(189, 0, 20, 3),
-(190, 0, 20, 3),
-(191, 0, 20, 3),
-(192, 0, 20, 3),
-(193, 0, 20, 3),
-(194, 0, 20, 3),
-(195, 0, 20, 3),
-(196, 0, 20, 3),
-(197, 0, 20, 3),
-(198, 0, 20, 3),
-(199, 0, 20, 3),
-(200, 0, 20, 3),
-(201, 0, 20, 3),
-(202, 0, 20, 3),
-(203, 0, 20, 3),
-(204, 0, 20, 3),
-(205, 0, 20, 3),
-(206, 0, 20, 3),
-(207, 0, 20, 3),
-(208, 0, 20, 3),
-(209, 0, 20, 3),
-(210, 0, 20, 3),
-(211, 0, 20, 3),
-(212, 0, 20, 3),
-(213, 0, 22, 6),
-(214, 0, 22, 6),
-(215, 0, 22, 6),
-(216, 0, 23, 5),
-(217, 0, 23, 5),
-(218, 0, 23, 5),
-(219, 0, 23, 5),
-(220, 0, 23, 5),
-(221, 0, 23, 5),
-(222, 0, 23, 5),
-(223, 0, 23, 5),
-(224, 0, 23, 5),
-(225, 0, 23, 5),
-(226, 0, 24, 6),
-(227, 0, 24, 6),
-(228, 0, 24, 6),
-(229, 0, 24, 6),
-(230, 0, 25, 1),
-(231, 0, 25, 1),
-(232, 0, 25, 1),
-(233, 0, 26, 1),
-(234, 0, 26, 1),
-(235, 0, 27, 1),
-(236, 0, 27, 1),
-(237, 0, 27, 1),
-(238, 0, 27, 1),
-(239, 0, 27, 1);
 
 -- --------------------------------------------------------
 
@@ -1282,31 +1072,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `cinemas`
 --
 ALTER TABLE `cinemas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `cinema_rooms`
 --
 ALTER TABLE `cinema_rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id_purchase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_purchase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `shows`
 --
 ALTER TABLE `shows`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT de la tabla `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=240;
+  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=244;
 
 --
 -- Restricciones para tablas volcadas

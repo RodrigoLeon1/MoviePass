@@ -468,9 +468,9 @@ CREATE PROCEDURE shows_add (
 								IN FK_id_cinemaRoom INT,
 								IN FK_id_movie INT,
 								IN date_start DATE,
-								IN time_start DATE,
+								IN time_start TIME,
 								IN date_end DATE,
-								IN time_end DATE
+								IN time_end TIME
 							 )
 BEGIN
 	INSERT INTO shows (
@@ -499,7 +499,8 @@ BEGIN
 			movies.title AS movies_title,
 			cinema_rooms.id AS cinema_rooms_id,
 			cinema_rooms.name AS cinema_rooms_name,
-			cinemas.name AS cinema_name
+			cinemas.name AS cinema_name,
+			cinemas.id AS cinema_id
 	FROM `shows`
 	INNER JOIN movies ON movies.id = shows.FK_id_movie
 	INNER JOIN cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom

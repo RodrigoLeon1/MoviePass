@@ -2,17 +2,14 @@
 
     namespace Controllers;
 
-    use Models\Show as Show;
-    use DAO\ShowDAO as ShowDAO;
-	
-    use Models\CinemaRoom as CinemaRoom;
-	use DAO\CinemaRoomDAO as CinemaRoomDAO;
-	
-	
 	use Models\Movie as Movie;
-	use DAO\MovieDAO as MovieDAO;
-	
+    use Models\CinemaRoom as CinemaRoom;
+    use Models\Show as Show;
+    use DAO\ShowDAO as ShowDAO;	
 	use Controllers\CinemaController as CinemaController;
+	use Controllers\CinemaRoomController as CinemaRoomController;
+	use Controllers\MovieController as MovieController;
+	use Controllers\UserController as UserController;   
 
     class ShowController {
 
@@ -21,22 +18,23 @@
         private $movieDAO;
 
         public function __construct() {
-            $this->showDAO = new ShowDAO();
-            $this->cinemaRoomDAO = new CinemaRoomDAO();
-            $this->movieDAO = new MovieDAO();
+            $this->showDAO = new ShowDAO();            
         }
 
         public function add($id_cinemaRoom, $id_movie, $date, $time) {
 			if($this->validateShowForm($id_cinemaRoom, $id_movie, $date, $time)) {				
-				$movie = new Movie ();
+				$movie = new Movie();
 				$movie->setId($id_movie);
-				$cinemaRoom = new CinemaRoom();
-				$cinemaRoom->setId($id_cinemaRoom);
+
+				$cinemaRoomController = new CinemaRoomController();
+				$cinemaRoom = $cinemaRoomController->getCinemaRoomById($id_cinemaRoom);				
+				
 				$show = new Show();
 				$show->setDateStart($date);
 				$show->setTimeStart($time);
 				$show->setMovie($movie);
 				$show->setCinemaRoom($cinemaRoom);
+				
 				if ($this->checkTime($show)) {
 					$this->showDAO->add($show);
 					return $this->addShowPath(NULL, SHOW_ADDED, $id_cinemaRoom, $id_movie, $date, $time);
@@ -74,8 +72,11 @@
 		public function appendTime ($show) {
 			
 			// $movie = $this->movieDAO->getById($show->getMovie()->getId()); // Get Movie On Show In Order To Get It's Runtime
+			// $movie = $this->movieDAO->getById($show->getMovie());
+			
+			$movieController = new MovieController();
+			$movie = $movieController->getMovieById($show->getMovie());
 
-			$movie = $this->movieDAO->getById($show->getMovie());
 			//Modify Time Lapse
 			//$timeStart = strtotime ("-15 minutes", strtotime($show->getDateStart() . $show->getTimeStart()));
 			$plusRunTime = "+" . $movie->getRuntime() . " minutes";
@@ -89,18 +90,21 @@
 		}
 
 		public function checkPlace (Show $show) {
-			$shows = $this->showDAO->getAll();
-			if ($shows != null) {
-				foreach ($shows as $showList) {
-					if ($showList->getMovie()->getId() == $show->getMovie()->getId()) {
-						if ($showList->getDateStart() == $show->getDateStart()) {
-							return 0;
-						}
-					}
-				}
-			}
-			return 1;
-		}
+            $shows = $this->showDAO->getAll();
+            if ($shows != null) {
+                foreach ($shows as $showList) {
+                    if ($showList->getMovie()->getId() == $show->getMovie()->getId()) {
+                        if ($showList->getDateStart() == $show->getDateStart()) {
+                            if($showList->getCinemaRoom()->getCinema()->getId() != $show->getCinemaRoom()->getCinema()->getId()){
+                                return 0;
+                            }
+
+                        }
+                    }
+                }
+            }
+            return 1;
+        }
 
         private function validateShowForm($id_cinemaRoom, $id_movie, $day, $hour) {
             if(empty($id_cinemaRoom) || empty($id_movie) || empty($day) || empty($hour)) {
@@ -110,20 +114,27 @@
         }
 
         public function addShowPath($alert = "", $success = "", $id_cinemaRoom="", $id_movie="", $showDate="", $time="") {
-            if ($_SESSION["loggedUser"]) {
+            if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
+
 					$cinemas = new CinemaController();
 					$cinemas = $cinemas->getAllCinemas();					
 
-					$movies = $this->movieDAO->getAll();					
-					$cinemaRooms = $this->cinemaRoomDAO->getAll();
+					$movieController = new MovieController();
+					$movies = $movieController->moviesNowPlaying();		
+
+					$cinemaRoomController = new CinemaRoomController();					
+					$cinemaRooms = $cinemaRoomController->getAllCinemaRooms();
 					
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-show-add.php");
 				}
-			}
+			} else {
+                $userController = new UserController();
+                return $userController->userPath();
+            } 
 		}
 		
 		public function checkParameters($id_cinemaRoom, $id_movie, $date, $time) {
@@ -135,16 +146,18 @@
 		}
 
 		public function listShowsPath($success = "") {
-			if ($_SESSION["loggedUser"]) {
+			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
 					$shows = $this->showDAO->getAll();
-
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-show-list.php");
 				}
-			}
+			} else {
+                $userController = new UserController();
+                return $userController->userPath();
+            } 
 		}
 
 		public function remove($id) {
@@ -155,22 +168,29 @@
 		}
 
 		public function getById($id) {
-			if ($_SESSION["loggedUser"]) {
+			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
+
 					$show = $this->showDAO->getById($id);
-					$movies = $this->movieDAO->getAll();
-					$cinemaRooms = $this->cinemaRoomDAO->getAll();
+					
+					$movieController = new MovieController();
+					$movies = $movieController->moviesNowPlaying();						
+					
+					$cinemaRoomController = new CinemaRoomController();
+					$cinemaRooms = $cinemaRoomController->getAllCinemaRooms();
+
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-show-modify.php");
 				}
-			}
+			} else {
+                $userController = new UserController();
+                return $userController->userPath();
+            } 
 		}
 
 		public function getShowById($id) {
-			// $show = new Show();
-			// $show->setId($id);
 			$show = $this->showDAO->getById($id);					
 			return $show;							
 		}

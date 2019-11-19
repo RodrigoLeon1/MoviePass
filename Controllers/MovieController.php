@@ -7,6 +7,7 @@
     use Controllers\GenreToMovieController as GenreToMovieController;
     use Controllers\ShowController as ShowController;
     use Controllers\PurchaseController as PurchaseController;
+    use Controllers\UserController as UserController;   
 
     class MovieController {
 
@@ -130,7 +131,8 @@
                     require_once(VIEWS_PATH . "admin-movie-add.php");
                 }
 			} else {
-                return $this->userPath();
+                $userController = new UserController();
+                return $userController->userPath();
             }
         }        
         
@@ -185,7 +187,8 @@
                     require_once(VIEWS_PATH . "admin-movie-list.php");
                 }
 			} else {
-                return $this->userPath();
+                $userController = new UserController();
+                return $userController->userPath();
             }            
         }         
 
@@ -203,7 +206,7 @@
         }
     
         public function sales() {
-			if ($_SESSION["loggedUser"]) {
+			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				if($admin->getRole() == 1) {
 
@@ -213,8 +216,15 @@
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-movie-sales.php");
 				}
-			}
-		}
+			} else {
+                $userController = new UserController();
+                return $userController->userPath();
+            } 
+        }
+        
+        public function getMovieById(Movie $movie) {            
+            return $this->movieDAO->getById($movie);
+        }
 
     }
 

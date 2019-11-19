@@ -3,8 +3,8 @@
     namespace Controllers;    
 
     use Models\Show as Show;
-    use DAO\TicketDAO as TicketDAO;
     use Models\Ticket as Ticket;
+    use DAO\TicketDAO as TicketDAO;
     use Controllers\ShowController as ShowController;
     use Controllers\UserController as UserController;    
 
@@ -54,17 +54,18 @@
 
         // Tickes vendidos
         public function ticketsSoldPath() {
-			if ($_SESSION["loggedUser"]) {
+			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
-				if($admin->getRole() == 1) {
-                    
+				if($admin->getRole() == 1) {                
                     $tickets = $this->ticketDAO->getGeneralInfo();                                    
-
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-tickets-sold.php");
-				}
-			}
+                } 
+			} else {
+                $userController = new UserController();
+                return $userController->userPath();
+            }
         }
         
         public function getTicketsSold($id_show) {
