@@ -155,7 +155,7 @@
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
 				foreach($results as $row) {
 					$movie = new Movie();
-					$movie->setId($row["FK_id_movie"]);
+					$movie->setId($row["id"]);
 					$movie->setPopularity($row["popularity"]);
 					$movie->setVoteCount($row["vote_count"]);
 					$movie->setVideo($row["video"]);

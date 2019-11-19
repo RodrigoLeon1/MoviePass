@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-11-2019 a las 01:05:44
+-- Tiempo de generación: 19-11-2019 a las 15:31:00
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.9
 
@@ -138,26 +138,26 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_add` (IN `FK_id_genre
         (FK_id_genre, FK_id_movie);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getByDate` (IN `date` INT)  BEGIN
-	SELECT 	movies.id,
-			movies.popularity,
-			movies.vote_count,
-			movies.video,
-			movies.poster_path,
-			movies.adult,
-			movies.backdrop_path,
-			movies.original_language,
-			movies.original_title,
-			movies.genre_ids,
-			movies.title,
-			movies.vote_average,
-			movies.overview,
-			movies.release_date
-	FROM genres_x_movies
-	INNER JOIN movies ON FK_id_movie = movies.id 
-	INNER JOIN shows ON movies.id = shows.FK_id_movie
-	WHERE (shows.date_start = date)
-	GROUP BY movies.id;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getByDate` (IN `date_show` DATE)  BEGIN
+    SELECT     movies.id,
+            movies.popularity,
+            movies.vote_count,
+            movies.video,
+            movies.poster_path,
+            movies.adult,
+            movies.backdrop_path,
+            movies.original_language,
+            movies.original_title,
+            movies.genre_ids,
+            movies.title,
+            movies.vote_average,
+            movies.overview,
+            movies.release_date
+    FROM genres_x_movies
+    INNER JOIN movies ON FK_id_movie = movies.id 
+    INNER JOIN shows ON movies.id = shows.FK_id_movie
+    WHERE (shows.date_start = date_show)
+    GROUP BY movies.id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getByGenre` (IN `id_genre` INT)  BEGIN
@@ -183,25 +183,26 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getByGenre` (IN `id_g
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getByGenreAndDate` (IN `id_genre` INT, IN `date_show` DATE)  BEGIN
-	SELECT 	movies.id,
-			movies.popularity,
-			movies.vote_count,
-			movies.video,
-			movies.poster_path,
-			movies.adult,
-			movies.backdrop_path,
-			movies.original_language,
-			movies.original_title,
-			movies.genre_ids,
-			movies.title,
-			movies.vote_average,
-			movies.overview,
-			movies.release_date
-	FROM genres_x_movies
-	INNER JOIN movies ON FK_id_movie = movies.id 
-	INNER JOIN shows ON movies.id = shows.FK_id_movie
-	WHERE (FK_id_genre = id_genre AND shows.date_start = date_show)
-	GROUP BY movies.id;
+    SELECT     movies.id,
+            movies.popularity,
+            movies.vote_count,
+            movies.video,
+            movies.poster_path,
+            movies.adult,
+            movies.backdrop_path,
+            movies.original_language,
+            movies.original_title,
+            movies.genre_ids,
+            movies.title,
+            movies.vote_average,
+            movies.overview,
+            movies.release_date,
+            movies.runtime
+    FROM genres_x_movies
+    INNER JOIN movies ON FK_id_movie = movies.id 
+    INNER JOIN shows ON movies.id = shows.FK_id_movie
+    WHERE (FK_id_genre = id_genre AND shows.date_start = date_show)
+    GROUP BY movies.id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getGenresOfMovie` (IN `id_movie` INT)  BEGIN

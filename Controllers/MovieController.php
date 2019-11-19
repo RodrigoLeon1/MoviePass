@@ -96,7 +96,6 @@
                 $nameGenre = $genreMovieController->getNameOfGenre($id);            
                 $title = 'Now Playing - ' . $nameGenre . ' - ' . $date;
                 $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);                                         
-
                 return (!empty($movies)) ? $this->nowPlaying($movies, $title) : $this->nowPlaying($movies, $title, MOVIES_NULL);
                 
             } else {                                
