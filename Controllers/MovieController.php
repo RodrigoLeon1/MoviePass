@@ -138,8 +138,8 @@
         public function add($id) {
             $movie = new Movie();
             $movie->setId($id);                        
-            // if($this->movieDAO->existMovie($movie) == NULL) {         
-            if($this->movieDAO->getById($movie) == NULL) {
+            if($this->movieDAO->existMovie($movie) == NULL) {         
+            // if($this->movieDAO->getById($movie) == NULL) {
                 $movieDetails = $this->movieDAO->getMovieDetailsById($movie);         
                 $this->movieDAO->addMovie($movieDetails);   
                 
@@ -190,8 +190,7 @@
             }            
         }         
 
-        public function searchMovie($title) {
-            
+        public function searchMovie($title) {            
             $movieTemp = new Movie();
             $movieTemp->setTitle($title);            
            

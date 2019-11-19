@@ -15,12 +15,12 @@
         private $tableName = "genres_x_movies";
 
 		public function add(GenreToMovie $genreToMovie) {
-            try {
-				$query = "INSERT INTO " . $this->tableName . " (FK_id_genre, FK_id_movie) VALUES (:FK_id_genre, :FK_id_movie);";
+            try {				
+				$query = "CALL genresxmovies_add(?, ?)";
 				$parameters["FK_id_genre"] = $genreToMovie->getIdGenre();
 				$parameters["FK_id_movie"] = $genreToMovie->getIdMovie();
 				$this->connection = Connection::getInstance();
-				$this->connection->executeNonQuery($query, $parameters);
+				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
 				return true;
             }
             catch (Exception $e) {
@@ -82,10 +82,6 @@
 		public function getByGenre($id) {
 			$movies = array();	
 			try {
-				// $query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON FK_id_movie = movies.id 
-				// 												 INNER JOIN shows ON movies.id = shows.FK_id_movie
-				// 												 WHERE (FK_id_genre = :id_genre)
-				// 												 GROUP BY movies.id";	
 				$query = "CALL genresxmovies_getByGenre(?)";
 				$parameters["id_genre"] = $id;
 				$this->connection = Connection::GetInstance();
@@ -119,10 +115,6 @@
 		public function getByDate($date) {
 			$movies = array();	
 			try {
-				// $query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON FK_id_movie = movies.id 
-				// 												 INNER JOIN shows ON movies.id = shows.FK_id_movie
-				// 												 WHERE (shows.date_start = :date)
-				// 												 GROUP BY movies.id ";			
 				$query = "CALL genresxmovies_getByDate(?)";
 				$parameters["date"] = $date;
 				$this->connection = Connection::GetInstance();
@@ -156,10 +148,6 @@
 		public function getByGenreAndDate($id, $date) {
 			$movies = array();	
 			try {
-				// $query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON FK_id_movie = movies.id 
-				// 												 INNER JOIN shows ON movies.id = shows.FK_id_movie
-				// 												 WHERE (FK_id_genre = :id_genre AND shows.date_start = :date)";	
-
 				$query = "CALL genresxmovies_getByGenreAndDate(?, ?)";
 				$parameters["id_genre"] = $id;
 				$parameters["date_show"] = $date;
@@ -193,10 +181,7 @@
 
 		public function getGenresOfMovie(Movie $movie) {
 			$genres = array();
-			try {
-				// $query = "SELECT * FROM " . $this->tableName . " INNER JOIN movies ON movies.id = FK_id_movie
-				// 												 INNER JOIN genres ON FK_id_genre = genres.id						
-				// 												 WHERE (FK_id_movie = :id_movie)";							
+			try {						
 				$query = "CALL genresxmovies_getGenresOfMovie(?)";
 				$parameters["id_movie"] = $movie->getId();
 				$this->connection = Connection::GetInstance();

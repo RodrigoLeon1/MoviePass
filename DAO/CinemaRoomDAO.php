@@ -17,13 +17,13 @@
 
         public function add(CinemaRoom $cinemaRoom) {
 			try {
-				$query = "INSERT INTO " . $this->tableName . " (name, capacity, price, FK_id_cinema) VALUES (:name, :capacity, :price, :cinema);";
+				$query = "CALL cinema_rooms_add(?, ?, ?, ?)";
 				$parameters["name"] = $cinemaRoom->getName();
 				$parameters["capacity"] = $cinemaRoom->getCapacity();
 				$parameters["price"] = $cinemaRoom->getPrice();
-				$parameters["cinema"] = $cinemaRoom->getCinema()->getId();
+				$parameters["id_cinema"] = $cinemaRoom->getCinema()->getId();
                 $this->connection = Connection::getInstance();
-				$this->connection->executeNonQuery($query, $parameters);
+				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
 			}
 			catch (Exception $e) {
 				throw $e;

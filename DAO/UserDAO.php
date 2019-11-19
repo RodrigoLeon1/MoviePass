@@ -23,7 +23,7 @@
 		}
 
         public function add(User $user) {
-			$profileUserDAO = new ProfileUserDAO ();
+			$profileUserDAO = new ProfileUserDAO();
 			$profileUserDAO->add($user);
 			try {
 				$query = "INSERT INTO " . $this->tableName . " (mail, password, FK_dni, FK_id_role) VALUES (:mail, :password, :dni, :role);";

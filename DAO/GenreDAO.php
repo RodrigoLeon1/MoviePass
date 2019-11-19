@@ -14,7 +14,7 @@
 
         public function add(Genre $genre) {
             try {
-				$query = "CALL genres(?, ?)";
+				$query = "CALL genres_add(?, ?)";
                 $parameters["id_genre"] = $genre->getIdGenre();
                 $parameters["name"] = $genre->getName();
 				

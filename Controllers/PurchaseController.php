@@ -18,8 +18,7 @@
             $this->purchaseDAO = new PurchaseDAO();
         }
 
-        public function Add($ticket_quantity, $id_show, $discount = "") {
-            
+        public function Add($ticket_quantity, $id_show, $discount = "") {            
             $ticketController = new TicketController();
             $showController = new ShowController();
 
@@ -46,7 +45,6 @@
 
         public function buyTicketPath($idShow) {            
             if(isset($_SESSION["loggedUser"])) {              
-
                 $showController = new ShowController();
                 $show = $showController->getShowById($idShow);      
                 

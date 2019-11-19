@@ -14,12 +14,12 @@
 		private $tableName = "cinemas";
 
         public function add(Cinema $cinema) {
-			try {
-				$query = "INSERT INTO " . $this->tableName . " (name, address) VALUES (:name, :address);";
+			try {				
+				$query = "CALL cinemas_add(?, ?)";
 				$parameters["name"] = $cinema->getName();
 				$parameters["address"] = $cinema->getAddress();				
                 $this->connection = Connection::getInstance();
-				$this->connection->executeNonQuery($query, $parameters);
+				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
 			}
 			catch (Exception $e) {
 				throw $e;

@@ -201,7 +201,7 @@
 
 			return $movies;
 		}
-		
+			
 		public function getById(Movie $movie) {
 			try {
 				$query = "CALL movies_getById(?)";
@@ -251,7 +251,7 @@
 			}
 		}		
 		
-		/*
+
 		public function existMovie(Movie $movie) {
 			try {
 				$query = "CALL movies_getById(?)";
@@ -262,7 +262,7 @@
 			catch (Exception $e) {
 				throw $e;
 			}
-		}*/
+		}
 
 		public function deleteById(Movie $movie) {
 			try {				

@@ -23,8 +23,8 @@
 		}
 
         public function add(Show $show) {
-			try {			
-				$query = "INSERT INTO " . $this->tableName . " (FK_id_cinemaRoom, FK_id_movie, date_start, time_start, date_end, time_end) VALUES (:FK_id_cinemaRoom, :FK_id_movie, :date_start, :time_start, :date_end, :time_end);";
+			try {							
+				$query = "CALL shows_add(?, ?, ?, ?, ?, ?)";
 				$parameters["FK_id_cinemaRoom"] = $show->getCinemaRoom()->getId();
 				$parameters["FK_id_movie"] = $show->getMovie()->getId();
 				$parameters["date_start"] = $show->getDateStart();
@@ -32,7 +32,7 @@
 				$parameters["date_end"] = $show->getDateEnd();
 				$parameters["time_end"] = $show->getTimeEnd();
 				$this->connection = Connection::getInstance();
-				$this->connection->executeNonQuery($query, $parameters);				
+				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);				
 			}
 			catch (Exception $e) {
 				throw $e;

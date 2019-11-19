@@ -25,6 +25,14 @@ BEGIN
     WHERE (roles.id = id);
 END$$
 
+DROP procedure IF EXISTS `roles_getAll`;
+DELIMITER $$
+CREATE PROCEDURE roles_getAll ()
+BEGIN
+	SELECT *
+    FROM roles;    
+END$$
+
 
 ----------------------------- PROFILE USERS -----------------------------
 
@@ -38,6 +46,22 @@ INSERT INTO `profile_users` (`dni`, `first_name`, `last_name`)
 	VALUES 	('11111111', 'admin', 'admin'),
 	 		('00000000', 'user', 'user');
 
+DROP procedure IF EXISTS `profile_users_add`;
+DELIMITER $$
+CREATE PROCEDURE profile_users_add (
+								IN dni INT,
+								IN first_name VARCHAR(255),
+								IN last_name VARCHAR(255)
+							 )
+BEGIN
+	INSERT INTO profile_users (
+			profile_users.dni,
+			profile_users.first_name,
+			profile_users.last_name
+	)
+    VALUES
+        (dni, first_name, last_name);
+END$$
 
 ----------------------------- USERS -----------------------------
 
@@ -99,6 +123,21 @@ CREATE TABLE cinemas (
 	`name` VARCHAR(255) NOT NULL,
 	`address` VARCHAR(255) NOT NULL
 );
+
+DROP procedure IF EXISTS `cinemas_add`;
+DELIMITER $$
+CREATE PROCEDURE cinemas_add (
+								IN name VARCHAR(255),
+								IN address VARCHAR(255)
+							 )
+BEGIN
+	INSERT INTO cinemas (
+			cinemas.name,
+			cinemas.address
+	)
+    VALUES
+        (name, address);
+END$$
 
 DROP procedure IF EXISTS `cinemas_deleteById`;
 DELIMITER $$
@@ -162,6 +201,24 @@ CREATE TABLE cinema_rooms (
 	CONSTRAINT `FK_id_cinema_room` FOREIGN KEY (`FK_id_cinema`) REFERENCES `cinemas` (`id`)
 );
 
+DROP procedure IF EXISTS `cinema_rooms_add`;
+DELIMITER $$
+CREATE PROCEDURE cinema_rooms_add (
+								IN name VARCHAR(255),
+								IN price INT,
+								IN capacity INT,
+								IN id_cinema INT
+							 )
+BEGIN
+	INSERT INTO cinema_rooms (
+			cinema_rooms.name,
+			cinema_rooms.price,
+			cinema_rooms.capacity,
+			cinema_rooms.FK_id_cinema
+	)
+    VALUES
+        (name, price, capacity, id_cinema);
+END$$
 
 DROP procedure IF EXISTS `cinemaRooms_deleteById`;
 DELIMITER $$
@@ -186,7 +243,6 @@ BEGIN
 	INNER JOIN shows ON shows.FK_id_cinemaRoom = cinema_rooms.id
 	WHERE shows.id = id;
 END$$
-
 
 
 DROP procedure IF EXISTS `cinemaRooms_getByNameAndCinema`;
@@ -405,6 +461,30 @@ CREATE TABLE shows (
 	CONSTRAINT `FK_id_cinemaRoom_show` FOREIGN KEY (`FK_id_cinemaRoom`) REFERENCES `cinema_rooms` (`id`),
 	CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`)
 );
+
+DROP procedure IF EXISTS `shows_add`;
+DELIMITER $$
+CREATE PROCEDURE shows_add (
+								IN FK_id_cinemaRoom INT,
+								IN FK_id_movie INT,
+								IN date_start DATE,
+								IN time_start DATE,
+								IN date_end DATE,
+								IN time_end DATE
+							 )
+BEGIN
+	INSERT INTO shows (
+			shows.FK_id_cinemaRoom,
+			shows.FK_id_movie,
+			shows.date_start,
+			shows.time_start,
+			shows.date_end,
+			shows.time_end
+	)
+    VALUES
+        (FK_id_cinemaRoom, FK_id_movie, date_start, time_start, date_end, time_end);
+END$$
+
 
 DROP procedure IF EXISTS `shows_getAll`;
 DELIMITER $$
@@ -734,6 +814,22 @@ CREATE TABLE genres (
 	`name` VARCHAR (255) NOT NULL
 );
 
+DROP procedure IF EXISTS `genres_add`;
+DELIMITER $$
+CREATE PROCEDURE genres_add (
+								IN id INT,
+								IN name VARCHAR(255)
+							 )
+BEGIN
+	INSERT INTO genres (
+			genres.id,
+			genres.name
+	)
+    VALUES
+        (id, name);
+END$$
+
+
 DROP PROCEDURE IF EXISTS `genres_GetAll`;
 DELIMITER $$
 CREATE PROCEDURE genres_GetAll()
@@ -761,6 +857,20 @@ CREATE TABLE genres_x_movies (
 	CONSTRAINT `FK_gm_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`)
 );
 
+DROP procedure IF EXISTS `genresxmovies_add`;
+DELIMITER $$
+CREATE PROCEDURE genresxmovies_add (
+								IN FK_id_genre INT,
+								IN FK_id_movie INT
+							 )
+BEGIN
+	INSERT INTO genres_x_movies (
+			genres_x_movies.FK_id_genre,
+			genres_x_movies.FK_id_movie
+	)
+    VALUES
+        (FK_id_genre, FK_id_movie);
+END$$
 
 DROP procedure IF EXISTS `genresxmovies_getByGenre`;					    
 DELIMITER $$

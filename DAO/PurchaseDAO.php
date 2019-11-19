@@ -34,8 +34,7 @@
             
         }
 
-        public function getId($ticket_quantity, $discount, $date, $total, $dni)
-        {
+        public function getId($ticket_quantity, $discount, $date, $total, $dni) {
             try {
                 $query = "SELECT * FROM " . $this->tableName . " WHERE((ticket_quantity = :ticket_quantity) AND (discount = :discount) AND (date = :date) AND (total = :total) AND (FK_dni = :dni) )";			
                 $parameters['ticket_quantity'] = $ticket_quantity;
@@ -109,8 +108,7 @@
             }
         }
 
-        public function getByDni($dni)
-        {
+        public function getByDni($dni) {
             try {
                 $query = "CALL purchases_GetByDni(?)";
                 $parameters['dni'] = $dni;

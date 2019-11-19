@@ -28,10 +28,10 @@
 		}
 		
 		public function getAll() {
-			try {				
-				$query = "SELECT * FROM " . $this->tableName;
+			try {								
+				$query = "CALL roles_getAll()";
 				$this->connection = Connection::GetInstance();
-				$results = $this->connection->Execute($query, array());
+				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
 				foreach($results as $row) {
 					$role = new Role();
 					$role->setId($row["id"]);

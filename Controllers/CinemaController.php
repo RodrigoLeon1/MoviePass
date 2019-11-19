@@ -77,7 +77,6 @@
 		}
 
 		public function forceDelete($id) {
-
 			$cinema = new Cinema();
 			$cinema->setId($id);
 			$this->cinemaDAO->deleteById($cinema);
@@ -92,8 +91,7 @@
 			return ($this->cinemaDAO->getShowsOfCinema($cinema)) ? TRUE : FALSE;
 		}
 
-		public function modifyById($id) {
-			
+		public function modifyById($id) {			
 			$cinemaAux = new Cinema();
 			$cinemaAux->setId($id);
 

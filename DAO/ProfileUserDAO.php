@@ -13,13 +13,13 @@
 		private $tableName = "profile_users";
 
         public function add(User $user) {
-			try {
-				$query = "INSERT INTO " . $this->tableName . " (dni, first_name, last_name) VALUES (:dni, :first_name, :last_name);";
+			try {				
+				$query = "CALL profile_users_add(?, ?, ?)";
 				$parameters["dni"] = $user->getDni();
                 $parameters["first_name"] = $user->getFirstName();
                 $parameters["last_name"] = $user->getLastName();
 				$this->connection = Connection::getInstance();
-				$this->connection->executeNonQuery($query, $parameters);
+				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
 			}
 			catch (Exception $e) {
 				throw $e;

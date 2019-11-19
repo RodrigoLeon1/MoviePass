@@ -2,12 +2,16 @@
 
     namespace Controllers;
 
-    use DAO\ShowDAO as ShowDAO;
     use Models\Show as Show;
-    use DAO\CinemaRoomDAO as CinemaRoomDAO;
+    use DAO\ShowDAO as ShowDAO;
+	
     use Models\CinemaRoom as CinemaRoom;
-    use DAO\MovieDAO as MovieDAO;
+	use DAO\CinemaRoomDAO as CinemaRoomDAO;
+	
+	
 	use Models\Movie as Movie;
+	use DAO\MovieDAO as MovieDAO;
+	
 	use Controllers\CinemaController as CinemaController;
 
     class ShowController {
@@ -68,7 +72,10 @@
 		}
 
 		public function appendTime ($show) {
-			$movie = $this->movieDAO->getById($show->getMovie()->getId()); // Get Movie On Show In Order To Get It's Runtime
+			
+			// $movie = $this->movieDAO->getById($show->getMovie()->getId()); // Get Movie On Show In Order To Get It's Runtime
+
+			$movie = $this->movieDAO->getById($show->getMovie());
 			//Modify Time Lapse
 			//$timeStart = strtotime ("-15 minutes", strtotime($show->getDateStart() . $show->getTimeStart()));
 			$plusRunTime = "+" . $movie->getRuntime() . " minutes";
@@ -119,13 +126,10 @@
 			}
 		}
 		
-		public function checkParameters($id_cinemaRoom, $id_movie, $date, $time)
-		{
-			if(empty($id_cinemaRoom) || empty($id_movie) || empty($date) || empty($time))
-			{
+		public function checkParameters($id_cinemaRoom, $id_movie, $date, $time) {
+			if(empty($id_cinemaRoom) || empty($id_movie) || empty($date) || empty($time)) {
 				return FALSE;
-			}else
-			{
+			} else {
 				return TRUE;
 			}
 		}
@@ -189,7 +193,6 @@
 		public function moviesOnShow() {
 			return $this->showDAO->moviesOnShow();
 		}
-
 
 		public function getShowsOfMovieById($id) {
 			$movie = new Movie();
