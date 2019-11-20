@@ -81,7 +81,7 @@
                 </li>
                 <li>
                     <i class="icon ion-logo-usd"></i>
-                    Tickets
+                    Tickets and sales
                     <ul>
 						<li>
                             <i class="icon ion-md-remove"></i>

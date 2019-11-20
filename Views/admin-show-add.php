@@ -74,11 +74,11 @@
             </label>
 
 			<label>
-                <h4>Insert hour:</h4>
+                <h4>Insert hour:</h4>                
                 <?php if($this->checkParameters($id_cinemaRoom, $id_movie, $showDate, $time)) { ?>
-                <input type="time" name="time" id="" required value=<?= $time ?>>
+                    <input type="time" name="time" min="" id="" required value=<?= $time ?>>
                 <?php } else { ?>
-                    <input type="time" name="time" id="" required>
+                    <input type="time" name="time" min="" id="" required>
                 <?php } ?>
             </label>
 

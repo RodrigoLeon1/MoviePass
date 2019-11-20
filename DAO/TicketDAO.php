@@ -141,6 +141,46 @@
             }
         }
 
+        public function getInfoShowTickets() {
+            try {
+                $query = "CALL tickets_ShowsTickets()";                
+
+                $this->connection = Connection::GetInstance();
+                $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+                $ticketList = array();
+                foreach($results as $row) {
+                    $ticket = new Ticket();
+                    
+                    $cinema = new Cinema();
+                    $cinema->setId($row["cinema_id"]);
+                    $cinema->setName($row["cinema_name"]);
+
+                    $cinemaRoom = new CinemaRoom();
+                    $cinemaRoom->setName($row["cinema_room_name"]);
+                    $cinemaRoom->setCinema($cinema);
+
+                    $movie = new Movie();
+                    $movie->setTitle($row["movie_title"]);
+
+                    $show = new Show();
+                    $show->setId($row["show_id"]);
+                    $show->setDateStart($row["show_date_start"]);
+                    $show->setTimeStart($row["show_time_start"]);
+                    $show->setMovie($movie);
+                    $show->setCinemaRoom($cinemaRoom);
+
+                    $ticket->setShow($show);
+
+                    array_push($ticketList, $ticket);
+                }
+
+                return $ticketList;
+                
+            } catch(Exception $e) {
+                throw $e;
+            }
+        }
+
         public function getTicketsOfShows(Show $show) {
             try {
                 $query = "CALL tickets_getTicketsOfShows(?)";

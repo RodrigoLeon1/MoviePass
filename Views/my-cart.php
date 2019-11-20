@@ -10,6 +10,7 @@
         
     <main>
         <div class="container">
+            <?php if(!empty($purchases)) { ?>
             <table border="1">
                 <thead>
                     <tr>
@@ -32,6 +33,12 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
+            <?php } else { ?>            
+            <h3 class="info">
+                <i class="icon ion-md-sad"></i>
+                No purchases found
+            </h3>
+            <?php } ?>
         </div>
         <br>
         <br>

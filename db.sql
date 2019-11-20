@@ -740,6 +740,26 @@ BEGIN
 	GROUP BY shows.id;
 END$$
 
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+DROP PROCEDURE IF EXISTS `tickets_ShowsTickets`;
+DELIMITER $$
+CREATE PROCEDURE tickets_ShowsTickets()
+BEGIN
+	SELECT 
+		shows.id AS show_id,
+		shows.date_start AS show_date_start,
+		shows.time_start AS show_time_start,
+		cinemas.name AS cinema_name,
+		cinemas.id AS cinema_id,
+		cinema_rooms.name AS cinema_room_name,
+		movies.title AS movie_title	
+	FROM shows 	
+	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
+	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
+	INNER JOIN movies ON shows.FK_id_movie = movies.id
+	GROUP BY shows.id;
+END$$
+
 
 -- Cuento la cantidad de tickets comprados que tiene un show
 DROP PROCEDURE IF EXISTS `tickets_getTicketsOfShows`;

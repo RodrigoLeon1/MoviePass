@@ -22,24 +22,28 @@
         }
 
         public function add($id_cinemaRoom, $id_movie, $date, $time) {
-			if($this->validateShowForm($id_cinemaRoom, $id_movie, $date, $time)) {				
-				$movie = new Movie();
-				$movie->setId($id_movie);
-
-				$cinemaRoomController = new CinemaRoomController();
-				$cinemaRoom = $cinemaRoomController->getCinemaRoomById($id_cinemaRoom);				
-				
-				$show = new Show();
-				$show->setDateStart($date);
-				$show->setTimeStart($time);
-				$show->setMovie($movie);
-				$show->setCinemaRoom($cinemaRoom);
-				
-				if ($this->checkTime($show)) {
-					$this->showDAO->add($show);
-					return $this->addShowPath(NULL, SHOW_ADDED, $id_cinemaRoom, $id_movie, $date, $time);
+			if($this->validateShowForm($id_cinemaRoom, $id_movie, $date, $time)) {					
+				if($this->validateDate($date)) {
+					$movie = new Movie();
+					$movie->setId($id_movie);
+	
+					$cinemaRoomController = new CinemaRoomController();
+					$cinemaRoom = $cinemaRoomController->getCinemaRoomById($id_cinemaRoom);				
+					
+					$show = new Show();
+					$show->setDateStart($date);
+					$show->setTimeStart($time);
+					$show->setMovie($movie);
+					$show->setCinemaRoom($cinemaRoom);
+					
+					if ($this->checkTime($show)) {
+						$this->showDAO->add($show);
+						return $this->addShowPath(NULL, SHOW_ADDED, $id_cinemaRoom, $id_movie, $date, $time);
+					}
+					return $this->addShowPath(SHOW_ERROR, NULL, $id_cinemaRoom, $id_movie, $date, $time); 
 				}
-				return $this->addShowPath(SHOW_ERROR, NULL, $id_cinemaRoom, $id_movie, $date, $time); 
+				return $this->addShowPath(SHOW_CHECK_DAY, NULL, NULL, NULL, NULL, NULL);
+				
 			}
 			return $this->addShowPath(EMPTY_FIELDS, $id_cinemaRoom, $id_movie, $date, $time);
         }
@@ -110,7 +114,12 @@
                 return FALSE;
             }
             return TRUE;
-        }
+		}
+		
+		private function validateDate($date) {
+			$today = date('Y-m-d');
+			return (strtotime($today) == strtotime($date)) ? FALSE : TRUE;
+		}
 
         public function addShowPath($alert = "", $success = "", $id_cinemaRoom="", $id_movie="", $showDate="", $time="") {
             if (isset($_SESSION["loggedUser"])) {
@@ -125,7 +134,7 @@
 
 					$cinemaRoomController = new CinemaRoomController();					
 					$cinemaRooms = $cinemaRoomController->getAllCinemaRooms();
-					
+
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-show-add.php");

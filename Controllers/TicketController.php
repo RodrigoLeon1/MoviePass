@@ -51,13 +51,12 @@
             $tickets = $this->getByShow($id);
             return count($tickets);
         }
-
-        // Tickes vendidos
+        
         public function ticketsSoldPath() {
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
-				if($admin->getRole() == 1) {                
-                    $tickets = $this->ticketDAO->getGeneralInfo();                                    
+				if($admin->getRole() == 1) {                                         
+                    $tickets = $this->ticketDAO->getInfoShowTickets();                    
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-tickets-sold.php");

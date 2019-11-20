@@ -1,5 +1,5 @@
     <main>
-        <h2 class="dash-title">Tickets sold</h2>
+        <h2 class="dash-title">Tickets sold and remainder</h2>
         <hr>
         
         <div class="dashboard-container">            
