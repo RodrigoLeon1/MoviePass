@@ -98,7 +98,6 @@
                             if($showList->getCinemaRoom()->getCinema()->getId() != $show->getCinemaRoom()->getCinema()->getId()){
                                 return 0;
                             }
-
                         }
                     }
                 }
