@@ -10,7 +10,7 @@
         
     <main>
         <div class="container">
-            <?php if(!empty($purchases)) { ?>
+            <?php if (!empty($purchases)) { ?>
             <table border="1">
                 <thead>
                     <tr>

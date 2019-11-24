@@ -32,10 +32,11 @@
 				$parameters["date_end"] = $show->getDateEnd();
 				$parameters["time_end"] = $show->getTimeEnd();
 				$this->connection = Connection::getInstance();
-				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);				
+				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);	
+				return true;			
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
         }
 
@@ -47,7 +48,7 @@
 				return $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -59,40 +60,44 @@
 				return $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
         public function getAll() {
-			$query = "CALL shows_getAll()";
-            $this->connection = Connection::GetInstance();
-            $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-            foreach($results as $row) {				
-				
-				$movie = new Movie();
-				$movie->setId($row["movies_id"]);
-				$movie->setTitle($row["movies_title"]);
-
-				$cinema = new Cinema();
-				$cinema->setId($row["cinema_id"]);
-				$cinema->setName($row["cinema_name"]);
-				
-				$cinemaRoom = new CinemaRoom();
-				$cinemaRoom->setId($row["cinema_rooms_id"]);
-				$cinemaRoom->setName($row["cinema_rooms_name"]);	
-				$cinemaRoom->setCinema($cinema);
-				
-				$show = new Show();
-				$show->setId($row["shows_id"]);
-				$show->setDateStart($row["shows_date_start"]);
-				$show->setTimeStart($row["shows_time_start"]);
-				$show->setDateEnd($row["shows_date_end"]);
-				$show->setTimeEnd($row["shows_time_end"]);
-				$show->setMovie($movie);
-				$show->setCinemaRoom($cinemaRoom);
-				array_push ($this->showList, $show);
-            }
-            return $this->showList;
+			try {
+				$query = "CALL shows_getAll()";
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+				foreach($results as $row) {				
+					
+					$movie = new Movie();
+					$movie->setId($row["movies_id"]);
+					$movie->setTitle($row["movies_title"]);
+	
+					$cinema = new Cinema();
+					$cinema->setId($row["cinema_id"]);
+					$cinema->setName($row["cinema_name"]);
+					
+					$cinemaRoom = new CinemaRoom();
+					$cinemaRoom->setId($row["cinema_rooms_id"]);
+					$cinemaRoom->setName($row["cinema_rooms_name"]);	
+					$cinemaRoom->setCinema($cinema);
+					
+					$show = new Show();
+					$show->setId($row["shows_id"]);
+					$show->setDateStart($row["shows_date_start"]);
+					$show->setTimeStart($row["shows_time_start"]);
+					$show->setDateEnd($row["shows_date_end"]);
+					$show->setTimeEnd($row["shows_time_end"]);
+					$show->setMovie($movie);
+					$show->setCinemaRoom($cinemaRoom);
+					array_push ($this->showList, $show);
+				}
+				return $this->showList;	
+			} catch (Exception $e) {
+				return false;
+			}
 		}
 		
 		public function deleteById(Show $show) {
@@ -103,7 +108,7 @@
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -147,7 +152,7 @@
 				return $show;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -164,9 +169,10 @@
 				$parameters["time_end"] = $show->getTimeEnd();
 				$this->connection = Connection::getInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -219,11 +225,10 @@
 					$show->setCinemaRoom($cinemaRoom);					
 					array_push($shows, $show);
 				}
-
 				return $shows;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 

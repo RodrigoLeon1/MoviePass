@@ -2,14 +2,14 @@
     <h2 class="dash-title">Add show</h2>
     <hr>
 
-    <?php if($success != NULL): ?>
+    <?php if($success != null): ?>
     <div class="alert-container success-container">
         <i class="icon ion-md-checkmark"></i>
         <h3><?= $success ?></h3>
     </div>
     <?php endif; ?>
 
-    <?php if($alert != NULL): ?>
+    <?php if($alert != null): ?>
     <div class="alert-container error-container">
         <i class="icon ion-md-close-circle-outline"></i>
         <h3><?= $alert ?></h3>

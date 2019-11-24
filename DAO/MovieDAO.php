@@ -31,10 +31,11 @@
 				$parameters["overview"] = $movie->getOverview();
 				$parameters["release_date"] = $movie->getReleaseDate();
 				$this->connection = Connection::GetInstance();
-				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);				
+				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;				
 			}
 			catch (Exception $e) {
-				throw $ex;
+				return false;
 			}
         }
 
@@ -58,10 +59,11 @@
 				$parameters["release_date"] = $movie->getReleaseDate();
 				$parameters["runtime"] = $movie->getRuntime();
 				$this->connection = Connection::GetInstance();				
-				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);							
+				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;							
 			}
 			catch (Exception $ex) {
-				throw $ex;
+				return false;
 			}			
 		}
 
@@ -92,7 +94,7 @@
 				return $this->movieList;
 			}
 			catch (Exception $ex) {
-				throw $ex;
+				return false;
 			}
         }
 
@@ -139,7 +141,7 @@
 				}
 			}
 			catch (Exception $ex) {
-				throw $ex;
+				return false;
 			}
 
 		}
@@ -229,7 +231,7 @@
 				return $movie;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -247,7 +249,7 @@
 				return $movie;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}		
 		
@@ -258,9 +260,10 @@
 				$parameters ["id"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				return $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);				
+				// return true;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -270,9 +273,10 @@
 				$parameters ["id"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -286,7 +290,7 @@
 				return $results;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -306,7 +310,7 @@
 				return $total;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 

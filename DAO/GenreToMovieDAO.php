@@ -24,7 +24,7 @@
 				return true;
             }
             catch (Exception $e) {
-                throw $e;
+                return false;
             }
         }
 		
@@ -75,13 +75,13 @@
 				return $this->genreList;
 			}
 			catch (Exception $ex) {
-				throw $ex;
+				return false;
 			}
 		}
 		
 		public function getByGenre($id) {
-			$movies = array();	
 			try {
+				$movies = array();	
 				$query = "CALL genresxmovies_getByGenre(?)";
 				$parameters["id_genre"] = $id;
 				$this->connection = Connection::GetInstance();
@@ -105,16 +105,16 @@
 					// $movie->setRuntime($row["runtime"]);
 					array_push($movies, $movie);
 				}			
+				return $movies;
 			}
 			catch (Exception $ex) {
-				throw $ex;
+				return false;
 			}
-			return $movies;
 		} 
 
 		public function getByDate($date) {
-			$movies = array();	
 			try {
+				$movies = array();	
 				$query = "CALL genresxmovies_getByDate(?)";
 				$parameters["date"] = $date;
 				$this->connection = Connection::GetInstance();
@@ -138,16 +138,16 @@
 					// $movie->setRuntime($row["runtime"]);
 					array_push($movies, $movie);
 				}			
+				return $movies;
 			}
 			catch (Exception $ex) {
-				throw $ex;
+				return false;
 			}
-			return $movies;
 		} 		
 
 		public function getByGenreAndDate($id, $date) {
-			$movies = array();	
 			try {
+				$movies = array();	
 				$query = "CALL genresxmovies_getByGenreAndDate(?, ?)";
 				$parameters["id_genre"] = $id;
 				$parameters["date_show"] = $date;
@@ -172,16 +172,16 @@
 					$movie->setRuntime($row["runtime"]);
 					array_push($movies, $movie);
 				}			
+				return $movies;
 			}
 			catch (Exception $ex) {
-				throw $ex;
+				return false;
 			}
-			return $movies;
 		}		
 
 		public function getGenresOfMovie(Movie $movie) {
-			$genres = array();
 			try {						
+				$genres = array();
 				$query = "CALL genresxmovies_getGenresOfMovie(?)";
 				$parameters["id_movie"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
@@ -190,16 +190,16 @@
 					$genre = $row["name"];
 					array_push($genres, $genre);
 				}	
+				return $genres;
 			}
 			catch (Exception $ex) {
-				throw $ex;
+				return false;
 			}		
-			return $genres;
 		}	
 
 		public function getGenresOfShows() {
-			$genres = array();
 			try {							
+				$genres = array();
 				$query = "CALL genresxmovies_getGenresOfShows()";				
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);			
@@ -209,11 +209,11 @@
 					$genre->setName($row["name"]);
 					array_push($genres, $genre);
 				}	
+				return $genres;			
 			}
 			catch (Exception $ex) {
-				throw $ex;
+				return false;
 			}		
-			return $genres;			
 		}
 	}
 

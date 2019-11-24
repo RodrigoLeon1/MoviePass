@@ -25,14 +25,14 @@
             $show->setId($id_show);
             $ticket->setShow($show);
             
-            $this->ticketDAO->add($ticket);			
+            return $this->ticketDAO->add($ticket);
         }
 
         private function validateTicketForm($id_purchase, $id_show) {
-            if(empty($id_purchase) || empty($id_show)) {
-                return FALSE;
+            if (empty($id_purchase) || empty($id_show)) {
+                return false;
             }
-            return TRUE;
+            return true;
         }
 
         public function getByNumber($number) {
@@ -55,12 +55,15 @@
         public function ticketsSoldPath() {
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
-				if($admin->getRole() == 1) {                                         
+				if ($admin->getRole() == 1) {                                         
                     $tickets = $this->ticketDAO->getInfoShowTickets();                    
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-tickets-sold.php");
-                } 
+                } else {
+                    $userController = new UserController();
+                    return $userController->userPath();
+                }
 			} else {
                 $userController = new UserController();
                 return $userController->userPath();

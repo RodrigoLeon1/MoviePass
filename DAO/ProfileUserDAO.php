@@ -20,9 +20,10 @@
                 $parameters["last_name"] = $user->getLastName();
 				$this->connection = Connection::getInstance();
 				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
         }
     }

@@ -49,7 +49,7 @@
 
         public function searchMoviesOnShowByGenre($genre) {
             $movies = array();
-            if(is_numeric($genre)) {
+            if (is_numeric($genre)) {
                 $movies = $this->genresToMoviesDAO->getByGenre($genre);
             } else {                
                 $aux = $this->genreByName($genre);

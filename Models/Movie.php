@@ -29,7 +29,6 @@
             return $this;
         }
 
-
         public function getVoteCount() {
             return $this->vote_count;
         }
@@ -38,7 +37,6 @@
             $this->vote_count = $vote_count;
             return $this;
         }
-
 
         public function getVideo() {
             return $this->video;
@@ -49,7 +47,6 @@
             return $this;
         }
 
-
         public function getPosterPath() {
             return $this->poster_path;
         }
@@ -58,7 +55,6 @@
             $this->poster_path = $poster_path;
             return $this;
         }
-
 
         public function getId() {
             return $this->id;
@@ -69,7 +65,6 @@
             return $this;
         }
 
-
         public function getAdult() {
             return $this->adult;
         }
@@ -78,7 +73,6 @@
             $this->adult = $adult;
             return $this;
         }
-
 
         public function getBackdropPath() {
             return $this->backdrop_path;
@@ -89,7 +83,6 @@
             return $this;
         }
 
-
         public function getOriginalLanguage() {
             return $this->original_language;
         }
@@ -98,7 +91,6 @@
             $this->original_language = $original_language;
             return $this;
         }
-
 
         public function getOriginalTitle() {
             return $this->original_title;
@@ -109,7 +101,6 @@
             return $this;
         }
 
-
         public function getGenreIds() {
             return $this->genre_ids;
         }
@@ -118,7 +109,6 @@
             $this->genre_ids = $genre_ids;
             return $this;
         }
-
 
         public function getTitle() {
             return $this->title;
@@ -129,7 +119,6 @@
             return $this;
         }
 
-
         public function getVoteAverage() {
             return $this->vote_average;
         }
@@ -139,7 +128,6 @@
             return $this;
         }
 
-
         public function getOverview() {
             return $this->overview;
         }
@@ -148,7 +136,6 @@
             $this->overview = $overview;
             return $this;
         }
-
 
         public function getReleaseDate() {
             return $this->release_date;

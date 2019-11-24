@@ -1,9 +1,15 @@
-<main class="">
-    <div class="dataSheet_Style">
-
-        <div class="poster_Style">
+<main>        
+    <div class="back-container">
+        <a href="<?= FRONT_ROOT ?>movie/nowPlaying">
+            <i class="icon ion-md-arrow-back"></i>
+            Back
+        </a>
+    </div>
+    <div class="dataSheet_Style">        
+        
+    <div class="poster_Style">
             <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?> ">
-        </div>
+        </div>        
 
         <div class="specification_Style">
             <div>
@@ -15,7 +21,7 @@
                     <div class="synopsis-extra">
                         <div class="movie-rating">
                             <i class="icon ion-md-star"></i>
-                            Rating <?= $movie->getVoteAverage() ?> 
+                            Rating: <span> <?= $movie->getVoteAverage() ?> </span>
                         </div>
                         <div class="genres">
                             <i class="icon ion-md-color-wand"></i>
@@ -26,12 +32,11 @@
                         </div>
                         <div class="duration">
                             <i class="icon ion-md-stopwatch"></i>
-                            Duration <?= $movie->getRuntime() ?>m
+                            Duration: <span> <?= $this->minToHour($movie->getRuntime()) ?> </span>
                         </div>
-                        <div class="genres">
+                        <div class="release">
                             <i class="icon ion-md-calendar"></i>
-                            Release date: 
-                            <?= $movie->getReleaseDate() ?>
+                            Release date: <span> <?= $movie->getReleaseDate() ?> </span>                            
                         </div>                                                
                     </div>
                 </p>
@@ -39,10 +44,6 @@
 
             <div class="show-container">
                 <h2>Movie Showtimes</h2>
-
-                <?php if(empty($shows)): ?>
-                    <p class="synopsis_Style">No shows available at the moment.</p>
-                <?php endif; ?>
 
                 <?php foreach ($shows as $show): ?>
                 <div class="show-item">
@@ -88,7 +89,7 @@
         <br><hr><br>
 
         <div>
-        <iframe width="854" height="480" src="https://www.youtube.com/embed/<?= $keyTrailer ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope;" allowfullscreen></iframe>
+            <iframe width="854" height="480" src="https://www.youtube.com/embed/<?= $keyTrailer ?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope;" allowfullscreen></iframe>
         </div>
     </div>
 </main>

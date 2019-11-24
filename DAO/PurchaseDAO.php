@@ -29,7 +29,7 @@
                 return $id;
 
             } catch(Exception $e) {
-                throw $e;
+                return false;
             }
             
         }
@@ -57,7 +57,7 @@
                 return $purchase->getId();
             
             } catch(Exception $e) {
-                throw $e;
+                return false;
             }
         }
         
@@ -80,7 +80,7 @@
                 return $purchaseList;
             }
             catch(Exception $e) {
-                throw $e;
+                return false;
             }
         }
 
@@ -104,7 +104,7 @@
                 return $purchase;
             
             } catch(Exception $e) {
-                throw $e;
+                return false;
             }
         }
 
@@ -129,7 +129,7 @@
                 return $purchases;
             
             } catch(Exception $e) {
-                throw $e;
+                return false;
             }
         }
 

@@ -26,7 +26,6 @@
             return $this;
         }
 
-
         public function getAddress() {
             return $this->address;
         }

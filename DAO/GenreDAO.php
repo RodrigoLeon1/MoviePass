@@ -16,12 +16,12 @@
             try {
 				$query = "CALL genres_add(?, ?)";
                 $parameters["id_genre"] = $genre->getIdGenre();
-                $parameters["name"] = $genre->getName();
-				
+                $parameters["name"] = $genre->getName();				
 				$this->connection = Connection::GetInstance();
-				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
+                $this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
+                return true;
 			}catch (Exception $e) {
-				throw $ex;
+				return false;
 			}
         }
 
@@ -40,41 +40,50 @@
 				return $this->genreList;
 			}
 			catch (Exception $ex) {
-				throw $ex;
+				return false;
 			}
         }
         
         public function getById(Genre $genre) {
-            $genre = NULL;
-            $query = "CALL genres_getById (?)";
-            $parameters["id"] = $genre->getId();
-            $this->connection = Connection::GetInstance();
-            $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-            foreach($results as $row) {
-                $genre = new Genre();
-                $genre->setIdGenre($row["id_genre"]);
-                $genre->setName($row["name"]);
+            try {
+                $genre = null;
+                $query = "CALL genres_getById (?)";
+                $parameters["id"] = $genre->getId();
+                $this->connection = Connection::GetInstance();
+                $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+                foreach($results as $row) {
+                    $genre = new Genre();
+                    $genre->setIdGenre($row["id_genre"]);
+                    $genre->setName($row["name"]);
+                }
+                return $genre;    
+            } catch (Exception $ex) {
+                return false;
             }
-            return $genre;
+            
         }
             
         public function getByName(Genre $genre) {
-            $genre = NULL;
-            $query = "CALL genres_getByName (?)";
-            $parameters["name"] = $genre->getName();
-            $this->connection = Connection::GetInstance();
-            $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-            foreach($results as $row) {
-                $genre = new Genre();
-                $genre->setIdGenre($row["id_genre"]);
-                $genre->setName($row["name"]);
+            try {
+                $genre = null;
+                $query = "CALL genres_getByName (?)";
+                $parameters["name"] = $genre->getName();
+                $this->connection = Connection::GetInstance();
+                $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+                foreach($results as $row) {
+                    $genre = new Genre();
+                    $genre->setIdGenre($row["id_genre"]);
+                    $genre->setName($row["name"]);
+                }
+                return $genre;
+            } catch (Exception $ex) {
+                return false;
             }
-            return $genre;
         }
         
         public function getNameGenre(Genre $genre) {			
-			$genreName = "";
-			try {						
+            try {						
+                $genreName = "";
                 $query = "CALL genres_getById(?)";
 				$parameters["id"] = $genre->getIdGenre();
 				$this->connection = Connection::GetInstance();
@@ -82,13 +91,12 @@
 				foreach($results as $row) {								
 					$genreName = $row["name"];				
 				}		
+                return $genreName;
 			}
 			catch (Exception $ex) {
-				throw $ex;
+				return false;
 			}	
-			return $genreName;
 		}
-
 
     }
 

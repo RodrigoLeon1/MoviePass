@@ -28,6 +28,8 @@
 	define("MOVIE_DETAILS_PATH", "https://api.themoviedb.org/3/movie/");
 
 	//ERR MSGS
+	define("DB_ERROR", "An error has ocurred. Try later!");
+
 	define("CINEMA_EXIST", "This cinema has already been registered.");
 	define("CINEMA_ADDED", "Cinema added with success.");
 	define("CINEMA_REMOVE", "The cinema was remove with success.");

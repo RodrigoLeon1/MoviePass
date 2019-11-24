@@ -22,8 +22,8 @@
         }
 
         public function add($id_cinemaRoom, $id_movie, $date, $time) {
-			if($this->validateShowForm($id_cinemaRoom, $id_movie, $date, $time)) {					
-				if($this->validateDate($date)) {
+			if ($this->validateShowForm($id_cinemaRoom, $id_movie, $date, $time)) {					
+				if ($this->validateDate($date)) {
 					$movie = new Movie();
 					$movie->setId($id_movie);
 	
@@ -37,20 +37,22 @@
 					$show->setCinemaRoom($cinemaRoom);
 					
 					if ($this->checkTime($show)) {
-						$this->showDAO->add($show);
-						return $this->addShowPath(NULL, SHOW_ADDED, $id_cinemaRoom, $id_movie, $date, $time);
+						if ($this->showDAO->add($show)) {
+							return $this->addShowPath(null, SHOW_ADDED, $id_cinemaRoom, $id_movie, $date, $time);
+						}
+						return $this-addShowPath(DB_ERROR, null, $id_cinemaRoom, $id_movie, $date, $time);
 					}
-					return $this->addShowPath(SHOW_ERROR, NULL, $id_cinemaRoom, $id_movie, $date, $time); 
+					return $this->addShowPath(SHOW_ERROR, null, $id_cinemaRoom, $id_movie, $date, $time); 
 				}
-				return $this->addShowPath(SHOW_CHECK_DAY, NULL, NULL, NULL, NULL, NULL);
-				
+				return $this->addShowPath(SHOW_CHECK_DAY, null, null, null, null, null);				
 			}
 			return $this->addShowPath(EMPTY_FIELDS, $id_cinemaRoom, $id_movie, $date, $time);
         }
 
+		// solo una sala puede tener la pelicula
 		public function checkTime (Show $show) {
-			$existance = $this->showDAO->getByCinemaRoomId($show); // Get Shows That Belong To That Particular Cinema
-			$this->appendTime ($show);
+			$existance = $this->showDAO->getByCinemaRoomId($show);  // Get Shows That Belong To That Particular Cinema
+			$this->appendTime($show);
 			$flag = 1;
 			if ($existance != null) {
 				foreach ($existance as $showsOnDB) {
@@ -99,7 +101,7 @@
                 foreach ($shows as $showList) {
                     if ($showList->getMovie()->getId() == $show->getMovie()->getId()) {
                         if ($showList->getDateStart() == $show->getDateStart()) {
-                            if($showList->getCinemaRoom()->getCinema()->getId() != $show->getCinemaRoom()->getCinema()->getId()){
+                            if ($showList->getCinemaRoom()->getCinema()->getId() != $show->getCinemaRoom()->getCinema()->getId()){
                                 return 0;
                             }
                         }
@@ -110,21 +112,21 @@
         }
 
         private function validateShowForm($id_cinemaRoom, $id_movie, $day, $hour) {
-            if(empty($id_cinemaRoom) || empty($id_movie) || empty($day) || empty($hour)) {
-                return FALSE;
+            if (empty($id_cinemaRoom) || empty($id_movie) || empty($day) || empty($hour)) {
+                return false;
             }
-            return TRUE;
+            return true;
 		}
 		
 		private function validateDate($date) {
 			$today = date('Y-m-d');
-			return (strtotime($today) == strtotime($date)) ? FALSE : TRUE;
+			return (strtotime($today) == strtotime($date)) ? false : true;
 		}
 
         public function addShowPath($alert = "", $success = "", $id_cinemaRoom="", $id_movie="", $showDate="", $time="") {
             if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
-				if($admin->getRole() == 1) {
+				if ($admin->getRole() == 1) {
 
 					$cinemas = new CinemaController();
 					$cinemas = $cinemas->getAllCinemas();					
@@ -138,6 +140,9 @@
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-show-add.php");
+				} else {
+					$userController = new UserController();
+					return $userController->userPath();	
 				}
 			} else {
                 $userController = new UserController();
@@ -146,21 +151,29 @@
 		}
 		
 		public function checkParameters($id_cinemaRoom, $id_movie, $date, $time) {
-			if(empty($id_cinemaRoom) || empty($id_movie) || empty($date) || empty($time)) {
-				return FALSE;
+			if (empty($id_cinemaRoom) || empty($id_movie) || empty($date) || empty($time)) {
+				return false;
 			} else {
-				return TRUE;
+				return true;
 			}
 		}
 
 		public function listShowsPath($success = "") {
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
-				if($admin->getRole() == 1) {
+				if ($admin->getRole() == 1) {
 					$shows = $this->showDAO->getAll();
-					require_once(VIEWS_PATH . "admin-head.php");
-					require_once(VIEWS_PATH . "admin-header.php");
-					require_once(VIEWS_PATH . "admin-show-list.php");
+					if ($shows) {
+						require_once(VIEWS_PATH . "admin-head.php");
+						require_once(VIEWS_PATH . "admin-header.php");
+						require_once(VIEWS_PATH . "admin-show-list.php");
+					} else {
+						$userController = new UserController();
+                		return $userController->adminPath();
+					}
+				} else {
+					$userController = new UserController();
+                	return $userController->userPath();
 				}
 			} else {
                 $userController = new UserController();
@@ -168,6 +181,7 @@
             } 
 		}
 
+		// borrado logico
 		public function remove($id) {
 			$show = new Show();
 			$show->setId($id);
@@ -175,10 +189,11 @@
 			return $this->listShowsPath(SHOW_REMOVE);
 		}
 
+		/*
 		public function getById($id) {
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
-				if($admin->getRole() == 1) {
+				if ($admin->getRole() == 1) {
 
 					$show = $this->showDAO->getById($id);
 					
@@ -196,7 +211,7 @@
                 $userController = new UserController();
                 return $userController->userPath();
             } 
-		}
+		} */
 
 		public function getShowById($id) {
 			$show = $this->showDAO->getById($id);					
@@ -214,8 +229,11 @@
 			$show->setTimeStart($time);
 			$show->setMovie($movie);
 			$show->setCinemaRoom($cinemaRoom);
-			$this->showDAO->modify($show);
-			return $this->listShowsPath();
+			if ($this->showDAO->modify($show)) {
+				return $this->listShowsPath();	//poner alerta de exito
+			} else {
+				return $this->listShowsPath(DB_ERROR);
+			}
 		}
 
 		public function moviesOnShow() {

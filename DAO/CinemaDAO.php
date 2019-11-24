@@ -19,10 +19,11 @@
 				$parameters["name"] = $cinema->getName();
 				$parameters["address"] = $cinema->getAddress();				
                 $this->connection = Connection::getInstance();
-				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
+				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);				
+				return true;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
         }
 
@@ -41,7 +42,7 @@
 				return $this->cinemaList;
 			}
 			catch(Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 		
@@ -51,9 +52,10 @@
 				$parameters ["id"] = $cinema->getId();
 				$this->connection = Connection::GetInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 		
@@ -73,7 +75,7 @@
 				return $cinema;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -85,9 +87,10 @@
 				$parameters["address"] = $cinema->getAddress();
 				$this->connection = Connection::getInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -101,7 +104,7 @@
 				return $results;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}			
 		}
         
@@ -115,7 +118,7 @@
 				return $results;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -135,7 +138,7 @@
 				return $total;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 

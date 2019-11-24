@@ -24,9 +24,10 @@
 				$parameters["id_cinema"] = $cinemaRoom->getCinema()->getId();
                 $this->connection = Connection::getInstance();
 				$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
         }
 
@@ -54,7 +55,7 @@
 				return $this->cinemaRoomList;
 			}
 			catch(Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 		
@@ -64,9 +65,10 @@
 				$parameters ["id"] = $cinemaRoom->getId();
 				$this->connection = Connection::GetInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 		
@@ -93,11 +95,11 @@
 				return $cinemaRoom;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
-		public function checkNameInCinema($name, $id_cinema) {
+		public function checkRoomNameInCinema($name, $id_cinema) {
 			try {
 				$query = "CALL cinemaRooms_getByNameAndCinema(?, ?)";
 				$parameters ["name"] = $name;
@@ -108,7 +110,7 @@
 				return $results;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -122,9 +124,10 @@
 				$parameters["price"] = $cinemaRoom->getPrice();
 				$this->connection = Connection::getInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -138,7 +141,7 @@
 				return $results;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}			
 		}
 
@@ -152,7 +155,7 @@
 				return $results;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -170,7 +173,7 @@
 				return $cinemaRoom;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 
@@ -191,7 +194,7 @@
 				return $total;
 			}
 			catch (Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 

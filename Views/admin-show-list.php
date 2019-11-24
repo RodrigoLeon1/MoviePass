@@ -2,7 +2,7 @@
         <h2 class="dash-title">Shows</h2>
         <hr>
 
-        <?php if($success != NULL): ?>
+        <?php if($success != null): ?>
         <div class="alert-container success-container">
             <i class="icon ion-md-checkmark"></i>
             <h3><?= $success ?></h3>

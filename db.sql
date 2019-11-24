@@ -633,9 +633,19 @@ BEGIN
            purchases.discount AS purchases_discount,
            purchases.date AS purchases_date,
            purchases.total AS purchases_total,
-           purchases.FK_dni AS purchases_FK_dni
+           purchases.FK_dni AS purchases_FK_dni,
+		   movies.title AS movie_title,
+		   movies.poster_path AS movie_poster_path,
+		   cinemas.name AS cinema_name,
+		   cinema_rooms.name AS cinema_room_name
     FROM purchases
-    WHERE(purchases.id_purchase = id);
+	INNER JOIN tickets ON purchases.id_purchase = tickets.FK_id_purchase
+	INNER JOIN shows ON tickets.FK_id_show = shows.id
+	INNER JOIN movies ON shows.FK_id_movie = movies.id
+	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
+	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
+    WHERE(purchases.id_purchase = id)
+	GROUP BY purchases.id;
 END$$
 
 DROP PROCEDURE IF EXISTS `purchases_GetAll`;

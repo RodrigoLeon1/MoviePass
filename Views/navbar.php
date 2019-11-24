@@ -14,22 +14,22 @@
                 <a href="<?= FRONT_ROOT ?>movie/comingSoon" class="nav-link">Coming soon</a>
             </li> 
             
-            <?php if(!isset($_SESSION["loggedUser"])): ?>
+            <?php if (!isset($_SESSION["loggedUser"])): ?>
             <li>
                 <a href="<?= FRONT_ROOT ?>user/registerPath" class="nav-link">Register</a>
             </li>
             <?php endif; ?>
             
-            <?php if(!isset($_SESSION["loggedUser"])): ?>
+            <?php if (!isset($_SESSION["loggedUser"])): ?>
             <li>
                 <a href="<?= FRONT_ROOT ?>user/loginPath" class="nav-link">Login</a>
             </li>
             <?php endif; ?>
 
-            <?php if(isset($_SESSION["loggedUser"])): ?>      
+            <?php if (isset($_SESSION["loggedUser"])): ?>      
                 <?php $user = $_SESSION["loggedUser"] ?>
                 <li>
-                	<a href="<?= FRONT_ROOT ?>user/loginPath" class="nav-link">
+                	<a href="#" class="nav-link">
                         <?= $user->getMail() ?>
                         <i class="icon ion-md-arrow-dropdown"></i>
                     </a>
@@ -43,7 +43,7 @@
                             <a href="<?= FRONT_ROOT ?>user/myCartPath" class="nav-link">My cart</a>                            
                         </li>
 
-                        <?php if($user->getRole() == 1): ?>
+                        <?php if ($user->getRole() == 1): ?>
                         <li>
                             <a href="<?= FRONT_ROOT ?>user/adminpath" class="nav-link">Dashboard</a>
                         </li>

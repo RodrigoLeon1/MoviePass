@@ -8,7 +8,7 @@
     use Models\User as User;    
     use Controllers\ShowController as ShowController;
     use Controllers\TicketController as TicketController;
-    
+    use Controllers\MovieController as MovieController;
 
     class PurchaseController {
 
@@ -34,30 +34,43 @@
             $purchase->setDate($date);
             $purchase->setTotal($total);
             $purchase->setDni($dni);
-            $id_purchase = $this->purchaseDAO->add($purchase);
             
-            for($i=0; $i<$ticket_quantity; $i++) {
+            $id_purchase = $this->purchaseDAO->add($purchase);                        
+
+            for ($i=0; $i<$ticket_quantity; $i++) {
                 $ticketController->add(0, $id_show, $id_purchase);
             }                            
+
+            /*
+            if ($this->purchaseDAO->add($purchase)) {
+                for ($i=0; $i<$ticket_quantity; $i++) {
+                    if ($ticketController->add(0, $id_show, $id_purchase)) {
+                        continue;
+                    }                    
+                }  
+                return $this->purchaseSuccess($id_purchase);                          
+            } */
 
 			return $this->purchaseSuccess($id_purchase);
         }
 
         public function buyTicketPath($idShow) {            
-            if(isset($_SESSION["loggedUser"])) {              
+            if (isset($_SESSION["loggedUser"])) {              
                 $showController = new ShowController();
                 $show = $showController->getShowById($idShow);      
-                
-                $title = 'Buy ticket - ' . $show->getMovie()->getTitle();
-                $img = IMG_PATH_TMDB . $show->getMovie()->getBackdropPath();
-                $available = $this->numberOfTicketsAvailable($idShow);
-
-                require_once(VIEWS_PATH . "header.php");			
-                require_once(VIEWS_PATH . "navbar.php");
-                require_once(VIEWS_PATH . "header-s.php");
-                require_once(VIEWS_PATH . "purchase-ticket.php");
-                require_once(VIEWS_PATH . "footer.php");                    
-                                
+                if ($show) {
+                    $title = 'Buy ticket - ' . $show->getMovie()->getTitle();
+                    $img = IMG_PATH_TMDB . $show->getMovie()->getBackdropPath();
+                    $available = $this->numberOfTicketsAvailable($idShow);    
+                    require_once(VIEWS_PATH . "header.php");			
+                    require_once(VIEWS_PATH . "navbar.php");
+                    require_once(VIEWS_PATH . "header-s.php");
+                    require_once(VIEWS_PATH . "purchase-ticket.php");
+                    require_once(VIEWS_PATH . "footer.php");                    
+                } else {
+                    $movieController = new MovieController();
+                    return $movieController->nowPlaying();
+                }                                
             } else {
                 $userController = new UserController();
                 return $userController->loginPath(LOGIN_NEEDED);
@@ -65,14 +78,18 @@
         }
 
         public function purchaseSuccess($id) {
-            if(isset($_SESSION["loggedUser"])) {  
+            if (isset($_SESSION["loggedUser"])) {  
                 $title = 'Purchase';
                 $purchase = $this->purchaseDAO->getById($id);
-
-                require_once(VIEWS_PATH . "header.php");			            
-                require_once(VIEWS_PATH . "navbar.php");            
-                require_once(VIEWS_PATH . "purchase-success.php");
-                require_once(VIEWS_PATH . "footer.php"); 
+                if ($purchase) {
+                    require_once(VIEWS_PATH . "header.php");			            
+                    require_once(VIEWS_PATH . "navbar.php");            
+                    require_once(VIEWS_PATH . "purchase-success.php");
+                    require_once(VIEWS_PATH . "footer.php"); 
+                } else {
+                    $movieController = new MovieController();
+                    return $movieController->nowPlaying();
+                }
             } else {
                 $userController = new UserController();
                 return $userController->loginPath(LOGIN_NEEDED);
@@ -100,7 +117,7 @@
         public function ticketsAvailable($id_show) {
             $quantity = $this->numberOfTicketsAvailable($id_show);
               
-            return ($quantity > 0) ? TRUE : FALSE;
+            return ($quantity > 0) ? true : false;
         }
 
         public function getPurchasesByUser($user) {

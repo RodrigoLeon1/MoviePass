@@ -26,9 +26,9 @@
 
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query, $parameters);
-                
+                return true;
             } catch(Exception $e) {
-                throw $e;
+                return false;
             }
         }
 
@@ -49,7 +49,7 @@
                 return $purchase;
                 
             } catch(Exception $e) {
-                throw $e;
+                return false;
             }
         }
 
@@ -70,7 +70,7 @@
                 return $ticketList;
             }
             catch(Exception $e) {
-                throw $e;
+                return false;
             }
         }
 
@@ -78,7 +78,6 @@
             try {
                 $query = "CALL tickets_GetByShowId(?)";
                 $parameters['id'] = $id;
-
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $ticketList = array();
@@ -92,11 +91,10 @@
                     $ticket->setShow($show);
                     array_push($ticketList, $ticket);
                 }
-
                 return $ticketList;
                 
             } catch(Exception $e) {
-                throw $e;
+                return false;
             }
         }
 
@@ -104,7 +102,6 @@
         public function getGeneralInfo() {
             try {
                 $query = "CALL tickets_GetInfoTicket()";                
-
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
                 $ticketList = array();
@@ -137,14 +134,13 @@
                 return $ticketList;
                 
             } catch(Exception $e) {
-                throw $e;
+                return false;
             }
         }
 
         public function getInfoShowTickets() {
             try {
                 $query = "CALL tickets_ShowsTickets()";                
-
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
                 $ticketList = array();
@@ -177,7 +173,7 @@
                 return $ticketList;
                 
             } catch(Exception $e) {
-                throw $e;
+                return false;
             }
         }
 
@@ -185,7 +181,6 @@
             try {
                 $query = "CALL tickets_getTicketsOfShows(?)";
                 $parameters['id_show'] = $show->getId();
-
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $results = $results[0];
@@ -193,7 +188,7 @@
                 return $results["count(FK_id_show)"];
                 
             } catch(Exception $e) {
-                throw $e;
+                return false;
             }
         }
 

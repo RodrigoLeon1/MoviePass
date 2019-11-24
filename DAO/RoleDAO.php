@@ -14,17 +14,21 @@
 		private $tableName = "roles";
 
 		public function getById($id) {
-            $user = NULL;
-            $query = "CALL roles_getById(?)";
-            $parameters["id"] = $id;
-            $this->connection = Connection::GetInstance();
-            $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-			foreach($results as $row) {
-				$role = new Role();
-                $role->setId($row["id"]);
-                $role->setDescription($row["description"]);
-            }
-            return $role;
+			try {
+				$user = null;
+				$query = "CALL roles_getById(?)";
+				$parameters["id"] = $id;
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
+				foreach($results as $row) {
+					$role = new Role();
+					$role->setId($row["id"]);
+					$role->setDescription($row["description"]);
+				}
+				return $role;	
+			} catch (Exception $e) {
+				return false;
+			}            
 		}
 		
 		public function getAll() {
@@ -41,7 +45,7 @@
 				return $this->roleList;
 			}
 			catch(Exception $e) {
-				throw $e;
+				return false;
 			}
 		}
 

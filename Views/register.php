@@ -17,7 +17,7 @@
                     </p>
                 </div>
 
-                <?php if($alert != NULL): ?>
+                <?php if ($alert != null): ?>
                 <div class="error-container">
                     <p>
                         <i class="icon ion-md-close-circle-outline"></i>

@@ -634,6 +634,18 @@ hr {
 
 
 /* Datasheet page*/
+.back-container {
+    width: 75%;
+    /* background-color: red; */
+    margin: 0 auto;
+    padding-left: 3rem;
+}
+
+.back-container a {
+    color: #a8a8a8;
+    font-size: 1.3rem;
+}
+
 .title1_Style {    
     font-size: 2rem;     
     font-weight: 700;
@@ -680,10 +692,10 @@ hr {
 }
 
 .dataSheet_Style {
-    margin-top: 8%;
-    margin-left: 13%;
-    margin-right: 8%;
-    margin-bottom: 10rem;
+    width: 80%;
+    margin: 0 auto;    
+    margin-top: 3rem;
+    margin-bottom: 5rem;
     padding:3px;
 }
 
@@ -714,12 +726,18 @@ hr {
     margin-bottom: 2rem;
 }
 
-.synopsis-container span {    
+.synopsis-container .genres > span {    
     display: inline-block;
     border: 1px solid rgba(255, 255, 0, .2);
     border-radius: 5px;
     margin: .3rem;
     padding: .3rem;
+}
+
+.movie-rating span,
+.duration span,
+.release span {
+    color: #919191;
 }
 
 .synopsis-extra {

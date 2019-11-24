@@ -17,10 +17,10 @@
 		}			
 
         public function add($id_cinema, $name, $capacity, $price) {
-			if($this->validateCinemaRoomForm($id_cinema, $name, $capacity, $price)) {
+			if ($this->validateCinemaRoomForm($id_cinema, $name, $capacity, $price)) {
 				$cinemaRoom = new CinemaRoom();            
 				$cinemaRoom->setName($name);
-				if($this->cinemaRoomDAO->checkNameInCinema($name, $id_cinema) == NULL) {
+				if ($this->cinemaRoomDAO->checkRoomNameInCinema($name, $id_cinema) == null) {
 					$cinemaRoom = new CinemaRoom();
 					$cinemaRoom->setName($name);
 					$cinemaRoom->setCapacity($capacity);
@@ -31,32 +31,37 @@
 
 					$cinemaRoom->setCinema($cinema);
 
-					$this->cinemaRoomDAO->add($cinemaRoom);
-					return $this->addCinemaRoomPath(CINEMA_ROOM_ADDED, NULL);
+					if ($this->cinemaRoomDAO->add($cinemaRoom)){
+						return $this->addCinemaRoomPath(CINEMA_ROOM_ADDED, null);
+					}
+					return $this->addCinemaRoomPath(null, DB_ERROR);
 				}
-				return $this->addCinemaRoomPath(NULL, CINEMA_ROOM_EXIST);
+				return $this->addCinemaRoomPath(null, CINEMA_ROOM_EXIST);
 			}
-			return $this->addCinemaRoomPath(NULL, EMPTY_FIELDS);
+			return $this->addCinemaRoomPath(null, EMPTY_FIELDS);
 		}
 		
         private function validateCinemaRoomForm($id_cinema, $name, $capacity, $price) {
-            if(empty($id_cinema) || empty($name) || empty($capacity) || empty($price)) {
-                return FALSE;
+            if (empty($id_cinema) || empty($name) || empty($capacity) || empty($price)) {
+                return false;
             }
-            return TRUE;
+            return true;
         }		
 
         public function addCinemaRoomPath($success = "", $alert = "") {
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
-				if($admin->getRole() == 1) {
-
+				if ($admin->getRole() == 1) {
 					$cinemaController = new CinemaController();
 					$cinemas = $cinemaController->getAllCinemas();
-
-					require_once(VIEWS_PATH . "admin-head.php");
-					require_once(VIEWS_PATH . "admin-header.php");
-					require_once(VIEWS_PATH . "admin-cinema-room-add.php");
+					if ($cinemas != null) {						
+						require_once(VIEWS_PATH . "admin-head.php");
+						require_once(VIEWS_PATH . "admin-header.php");
+						require_once(VIEWS_PATH . "admin-cinema-room-add.php");
+					} else {
+						$userController = new UserController();
+                		return $userController->adminPath();
+					}
 				}				
 			} else {
                 $userController = new UserController();
@@ -67,13 +72,16 @@
 		public function listCinemaRoomPath($success = "", $alert = "", $cinemaId = "") {
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];								
-				if($admin->getRole() == 1) {
-					
+				if ($admin->getRole() == 1) {					
 					$cinemasRooms = $this->cinemaRoomDAO->getAll();
-
-					require_once(VIEWS_PATH . "admin-head.php");
-					require_once(VIEWS_PATH . "admin-header.php");
-					require_once(VIEWS_PATH . "admin-cinema-room-list.php");
+					if ($cinemasRooms) {
+						require_once(VIEWS_PATH . "admin-head.php");
+						require_once(VIEWS_PATH . "admin-header.php");
+						require_once(VIEWS_PATH . "admin-cinema-room-list.php");
+					} else {
+						$userController = new UserController();
+                		return $userController->adminPath();
+					}
 				}
 			} else {
                 $userController = new UserController();
@@ -81,15 +89,16 @@
             }
         }
 
+		// borrado logico
 		public function remove($id) {				
-			if($this->cinemaRoomHasShows($id)) {								
-				return $this->listCinemaRoomPath(NULL, CINEMA_ROOM_HAS_SHOWS, $id);
+			if ($this->cinemaRoomHasShows($id)) {								
+				return $this->listCinemaRoomPath(null, CINEMA_ROOM_HAS_SHOWS, $id);
 			} else {								
 				$cinemaRoom = new CinemaRoom();
 				$cinemaRoom->setId($id);
 				
 				$this->cinemaRoomDAO->deleteById($cinemaRoom);
-				return $this->listCinemaRoomPath(CINEMA_ROOM_REMOVE, NULL, NULL);
+				return $this->listCinemaRoomPath(CINEMA_ROOM_REMOVE, null, null);
 			}
 		}
 
@@ -98,26 +107,31 @@
 			$cinemaRoom->setId($id);
 
 			$this->cinemaRoomDAO->deleteById($cinemaRoom);
-			return $this->listCinemaRoomPath(CINEMA_ROOM_REMOVE, NULL, NULL);
+			return $this->listCinemaRoomPath(CINEMA_ROOM_REMOVE, null, null);
 		}
 
 		private function cinemaRoomHasShows($id) {
 			$cinemaRoom = new CinemaRoom();
 			$cinemaRoom->setId($id);
 
-			return ($this->cinemaRoomDAO->getShowsOfCinemaRoom($cinemaRoom)) ? TRUE : FALSE;
+			return ($this->cinemaRoomDAO->getShowsOfCinemaRoom($cinemaRoom)) ? true : false;
 		}
 
 		public function modifyById($id) {
-			$cinemaRoom = new CinemaRoom();
-			$cinemaRoom->setId($id);
-			$cinemaRoom = $this->cinemaRoomDAO->getById($cinemaRoom);
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
-				if($admin->getRole() == 1) {
-					require_once(VIEWS_PATH . "admin-head.php");
-					require_once(VIEWS_PATH . "admin-header.php");
-					require_once(VIEWS_PATH . "admin-cinema-modify.php");
+				if ($admin->getRole() == 1) {
+					$cinemaRoomTemp = new CinemaRoom();
+					$cinemaRoomTemp->setId($id);
+					$cinemaRoom = $this->cinemaRoomDAO->getById($cinemaRoomTemp);					
+					if ($cinemaRoom) {
+						require_once(VIEWS_PATH . "admin-head.php");
+						require_once(VIEWS_PATH . "admin-header.php");
+						require_once(VIEWS_PATH . "admin-cinema-modify.php");
+					} else {
+						$userController = new UserController();
+                		return $userController->adminPath();
+					}
 				}
 			} else {
                 $userController = new UserController();
@@ -129,9 +143,11 @@
 			$cinemaRoom = new CinemaRoom();
             $cinemaRoom->setName($name);
             $cinemaRoom->setCapacity($capacity);
-            $cinemaRoom->setPrice($price);
-	        $this->cinemaRoomDAO->modify($cinemaRoom);
-            return $this->listCinemaRoomPath(CINEMA_ROOM_MODIFY);
+			$cinemaRoom->setPrice($price);			
+	        if ($this->cinemaRoomDAO->modify($cinemaRoom)) {
+				return $this->listCinemaRoomPath(CINEMA_ROOM_MODIFY, null, null);
+			}
+			return $this->listCinemaRoomPath(null, DB_ERROR, null);
         }
 
 		public function getCinemaRoomByShowId($id_show) {
@@ -144,13 +160,16 @@
 		public function sales() {
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
-				if($admin->getRole() == 1) {
-					
+				if ($admin->getRole() == 1) {					
 					$rooms = $this->cinemaRoomDAO->getAll();
-					
-					require_once(VIEWS_PATH . "admin-head.php");
-					require_once(VIEWS_PATH . "admin-header.php");
-					require_once(VIEWS_PATH . "admin-cinema-room-sales.php");
+					if ($rooms) {
+						require_once(VIEWS_PATH . "admin-head.php");
+						require_once(VIEWS_PATH . "admin-header.php");
+						require_once(VIEWS_PATH . "admin-cinema-room-sales.php");
+					} else {
+						$userController = new UserController();
+                		return $userController->adminPath();
+					}
 				}
 			} else {
                 $userController = new UserController();

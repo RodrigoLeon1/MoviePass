@@ -4,7 +4,7 @@
 
         <form class="filter-form" action="<?= FRONT_ROOT ?>movie/filterMovies" method="POST">
             <label>
-                Category:
+                Genre:
                 <select name="category">
                 <option value="" selected>All</option>
                 <?php foreach ($genres as $genre): ?>
@@ -24,7 +24,7 @@
         </form>
     </div>
 
-    <?php if($alert != NULL): ?>
+    <?php if ($alert != null): ?>
     <div class="container">
         <h3 class="info">
             <?= $alert ?>
