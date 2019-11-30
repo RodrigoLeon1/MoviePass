@@ -11,6 +11,8 @@
 	define("CSS_PATH", FRONT_ROOT . VIEWS_PATH . "assets/css/");
     define("JS_PATH", FRONT_ROOT . VIEWS_PATH . "assets/js/");
 	define('VIDEO_PATH', FRONT_ROOT . VIEWS_PATH . "assets/video/");
+	define("UPLOADS_PATH", "uploads/");
+	define("IMG_UPLOADS_PATH", FRONT_ROOT . "uploads/");
 
 	//DB
 	define("DB_HOST", "localhost");
@@ -32,31 +34,37 @@
 
 	define("CINEMA_EXIST", "This cinema has already been registered.");
 	define("CINEMA_ADDED", "Cinema added with success.");
-	define("CINEMA_REMOVE", "The cinema was remove with success.");
-	define("CINEMA_MODIFY", "The cinema was modified with success.");
-	define("CINEMA_HAS_SHOWS", "Can't remove the cinema because has next shows.");
+	define("CINEMA_DISABLE", "Cinema disable with success.");
+	define("CINEMA_ENABLE", "Cinema enable with success.");
+	define("CINEMA_MODIFY", "Cinema modified with success.");
+	define("CINEMA_HAS_SHOWS", "Can't disable the cinema because has next shows.");
 
 	define("CINEMA_ROOM_EXIST", "This cinema room has already been registered in this cinema.");
 	define("CINEMA_ROOM_ADDED", "Cinema room added with success.");
-	define("CINEMA_ROOM_REMOVE", "The cinema room was remove with success.");
-	define("CINEMA_ROOM_MODIFY", "The cinema room was modified with success.");
-	define("CINEMA_ROOM_HAS_SHOWS", "Can't remove the cinema room because has next shows.");
+	define("CINEMA_ROOM_DISABLE", "Cinema room disable with success.");
+	define("CINEMA_ROOM_ENABLE", "Cinema room enable with success.");
+	define("CINEMA_ROOM_MODIFY", "Cinema room modified with success.");
+	define("CINEMA_ROOM_HAS_SHOWS", "Can't disable the cinema room because has next shows.");
 
 	define("MOVIE_ADDED", "Movie added with success.");
 	define("MOVIE_EXIST", "This movie has already been registered.");
-	define("MOVIE_REMOVE", "Movie was remove with success.");
+	define("MOVIE_DISABLE", "Movie disable with success.");
+	define("MOVIE_ENABLE", "Movie enable with success.");
 	define("MOVIES_NULL", "No movies found");
-	define("MOVIE_HAS_SHOWS", "Can't remove the movie because has next shows.");
+	define("MOVIE_HAS_SHOWS", "Can't disable the movie because has next shows.");
 
 	define("SHOW_ADDED", "Show added with success.");
-	define("SHOW_REMOVE", "Show remove with success.");
+	define("SHOW_DISABLE", "Show disable with success.");
+	define("SHOW_ENABLE", "Show enable with success.");
 	define("SHOW_ERROR", "Can't add the show! Check the date, hour or the movie and try again.");
 	define("SHOW_CHECK_DAY", "The show must be at least one day anticipation.");
 	define("SHOW_EXIST", "This show has already been registered.");	
 	
 	define("USER_ADDED", "User added with success.");
-	define("USER_REMOVE", "User was remove with success.");
-	define("ELIMINATE_YOURSELF", "You can't remove yourself.");
+	define("USER_DISABLE", "User disable with success.");
+	define("USER_ENABLE", "User enable with success.");
+	define("ACCOUNT_DISABLE", "Your account is disabled at the moment. Contact the admin.");
+	define("ELIMINATE_YOURSELF", "You can't disable yourself.");
 
 	define("LOGIN_NEEDED", "Please! Login to continue.");
 	define("LOGIN_ERROR", "You have entered an invalid e-mail or password. Try again!");	

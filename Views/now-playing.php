@@ -8,7 +8,9 @@
                 <select name="category">
                 <option value="" selected>All</option>
                 <?php foreach ($genres as $genre): ?>
-                    <option value="<?= $genre->getIdGenre(); ?>"><?= $genre->getName(); ?></option>
+                    <option value="<?= $genre->getIdGenre(); ?>">
+                        <?= $genre->getName(); ?>
+                    </option>
                 <?php endforeach; ?>                
                 </select>
             </label>
@@ -18,8 +20,7 @@
             </label>
 
             <button type="submit" class="btn-f">
-                <i class="icon ion-md-search" style="font-size:2rem;"></i>
-                <!-- Filter -->
+                <i class="icon ion-md-search" style="font-size:2rem;"></i>                
             </button>
         </form>
     </div>
@@ -27,7 +28,7 @@
     <?php if ($alert != null): ?>
     <div class="container">
         <h3 class="info">
-            <?= $alert ?>
+            <?= $alert; ?>
             <i class="icon ion-md-sad"></i>
         </h3>
     </div>
@@ -36,20 +37,20 @@
     <?php foreach ($movies as $movie): ?>
     <div class="container movie-container">
         <div class="movie-img">
-            <a href="<?= FRONT_ROOT ?>movie/showMovie/<?= $movie->getId() ?>">
-                <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?>" alt="">
+            <a href="<?= FRONT_ROOT ?>movie/showMovie/<?= $movie->getId(); ?>">
+                <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath(); ?>" alt="">
             </a>
         </div>
         <div class="movie-info">
-            <h3><?= $movie->getTitle() ?></h3>
+            <h3><?= $movie->getTitle(); ?></h3>
             <p>
                 <i class="icon ion-md-star"></i>
-                <?= $movie->getVoteAverage() ?>
+                <?= $movie->getVoteAverage(); ?>
             </p>
-            <p class="overview-text"><?= $movie->getOverview() ?></p>
+            <p class="overview-text"><?= $movie->getOverview(); ?></p>
         </div>
         <div class="movie-cta">
-            <a class="btn-l" href="<?= FRONT_ROOT ?>movie/showMovie/<?= $movie->getId() ?>">  
+            <a class="btn-l" href="<?= FRONT_ROOT ?>movie/showMovie/<?= $movie->getId(); ?>">  
                 <i class="icon ion-md-add"></i>More info
             </a>
         </div>

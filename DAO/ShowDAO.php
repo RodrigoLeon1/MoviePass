@@ -17,6 +17,7 @@
         private $moviesOnShowList = array();
 		private $tableName = "shows";
 		private $movieDAO;
+		private $connection;
 
 		public function __construct () {
 			$this->movieDAO = new MovieDAO();
@@ -39,7 +40,7 @@
 				return false;
 			}
         }
-
+		
 		public function getByMovieId(Show $show) {
 			try {
 				$query = "CALL shows_getByMovieId (?)";
@@ -69,8 +70,7 @@
 				$query = "CALL shows_getAll()";
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-				foreach($results as $row) {				
-					
+				foreach($results as $row) {									
 					$movie = new Movie();
 					$movie->setId($row["movies_id"]);
 					$movie->setTitle($row["movies_title"]);
@@ -92,6 +92,7 @@
 					$show->setTimeEnd($row["shows_time_end"]);
 					$show->setMovie($movie);
 					$show->setCinemaRoom($cinemaRoom);
+					$show->setIsActive($row["shows_is_active"]);
 					array_push ($this->showList, $show);
 				}
 				return $this->showList;	
@@ -99,25 +100,73 @@
 				return false;
 			}
 		}
-		
-		public function deleteById(Show $show) {
+
+        public function getAllActives() {
 			try {
-				$query = "CALL shows_deleteById(?)";
+				$query = "CALL shows_getAllActives()";
+				$this->connection = Connection::GetInstance();
+				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+				foreach($results as $row) {									
+					$movie = new Movie();
+					$movie->setId($row["movies_id"]);
+					$movie->setTitle($row["movies_title"]);
+	
+					$cinema = new Cinema();
+					$cinema->setId($row["cinema_id"]);
+					$cinema->setName($row["cinema_name"]);
+					
+					$cinemaRoom = new CinemaRoom();
+					$cinemaRoom->setId($row["cinema_rooms_id"]);
+					$cinemaRoom->setName($row["cinema_rooms_name"]);	
+					$cinemaRoom->setCinema($cinema);
+					
+					$show = new Show();
+					$show->setId($row["shows_id"]);
+					$show->setDateStart($row["shows_date_start"]);
+					$show->setTimeStart($row["shows_time_start"]);
+					$show->setDateEnd($row["shows_date_end"]);
+					$show->setTimeEnd($row["shows_time_end"]);
+					$show->setMovie($movie);
+					$show->setCinemaRoom($cinemaRoom);
+					$show->setIsActive($row["shows_is_active"]);
+					array_push ($this->showList, $show);
+				}
+				return $this->showList;	
+			} catch (Exception $e) {
+				return false;
+			}
+		}		
+				
+		public function enableById(Show $show) {
+			try {
+				$query = "CALL shows_enableById(?)";
 				$parameters ["id"] = $show->getId();
 				$this->connection = Connection::GetInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
 			}
 			catch (Exception $e) {
 				return false;
 			}
 		}
 
-		//No lo cambie para no romper algunas funciones en showcontroller
-		//Mas adelante pasar como parametro Movie $movie en lugar del id
-		public function getById($id) {
+		public function disableById(Show $show) {
+			try {
+				$query = "CALL shows_disableById(?)";
+				$parameters ["id"] = $show->getId();
+				$this->connection = Connection::GetInstance();
+				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
+			}
+			catch (Exception $e) {
+				return false;
+			}
+		}
+						
+		public function getById(Show $show) {
 			try {
 				$query = "CALL shows_getById(?)";
-				$parameters ["id"] = $id;
+				$parameters ["id"] = $show->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
 
@@ -145,6 +194,7 @@
 					$show->setTimeStart($row["shows_time_start"]);
 					$show->setDateEnd($row["shows_date_end"]);
 					$show->setTimeEnd($row["shows_time_end"]);
+					$show->setIsActive($row["shows_is_active"]);
 					
 					$show->setMovie($movie);
 					$show->setCinemaRoom($cinemaRoom);
@@ -177,7 +227,7 @@
 		}
 
 		public function moviesOnShow() {
-			$this->getAll();
+			$this->getAllActives();
 			foreach ($this->showList as $show) {
 				$id = $show->getMovie()->getId();
 				if($this->getMoviesIdWithoutRepeating($id)) {
@@ -189,7 +239,7 @@
 			}
 			return $this->moviesOnShowList;
 		}
-
+		
 		public function getMoviesIdWithoutRepeating($id) {
 			if (count ($this->moviesOnShowList) == 0) {
 				return 1;
@@ -221,7 +271,7 @@
 					$cinemaRoom->setCinema($cinema);
 					$show->setId($row["show_id"]);
 					$show->setDateStart($row["show_date_start"]);
-					$show->setTimeStart($row["show_time_start"]);
+					$show->setTimeStart($row["show_time_start"]); 					
 					$show->setCinemaRoom($cinemaRoom);					
 					array_push($shows, $show);
 				}

@@ -4,7 +4,11 @@
         
         <div class="dashboard-container">            
             <div class="content-container">
-                <table border="1">
+                <table border="1" id="myTable">
+                    <div class="filter-container">
+                        <i class="icon ion-md-search"></i>
+                        <input class="filter-input" type="text" class="filter" id="myInput" onkeyup="myFunction()" placeholder="Search for cinema rooms..">
+                    </div>  
                     <thead>
                         <tr>                            
                             <th>Id</th>
@@ -17,11 +21,11 @@
                     <tbody>
                         <?php foreach ($rooms as $room): ?>
                             <tr>  
-                                <td><?= $room->getId() ?></td>
-                                <td><?= $room->getCinema()->getName() ?></td>
-                                <td><?= $room->getName() ?></td>
-                                <td>$<?= $room->getPrice() ?></td>
-                                <td>$<?= $this->cinemaRoomDAO->getSales($room) ?></td>
+                                <td><?= $room->getId(); ?></td>
+                                <td><?= $room->getCinema()->getName(); ?></td>
+                                <td><?= $room->getName(); ?></td>
+                                <td>$<?= $room->getPrice(); ?></td>
+                                <td>$<?= $this->cinemaRoomDAO->getSales($room); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -29,5 +33,28 @@
             </div>
         </div>
     </main>
+    <script>
+        function myFunction() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+</script>
 </body>
 </html>

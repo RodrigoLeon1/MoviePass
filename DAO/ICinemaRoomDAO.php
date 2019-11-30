@@ -1,6 +1,7 @@
 <?php
     namespace DAO;
 
+    use Models\Cinema as Cinema;
     use Models\CinemaRoom as CinemaRoom;
     use Models\Show as Show;
 
@@ -8,9 +9,10 @@
         
         function add(CinemaRoom $cinemaRoom);
         function getAll();
-        function deleteById(CinemaRoom $cinemaRoom);
+        function enableById(CinemaRoom $cinemaRoom);
+        function disableById(CinemaRoom $cinemaRoom);
         function getById(CinemaRoom $cinemaRoom);
-        function checkRoomNameInCinema($name, $id_cinema);
+        function checkRoomNameInCinema(CinemaRoom $cinemaRoom, Cinema $cinema);
         function modify(CinemaRoom $cinemaRoom);
         function getByName(CinemaRoom $cinemaRoom);
         function getShowsOfCinemaRoom(CinemaRoom $cinemaRoom);

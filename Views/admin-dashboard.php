@@ -4,7 +4,7 @@
         <div class="dashboard-container">            
             <h1>
                 <i class="icon ion-md-hand"></i>
-                Welcome <?= $admin->getFirstName() ?> <?= $admin->getLastName() ?> to the dashboard main page.
+                Welcome <?= $admin->getFirstName() . ' ' . $admin->getLastName(); ?> !
             </h1>
         </div>       
         
@@ -14,7 +14,7 @@
             <div class="movies-container">
                 <?php foreach ($movies as $movie): ?>
                 <div class="movie">
-                    <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?>" alt="<?= $movie->getTitle() ?>">
+                    <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath(); ?>" alt="<?= $movie->getTitle(); ?>">
                 </div>                    
                 <?php endforeach; ?>                                            
             </div>

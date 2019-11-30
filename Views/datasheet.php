@@ -8,7 +8,7 @@
     <div class="dataSheet_Style">        
         
     <div class="poster_Style">
-            <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?> ">
+            <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath(); ?> ">
         </div>        
 
         <div class="specification_Style">
@@ -17,11 +17,11 @@
             </div>
             <div class="synopsis-container">
                 <p class="synopsis_Style">
-                    <?= $movie->getOverview() ?>
+                    <?= $movie->getOverview(); ?>
                     <div class="synopsis-extra">
                         <div class="movie-rating">
                             <i class="icon ion-md-star"></i>
-                            Rating: <span> <?= $movie->getVoteAverage() ?> </span>
+                            Rating: <span> <?= $movie->getVoteAverage(); ?> </span>
                         </div>
                         <div class="genres">
                             <i class="icon ion-md-color-wand"></i>
@@ -32,11 +32,11 @@
                         </div>
                         <div class="duration">
                             <i class="icon ion-md-stopwatch"></i>
-                            Duration: <span> <?= $this->minToHour($movie->getRuntime()) ?> </span>
+                            Duration: <span> <?= $this->minToHour($movie->getRuntime()); ?> </span>
                         </div>
                         <div class="release">
                             <i class="icon ion-md-calendar"></i>
-                            Release date: <span> <?= $movie->getReleaseDate() ?> </span>                            
+                            Release date: <span> <?= $movie->getReleaseDate(); ?> </span>                            
                         </div>                                                
                     </div>
                 </p>
@@ -48,31 +48,31 @@
                 <?php foreach ($shows as $show): ?>
                 <div class="show-item">
                     <div class="show-content">
-                        <h2><?= $show->getCinemaRoom()->getCinema()->getName() ?> - <?= $show->getCinemaRoom()->getName() ?></h2>
+                        <h2><?= $show->getCinemaRoom()->getCinema()->getName(); ?> - <?= $show->getCinemaRoom()->getName(); ?></h2>
                         <p>
                             <p>
                                 <i class="icon ion-md-calendar"></i> 
                                 <!-- June 18, 2019 at 8:00  -->
-                                <?= date('F j, Y', strtotime($show->getDateStart())) ?>
+                                <?= date('F j, Y', strtotime($show->getDateStart())); ?>
                                 at 
-                                <?= date('H:i', strtotime($show->getTimeStart())) ?>
+                                <?= date('H:i', strtotime($show->getTimeStart())); ?>
                             </p>
                             <p>-</p>
                             <p>
                                 <i class="icon ion-md-pin"></i>
-                                <?= $show->getCinemaRoom()->getCinema()->getAddress() ?>
+                                <?= $show->getCinemaRoom()->getCinema()->getAddress(); ?>
                             </p>
                         </p>
                     </div>
-                    <?php if($purchaseController->ticketsAvailable($show->getId())) { ?>                    
+                    <?php if($purchaseController->ticketsAvailable($show->getId())): ?>                    
                         <div class="show-ticket">
-                            <a href="<?= FRONT_ROOT ?>purchase/buyTicketPath/<?= $show->getId() ?>">Buy Ticket</a>
+                            <a href="<?= FRONT_ROOT ?>purchase/buyTicketPath/<?= $show->getId(); ?>">Buy Ticket</a>
                         </div>
-                    <?php } else { ?>
+                    <?php else: ?>
                         <div class="show-ticket sold-out">
                             <a>Sold out</a>
                         </div>
-                    <?php } ?>                    
+                    <?php endif; ?>                    
                 </div>                    
                 <?php endforeach; ?>                             
                 <br>                

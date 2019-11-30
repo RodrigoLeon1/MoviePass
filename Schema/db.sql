@@ -70,6 +70,7 @@ CREATE TABLE users (
 	`password` VARCHAR (255) NOT NULL,
 	`FK_dni` int PRIMARY KEY,
 	`FK_id_role` int,
+	`is_active` BOOLEAN NOT NULL DEFAULT TRUE
 	CONSTRAINT `FK_dni` FOREIGN KEY (`FK_dni`) REFERENCES `profile_users` (`dni`),
 	CONSTRAINT `FK_id_role` FOREIGN KEY (`FK_id_role`) REFERENCES `roles` (`id`)
 );
@@ -79,6 +80,25 @@ INSERT INTO `users` (`mail`, `password`, `FK_dni`, `FK_id_role`)
 			('user@user.com', '123', '00000000', '0');
 
 
+DROP procedure IF EXISTS `users_add`;
+DELIMITER $$
+CREATE PROCEDURE users_add (
+								IN mail VARCHAR(255),
+								IN password VARCHAR(255),
+								IN FK_dni INT,
+								IN FK_id_role INT								
+							 )
+BEGIN
+	INSERT INTO users (
+			users.mail,
+			users.password,
+			users.FK_dni,
+			users.FK_id_role
+	)
+    VALUES
+        (mail, password, FK_dni, FK_id_role);
+END$$
+
 DROP procedure IF EXISTS `users_getByMail`;
 DELIMITER $$
 CREATE PROCEDURE users_getByMail (IN mail VARCHAR(255))
@@ -86,6 +106,7 @@ BEGIN
 	SELECT 	users.mail,
 			users.password,
 			users.FK_id_role,
+			users.is_active,
 			profile_users.dni,
 			profile_users.first_name,
 			profile_users.last_name
@@ -101,6 +122,7 @@ BEGIN
 	SELECT 	users.mail,
 			users.password,
 			users.FK_id_role,
+			users.is_active,
 			profile_users.dni,
 			profile_users.first_name,
 			profile_users.last_name
@@ -109,11 +131,49 @@ BEGIN
 	ORDER By profile_users.dni;
 END $$
 
-DROP procedure IF EXISTS `users_deleteByDni`;
+DROP procedure IF EXISTS `users_disableByDni`;
 DELIMITER $$
-CREATE PROCEDURE users_deleteByDni (IN dni INT)
+CREATE PROCEDURE users_disableByDni (IN dni INT)
 BEGIN
-	DELETE FROM `users` WHERE `users`.`FK_dni` = dni;
+	UPDATE `users` SET users.is_active = false WHERE `users`.`FK_dni` = dni;
+END$$
+
+DROP procedure IF EXISTS `users_enableByDni`;
+DELIMITER $$
+CREATE PROCEDURE users_enableByDni (IN dni INT)
+BEGIN
+	UPDATE `users` SET users.is_active = true WHERE `users`.`FK_dni` = dni;
+END$$
+
+
+----------------------------- IMAGES -----------------------------
+CREATE TABLE images (
+	`imageId` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`name` VARCHAR(100) NOT NULL,
+	`FK_dni_user` INT NOT NULL	
+	CONSTRAINT `FK_dni_image` FOREIGN KEY (`FK_dni_user`) REFERENCES `profile_users` (`dni`),
+);
+
+DROP procedure IF EXISTS `images_add`;
+DELIMITER $$
+CREATE PROCEDURE images_add(
+							IN name VARCHAR(100),
+							IN dni_user INT
+							)
+BEGIN
+    INSERT INTO images
+    	(name, FK_dni_user)
+	VALUES
+		(name, dni_user);
+END$$
+
+DROP procedure IF EXISTS `images_getByUser`;
+DELIMITER $$
+CREATE PROCEDURE images_getByUser (IN dni INT)
+BEGIN
+	SELECT *
+	FROM images	
+    WHERE (images.FK_dni_user = dni);
 END$$
 
 ----------------------------- CINEMAS -----------------------------
@@ -121,7 +181,8 @@ END$$
 CREATE TABLE cinemas (
 	`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`name` VARCHAR(255) NOT NULL,
-	`address` VARCHAR(255) NOT NULL
+	`address` VARCHAR(255) NOT NULL,
+	`is_active` BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 DROP procedure IF EXISTS `cinemas_add`;
@@ -139,11 +200,18 @@ BEGIN
         (name, address);
 END$$
 
-DROP procedure IF EXISTS `cinemas_deleteById`;
+DROP procedure IF EXISTS `cinemas_disableById`;
 DELIMITER $$
-CREATE PROCEDURE cinemas_deleteById (IN id INT)
+CREATE PROCEDURE cinemas_disableById (IN id INT)
 BEGIN
-	DELETE FROM `cinemas` WHERE `cinemas`.`id` = id;
+	UPDATE `cinemas` SET `cinemas`.`is_active` = false WHERE `cinemas`.`id` = id;
+END$$
+
+DROP procedure IF EXISTS `cinemas_enableById`;
+DELIMITER $$
+CREATE PROCEDURE cinemas_enableById (IN id INT)
+BEGIN
+	UPDATE `cinemas` SET `cinemas`.`is_active` = true WHERE `cinemas`.`id` = id;
 END$$
 
 DROP procedure IF EXISTS `cinemas_getById`;
@@ -160,11 +228,18 @@ BEGIN
 	SELECT * FROM `cinemas` WHERE `cinemas`.`name` = name;
 END$$
 
+DROP procedure IF EXISTS `cinemas_GetAllActives`;
+DELIMITER $$
+CREATE PROCEDURE cinemas_GetAllActives ()
+BEGIN
+	SELECT * FROM `cinemas` WHERE `cinemas`.`is_active` = true ORDER BY `cinemas`.name;
+END$$
+
 DROP procedure IF EXISTS `cinemas_GetAll`;
 DELIMITER $$
 CREATE PROCEDURE cinemas_GetAll ()
 BEGIN
-	SELECT * FROM `cinemas`;
+	SELECT * FROM `cinemas` ORDER BY `cinemas`.name;
 END$$
 
 DROP procedure IF EXISTS `cinemas_modify`;
@@ -198,6 +273,7 @@ CREATE TABLE cinema_rooms (
 	`price` INT NOT NULL,
 	`capacity` INT NOT NULL,
 	`FK_id_cinema` INT NOT NULL,
+	`is_active` BOOLEAN NOT NULL DEFAULT TRUE,
 	CONSTRAINT `FK_id_cinema_room` FOREIGN KEY (`FK_id_cinema`) REFERENCES `cinemas` (`id`)
 );
 
@@ -220,11 +296,18 @@ BEGIN
         (name, price, capacity, id_cinema);
 END$$
 
-DROP procedure IF EXISTS `cinemaRooms_deleteById`;
+DROP procedure IF EXISTS `cinemaRooms_enableById`;
 DELIMITER $$
-CREATE PROCEDURE cinemaRooms_deleteById (IN id INT)
+CREATE PROCEDURE cinemaRooms_enableById (IN id INT)
 BEGIN
-	DELETE FROM `cinema_rooms` WHERE `cinema_rooms`.`id` = id;
+	UPDATE `cinema_rooms` SET `cinema_rooms`.`is_active` = true WHERE `cinema_rooms`.`id` = id;
+END$$
+
+DROP procedure IF EXISTS `cinemaRooms_disableById`;
+DELIMITER $$
+CREATE PROCEDURE cinemaRooms_disableById (IN id INT)
+BEGIN
+	UPDATE `cinema_rooms` SET `cinema_rooms`.`is_active` = false WHERE `cinema_rooms`.`id` = id;
 END$$
 
 DROP procedure IF EXISTS `cinemaRooms_getById`;
@@ -234,7 +317,6 @@ BEGIN
 	SELECT * FROM `cinema_rooms` WHERE `cinema_rooms`.`id` = id;
 END$$
 
-
 DROP procedure IF EXISTS `cinemaRooms_getByIdShow`;
 DELIMITER $$
 CREATE PROCEDURE cinemaRooms_getByIdShow (IN id INT)
@@ -243,7 +325,6 @@ BEGIN
 	INNER JOIN shows ON shows.FK_id_cinemaRoom = cinema_rooms.id
 	WHERE shows.id = id;
 END$$
-
 
 DROP procedure IF EXISTS `cinemaRooms_getByNameAndCinema`;
 DELIMITER $$
@@ -270,11 +351,31 @@ BEGIN
 		cinema_rooms.name as cinema_room_name,
 		cinema_rooms.capacity as cinema_room_capacity,
 		cinema_rooms.price as cinema_room_price,
+		cinema_rooms.is_active as cinema_room_is_active,
 		cinemas.id as cinema_id,
 		cinemas.name as cinema_name,
 		cinemas.address as cinema_address
 	FROM cinema_rooms
 	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
+	ORDER BY cinemas.name ASC;
+END$$
+
+DROP procedure IF EXISTS `cinemaRooms_GetAllActives`;
+DELIMITER $$
+CREATE PROCEDURE cinemaRooms_GetAllActives ()
+BEGIN
+	SELECT 
+		cinema_rooms.id as cinema_room_id,
+		cinema_rooms.name as cinema_room_name,
+		cinema_rooms.capacity as cinema_room_capacity,
+		cinema_rooms.price as cinema_room_price,
+		cinema_rooms.is_active as cinema_room_is_active,
+		cinemas.id as cinema_id,
+		cinemas.name as cinema_name,
+		cinemas.address as cinema_address
+	FROM cinema_rooms
+	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
+	WHERE cinema_rooms.is_active = true
 	ORDER BY cinemas.name ASC;
 END$$
 
@@ -286,7 +387,8 @@ CREATE PROCEDURE cinemaRooms_modify (	IN id int,
 									IN price int
 								)
 BEGIN
-	UPDATE cinema_rooms SET cinema_rooms.name = name, cinema_rooms.address = address,cinema_rooms.capacity = capacity, cinema_rooms.price = price  WHERE cinema_rooms.id = id;
+	UPDATE cinema_rooms SET cinema_rooms.name = name, cinema_rooms.capacity = capacity, cinema_rooms.price = price
+	WHERE cinema_rooms.id = id;
 END$$
 DELIMITER ;
 
@@ -304,59 +406,46 @@ END$$
 ----------------------------- MOVIES -----------------------------
 
 CREATE TABLE movies (
-	`id` int NOT NULL PRIMARY KEY,
-	`popularity` VARCHAR (255) NOT NULL,
-	`vote_count` VARCHAR (255) NOT NULL,
-	`video` VARCHAR (255) NOT NULL,
-	`poster_path` VARCHAR (255) NOT NULL,
-	`adult` VARCHAR (255) NOT NULL,
-	`backdrop_path` VARCHAR (255) NOT NULL,
-	`original_language` VARCHAR (255) NOT NULL,
-	`original_title` VARCHAR (255) NOT NULL,
-	`genre_ids` VARCHAR (255) NULL,
+	`id` int NOT NULL PRIMARY KEY,	
+	`poster_path` VARCHAR (255) NOT NULL,	
+	`backdrop_path` VARCHAR (255) NOT NULL,		
 	`title` VARCHAR (255) NOT NULL,
 	`vote_average` VARCHAR (255) NOT NULL,
 	`overview` TEXT NOT NULL,
 	`release_date` DATE NOT NULL,
-	`runtime` INT
+	`runtime` INT,
+	`is_active` BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 DROP procedure IF EXISTS `movies_add`;
 DELIMITER $$
 CREATE PROCEDURE movies_add (
-								IN id INT,
-								IN popularity VARCHAR(255),
-								IN vote_count VARCHAR(255),
-								IN video VARCHAR (255),
-								IN poster_path VARCHAR(255),
-								IN adult VARCHAR(255),
- 								IN backdrop_path VARCHAR (255),
-								IN original_language VARCHAR(255),
-								IN original_title VARCHAR(255),
-								IN genre_ids VARCHAR (255),
+								IN id INT,								
+								IN poster_path VARCHAR(255),								
+ 								IN backdrop_path VARCHAR (255),																
 								IN title VARCHAR(255),
 								IN vote_average VARCHAR(255),
  								IN overview VARCHAR (255),
 								IN release_date DATE)
 BEGIN
 	INSERT INTO movies (
-			movies.id,
-			movies.popularity,
-			movies.vote_count,
-			movies.video,
-			movies.poster_path,
-			movies.adult,
-			movies.backdrop_path,
-			movies.original_language,
-			movies.original_title,
-			movies.genre_ids,
+			movies.id,			
+			movies.poster_path,			
+			movies.backdrop_path,			
 			movies.title,
 			movies.vote_average,
 			movies.overview,
 			movies.release_date
 	)
     VALUES
-        (id, popularity, vote_count, video, poster_path, adult, backdrop_path, original_language, original_title, genre_ids, title, vote_average, overview, release_date);
+        (id, poster_path, backdrop_path, title, vote_average, overview, release_date);
+END$$
+
+DROP procedure IF EXISTS `movies_getId`;
+DELIMITER $$
+CREATE PROCEDURE movies_getId ()
+BEGIN
+	SELECT movies.id FROM `movies`;
 END$$
 
 DROP procedure IF EXISTS `movies_getById`;
@@ -384,6 +473,13 @@ BEGIN
 	SELECT * FROM `movies` ORDER BY title ASC;
 END$$
 
+DROP procedure IF EXISTS `movies_getAllActives`;
+DELIMITER $$
+CREATE PROCEDURE movies_getAllActives ()
+BEGIN
+	SELECT * FROM `movies` WHERE `movies`.`is_active` = true ORDER BY title ASC;
+END$$
+
 DROP procedure IF EXISTS `movies_add_runtime`;
 DELIMITER $$
 CREATE PROCEDURE movies_add_runtime (IN id INT, IN runtime INT)
@@ -397,14 +493,8 @@ DROP procedure IF EXISTS `movies_add_details`;
 DELIMITER $$
 CREATE PROCEDURE movies_add_details (
 								IN id INT,
-								IN popularity VARCHAR(255),
-								IN vote_count VARCHAR(255),
-								IN video VARCHAR (255),
-								IN poster_path VARCHAR(255),
-								IN adult VARCHAR(255),
+								IN poster_path VARCHAR(255),								
  								IN backdrop_path VARCHAR (255),
-								IN original_language VARCHAR(255),
-								IN original_title VARCHAR(255),								
 								IN title VARCHAR(255),
 								IN vote_average VARCHAR(255),
  								IN overview VARCHAR (255),
@@ -413,14 +503,8 @@ CREATE PROCEDURE movies_add_details (
 BEGIN
 	INSERT INTO movies (
 			movies.id,
-			movies.popularity,
-			movies.vote_count,
-			movies.video,
-			movies.poster_path,
-			movies.adult,
+			movies.poster_path,			
 			movies.backdrop_path,
-			movies.original_language,
-			movies.original_title,			
 			movies.title,
 			movies.vote_average,
 			movies.overview,
@@ -428,14 +512,21 @@ BEGIN
 			movies.runtime
 	)
     VALUES
-        (id, popularity, vote_count, video, poster_path, adult, backdrop_path, original_language, original_title, title, vote_average, overview, release_date, runtime);
+        (id, poster_path, backdrop_path, title, vote_average, overview, release_date, runtime);
 END$$
 
-DROP procedure IF EXISTS `movies_deleteById`;
+DROP procedure IF EXISTS `movies_disableById`;
 DELIMITER $$
-CREATE PROCEDURE movies_deleteById (IN id INT)
+CREATE PROCEDURE movies_disableById (IN id INT)
 BEGIN
-	DELETE FROM `movies` WHERE `movies`.`id` = id;
+	UPDATE `movies` SET `movies`.`is_active` = false WHERE `movies`.`id` = id;
+END$$
+
+DROP procedure IF EXISTS `movies_enableById`;
+DELIMITER $$
+CREATE PROCEDURE movies_enableById (IN id INT)
+BEGIN
+	UPDATE `movies` SET `movies`.`is_active` = true WHERE `movies`.`id` = id;
 END$$
 
 DROP procedure IF EXISTS `movies_hasShows`;
@@ -458,6 +549,7 @@ CREATE TABLE shows (
 	`time_start` TIME NOT NULL,
 	`date_end` DATE NOT NULL,
 	`time_end` TIME NOT NULL,
+	`is_active` BOOLEAN NOT NULL DEFAULT TRUE,
 	CONSTRAINT `FK_id_cinemaRoom_show` FOREIGN KEY (`FK_id_cinemaRoom`) REFERENCES `cinema_rooms` (`id`),
 	CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`)
 );
@@ -485,7 +577,6 @@ BEGIN
         (FK_id_cinemaRoom, FK_id_movie, date_start, time_start, date_end, time_end);
 END$$
 
-
 DROP procedure IF EXISTS `shows_getAll`;
 DELIMITER $$
 CREATE PROCEDURE shows_getAll ()
@@ -495,6 +586,7 @@ BEGIN
 			shows.time_start AS shows_time_start,
 			shows.date_end AS shows_date_end,
 			shows.time_end AS shows_time_end,
+			shows.is_active AS shows_is_active,
 			movies.id AS movies_id,
 			movies.title AS movies_title,
 			cinema_rooms.id AS cinema_rooms_id,
@@ -508,11 +600,42 @@ BEGIN
 	ORDER BY movies.title ASC;
 END$$
 
-DROP procedure IF EXISTS `shows_deleteById`;
+DROP procedure IF EXISTS `shows_getAllActives`;
 DELIMITER $$
-CREATE PROCEDURE shows_deleteById (IN id INT)
+CREATE PROCEDURE shows_getAllActives ()
 BEGIN
-	DELETE FROM `shows` WHERE `shows`.`id` = id;
+	SELECT 	shows.id AS shows_id,
+			shows.date_start AS shows_date_start,
+			shows.time_start AS shows_time_start,
+			shows.date_end AS shows_date_end,
+			shows.time_end AS shows_time_end,
+			shows.is_active AS shows_is_active,
+			movies.id AS movies_id,
+			movies.title AS movies_title,
+			cinema_rooms.id AS cinema_rooms_id,
+			cinema_rooms.name AS cinema_rooms_name,
+			cinemas.name AS cinema_name,
+			cinemas.id AS cinema_id
+	FROM `shows`
+	INNER JOIN movies ON movies.id = shows.FK_id_movie
+	INNER JOIN cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
+	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
+	WHERE shows.is_active = true
+	ORDER BY movies.title ASC;
+END$$
+
+DROP procedure IF EXISTS `shows_disableById`;
+DELIMITER $$
+CREATE PROCEDURE shows_disableById (IN id INT)
+BEGIN
+	UPDATE `shows` SET `shows`.`is_active` = false WHERE `shows`.`id` = id;
+END$$
+
+DROP procedure IF EXISTS `shows_enableById`;
+DELIMITER $$
+CREATE PROCEDURE shows_enableById (IN id INT)
+BEGIN
+	UPDATE `shows` SET `shows`.`is_active` = true WHERE `shows`.`id` = id;
 END$$
 
 DROP procedure IF EXISTS `shows_getById`;
@@ -524,6 +647,7 @@ BEGIN
 			shows.time_start AS shows_time_start,
 			shows.date_end AS shows_date_end,
 			shows.time_end AS shows_time_end,
+			shows.is_active AS shows_is_active,
 			movies.id AS movies_id,
 			movies.title AS movies_title,
             movies.backdrop_path AS movies_backdrop_path,
@@ -572,6 +696,7 @@ BEGIN
 	WHERE (shows.FK_id_cinemaRoom = id_cinemaRoom);
 END$$
 
+-- AGREGAR FILTROS? PARA SABER SI ESTA ACTIVO EL SHOW?
 DROP procedure IF EXISTS `shows_getShowsOfMovie`;
 DELIMITER $$
 CREATE PROCEDURE shows_getShowsOfMovie (IN id_movie INT)
@@ -597,7 +722,7 @@ END$$
 ----------------------------- PURCHASE -----------------------------
 
 CREATE TABLE purchases (
-	`id_purchase` int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+	`id` int AUTO_INCREMENT NOT NULL PRIMARY KEY,
 	`ticket_quantity` int NOT NULL,
 	`discount` int NOT NULL,
 	`date` date NOT NULL,
@@ -615,11 +740,11 @@ BEGIN
 END$$
 
 
-DROP PROCEDURE IF EXISTS 'purchases_GetByData';
+DROP PROCEDURE IF EXISTS `purchases_GetByData`;
 DELIMITER $$
 CREATE PROCEDURE purchases_GetByData(IN ticket_quantity int, IN discount int, IN date DATE, IN total int, IN dni_user int)
 BEGIN 
-    SELECT purchases.id_purchase AS purchases_id_purchase,
+    SELECT purchases.id AS purchases_id_purchase
     FROM purchases
     WHERE(purchases.ticket_quantity = ticket_quantity AND purchases.discount = discount AND purchases.date = date AND purchases.total = total AND purchases.FK_dni = dni_user );
 END$$
@@ -628,7 +753,7 @@ DROP PROCEDURE IF EXISTS `purchases_GetById`;
 DELIMITER $$
 CREATE PROCEDURE purchases_GetById(IN id int)
 BEGIN 
-    SELECT purchases.id_purchase AS purchases_id_purchase,
+    SELECT purchases.id AS purchases_id_purchase,
            purchases.ticket_quantity AS purchases_ticket_quantity,
            purchases.discount AS purchases_discount,
            purchases.date AS purchases_date,
@@ -639,12 +764,12 @@ BEGIN
 		   cinemas.name AS cinema_name,
 		   cinema_rooms.name AS cinema_room_name
     FROM purchases
-	INNER JOIN tickets ON purchases.id_purchase = tickets.FK_id_purchase
+	INNER JOIN tickets ON purchases.id = tickets.FK_id_purchase
 	INNER JOIN shows ON tickets.FK_id_show = shows.id
 	INNER JOIN movies ON shows.FK_id_movie = movies.id
 	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
 	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
-    WHERE(purchases.id_purchase = id)
+    WHERE(purchases.id = id)
 	GROUP BY purchases.id;
 END$$
 
@@ -652,7 +777,7 @@ DROP PROCEDURE IF EXISTS `purchases_GetAll`;
 DELIMITER $$
 CREATE PROCEDURE purchases_GetAll()
 BEGIN
-	SELECT purchases.id_purchase AS purchases_id_purchase,
+	SELECT purchases.id AS purchases_id_purchase,
            purchases.ticket_quantity AS purchases_ticket_quantity,
            purchases.discount AS purchases_discount,
            purchases.date AS purchases_date,
@@ -665,7 +790,7 @@ DROP PROCEDURE IF EXISTS `purchases_GetByDni`;
 DELIMITER $$
 CREATE PROCEDURE purchases_GetByDni(IN dni int)
 BEGIN 
-    SELECT purchases.id_purchase AS purchases_id_purchase,
+    SELECT purchases.id AS purchases_id_purchase,
            purchases.ticket_quantity AS purchases_ticket_quantity,
            purchases.discount AS purchases_discount,
            purchases.date AS purchases_date,
@@ -903,20 +1028,21 @@ BEGIN
         (FK_id_genre, FK_id_movie);
 END$$
 
+DROP procedure IF EXISTS `genresxmovies_getAll`;					    
+DELIMITER $$
+CREATE PROCEDURE genresxmovies_getAll ()
+BEGIN
+	SELECT 	*
+	FROM genres_x_movies;	
+END$$
+
 DROP procedure IF EXISTS `genresxmovies_getByGenre`;					    
 DELIMITER $$
 CREATE PROCEDURE genresxmovies_getByGenre (IN id_genre INT)
 BEGIN
-	SELECT 	movies.id,
-			movies.popularity,
-			movies.vote_count,
-			movies.video,
-			movies.poster_path,
-			movies.adult,
-			movies.backdrop_path,
-			movies.original_language,
-			movies.original_title,
-			movies.genre_ids,
+	SELECT 	movies.id,			
+			movies.poster_path,			
+			movies.backdrop_path,			
 			movies.title,
 			movies.vote_average,
 			movies.overview,
@@ -932,16 +1058,9 @@ DROP procedure IF EXISTS `genresxmovies_getByDate`;
 DELIMITER $$
 CREATE PROCEDURE genresxmovies_getByDate (IN date_show DATE)
 BEGIN
-	SELECT 	movies.id,
-			movies.popularity,
-			movies.vote_count,
-			movies.video,
-			movies.poster_path,
-			movies.adult,
-			movies.backdrop_path,
-			movies.original_language,
-			movies.original_title,
-			movies.genre_ids,
+	SELECT 	movies.id,			
+			movies.poster_path,			
+			movies.backdrop_path,						
 			movies.title,
 			movies.vote_average,
 			movies.overview,
@@ -957,16 +1076,9 @@ DROP procedure IF EXISTS `genresxmovies_getByGenreAndDate`;
 DELIMITER $$
 CREATE PROCEDURE genresxmovies_getByGenreAndDate (IN id_genre INT, IN date_show DATE)
 BEGIN
-	SELECT 	movies.id,
-			movies.popularity,
-			movies.vote_count,
-			movies.video,
-			movies.poster_path,
-			movies.adult,
-			movies.backdrop_path,
-			movies.original_language,
-			movies.original_title,
-			movies.genre_ids,
+	SELECT 	movies.id,			
+			movies.poster_path,			
+			movies.backdrop_path,			
 			movies.title,
 			movies.vote_average,
 			movies.overview,
@@ -1003,4 +1115,3 @@ BEGIN
 END$$
 
 
------------------------------ ROOMS -----------------------------

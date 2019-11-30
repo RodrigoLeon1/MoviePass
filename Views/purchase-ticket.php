@@ -6,29 +6,26 @@
                     <h3 class="cinema-name">Show information</h3>                        
                     <div class="show-complete-info">
                         <h3>
+                            <i class="icon ion-md-videocam"></i> 
+                            <?= $show->getMovie()->getTitle(); ?>
+                        </h3>
+                        <h3>
+                            <i class="icon ion-logo-usd"></i> 
+                            Price for ticket: $<span id="price-ticket"><?= $show->getCinemaRoom()->getPrice(); ?></span>  
+                        </h3>                        
+                        <h3>
                             <i class="icon ion-md-calendar"></i> 
                             <?= $show->getCinemaRoom()->getCinema()->getName() ?> - <?= $show->getCinemaRoom()->getName() ?>
                         </h3>
                         <h3>
-                            <i class="icon ion-md-videocam"></i> 
-                            <?= $show->getMovie()->getTitle() ?>
-                        </h3>
-                        <h3>
-                            <i class="icon ion-logo-usd"></i> 
-                            Price for ticket: 
-                            <span id="price-ticket">
-                                <?= $show->getCinemaRoom()->getPrice() ?>
-                            </span>  
-                        </h3>
+                            <i class="icon ion-md-pin"></i> 
+                            <?= $show->getCinemaRoom()->getCinema()->getAddress(); ?>
+                        </h3>                        
                         <h3>
                             <i class="icon ion-md-calendar"></i> 
-                            <?= date('F j, Y', strtotime($show->getDateStart())) ?>
+                            <?= date('F j, Y', strtotime($show->getDateStart())); ?>
                             at 
-                            <?= date('H:i', strtotime($show->getTimeStart())) ?>
-                        </h3>
-                        <h3>
-                            <i class="icon ion-md-pin"></i> 
-                            <?= $show->getCinemaRoom()->getCinema()->getAddress() ?>
+                            <?= date('H:i', strtotime($show->getTimeStart())); ?>
                         </h3>
                     </div>
                     <div class="show-total">
@@ -48,11 +45,11 @@
                     <form action="<?= FRONT_ROOT ?>purchase/Add" method="POST" class="register-form">                        
                         <label>
                             <h4>Insert quantity of tickets</h4>               
-                            <input type="number" name="numberOfTickets" id="numberTickets" min="1" max="<?= $available ?>" required>
+                            <input type="number" name="numberOfTickets" id="numberTickets" min="1" max="<?= $available; ?>" required>
                         </label> 
-
-                        <input type="hidden" name="id_show" value="<?= $show->getId() ?>">
-                        <!--
+                        
+                        <input type="hidden" name="id_show" value="<?= $show->getId(); ?>">                        
+<!-- 
                         <label>
                             <h4>Card</h4>
                             <div class="card-container">
@@ -163,16 +160,16 @@
                                 
     <script>
 
-        let priceTicket = document.getElementById('price-ticket');
+        let priceTicket = document.getElementById('price-ticket');        
             priceTicket = parseInt(priceTicket.innerHTML);
 
         let cartTotal = document.getElementById('cart-total');
         let tickets = document.getElementById('numberTickets');    
         let ticketQuantity = document.getElementById('ticket-quantity'); 
-        
-        
+                
         //Cada vez que el usuario ingrese una cantidad numerica de ticket, se renderizara el total de la compra
-        tickets.addEventListener('keyup', function getNumberTickets() {        
+        tickets.addEventListener('keyup', function getNumberTickets() {      
+            console.log(priceTicket, this.value)  ;
             cartTotal.innerHTML = renderTotal(priceTicket, this.value);
             ticketQuantity.innerHTML = this.value;
         });        

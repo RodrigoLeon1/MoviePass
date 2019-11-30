@@ -10,6 +10,7 @@
         private $mail;
         private $password;
         private $role;
+        private $is_active;
 
         public function getMail() {
             return $this->mail;
@@ -36,7 +37,16 @@
 		public function setRole($role) {
 			$this->role = $role;
 			return $this;
-		}
+        }
+        
+        public function getIsActive() {
+            return $this->is_active;
+        }
+
+        public function setIsActive($is_active) {
+            $this->is_active = $is_active;
+            return $this;
+        }
 	}
 
 ?>

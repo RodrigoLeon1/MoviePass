@@ -29,11 +29,11 @@
                         </li>
                         <li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>cinema/listCinemaPath">List/Edit cinemas</a>
+                            <a href="<?= FRONT_ROOT ?>cinema/listCinemaPath">List / Modify cinemas</a>
                         </li>
                         <li>
                             <i class="icon ion-md-remove"></i>
-                            <a href="<?= FRONT_ROOT ?>cinemaRoom/listCinemaRoomPath">List/Edit cinemas rooms</a>
+                            <a href="<?= FRONT_ROOT ?>cinemaRoom/listCinemaRoomPath">List / Modify cinemas rooms</a>
                         </li>
                     </ul>
                 </li>

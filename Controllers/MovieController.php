@@ -8,8 +8,9 @@
     use Controllers\ShowController as ShowController;
     use Controllers\PurchaseController as PurchaseController;
     use Controllers\UserController as UserController;   
+    use Controllers\ViewsRouterController as ViewsRouter;  
 
-    class MovieController {
+    class MovieController extends ViewsRouter {
 
         private $movieDAO;
 		private $showController;
@@ -20,7 +21,7 @@
         }
 
         public function moviesNowPlaying() {
-            return $this->movieDAO->getAll();
+            return $this->movieDAO->getAllActives();
         }
 
 		public function moviesNowPlayingOnShow() {
@@ -56,7 +57,7 @@
             }
         }
 
-        // Converts the runtime of a movie in minutes to xhr xm
+        // Converts the runtime of a movie in minutes to hours and minutes
         private function minToHour($time, $format = '%2dhr %02dm') {
             if ($time < 1) {
                 return;
@@ -84,8 +85,7 @@
 			require_once(VIEWS_PATH . "now-playing.php");
 			require_once(VIEWS_PATH . "footer.php");
 		}
-        
-        // Imagen para cada genero???
+                
         public function filterMovies($id = "", $date = "") {                        
             $genreMovieController = new GenreToMovieController();            
             $genres = $genreMovieController->getAllGenres();            
@@ -111,30 +111,25 @@
                 $nameGenre = $genreMovieController->getNameOfGenre($id);            
                 $title = 'Now Playing - ' . $nameGenre . ' - ' . $date;
                 $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);  
-                                                       
+                               
                 return (!empty($movies)) ? $this->nowPlaying($movies, $title) : $this->nowPlaying($movies, $title, MOVIES_NULL);
                 
-            } else {                                
+            } else {                            
                 return $this->nowPlaying();
-            }            
+            }    
+            // Arreglar??? No repetir siempre el return, ponerlo al finalizar el bloque            
         } 
 
 		public function comingSoon() {
 			$title = 'Coming Soon';
             $img = IMG_PATH . '/w5.png';
             $movies = $this->moviesUpcoming();
-
 			require_once(VIEWS_PATH . "header.php");
 			require_once(VIEWS_PATH . "navbar.php");
 			require_once(VIEWS_PATH . "header-s.php");
 			require_once(VIEWS_PATH . "coming-soon.php");
             require_once(VIEWS_PATH . "footer.php");            
 		}
-
-		public function getNowPlayingMoviesFromDAO() {
-			$this->movieDAO->getNowPlayingMoviesFromDAO();
-			$this->movieDAO->getRunTimeMovieFromDAO();
-        }
 
         public function addMoviePath($alert = "", $success = "") {
 			if (isset($_SESSION["loggedUser"])) {
@@ -144,57 +139,74 @@
 				    require_once(VIEWS_PATH . "admin-header.php");
                     require_once(VIEWS_PATH . "admin-movie-add.php");
                 } else {
-                    $userController = new UserController();
-                    return $userController->userPath();
+                    // $userController = new UserController();
+                    // return $userController->userPath();
+                    return $this->goToUserPath();
                 }
 			} else {
-                $userController = new UserController();
-                return $userController->userPath();
+                // $userController = new UserController();
+                // return $userController->userPath();
+                return $this->goToUserPath();
             }
         }        
         
         public function add($id) {
             $movie = new Movie();
             $movie->setId($id);                        
-            if ($this->movieDAO->existMovie($movie) == null) {         
-            // if ($this->movieDAO->getById($movie) == null) {
-                $movieDetails = $this->movieDAO->getMovieDetailsById($movie);         
-                if ($this->movieDAO->addMovie($movieDetails)) {
-                    $genreMovieController = new GenreToMovieController();    
-                    if ($genreMovieController->addGenresBD($movieDetails)) {
+            if ($this->movieDAO->existMovie($movie) == null) {                                     
+                $movieDetails = $this->movieDAO->getMovieDetailsById($movie);                  
+                if ($this->movieDAO->addMovie($movieDetails)) {                    
+                    $genreMovieController = new GenreToMovieController();   
+                    if ($genreMovieController->addGenresBD($movieDetails)) {                        
                         return $this->addMoviePath(null, MOVIE_ADDED);                                    
-                    }
-                    return $this->addMoviePath(null, MOVIE_ADDED . ' But the genres cant added with success.');     //arreglar
-                }
-                
-            }            
+                    } else {
+                        // si no se pudieron agregar los generos, se borrara la pelicula de la db
+                        if ($this->movieDAO->deleteById($movieDetails)) {
+                            return $this->addMoviePath(DB_ERROR, null);                   
+                        } else {
+                            return $this->addMoviePath();
+                        }
+                    }                   
+                }                
+            }                        
             return $this->addMoviePath(MOVIE_EXIST, null);
         }        
 
-        // borrado logico
-        public function remove($id) {
+        public function enable($id) {
+			$movie = new Movie();
+			$movie->setId($id);
+			if ($this->movieDAO->enableById($movie)) {
+				return $this->listMoviePath(MOVIE_ENABLE, null, null);
+			} else {
+				return $this->listMoviePath(null, DB_ERROR, null);
+			}
+		}
+        
+        public function disable($id) {
             if ($this->movieHasShows($id)) {
                 return $this->listMoviePath(null, MOVIE_HAS_SHOWS, $id);
             } else {
                 $movie = new Movie();
                 $movie->setId($id);
-                $this->movieDAO->deleteById($movie);
-                return $this->listMoviePath(MOVIE_REMOVE, null, null);
+                if ($this->movieDAO->disableById($movie)) {
+                    return $this->listMoviePath(MOVIE_DISABLE, null, null);
+                }
+                return $this->listMoviePath(null, DB_ERROR, null);
             }
         }
 
-		public function forceDelete($id) {
+		public function forceDisable($id) {
             $movie = new Movie();
             $movie->setId($id);
-            $this->movieDAO->deleteById($movie);
-            
-			return $this->listMoviePath(MOVIE_REMOVE, null, null);
+            if ($this->movieDAO->disableById($movie)) {
+                return $this->listMoviePath(MOVIE_DISABLE, null, null);
+            }
+            return $this->listMoviePath(null, DB_ERROR, null);
 		}        
         
         private function movieHasShows($id) {
 			$movie = new Movie();
 			$movie->setId($id);
-
 			return ($this->movieDAO->getShowsOfMovie($movie)) ? true : false;
 		}
         
@@ -208,13 +220,19 @@
                         require_once(VIEWS_PATH . "admin-header.php");
                         require_once(VIEWS_PATH . "admin-movie-list.php");
                     } else {
-                        $userController = new UserController();
-                        return $userController->adminPath();
+                        // $userController = new UserController();
+                        // return $userController->adminPath();
+                        return $this->goToAdminPath();
                     }
+                } else {
+                    // $userController = new UserController();
+                    // return $userController->userPath();
+                    return $this->goToUserPath();
                 }
 			} else {
-                $userController = new UserController();
-                return $userController->userPath();
+                // $userController = new UserController();
+                // return $userController->userPath();
+                return $this->goToUserPath();
             }            
         }         
 
@@ -239,18 +257,30 @@
                         require_once(VIEWS_PATH . "admin-header.php");
                         require_once(VIEWS_PATH . "admin-movie-sales.php");
                     } else {
-                        $userController = new UserController();
-                        return $userController->adminPath();
+                        // $userController = new UserController();
+                        // return $userController->adminPath();
+                        return $this->goToAdminPath();
                     }
-				}
+				} else {
+                    // $userController = new UserController();
+                    // return $userController->userPath();
+                    return $this->goToUserPath();
+                }
 			} else {
-                $userController = new UserController();
-                return $userController->userPath();
+                // $userController = new UserController();
+                // return $userController->userPath();
+                return $this->goToUserPath();
             } 
         }
         
+        //
         public function getMovieById(Movie $movie) {            
             return $this->movieDAO->getById($movie);
+        }
+
+        public function getNowPlayingMoviesFromDAO() {
+			$this->movieDAO->getNowPlayingMoviesFromDAO();
+			$this->movieDAO->getRunTimeMovieFromDAO();
         }
 
     }

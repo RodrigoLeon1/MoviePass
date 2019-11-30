@@ -14,8 +14,7 @@
 		private $tableName = "roles";
 
 		public function getById($id) {
-			try {
-				$user = null;
+			try {				
 				$query = "CALL roles_getById(?)";
 				$parameters["id"] = $id;
 				$this->connection = Connection::GetInstance();

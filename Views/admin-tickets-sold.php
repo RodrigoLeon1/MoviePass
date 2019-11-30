@@ -20,14 +20,14 @@
                     <tbody>
                         <?php foreach ($tickets as $ticket): ?>
                             <tr>  
-                                <td><?= $ticket->getShow()->getId() ?></td>
-                                <td><?= $ticket->getShow()->getCinemaRoom()->getCinema()->getName() ?></td>
-                                <td><?= $ticket->getShow()->getCinemaRoom()->getName() ?></td>
-                                <td><?= $ticket->getShow()->getDateStart() ?></td>
-                                <td><?= $ticket->getShow()->getTimeStart() ?></td>
-                                <td><?= $ticket->getShow()->getMovie()->getTitle() ?></td>
-                                <td><?= $this->getTicketsSold($ticket->getShow()->getId()) ?></td>
-                                <td><?= $this->getTickesRemainder($ticket->getShow()->getId()) ?></td>
+                                <td><?= $ticket->getShow()->getId(); ?></td>
+                                <td><?= $ticket->getShow()->getCinemaRoom()->getCinema()->getName(); ?></td>
+                                <td><?= $ticket->getShow()->getCinemaRoom()->getName(); ?></td>
+                                <td><?= $ticket->getShow()->getDateStart(); ?></td>
+                                <td><?= $ticket->getShow()->getTimeStart(); ?></td>
+                                <td><?= $ticket->getShow()->getMovie()->getTitle(); ?></td>
+                                <td><?= $this->getTicketsSold($ticket->getShow()->getId()); ?></td>
+                                <td><?= $this->getTickesRemainder($ticket->getShow()->getId()); ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

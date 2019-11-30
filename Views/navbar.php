@@ -30,7 +30,7 @@
                 <?php $user = $_SESSION["loggedUser"] ?>
                 <li>
                 	<a href="#" class="nav-link">
-                        <?= $user->getMail() ?>
+                        <?= $user->getMail(); ?>
                         <i class="icon ion-md-arrow-dropdown"></i>
                     </a>
                     <!-- SubMenu -->

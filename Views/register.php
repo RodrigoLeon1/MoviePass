@@ -21,7 +21,7 @@
                 <div class="error-container">
                     <p>
                         <i class="icon ion-md-close-circle-outline"></i>
-                        <?= $alert ?>
+                        <?= $alert; ?>
                     </p>
                 </div>
                 <?php endif; ?>                
@@ -54,7 +54,7 @@
                     </button>
                 </div>
             </div>
-            <div class="register-img" style="background-image: url('<?= $img ?>');"></div>
+            <div class="register-img" style="background-image: url('<?= $img; ?>');"></div>
         </div>
     </main>
 </body>

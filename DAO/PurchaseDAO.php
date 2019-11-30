@@ -7,6 +7,7 @@
     use DAO\IPurchaseDAO as IPurchaseDAO;
     use DAO\QueryType as QueryType;
 
+    // arreglar -> ahora no es mas id_purchase -> es solo 'id' en la BD
     class PurchaseDAO implements IPurchaseDAO {
 
         private $tableName = "purchases";
@@ -19,8 +20,7 @@
                 $parameters['discount'] = $purchase->getDiscount();
                 $parameters['date'] = $purchase->getDate();
                 $parameters['total'] = $purchase->getTotal();
-                $parameters['dni'] = $purchase->getDni();   
-                
+                $parameters['dni'] = $purchase->getDni();                   
                 $this->connection = Connection::GetInstance();
                 $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
                 
@@ -42,12 +42,11 @@
                 $parameters['date'] = $date;
                 $parameters['total'] = $total;
                 $parameters['dni'] = $dni;
-
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters);
-                $purchase = new Purchase();
                 foreach($results as $row) {
-                    $purchase->setId($row['id_purchase']);
+                    $purchase = new Purchase();
+                    $purchase->setId($row['id']);
                     $purchase->setTicketQuantity($row['ticket_quantity']);
                     $purchase->setDiscount($row['discount']);
                     $purchase->setDate($row['date']);
@@ -89,7 +88,6 @@
             try {
                 $query = "CALL purchases_GetById(?)";
                 $parameters['id'] = $id;
-
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $purchase = new Purchase();
@@ -112,7 +110,6 @@
             try {
                 $query = "CALL purchases_GetByDni(?)";
                 $parameters['dni'] = $dni;
-
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $purchases = array();

@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <link rel="shortcut icon" type="image/png" href="<?=IMG_PATH?>/favicon.ico">
+    <link rel="shortcut icon" type="image/png" href="<?= IMG_PATH ?>/favicon.ico">
 
     <!--Dinamicamente cambiamos el titulo de las paginas -->
-    <title><?= $title ?></title>
+    <title><?= $title; ?></title>
 
     <!--Ion Icons-->
     <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">

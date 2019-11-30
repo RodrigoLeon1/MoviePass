@@ -5,7 +5,7 @@
         <?php if($success != null): ?>
         <div class="alert-container success-container">
             <i class="icon ion-md-checkmark"></i>
-            <h3><?= $success ?></h3>
+            <h3><?= $success; ?></h3>
         </div>
         <?php endif; ?>
 
@@ -28,17 +28,24 @@
 						<?php foreach ($shows as $show): ?>
 							<tr>
 								<td><?= $show->getId(); ?></td>
-								<td><?= $show->getCinemaRoom()->getCinema()->getName() ?></td>
+								<td><?= $show->getCinemaRoom()->getCinema()->getName(); ?></td>
 								<td><?= $show->getCinemaRoom()->getName(); ?></td>
 								<td><?= $show->getMovie()->getTitle(); ?></td>
 								<td><?= $show->getDateStart(); ?></td>
 								<td><?= $show->getTimeStart(); ?></td>
 								<td>
 									<div class="actions-container">
-										<a href="<?php echo FRONT_ROOT . "show/remove/" . $show->getId(); ?>" class="btn btn-delete">
+										<?php if ($show->getIsActive()): ?>
+										<a href="<?php echo FRONT_ROOT . "show/disable/" . $show->getId(); ?>" class="btn btn-disable">
 											<i class="icon ion-md-trash"></i>
-											Remove
+											Disable
 										</a>
+										<?php else: ?>
+										<a href="<?php echo FRONT_ROOT . "show/enable/" . $show->getId(); ?>" class="btn btn-enable">
+											<i class="icon ion-md-done-all"></i>
+											Enable
+										</a>
+										<?php endif; ?>
 										<!-- <a href="<?php echo FRONT_ROOT . "show/getById/" . $show->getId(); ?>" class="btn">
 											<i class="icon ion-md-build"></i>
 											Modify

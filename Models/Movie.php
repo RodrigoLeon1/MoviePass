@@ -3,49 +3,16 @@
     namespace Models;
 
     class Movie {
-
-        private $popularity;
-        private $vote_count;
-        private $video;
+        
         private $poster_path;
-        private $id;
-        private $adult;
-        private $backdrop_path;
-        private $original_language;
-        private $original_title;
-        private $genre_ids;
+        private $id;        
+        private $backdrop_path;        
         private $title;
         private $vote_average;
         private $overview;
         private $release_date;        
-        private $runtime;
-
-        public function getPopularity() {
-            return $this->popularity;
-        }
-
-        public function setPopularity($popularity) {
-            $this->popularity = $popularity;
-            return $this;
-        }
-
-        public function getVoteCount() {
-            return $this->vote_count;
-        }
-
-        public function setVoteCount($vote_count) {
-            $this->vote_count = $vote_count;
-            return $this;
-        }
-
-        public function getVideo() {
-            return $this->video;
-        }
-
-        public function setVideo($video) {
-            $this->video = $video;
-            return $this;
-        }
+        private $runtime;        
+        private $is_active;
 
         public function getPosterPath() {
             return $this->poster_path;
@@ -65,48 +32,12 @@
             return $this;
         }
 
-        public function getAdult() {
-            return $this->adult;
-        }
-
-        public function setAdult($adult) {
-            $this->adult = $adult;
-            return $this;
-        }
-
         public function getBackdropPath() {
             return $this->backdrop_path;
         }
 
         public function setBackdropPath($backdrop_path) {
             $this->backdrop_path = $backdrop_path;
-            return $this;
-        }
-
-        public function getOriginalLanguage() {
-            return $this->original_language;
-        }
-
-        public function setOriginalLanguage($original_language) {
-            $this->original_language = $original_language;
-            return $this;
-        }
-
-        public function getOriginalTitle() {
-            return $this->original_title;
-        }
-
-        public function setOriginalTitle($original_title) {
-            $this->original_title = $original_title;
-            return $this;
-        }
-
-        public function getGenreIds() {
-            return $this->genre_ids;
-        }
-
-        public function setGenreIds($genre_ids) {
-            $this->genre_ids = $genre_ids;
             return $this;
         }
 
@@ -152,6 +83,15 @@
 
         public function setRuntime($runtime) {
             $this->runtime = $runtime;
+            return $this;
+        }
+
+        public function getIsActive() {
+            return $this->is_active;
+        }
+
+        public function setIsActive($is_active) {
+            $this->is_active = $is_active;
             return $this;
         }
     }

@@ -12,20 +12,14 @@
 		private $movieList = array();		
 		private $upcoming = array();
 		private $tableName = "movies";
+		private $connection;
 
 		public function add(Movie $movie) {
 			try {
-				$query = "CALL movies_add(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-				$parameters["id"] = $movie->getId();
-				$parameters["popularity"] = $movie->getPopularity();
-				$parameters["vote_count"] = $movie->getVoteCount();
-				$parameters["video"] = $movie->getVideo();
-				$parameters["poster_path"] = $movie->getPosterPath();
-				$parameters["adult"] = $movie->getAdult();
-				$parameters["backdrop_path"] = $movie->getBackdropPath();
-				$parameters["original_language"] = $movie->getOriginalLanguage();
-				$parameters["original_title"] = $movie->getOriginalTitle();
-				$parameters["genre_ids"] = $movie->getGenreIds();
+				$query = "CALL movies_add(?, ?, ?, ?, ?, ?, ?, ?)"; 
+				$parameters["id"] = $movie->getId();				
+				$parameters["poster_path"] = $movie->getPosterPath();				
+				$parameters["backdrop_path"] = $movie->getBackdropPath();												
 				$parameters["title"] = $movie->getTitle();
 				$parameters["vote_average"] = $movie->getVoteAverage();
 				$parameters["overview"] = $movie->getOverview();
@@ -42,17 +36,10 @@
 		// Tambien agrega el runtime
 		public function addMovie(Movie $movie) {
 			try {				
-				$query = "CALL movies_add_details(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-				$parameters["id"] = $movie->getId();
-				$parameters["popularity"] = $movie->getPopularity();
-				$parameters["vote_count"] = $movie->getVoteCount();
-				$parameters["video"] = $movie->getVideo();
-				$parameters["poster_path"] = $movie->getPosterPath();
-				$parameters["adult"] = $movie->getAdult();
-				$parameters["backdrop_path"] = $movie->getBackdropPath();
-				$parameters["original_language"] = $movie->getOriginalLanguage();
-				$parameters["original_title"] = $movie->getOriginalTitle();	
-				// $parameters["genre_ids"] = $movie->getGenreIds();			
+				$query = "CALL movies_add_details(?, ?, ?, ?, ?, ?, ?, ?)";
+				$parameters["id"] = $movie->getId();				
+				$parameters["poster_path"] = $movie->getPosterPath();				
+				$parameters["backdrop_path"] = $movie->getBackdropPath();														
 				$parameters["title"] = $movie->getTitle();
 				$parameters["vote_average"] = $movie->getVoteAverage();
 				$parameters["overview"] = $movie->getOverview();
@@ -74,21 +61,40 @@
 				$resultSet = $this->connection->execute($query, array(), QueryType::StoredProcedure);
 				foreach ($resultSet as $row) {
 					$movie = new Movie ();
-					$movie->setId($row["id"]);
-					$movie->setPopularity($row["popularity"]);
-					$movie->setVoteCount($row["vote_count"]);
-					$movie->setVideo($row["video"]);
-					$movie->setPosterPath($row["poster_path"]);
-					$movie->setAdult($row["adult"]);
-					$movie->setBackdropPath($row["backdrop_path"]);
-					$movie->setOriginalLanguage($row["original_language"]);
-					$movie->setOriginalTitle($row["original_title"]);
-					$movie->setGenreIds($row["genre_ids"]);
+					$movie->setId($row["id"]);					
+					$movie->setPosterPath($row["poster_path"]);					
+					$movie->setBackdropPath($row["backdrop_path"]);														
 					$movie->setTitle($row["title"]);
 					$movie->setVoteAverage($row["vote_average"]);
 					$movie->setOverview($row["overview"]);
 					$movie->setReleaseDate($row["release_date"]);
 					$movie->setRuntime($row["runtime"]);
+					$movie->setIsActive($row["is_active"]);
+					array_push($this->movieList, $movie);
+				}
+				return $this->movieList;
+			}
+			catch (Exception $ex) {
+				return false;
+			}
+		}
+		
+		public function getAllActives() {
+			try {				
+				$query = "CALL movies_getAllActives()";
+				$this->connection = Connection::getInstance();				
+				$resultSet = $this->connection->execute($query, array(), QueryType::StoredProcedure);
+				foreach ($resultSet as $row) {
+					$movie = new Movie ();
+					$movie->setId($row["id"]);					
+					$movie->setPosterPath($row["poster_path"]);					
+					$movie->setBackdropPath($row["backdrop_path"]);														
+					$movie->setTitle($row["title"]);
+					$movie->setVoteAverage($row["vote_average"]);
+					$movie->setOverview($row["overview"]);
+					$movie->setReleaseDate($row["release_date"]);
+					$movie->setRuntime($row["runtime"]);
+					$movie->setIsActive($row["is_active"]);
 					array_push($this->movieList, $movie);
 				}
 				return $this->movieList;
@@ -104,17 +110,10 @@
             $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
             foreach ($arrayToDecode as $valuesArray) {
 				foreach ($valuesArray as $values) {
-					$movie = new Movie();
-					$movie->setPopularity($values["popularity"]);
-					$movie->setVoteCount($values["vote_count"]);
-					$movie->setVideo($values["video"]);
+					$movie = new Movie();					
 					$movie->setPosterPath($values["poster_path"]);
-					$movie->setId($values["id"]);
-					$movie->setAdult($values["adult"]);
-					$movie->setBackdropPath($values["backdrop_path"]);
-					$movie->setOriginalLanguage($values["original_language"]);
-					$movie->setOriginalTitle($values["original_title"]);
-					$movie->setGenreIds($values["genre_ids"]);
+					$movie->setId($values["id"]);					
+					$movie->setBackdropPath($values["backdrop_path"]);															
 					$movie->setTitle($values["title"]);
 					$movie->setVoteAverage($values["vote_average"]);
 					$movie->setOverview($values["overview"]);
@@ -126,9 +125,10 @@
 
 		public function getRunTimeMovieFromDAO() {
 			try {
-				$query = "SELECT id FROM " . $this->tableName;
+				// $query = "SELECT id FROM " . $this->tableName;
+				$query = "CALL movies_getId()";
 				$this->connection = Connection::getInstance();
-				$resultSet = $this->connection->execute($query);
+				$resultSet = $this->connection->execute($query, array(), QueryType::StoredProcedure);
 				foreach ($resultSet as $row) {
 					$jsonPath = MOVIE_DETAILS_PATH . $row["id"] . "?api_key=" . API_N . URL_API_LANGUAGE;
 					$jsonContent = file_get_contents($jsonPath);
@@ -162,17 +162,10 @@
             $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();
 
             foreach ($arrayToDecode as $valuesArray) {	
-				$movie = new Movie();
-				$movie->setPopularity($arrayToDecode["popularity"]);
-				$movie->setVoteCount($arrayToDecode["vote_count"]);
-				$movie->setVideo($arrayToDecode["video"]);
+				$movie = new Movie();				
 				$movie->setPosterPath($arrayToDecode["poster_path"]);
-				$movie->setId($arrayToDecode["id"]);
-				$movie->setAdult($arrayToDecode["adult"]);
-				$movie->setBackdropPath($arrayToDecode["backdrop_path"]);
-				$movie->setOriginalLanguage($arrayToDecode["original_language"]);
-				$movie->setOriginalTitle($arrayToDecode["original_title"]);	
-				$movie->setGenreIds($arrayToDecode["genres"]);
+				$movie->setId($arrayToDecode["id"]);				
+				$movie->setBackdropPath($arrayToDecode["backdrop_path"]);												
 				$movie->setTitle($arrayToDecode["title"]);
 				$movie->setVoteAverage($arrayToDecode["vote_average"]);
 				$movie->setOverview($arrayToDecode["overview"]);
@@ -210,23 +203,17 @@
 				$parameters ["id"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-				$movie = new Movie();
-				foreach ($results as $values) {
-					$movie->setPopularity($values["popularity"]);
-					$movie->setVoteCount($values["vote_count"]);
-					$movie->setVideo($values["video"]);
-					$movie->setPosterPath($values["poster_path"]);
+				foreach ($results as $values) {					
+					$movie = new Movie();
 					$movie->setId($values["id"]);
-					$movie->setAdult($values["adult"]);
-					$movie->setBackdropPath($values["backdrop_path"]);
-					$movie->setOriginalLanguage($values["original_language"]);
-					$movie->setOriginalTitle($values["original_title"]);
-					$movie->setGenreIds($values["genre_ids"]);
+					$movie->setPosterPath($values["poster_path"]);					
+					$movie->setBackdropPath($values["backdrop_path"]);														
 					$movie->setTitle($values["title"]);
 					$movie->setVoteAverage($values["vote_average"]);
 					$movie->setOverview($values["overview"]);
 					$movie->setReleaseDate($values["release_date"]);
 					$movie->setRuntime($values["runtime"]);
+					$movie->setIsActive($values["is_active"]);
 				}
 				return $movie;
 			}
@@ -251,25 +238,37 @@
 			catch (Exception $e) {
 				return false;
 			}
-		}		
-		
+		}				
 
 		public function existMovie(Movie $movie) {
 			try {
 				$query = "CALL movies_getById(?)";
 				$parameters ["id"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
-				return $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);				
-				// return true;
+				return $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);				
+				return true;
+			}
+			catch (Exception $e) {
+				return false;
+			}
+		}
+		
+		public function enableById(Movie $movie) {
+			try {				
+				$query = "CALL movies_enableById(?)";
+				$parameters ["id"] = $movie->getId();
+				$this->connection = Connection::GetInstance();
+				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
 			}
 			catch (Exception $e) {
 				return false;
 			}
 		}
 
-		public function deleteById(Movie $movie) {
+		public function disableById(Movie $movie) {
 			try {				
-				$query = "CALL movies_deleteById(?)";
+				$query = "CALL movies_disableById(?)";
 				$parameters ["id"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
@@ -286,7 +285,6 @@
 				$parameters["id_movie"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);				
-
 				return $results;
 			}
 			catch (Exception $e) {

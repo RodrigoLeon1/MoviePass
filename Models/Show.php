@@ -13,6 +13,7 @@
         private $timeStart;
         private $dateEnd;
         private $timeEnd;
+        private $is_active;
 
 		public function __construct () {
 			$this->cinema = new Cinema ();
@@ -79,6 +80,15 @@
 
         public function setTimeEnd($timeEnd) {
             $this->timeEnd = $timeEnd;
+            return $this;
+        }
+
+        public function getIsActive() {
+            return $this->is_active;
+        }
+
+        public function setIsActive($is_active) {
+            $this->is_active = $is_active;
             return $this;
         }
 

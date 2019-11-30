@@ -32,6 +32,7 @@
             }
         }
 
+        // Ticket $ticket ??????
         public function getByNumber($number) {
             try {
                 $query = "CALL tickets_GetByNumber(?)";
@@ -46,8 +47,7 @@
                     $ticket->setIdPurchase($row['id_purchase']);
                     $ticket->setIdShow($row['id_show']);
                 }
-                return $purchase;
-                
+                return $purchase;                
             } catch(Exception $e) {
                 return false;
             }
@@ -74,6 +74,7 @@
             }
         }
 
+        // Show $show
         public function getByShowId($id) {
             try {
                 $query = "CALL tickets_GetByShowId(?)";

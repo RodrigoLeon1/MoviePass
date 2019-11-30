@@ -7,6 +7,7 @@
         private $id;
         private $name;        
         private $address;
+        private $is_active;
 
         public function getId() {
             return $this->id;
@@ -32,6 +33,15 @@
 
         public function setAddress($address) {
             $this->address = $address;
+            return $this;
+        }
+
+        public function getIsActive() {
+            return $this->is_active;
+        }
+
+        public function setIsActive($is_active) {
+            $this->is_active = $is_active;
             return $this;
         }
 

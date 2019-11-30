@@ -5,14 +5,14 @@
         <?php if($success != null): ?>
         <div class="alert-container success-container">
             <i class="icon ion-md-checkmark"></i>
-            <h3><?= $success ?></h3>
+            <h3><?= $success; ?></h3>
         </div>
         <?php endif; ?>        
 
         <?php if($alert != null): ?>
         <div class="alert-container error-container">
             <i class="icon ion-md-close-circle-outline"></i>
-            <h3><?= $alert ?></h3>
+            <h3><?= $alert; ?></h3>
         </div>
         <?php endif; ?>
 
@@ -38,10 +38,17 @@
 								<td><?= $user->getMail(); ?></td>
 								<td>
 									<div class="actions-container">
-										<a href="<?php echo FRONT_ROOT . "user/removeUser/" . $user->getDni(); ?>" class="btn btn-delete">
+										<?php if ($user->getIsActive()): ?>
+										<a href="<?php echo FRONT_ROOT . "user/disable/" . $user->getDni(); ?>" class="btn btn-disable">
 											<i class="icon ion-md-trash"></i>
-											Remove
-										</a>										
+											Disable
+										</a>							
+										<?php else: ?>
+										<a href="<?php echo FRONT_ROOT . "user/enable/" . $user->getDni(); ?>" class="btn btn-enable">
+											<i class="icon ion-md-done-all"></i>
+											Enable
+										</a>
+										<?php endif; ?>			
 									</div> 									
 								</td>																		
 							</tr>

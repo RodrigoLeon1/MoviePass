@@ -1,7 +1,7 @@
     <main>
         <div class="login-container">
 
-            <div class="login-img" style="background-image: url('<?= $img ?>');"></div>
+            <div class="login-img" style="background-image: url('<?= $img; ?>');"></div>
             
             <div class="login-content">
             
@@ -24,7 +24,7 @@
                 <div class="error-container">
                     <p>
                         <i class="icon ion-md-close-circle-outline"></i>
-                        <?= $alert ?>
+                        <?= $alert; ?>
                     </p>
                 </div>
                 <?php endif; ?>

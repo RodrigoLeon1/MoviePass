@@ -16,8 +16,8 @@
                 <div class="glider">
                     <?php foreach ($movies as $movie): ?>
                     <figure>
-                        <a href="<?= FRONT_ROOT ?>movie/showMovie/<?= $movie->getId() ?>">
-                            <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?>" alt="">
+                        <a href="<?= FRONT_ROOT ?>movie/showMovie/<?= $movie->getId(); ?>">
+                            <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath(); ?>" alt="Poster path">
                             <h2><?= $movie->getTitle(); ?></h2>
                         </a>
                     </figure>
@@ -57,7 +57,7 @@
                     <?php foreach ($upcoming as $movie): ?>
                     <figure>
                         <a href="#">
-                            <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath() ?>" alt="">
+                            <img src="<?= IMG_PATH_TMDB . $movie->getPosterPath(); ?>" alt="Poster Path">
                             <h2><?= $movie->getTitle(); ?></h2>
                         </a>
                     </figure>

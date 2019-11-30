@@ -6,9 +6,10 @@
     interface IUserDAO {
         
         function add(User $user);
-        function getByMail($mail);
+        function getByMail(User $user);
         function getAll();
-        function deleteByDni($dni);
+        function enableByDni(User $user);
+        function disableByDni(User $user);
         function updateUser(User $user);
         
     }

@@ -227,6 +227,22 @@ hr {
 
 
 /*  */
+.filter-container {
+    margin: 3rem 0 3rem 0;    
+}
+
+.filter-container i {
+    font-size: 2rem;
+}
+
+.filter-input {    
+    border: none !important;
+    border-bottom: 3px solid #038b9a !important;
+    color: #fff !important;
+    width: 30%;
+    background-color: #323c48 !important;
+}
+
 .content-container {
     background-color: #323c48;
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
@@ -276,9 +292,21 @@ hr {
     justify-content: center;
 }
 
-.btn-delete {
+.btn-disable {
     background-color: #f8d7da;
     color: #2a323c;
+}
+
+.btn-enable {
+    background-color: rgb(31, 119, 93);    
+    color: #fff;    
+}
+
+.btn-view-all {
+    display: inline-block;
+    margin-top: 2rem;    
+    margin-left: 1rem;
+    font-size: 1.3rem;
 }
 
 .btn-modify {

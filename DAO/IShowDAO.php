@@ -10,8 +10,9 @@
         function getByMovieId(Show $show);
         function getByCinemaRoomId(Show $show);
         function getAll();
-        function deleteById(Show $show);
-        function getById($id);
+        function enableById(Show $show);
+        function disableById(Show $show);
+        function getById(Show $show);
         function modify(Show $show);
         function moviesOnShow();
         function getMoviesIdWithoutRepeating($id);

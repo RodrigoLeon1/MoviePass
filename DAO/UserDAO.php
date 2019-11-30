@@ -6,59 +6,58 @@
 	use DAO\Connection as Connection;
 	use DAO\IUserDAO as IUserDAO;
     use Models\User as User;
-	use DAO\ProfileUserDAO as ProfileUserDAO;
-	use DAO\RoleDAO as RoleDAO;
+	use DAO\ProfileUserDAO as ProfileUserDAO;	
 
     class UserDAO implements IUserDAO  {
 
 		private $userList = array();
 		private $connection;
 		private $tableName = "users";
-		private $profileUserDAO;
-		private $roleDAO;
+		private $profileUserDAO;		
 
 		public function __construct() {
-			$this->profileUserDAO = new ProfileUserDAO();
-			$this->roleDAO = new RoleDAO();
+			$this->profileUserDAO = new ProfileUserDAO();			
 		}
 
         public function add(User $user) {
-			$profileUserDAO = new ProfileUserDAO();
-			// if true -> seguir
-			$profileUserDAO->add($user);
-			try {
-				$query = "INSERT INTO " . $this->tableName . " (mail, password, FK_dni, FK_id_role) VALUES (:mail, :password, :dni, :role);";
-				$parameters["mail"] = $user->getMail();
-                $parameters["password"] = $user->getPassword();
-				$parameters["dni"] = $user->getDni();
-				$parameters["role"] = $user->getRole();
-                $this->connection = Connection::getInstance();
-				$this->connection->executeNonQuery($query, $parameters);
-				return true;
-			}
-			catch (Exception $e) {
+			$profileUserDAO = new ProfileUserDAO();			
+			if ($profileUserDAO->add($user)) {
+				try {					
+					$query = "CALL users_add(?, ?, ?, ?)";
+					$parameters["mail"] = $user->getMail();
+					$parameters["password"] = $user->getPassword();
+					$parameters["dni"] = $user->getDni();
+					$parameters["role"] = $user->getRole();
+					$this->connection = Connection::getInstance();
+					$this->connection->executeNonQuery($query, $parameters, QueryType::StoredProcedure);
+					return true;
+				}
+				catch (Exception $e) {
+					return false;
+				}
+			} else {
 				return false;
 			}
         }
-
-		//PASAR A OBJ
-		public function getByMail($mail) {
+				
+		public function getByMail(User $user) {
 			try {
-				$user = null;
-				$query = "CALL users_getByMail (?)";
-				$parameters["mail"] = $mail;
+				$userTemp = null;
+				$query = "CALL users_getByMail(?)";
+				$parameters["mail"] = $user->getMail();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);						
 				foreach($results as $row) {
-					$user = new User();
-					$user->setMail($row["mail"]);
-					$user->setPassword($row["password"]);
-					$user->setRole($row["FK_id_role"]);
-					$user->setDni($row["dni"]);
-					$user->setFirstName($row["first_name"]);
-					$user->setLastName($row["last_name"]);
+					$userTemp = new User();
+					$userTemp->setMail($row["mail"]);
+					$userTemp->setPassword($row["password"]);
+					$userTemp->setRole($row["FK_id_role"]);
+					$userTemp->setDni($row["dni"]);
+					$userTemp->setFirstName($row["first_name"]);
+					$userTemp->setLastName($row["last_name"]);
+					$userTemp->setIsActive($row["is_active"]);
 				}
-				return $user;
+				return $userTemp;
 			} catch (Exception $e) {
 				return false;
 			}
@@ -66,7 +65,7 @@
 
 		public function getAll() {
 			try {
-				$query = "CALL users_getAll";
+				$query = "CALL users_getAll()";
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
 				foreach($results as $row) {
@@ -76,6 +75,7 @@
 					$user->setDni($row["dni"]);
 					$user->setMail($row["mail"]);
 					$user->setRole($row["FK_id_role"]);
+					$user->setIsActive($row["is_active"]);
 					array_push($this->userList, $user);
 				}
 				return $this->userList;	
@@ -83,12 +83,24 @@
 				return false;
 			}
 		}
-
-		//PASAR A OBJ
-		public function deleteByDni($dni) {
+		
+		public function enableByDni(User $user) {
 			try {
-				$query = "CALL users_deleteByDni(?)";
-				$parameters ["FK_dni"] = $dni;
+				$query = "CALL users_enableByDni(?)";
+				$parameters ["FK_dni"] = $user->getDni();
+				$this->connection = Connection::GetInstance();
+				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
+			}
+			catch (Exception $e) {
+				return false;
+			}
+		}
+
+		public function disableByDni(User $user) {
+			try {
+				$query = "CALL users_disableByDni(?)";
+				$parameters ["FK_dni"] = $user->getDni();
 				$this->connection = Connection::GetInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 				return true;

@@ -11,6 +11,7 @@
         private $capacity;
         private $price;
         private $cinema;
+        private $is_active;
 
         public function getId() {
             return $this->id;
@@ -54,6 +55,15 @@
 
         public function setCinema(Cinema $cinema) {
             $this->cinema = $cinema;
+            return $this;
+        }
+
+        public function getIsActive() {
+            return $this->is_active;
+        }
+
+        public function setIsActive($is_active) {
+            $this->is_active = $is_active;
             return $this;
         }
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-11-2019 a las 18:33:33
+-- Tiempo de generación: 29-11-2019 a las 21:53:18
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.9
 
@@ -30,17 +30,42 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemaRooms_deleteById` (IN `id` IN
 	DELETE FROM `cinema_rooms` WHERE `cinema_rooms`.`id` = id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemaRooms_disableById` (IN `id` INT)  BEGIN
+	UPDATE `cinema_rooms` SET `cinema_rooms`.`is_active` = false WHERE `cinema_rooms`.`id` = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemaRooms_enableById` (IN `id` INT)  BEGIN
+	UPDATE `cinema_rooms` SET `cinema_rooms`.`is_active` = true WHERE `cinema_rooms`.`id` = id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemaRooms_GetAll` ()  BEGIN
 	SELECT 
 		cinema_rooms.id as cinema_room_id,
 		cinema_rooms.name as cinema_room_name,
 		cinema_rooms.capacity as cinema_room_capacity,
 		cinema_rooms.price as cinema_room_price,
+		cinema_rooms.is_active as cinema_room_is_active,
 		cinemas.id as cinema_id,
 		cinemas.name as cinema_name,
 		cinemas.address as cinema_address
 	FROM cinema_rooms
 	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
+	ORDER BY cinemas.name ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemaRooms_GetAllActives` ()  BEGIN
+	SELECT 
+		cinema_rooms.id as cinema_room_id,
+		cinema_rooms.name as cinema_room_name,
+		cinema_rooms.capacity as cinema_room_capacity,
+		cinema_rooms.price as cinema_room_price,
+		cinema_rooms.is_active as cinema_room_is_active,
+		cinemas.id as cinema_id,
+		cinemas.name as cinema_name,
+		cinemas.address as cinema_address
+	FROM cinema_rooms
+	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
+	WHERE cinema_rooms.is_active = true
 	ORDER BY cinemas.name ASC;
 END$$
 
@@ -70,7 +95,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemaRooms_hasShows` (IN `id` INT)
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemaRooms_modify` (IN `id` INT, IN `name` VARCHAR(255), IN `capacity` INT, IN `price` INT)  BEGIN
-	UPDATE cinema_rooms SET cinema_rooms.name = name, cinema_rooms.address = address,cinema_rooms.capacity = capacity, cinema_rooms.price = price  WHERE cinema_rooms.id = id;
+	UPDATE cinema_rooms SET cinema_rooms.name = name, cinema_rooms.capacity = capacity, cinema_rooms.price = price
+	WHERE cinema_rooms.id = id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemas_add` (IN `name` VARCHAR(255), IN `address` VARCHAR(255))  BEGIN
@@ -86,8 +112,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemas_deleteById` (IN `id` INT)  
 	DELETE FROM `cinemas` WHERE `cinemas`.`id` = id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemas_disableById` (IN `id` INT)  BEGIN
+	UPDATE `cinemas` SET `cinemas`.`is_active` = false WHERE `cinemas`.`id` = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemas_enableById` (IN `id` INT)  BEGIN
+	UPDATE `cinemas` SET `cinemas`.`is_active` = true WHERE `cinemas`.`id` = id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemas_GetAll` ()  BEGIN
-	SELECT * FROM `cinemas`;
+	SELECT * FROM `cinemas` ORDER BY `cinemas`.name;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemas_GetAllActives` ()  BEGIN
+	SELECT * FROM `cinemas` WHERE `cinemas`.`is_active` = true ORDER BY `cinemas`.name;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemas_getById` (IN `id` INT)  BEGIN
@@ -138,39 +176,30 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_add` (IN `FK_id_genre
         (FK_id_genre, FK_id_movie);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getAll` ()  BEGIN
+	SELECT 	*
+	FROM genres_x_movies;	
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getByDate` (IN `date_show` DATE)  BEGIN
-    SELECT     movies.id,
-            movies.popularity,
-            movies.vote_count,
-            movies.video,
-            movies.poster_path,
-            movies.adult,
-            movies.backdrop_path,
-            movies.original_language,
-            movies.original_title,
-            movies.genre_ids,
-            movies.title,
-            movies.vote_average,
-            movies.overview,
-            movies.release_date
-    FROM genres_x_movies
-    INNER JOIN movies ON FK_id_movie = movies.id 
-    INNER JOIN shows ON movies.id = shows.FK_id_movie
-    WHERE (shows.date_start = date_show)
-    GROUP BY movies.id;
+	SELECT 	movies.id,			
+			movies.poster_path,			
+			movies.backdrop_path,						
+			movies.title,
+			movies.vote_average,
+			movies.overview,
+			movies.release_date
+	FROM genres_x_movies
+	INNER JOIN movies ON FK_id_movie = movies.id 
+	INNER JOIN shows ON movies.id = shows.FK_id_movie
+	WHERE (shows.date_start = date_show)
+	GROUP BY movies.id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getByGenre` (IN `id_genre` INT)  BEGIN
-	SELECT 	movies.id,
-			movies.popularity,
-			movies.vote_count,
-			movies.video,
-			movies.poster_path,
-			movies.adult,
-			movies.backdrop_path,
-			movies.original_language,
-			movies.original_title,
-			movies.genre_ids,
+	SELECT 	movies.id,			
+			movies.poster_path,			
+			movies.backdrop_path,			
 			movies.title,
 			movies.vote_average,
 			movies.overview,
@@ -183,26 +212,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getByGenre` (IN `id_g
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getByGenreAndDate` (IN `id_genre` INT, IN `date_show` DATE)  BEGIN
-    SELECT     movies.id,
-            movies.popularity,
-            movies.vote_count,
-            movies.video,
-            movies.poster_path,
-            movies.adult,
-            movies.backdrop_path,
-            movies.original_language,
-            movies.original_title,
-            movies.genre_ids,
-            movies.title,
-            movies.vote_average,
-            movies.overview,
-            movies.release_date,
-            movies.runtime
-    FROM genres_x_movies
-    INNER JOIN movies ON FK_id_movie = movies.id 
-    INNER JOIN shows ON movies.id = shows.FK_id_movie
-    WHERE (FK_id_genre = id_genre AND shows.date_start = date_show)
-    GROUP BY movies.id;
+	SELECT 	movies.id,			
+			movies.poster_path,			
+			movies.backdrop_path,			
+			movies.title,
+			movies.vote_average,
+			movies.overview,
+			movies.release_date
+	FROM genres_x_movies
+	INNER JOIN movies ON FK_id_movie = movies.id 
+	INNER JOIN shows ON movies.id = shows.FK_id_movie
+	WHERE (FK_id_genre = id_genre AND shows.date_start = date_show)
+	GROUP BY movies.id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getGenresOfMovie` (IN `id_movie` INT)  BEGIN
@@ -274,38 +295,38 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `genres_x_movies_getByGenre` (IN `id
 	GROUP BY movies.id;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_add` (IN `id` INT, IN `popularity` VARCHAR(255), IN `vote_count` VARCHAR(255), IN `video` VARCHAR(255), IN `poster_path` VARCHAR(255), IN `adult` VARCHAR(255), IN `backdrop_path` VARCHAR(255), IN `original_language` VARCHAR(255), IN `original_title` VARCHAR(255), IN `genre_ids` VARCHAR(255), IN `title` VARCHAR(255), IN `vote_average` VARCHAR(255), IN `overview` VARCHAR(255), IN `release_date` DATE)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `images_add` (IN `name` VARCHAR(100), IN `dni_user` INT)  BEGIN
+    INSERT INTO images
+    	(name, FK_dni_user)
+	VALUES
+		(name, dni_user);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `images_getByUser` (IN `dni` INT)  BEGIN
+	SELECT *
+	FROM images	
+    WHERE (images.FK_dni_user = dni);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_add` (IN `id` INT, IN `poster_path` VARCHAR(255), IN `backdrop_path` VARCHAR(255), IN `title` VARCHAR(255), IN `vote_average` VARCHAR(255), IN `overview` VARCHAR(255), IN `release_date` DATE)  BEGIN
 	INSERT INTO movies (
-			movies.id,
-			movies.popularity,
-			movies.vote_count,
-			movies.video,
-			movies.poster_path,
-			movies.adult,
-			movies.backdrop_path,
-			movies.original_language,
-			movies.original_title,
-			movies.genre_ids,
+			movies.id,			
+			movies.poster_path,			
+			movies.backdrop_path,			
 			movies.title,
 			movies.vote_average,
 			movies.overview,
 			movies.release_date
 	)
     VALUES
-        (id, popularity, vote_count, video, poster_path, adult, backdrop_path, original_language, original_title, genre_ids, title, vote_average, overview, release_date);
+        (id, poster_path, backdrop_path, title, vote_average, overview, release_date);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_add_details` (IN `id` INT, IN `popularity` VARCHAR(255), IN `vote_count` VARCHAR(255), IN `video` VARCHAR(255), IN `poster_path` VARCHAR(255), IN `adult` VARCHAR(255), IN `backdrop_path` VARCHAR(255), IN `original_language` VARCHAR(255), IN `original_title` VARCHAR(255), IN `title` VARCHAR(255), IN `vote_average` VARCHAR(255), IN `overview` VARCHAR(255), IN `release_date` DATE, IN `runtime` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_add_details` (IN `id` INT, IN `poster_path` VARCHAR(255), IN `backdrop_path` VARCHAR(255), IN `title` VARCHAR(255), IN `vote_average` VARCHAR(255), IN `overview` VARCHAR(255), IN `release_date` DATE, IN `runtime` INT)  BEGIN
 	INSERT INTO movies (
 			movies.id,
-			movies.popularity,
-			movies.vote_count,
-			movies.video,
-			movies.poster_path,
-			movies.adult,
+			movies.poster_path,			
 			movies.backdrop_path,
-			movies.original_language,
-			movies.original_title,			
 			movies.title,
 			movies.vote_average,
 			movies.overview,
@@ -313,7 +334,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_add_details` (IN `id` INT, I
 			movies.runtime
 	)
     VALUES
-        (id, popularity, vote_count, video, poster_path, adult, backdrop_path, original_language, original_title, title, vote_average, overview, release_date, runtime);
+        (id,poster_path, backdrop_path, title, vote_average, overview, release_date, runtime);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_add_runtime` (IN `id` INT, IN `runtime` INT)  BEGIN
@@ -326,8 +347,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_deleteById` (IN `id` INT)  B
 	DELETE FROM `movies` WHERE `movies`.`id` = id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_disableById` (IN `id` INT)  BEGIN
+	UPDATE `movies` SET `movies`.`is_active` = false WHERE `movies`.`id` = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_enableById` (IN `id` INT)  BEGIN
+	UPDATE `movies` SET `movies`.`is_active` = true WHERE `movies`.`id` = id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_getAll` ()  BEGIN
 	SELECT * FROM `movies` ORDER BY title ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_getAllActives` ()  BEGIN
+	SELECT * FROM `movies` WHERE `movies`.`is_active` = true ORDER BY title ASC;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_getById` (IN `id` INT)  BEGIN
@@ -340,6 +373,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_getByTitle` (IN `title` VARC
 	FROM movies 
 	INNER JOIN shows ON movies.id = shows.FK_id_movie
 	WHERE movies.title = title;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_getId` ()  BEGIN
+	SELECT movies.id FROM `movies`;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_hasShows` (IN `id_movie` INT)  BEGIN
@@ -365,7 +402,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_Add` (IN `ticket_quantity
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_GetAll` ()  BEGIN
-	SELECT purchases.id_purchase AS purchases_id_purchase,
+	SELECT purchases.id AS purchases_id_purchase,
            purchases.ticket_quantity AS purchases_ticket_quantity,
            purchases.discount AS purchases_discount,
            purchases.date AS purchases_date,
@@ -374,8 +411,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_GetAll` ()  BEGIN
 	FROM purchases;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_GetByData` (IN `ticket_quantity` INT, IN `discount` INT, IN `date` DATE, IN `total` INT, IN `dni_user` INT)  BEGIN 
+    SELECT purchases.id AS purchases_id_purchase
+    FROM purchases
+    WHERE(purchases.ticket_quantity = ticket_quantity AND purchases.discount = discount AND purchases.date = date AND purchases.total = total AND purchases.FK_dni = dni_user );
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_GetByDni` (IN `dni` INT)  BEGIN 
-    SELECT purchases.id_purchase AS purchases_id_purchase,
+    SELECT purchases.id AS purchases_id_purchase,
            purchases.ticket_quantity AS purchases_ticket_quantity,
            purchases.discount AS purchases_discount,
            purchases.date AS purchases_date,
@@ -386,14 +429,24 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_GetByDni` (IN `dni` INT) 
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_GetById` (IN `id` INT)  BEGIN 
-    SELECT purchases.id_purchase AS purchases_id_purchase,
+    SELECT purchases.id AS purchases_id_purchase,
            purchases.ticket_quantity AS purchases_ticket_quantity,
            purchases.discount AS purchases_discount,
            purchases.date AS purchases_date,
            purchases.total AS purchases_total,
-           purchases.FK_dni AS purchases_FK_dni
+           purchases.FK_dni AS purchases_FK_dni,
+		   movies.title AS movie_title,
+		   movies.poster_path AS movie_poster_path,
+		   cinemas.name AS cinema_name,
+		   cinema_rooms.name AS cinema_room_name
     FROM purchases
-    WHERE(purchases.id_purchase = id);
+	INNER JOIN tickets ON purchases.id = tickets.FK_id_purchase
+	INNER JOIN shows ON tickets.FK_id_show = shows.id
+	INNER JOIN movies ON shows.FK_id_movie = movies.id
+	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
+	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
+    WHERE(purchases.id = id)
+	GROUP BY purchases.id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `roles_getAll` ()  BEGIN
@@ -424,12 +477,21 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_deleteById` (IN `id` INT)  BE
 	DELETE FROM `shows` WHERE `shows`.`id` = id;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_disableById` (IN `id` INT)  BEGIN
+	UPDATE `shows` SET `shows`.`is_active` = false WHERE `shows`.`id` = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_enableById` (IN `id` INT)  BEGIN
+	UPDATE `shows` SET `shows`.`is_active` = true WHERE `shows`.`id` = id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_getAll` ()  BEGIN
 	SELECT 	shows.id AS shows_id,
 			shows.date_start AS shows_date_start,
 			shows.time_start AS shows_time_start,
 			shows.date_end AS shows_date_end,
 			shows.time_end AS shows_time_end,
+			shows.is_active AS shows_is_active,
 			movies.id AS movies_id,
 			movies.title AS movies_title,
 			cinema_rooms.id AS cinema_rooms_id,
@@ -440,6 +502,27 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_getAll` ()  BEGIN
 	INNER JOIN movies ON movies.id = shows.FK_id_movie
 	INNER JOIN cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
 	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
+	ORDER BY movies.title ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_getAllActives` ()  BEGIN
+	SELECT 	shows.id AS shows_id,
+			shows.date_start AS shows_date_start,
+			shows.time_start AS shows_time_start,
+			shows.date_end AS shows_date_end,
+			shows.time_end AS shows_time_end,
+			shows.is_active AS shows_is_active,
+			movies.id AS movies_id,
+			movies.title AS movies_title,
+			cinema_rooms.id AS cinema_rooms_id,
+			cinema_rooms.name AS cinema_rooms_name,
+			cinemas.name AS cinema_name,
+			cinemas.id AS cinema_id
+	FROM `shows`
+	INNER JOIN movies ON movies.id = shows.FK_id_movie
+	INNER JOIN cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
+	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
+	WHERE shows.is_active = true
 	ORDER BY movies.title ASC;
 END$$
 
@@ -461,6 +544,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_getById` (IN `id` INT)  BEGIN
 			shows.time_start AS shows_time_start,
 			shows.date_end AS shows_date_end,
 			shows.time_end AS shows_time_end,
+			shows.is_active AS shows_is_active,
 			movies.id AS movies_id,
 			movies.title AS movies_title,
             movies.backdrop_path AS movies_backdrop_path,
@@ -600,14 +684,50 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tickets_getTicketsOfShows` (IN `id_
 	WHERE tickets.FK_id_show = id_show;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tickets_ShowsTickets` ()  BEGIN
+	SELECT 
+		shows.id AS show_id,
+		shows.date_start AS show_date_start,
+		shows.time_start AS show_time_start,
+		cinemas.name AS cinema_name,
+		cinemas.id AS cinema_id,
+		cinema_rooms.name AS cinema_room_name,
+		movies.title AS movie_title	
+	FROM shows 	
+	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
+	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
+	INNER JOIN movies ON shows.FK_id_movie = movies.id
+	GROUP BY shows.id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_add` (IN `mail` VARCHAR(255), IN `password` VARCHAR(255), IN `FK_dni` INT, IN `FK_id_role` INT)  BEGIN
+	INSERT INTO users (
+			users.mail,
+			users.password,
+			users.FK_dni,
+			users.FK_id_role
+	)
+    VALUES
+        (mail, password, FK_dni, FK_id_role);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `users_deleteByDni` (IN `dni` INT)  BEGIN
 	DELETE FROM `users` WHERE `users`.`FK_dni` = dni;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_disableByDni` (IN `dni` INT)  BEGIN
+	UPDATE `users` SET users.is_active = false WHERE `users`.`FK_dni` = dni;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_enableByDni` (IN `dni` INT)  BEGIN
+	UPDATE `users` SET users.is_active = true WHERE `users`.`FK_dni` = dni;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `users_getAll` ()  BEGIN
 	SELECT 	users.mail,
 			users.password,
 			users.FK_id_role,
+			users.is_active,
 			profile_users.dni,
 			profile_users.first_name,
 			profile_users.last_name
@@ -620,6 +740,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `users_getByMail` (IN `mail` VARCHAR
 	SELECT 	users.mail,
 			users.password,
 			users.FK_id_role,
+			users.is_active,
 			profile_users.dni,
 			profile_users.first_name,
 			profile_users.last_name
@@ -639,19 +760,21 @@ DELIMITER ;
 CREATE TABLE `cinemas` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL
+  `address` varchar(255) NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `cinemas`
 --
 
-INSERT INTO `cinemas` (`id`, `name`, `address`) VALUES
-(10, 'Paseo Aldrey', 'Sarmiento 2685'),
-(11, 'Ambassador', 'Cordoba DVi'),
-(12, 'CinemaCenter', 'Diag. Pueyrredon 3050'),
-(13, 'Cinema II', 'Los Gallegos Shopping'),
-(14, 'Cine del Paseo', 'Diagonal Pueyrredon');
+INSERT INTO `cinemas` (`id`, `name`, `address`, `is_active`) VALUES
+(10, 'Paseo Aldrey', 'Sarmiento 2685', 1),
+(11, 'Ambassador', 'Cordoba DVi', 1),
+(12, 'CinemaCenter', 'Diag. Pueyrredon 3050', 1),
+(13, 'Cinema II', 'Los Gallegos Shopping', 1),
+(14, 'Cine del Paseo', 'Diagonal Pueyrredon', 1),
+(21, 'at', 'a5', 0);
 
 -- --------------------------------------------------------
 
@@ -664,18 +787,20 @@ CREATE TABLE `cinema_rooms` (
   `name` varchar(255) COLLATE utf8_bin NOT NULL,
   `price` int(11) NOT NULL,
   `capacity` int(11) NOT NULL,
-  `FK_id_cinema` int(11) NOT NULL
+  `FK_id_cinema` int(11) NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `cinema_rooms`
 --
 
-INSERT INTO `cinema_rooms` (`id`, `name`, `price`, `capacity`, `FK_id_cinema`) VALUES
-(11, 'Sala 1', 50, 120, 10),
-(12, 'Sala 1', 30, 160, 11),
-(13, 'Sala 2', 55, 5, 10),
-(14, 'Sala 3', 15, 15, 10);
+INSERT INTO `cinema_rooms` (`id`, `name`, `price`, `capacity`, `FK_id_cinema`, `is_active`) VALUES
+(11, 'Sala 1', 50, 120, 10, 1),
+(12, 'Sala 1', 30, 160, 11, 1),
+(13, 'Sala 2', 55, 5, 10, 1),
+(14, 'Sala 3', 15, 15, 10, 1),
+(21, 'attt', 5, 5, 21, 0);
 
 -- --------------------------------------------------------
 
@@ -781,7 +906,29 @@ INSERT INTO `genres_x_movies` (`FK_id_genre`, `FK_id_movie`) VALUES
 (53, 77),
 (28, 14161),
 (12, 14161),
-(878, 14161);
+(878, 14161),
+(28, 272),
+(80, 272),
+(18, 272);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `images`
+--
+
+CREATE TABLE `images` (
+  `imageId` int(11) NOT NULL,
+  `name` varchar(100) COLLATE utf8_bin NOT NULL,
+  `FK_dni_user` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Volcado de datos para la tabla `images`
+--
+
+INSERT INTO `images` (`imageId`, `name`, `FK_dni_user`) VALUES
+(8, '35017858.jpg', 11111111);
 
 -- --------------------------------------------------------
 
@@ -791,48 +938,43 @@ INSERT INTO `genres_x_movies` (`FK_id_genre`, `FK_id_movie`) VALUES
 
 CREATE TABLE `movies` (
   `id` int(11) NOT NULL,
-  `popularity` varchar(255) NOT NULL,
-  `vote_count` varchar(255) NOT NULL,
-  `video` varchar(255) NOT NULL,
   `poster_path` varchar(255) NOT NULL,
-  `adult` varchar(255) NOT NULL,
   `backdrop_path` varchar(255) NOT NULL,
-  `original_language` varchar(255) NOT NULL,
-  `original_title` varchar(255) NOT NULL,
   `title` varchar(255) NOT NULL,
   `vote_average` varchar(255) NOT NULL,
   `overview` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `release_date` date NOT NULL,
   `runtime` int(11) DEFAULT NULL,
-  `genre_ids` int(11) DEFAULT NULL
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `movies`
 --
 
-INSERT INTO `movies` (`id`, `popularity`, `vote_count`, `video`, `poster_path`, `adult`, `backdrop_path`, `original_language`, `original_title`, `title`, `vote_average`, `overview`, `release_date`, `runtime`, `genre_ids`) VALUES
-(77, '15.923', '8417', '', '/fQMSaP88cf1nz4qwuNEEFtazuDM.jpg', '', '/q2CtXYjp9IlnfBcPktNkBPsuAEO.jpg', 'en', 'Memento', 'Memento', '8.2', 'Leonard Shelby is tracking down the man who raped and murdered his wife. The difficulty of locating his wife\'s killer, however, is compounded by the fact that he suffers from a rare, untreatable form of short-term memory loss. Although he can recall detai', '2000-10-11', 113, NULL),
-(14161, '20.281', '8068', '', '/zf1idF1ys8zuaAzEEzghre5A4m3.jpg', '', '/ywxrdkfbr8Dg3SBW2gi4kC59qOb.jpg', 'en', '2012', '2012', '5.7', 'Dr. Adrian Helmsley, part of a worldwide geophysical team investigating the effect on the earth of radiation from unprecedented solar storms, learns that the earth\'s core is heating up. He warns U.S. President Thomas Wilson that the crust of the earth is ', '2009-10-10', 158, NULL),
-(157336, '41.105', '19972', '', '/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg', '', '/xu9zaAevzQ5nnrsXN6JcahLnG4i.jpg', 'en', 'Interstellar', 'Interstellar', '8.3', 'Interstellar chronicles the adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.', '2014-11-05', 169, 0),
-(290859, '315.137', '159', '', '/vqzNJRH4YyquRiWxCCOH0aXggHI.jpg', '', '/a6cDxdwaQIFjSkXf7uskg78ZyTq.jpg', 'en', 'Terminator: Dark Fate', 'Terminator: Dark Fate', '6.6', 'More than two decades have passed since Sarah Connor prevented Judgment Day, changed the future, and re-wrote the fate of the human race. Dani Ramos is living a simple life in Mexico City with her brother and father when a highly advanced and deadly new T', '2019-11-01', 128, 0),
-(295151, '95.424', '125', '', '/tXTccijjTnpXWFEMaHC1gp59cNc.jpg', '', '/9REB0BCTk2RueTj5PuELYRYJN5e.jpg', 'en', 'Let It Snow', 'Let It Snow', '6.3', 'When a huge blizzard (that doesn\'t show signs of stopping) hits, Gracetown is completely snowed in. But even though it\'s cold outside, things are heating up inside, proving that Christmas is magical when it comes to love.', '2019-11-08', 93, 0),
-(338967, '99.847', '213', '', '/pIcV8XXIIvJCbtPoxF9qHMKdRr2.jpg', '', '/jCCdt0e8Xe9ttvevD4S3TSMNdH.jpg', 'en', 'Zombieland: Double Tap', 'Zombieland: Double Tap', '7.5', 'The group will face a new zombie threat as a new breed of zombie has developed. This new super-zombie type is faster, bigger, and stronger than the previous strain of zombies and harder to kill. These super-zombies have started grouping up into a horde go', '2019-10-18', 99, 0),
-(398978, '53.593', '7', '', '/eXH2w0Ylh706Rwj6CHFm1FKRBXG.jpg', '', '/aZ1ZqJ4uO1RK5gU5jRsO4qG7rJo.jpg', 'en', 'The Irishman', 'The Irishman', '8.9', 'World War II veteran and mob hitman Frank \"The Irishman\" Sheeran recalls his possible involvement with the slaying of union leader Jimmy Hoffa.', '2019-11-01', 209, 0),
-(417384, '90.103', '484', '', '/q5298SICFzqMcKtQoBktk8p6FH.jpg', '', '/qBI3Spq93lNxGzecdGpbwV5lOvU.jpg', 'en', 'Scary Stories to Tell in the Dark', 'Scary Stories to Tell in the Dark', '6.3', 'Mill Valley, Pennsylvania, Halloween night, 1968. After playing a joke on a school bully, Sarah and her friends decide to sneak into a supposedly haunted house that once belonged to the powerful Bellows family, unleashing dark forces that they will be una', '2019-08-09', 108, 0),
-(420809, '230.948', '579', '', '/tBuabjEqxzoUBHfbyNbd8ulgy5j.jpg', '', '/skvI4rYFrKXS73BJxWGH54Omlvv.jpg', 'en', 'Maleficent: Mistress of Evil', 'Maleficent: Mistress of Evil', '7.3', 'Maleficent and her goddaughter Aurora begin to question the complex family ties that bind them as they are pulled in different directions by impending nuptials, unexpected allies, and dark new forces at play.', '2019-10-18', 118, 0),
-(453405, '94.626', '442', '', '/uTALxjQU8e1lhmNjP9nnJ3t2pRU.jpg', '', '/c3F4P2oauA7IQmy4hM0OmRt2W7d.jpg', 'en', 'Gemini Man', 'Gemini Man', '5.8', 'Henry Brogen, an aging assassin tries to get out of the business but finds himself in the ultimate battle: fighting his own clone who is 25 years younger than him and at the peak of his abilities.', '2019-10-11', 117, 0),
-(454640, '59.76', '224', '', '/ebe8hJRCwdflNQbUjRrfmqtUiNi.jpg', '', '/k7sE3loFwuU2mqf7FbZBeE3rjBa.jpg', 'en', 'The Angry Birds Movie 2', 'The Angry Birds Movie 2', '6.5', 'Red, Chuck, Bomb and the rest of their feathered friends are surprised when a green pig suggests that they put aside their differences and unite to fight a common threat. Aggressive birds from an island covered in ice are planning to use an elaborate weap', '2019-08-14', 96, 0),
-(458156, '60.831', '3085', '', '/ziEuG1essDuWuC5lpWUaw1uXY2O.jpg', '', '/stemLQMLDrlpfIlZ5OjllOPT8QX.jpg', 'en', 'John Wick: Chapter 3 - Parabellum', 'John Wick: Chapter 3 - Parabellum', '7.1', 'Super-assassin John Wick returns with a $14 million price tag on his head and an army of bounty-hunting killers on his trail. After killing a member of the shadowy international assassin’s guild, the High Table, John Wick is excommunicado, but the world’s', '2019-05-17', 131, 0),
-(474350, '108.576', '1800', '', '/zfE0R94v1E8cuKAerbskfD3VfUt.jpg', '', '/8moTOzunF7p40oR5XhlDvJckOSW.jpg', 'en', 'It Chapter Two', 'It Chapter Two', '6.9', '27 years after overcoming the malevolent supernatural entity Pennywise, the former members of the Losers\' Club, who have grown up and moved away from Derry, are brought back together by a devastating phone call.', '2019-09-06', 169, 0),
-(475557, '470.723', '4556', '', '/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg', '', '/n6bUvigpRFqSwmPp1m2YADdbRBc.jpg', 'en', 'Joker', 'Joker', '8.5', 'During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.', '2019-10-04', 122, 0),
-(480105, '96.279', '121', '', '/g4z7mDmJmx23vsVg6XNWcnXb6gc.jpg', '', '/3uG3aOhEzFCjcQulsJQiAzLSrw8.jpg', 'en', '47 Meters Down: Uncaged', '47 Meters Down: Uncaged', '5.2', 'A group of backpackers diving in a ruined underwater city discover that they have stumbled into the territory of the ocean\'s deadliest shark species.', '2019-08-16', 90, 0),
-(481084, '80.361', '111', '', '/uaXNjRkDdjfxfVuKHo25wkA6CiA.jpg', '', '/ur4NTeFGZmQ6Hz5uEkAMgPI3WRg.jpg', 'en', 'The Addams Family', 'The Addams Family', '5.9', 'The Addams family\'s lives begin to unravel when they face-off against a treacherous, greedy crafty reality-TV host while also preparing for their extended family to arrive for a major celebration.', '2019-10-11', 86, 0),
-(501170, '92.496', '59', '', '/p69QzIBbN06aTYqRRiCOY1emNBh.jpg', '', '/4D4Ic9N4tnwaW4x241LGb1XOi7O.jpg', 'en', 'Doctor Sleep', 'Doctor Sleep', '6.9', 'A traumatized, alcoholic Dan Torrance meets Abra, a kid who also has the ability to \"shine.\" He tries to protect her from the True Knot, a cult whose goal is to feed off people like them in order to remain immortal.', '2019-11-08', 152, 0),
-(515195, '64.828', '880', '', '/1rjaRIAqFPQNnMtqSMLtg0VEABi.jpg', '', '/t5Kp02Jzixl0KfpwthHp9ZUex9t.jpg', 'en', 'Yesterday', 'Yesterday', '6.7', 'Jack Malik is a struggling singer-songwriter in an English seaside town whose dreams of fame are rapidly fading, despite the fierce devotion and support of his childhood best friend, Ellie. After a freak bus accident during a mysterious global blackout, J', '2019-06-28', 116, 0),
-(521777, '91.718', '279', '', '/tximyCXMEnWIIyOy9STkOduUprG.jpg', '', '/jTwUkBa6BOPypqCx4KcvrYIlAcI.jpg', 'en', 'Good Boys', 'Good Boys', '6.5', 'A group of young boys on the cusp of becoming teenagers embark on an epic quest to fix their broken drone before their parents get home.', '2019-08-16', 89, 0),
-(559969, '119.825', '1227', '', '/ePXuKdXZuJx8hHMNr2yM4jY2L7Z.jpg', '', '/ijiE9WoGSwSzM16zTxvUneJ8RXc.jpg', 'en', 'El Camino: A Breaking Bad Movie', 'El Camino: A Breaking Bad Movie', '7.1', 'In the wake of his dramatic escape from captivity, Jesse Pinkman must come to terms with his past in order to forge some kind of future.', '2019-10-11', 123, 0),
-(568012, '126.478', '60', '', '/4E2lyUGLEr3yH4q6kJxPkQUhX7n.jpg', '', '/iGnCzXEx0cFlUbpyAMeHwHWhPhx.jpg', 'ja', 'ワンピーススタンピード', 'One Piece: Stampede', '7.6', 'One Piece: Stampede is a stand-alone film that celebrates the anime\'s 20th Anniversary and takes place outside the canon of the \"One Piece\" TV series. Monkey D. Luffy and his Straw Hat pirate crew are invited to a massive Pirate Festival that brings many ', '2019-10-24', 101, 0);
+INSERT INTO `movies` (`id`, `poster_path`, `backdrop_path`, `title`, `vote_average`, `overview`, `release_date`, `runtime`, `is_active`) VALUES
+(77, '/fQMSaP88cf1nz4qwuNEEFtazuDM.jpg', '/q2CtXYjp9IlnfBcPktNkBPsuAEO.jpg', 'Memento', '8.2', 'Leonard Shelby is tracking down the man who raped and murdered his wife. The difficulty of locating his wife\'s killer, however, is compounded by the fact that he suffers from a rare, untreatable form of short-term memory loss. Although he can recall detai', '2000-10-11', 113, 1),
+(272, '/dr6x4GyyegBWtinPBzipY02J2lV.jpg', '/9myrRcegWGGp24mpVfkD4zhUfhi.jpg', 'Batman Begins', '7.6', 'Driven by tragedy, billionaire Bruce Wayne dedicates his life to uncovering and defeating the corruption that plagues his home, Gotham City.  Unable to work within the system, he instead creates a new identity, a symbol of fear for the criminal underworld', '2005-06-10', 140, 1),
+(14161, '/zf1idF1ys8zuaAzEEzghre5A4m3.jpg', '/ywxrdkfbr8Dg3SBW2gi4kC59qOb.jpg', '2012', '5.7', 'Dr. Adrian Helmsley, part of a worldwide geophysical team investigating the effect on the earth of radiation from unprecedented solar storms, learns that the earth\'s core is heating up. He warns U.S. President Thomas Wilson that the crust of the earth is ', '2009-10-10', 158, 1),
+(157336, '/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg', '/xu9zaAevzQ5nnrsXN6JcahLnG4i.jpg', 'Interstellar', '8.3', 'Interstellar chronicles the adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.', '2014-11-05', 169, 1),
+(290859, '/vqzNJRH4YyquRiWxCCOH0aXggHI.jpg', '/a6cDxdwaQIFjSkXf7uskg78ZyTq.jpg', 'Terminator: Dark Fate', '6.6', 'More than two decades have passed since Sarah Connor prevented Judgment Day, changed the future, and re-wrote the fate of the human race. Dani Ramos is living a simple life in Mexico City with her brother and father when a highly advanced and deadly new T', '2019-11-01', 128, 1),
+(295151, '/tXTccijjTnpXWFEMaHC1gp59cNc.jpg', '/9REB0BCTk2RueTj5PuELYRYJN5e.jpg', 'Let It Snow', '6.3', 'When a huge blizzard (that doesn\'t show signs of stopping) hits, Gracetown is completely snowed in. But even though it\'s cold outside, things are heating up inside, proving that Christmas is magical when it comes to love.', '2019-11-08', 93, 0),
+(338967, '/pIcV8XXIIvJCbtPoxF9qHMKdRr2.jpg', '/jCCdt0e8Xe9ttvevD4S3TSMNdH.jpg', 'Zombieland: Double Tap', '7.5', 'The group will face a new zombie threat as a new breed of zombie has developed. This new super-zombie type is faster, bigger, and stronger than the previous strain of zombies and harder to kill. These super-zombies have started grouping up into a horde go', '2019-10-18', 99, 1),
+(398978, '/eXH2w0Ylh706Rwj6CHFm1FKRBXG.jpg', '/aZ1ZqJ4uO1RK5gU5jRsO4qG7rJo.jpg', 'The Irishman', '8.9', 'World War II veteran and mob hitman Frank \"The Irishman\" Sheeran recalls his possible involvement with the slaying of union leader Jimmy Hoffa.', '2019-11-01', 209, 1),
+(417384, '/q5298SICFzqMcKtQoBktk8p6FH.jpg', '/qBI3Spq93lNxGzecdGpbwV5lOvU.jpg', 'Scary Stories to Tell in the Dark', '6.3', 'Mill Valley, Pennsylvania, Halloween night, 1968. After playing a joke on a school bully, Sarah and her friends decide to sneak into a supposedly haunted house that once belonged to the powerful Bellows family, unleashing dark forces that they will be una', '2019-08-09', 108, 1),
+(420809, '/tBuabjEqxzoUBHfbyNbd8ulgy5j.jpg', '/skvI4rYFrKXS73BJxWGH54Omlvv.jpg', 'Maleficent: Mistress of Evil', '7.3', 'Maleficent and her goddaughter Aurora begin to question the complex family ties that bind them as they are pulled in different directions by impending nuptials, unexpected allies, and dark new forces at play.', '2019-10-18', 118, 1),
+(453405, '/uTALxjQU8e1lhmNjP9nnJ3t2pRU.jpg', '/c3F4P2oauA7IQmy4hM0OmRt2W7d.jpg', 'Gemini Man', '5.8', 'Henry Brogen, an aging assassin tries to get out of the business but finds himself in the ultimate battle: fighting his own clone who is 25 years younger than him and at the peak of his abilities.', '2019-10-11', 117, 1),
+(454640, '/ebe8hJRCwdflNQbUjRrfmqtUiNi.jpg', '/k7sE3loFwuU2mqf7FbZBeE3rjBa.jpg', 'The Angry Birds Movie 2', '6.5', 'Red, Chuck, Bomb and the rest of their feathered friends are surprised when a green pig suggests that they put aside their differences and unite to fight a common threat. Aggressive birds from an island covered in ice are planning to use an elaborate weap', '2019-08-14', 96, 1),
+(458156, '/ziEuG1essDuWuC5lpWUaw1uXY2O.jpg', '/stemLQMLDrlpfIlZ5OjllOPT8QX.jpg', 'John Wick: Chapter 3 - Parabellum', '7.1', 'Super-assassin John Wick returns with a $14 million price tag on his head and an army of bounty-hunting killers on his trail. After killing a member of the shadowy international assassin’s guild, the High Table, John Wick is excommunicado, but the world’s', '2019-05-17', 131, 0),
+(474350, '/zfE0R94v1E8cuKAerbskfD3VfUt.jpg', '/8moTOzunF7p40oR5XhlDvJckOSW.jpg', 'It Chapter Two', '6.9', '27 years after overcoming the malevolent supernatural entity Pennywise, the former members of the Losers\' Club, who have grown up and moved away from Derry, are brought back together by a devastating phone call.', '2019-09-06', 169, 1),
+(475557, '/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg', '/n6bUvigpRFqSwmPp1m2YADdbRBc.jpg', 'Joker', '8.5', 'During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.', '2019-10-04', 122, 1),
+(480105, '/g4z7mDmJmx23vsVg6XNWcnXb6gc.jpg', '/3uG3aOhEzFCjcQulsJQiAzLSrw8.jpg', '47 Meters Down: Uncaged', '5.2', 'A group of backpackers diving in a ruined underwater city discover that they have stumbled into the territory of the ocean\'s deadliest shark species.', '2019-08-16', 90, 1),
+(481084, '/uaXNjRkDdjfxfVuKHo25wkA6CiA.jpg', '/ur4NTeFGZmQ6Hz5uEkAMgPI3WRg.jpg', 'The Addams Family', '5.9', 'The Addams family\'s lives begin to unravel when they face-off against a treacherous, greedy crafty reality-TV host while also preparing for their extended family to arrive for a major celebration.', '2019-10-11', 86, 1),
+(501170, '/p69QzIBbN06aTYqRRiCOY1emNBh.jpg', '/4D4Ic9N4tnwaW4x241LGb1XOi7O.jpg', 'Doctor Sleep', '6.9', 'A traumatized, alcoholic Dan Torrance meets Abra, a kid who also has the ability to \"shine.\" He tries to protect her from the True Knot, a cult whose goal is to feed off people like them in order to remain immortal.', '2019-11-08', 152, 1),
+(515195, '/1rjaRIAqFPQNnMtqSMLtg0VEABi.jpg', '/t5Kp02Jzixl0KfpwthHp9ZUex9t.jpg', 'Yesterday', '6.7', 'Jack Malik is a struggling singer-songwriter in an English seaside town whose dreams of fame are rapidly fading, despite the fierce devotion and support of his childhood best friend, Ellie. After a freak bus accident during a mysterious global blackout, J', '2019-06-28', 116, 1),
+(521777, '/tximyCXMEnWIIyOy9STkOduUprG.jpg', '/jTwUkBa6BOPypqCx4KcvrYIlAcI.jpg', 'Good Boys', '6.5', 'A group of young boys on the cusp of becoming teenagers embark on an epic quest to fix their broken drone before their parents get home.', '2019-08-16', 89, 1),
+(559969, '/ePXuKdXZuJx8hHMNr2yM4jY2L7Z.jpg', '/ijiE9WoGSwSzM16zTxvUneJ8RXc.jpg', 'El Camino: A Breaking Bad Movie', '7.1', 'In the wake of his dramatic escape from captivity, Jesse Pinkman must come to terms with his past in order to forge some kind of future.', '2019-10-11', 123, 1),
+(568012, '/4E2lyUGLEr3yH4q6kJxPkQUhX7n.jpg', '/iGnCzXEx0cFlUbpyAMeHwHWhPhx.jpg', 'One Piece: Stampede', '7.6', 'One Piece: Stampede is a stand-alone film that celebrates the anime\'s 20th Anniversary and takes place outside the canon of the \"One Piece\" TV series. Monkey D. Luffy and his Straw Hat pirate crew are invited to a massive Pirate Festival that brings many ', '2019-10-24', 101, 0);
 
 -- --------------------------------------------------------
 
@@ -851,10 +993,8 @@ CREATE TABLE `profile_users` (
 --
 
 INSERT INTO `profile_users` (`dni`, `first_name`, `last_name`) VALUES
-(0, 'user', 'user'),
-(2, 'x', 'x'),
-(404040, 'Mr pepe', 'Peposo'),
-(615124, 'Rodrigo', 'Leon'),
+(1515, 'user', 'user'),
+(10512412, 'pep', 'pep'),
 (11111111, 'Rodrigo', 'Leon');
 
 -- --------------------------------------------------------
@@ -864,7 +1004,7 @@ INSERT INTO `profile_users` (`dni`, `first_name`, `last_name`) VALUES
 --
 
 CREATE TABLE `purchases` (
-  `id_purchase` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `ticket_quantity` int(11) NOT NULL,
   `discount` int(11) NOT NULL,
   `date` date NOT NULL,
@@ -876,7 +1016,7 @@ CREATE TABLE `purchases` (
 -- Volcado de datos para la tabla `purchases`
 --
 
-INSERT INTO `purchases` (`id_purchase`, `ticket_quantity`, `discount`, `date`, `total`, `FK_dni`) VALUES
+INSERT INTO `purchases` (`id`, `ticket_quantity`, `discount`, `date`, `total`, `FK_dni`) VALUES
 (1, 4, 0, '2019-11-17', 120, 11111111),
 (2, 3, 0, '2019-11-17', 90, 11111111),
 (3, 2, 0, '2019-11-17', 60, 11111111),
@@ -894,7 +1034,7 @@ INSERT INTO `purchases` (`id_purchase`, `ticket_quantity`, `discount`, `date`, `
 (15, 3, 0, '2019-11-17', 150, 11111111),
 (16, 3, 0, '2019-11-17', 150, 11111111),
 (17, 3, 0, '2019-11-17', 90, 11111111),
-(18, 2, 0, '2019-11-17', 60, 0),
+(18, 2, 0, '2019-11-17', 60, 1515),
 (19, 1, 0, '2019-11-17', 30, 11111111),
 (20, 159, 0, '2019-11-17', 4770, 11111111),
 (21, 3, 0, '2019-11-17', 45, 11111111),
@@ -903,8 +1043,12 @@ INSERT INTO `purchases` (`id_purchase`, `ticket_quantity`, `discount`, `date`, `
 (24, 4, 0, '2019-11-18', 60, 11111111),
 (25, 3, 0, '2019-11-18', 90, 11111111),
 (26, 2, 0, '2019-11-18', 60, 11111111),
-(27, 5, 0, '2019-11-19', 150, 615124),
-(28, 4, 0, '2019-11-19', 120, 11111111);
+(28, 4, 0, '2019-11-19', 120, 11111111),
+(29, 5, 0, '2019-11-20', 275, 11111111),
+(30, 10, 0, '2019-11-20', 500, 1515),
+(31, 5, 0, '2019-11-20', 275, 11111111),
+(32, 5, 0, '2019-11-21', 75, 1515),
+(33, 3, 0, '2019-11-28', 90, 1515);
 
 -- --------------------------------------------------------
 
@@ -938,18 +1082,28 @@ CREATE TABLE `shows` (
   `date_start` date NOT NULL,
   `time_start` time NOT NULL,
   `date_end` date NOT NULL,
-  `time_end` time NOT NULL
+  `time_end` time NOT NULL,
+  `is_active` tinyint(1) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Volcado de datos para la tabla `shows`
 --
 
-INSERT INTO `shows` (`id`, `FK_id_cinemaRoom`, `FK_id_movie`, `date_start`, `time_start`, `date_end`, `time_end`) VALUES
-(24, 13, 14161, '2019-12-28', '10:10:00', '2019-12-28', '13:03:00'),
-(25, 13, 14161, '2019-12-28', '15:15:00', '2019-12-28', '18:08:00'),
-(26, 14, 14161, '2019-12-28', '10:25:00', '2019-12-28', '13:18:00'),
-(37, 11, 14161, '2019-12-28', '17:30:00', '2019-12-28', '20:23:00');
+INSERT INTO `shows` (`id`, `FK_id_cinemaRoom`, `FK_id_movie`, `date_start`, `time_start`, `date_end`, `time_end`, `is_active`) VALUES
+(24, 13, 14161, '2019-12-28', '10:10:00', '2019-12-28', '13:03:00', 1),
+(25, 13, 14161, '2019-12-28', '15:15:00', '2019-12-28', '18:08:00', 1),
+(26, 14, 14161, '2019-12-28', '10:25:00', '2019-12-28', '13:18:00', 1),
+(37, 11, 14161, '2019-12-28', '17:30:00', '2019-12-28', '20:23:00', 1),
+(38, 13, 475557, '2019-12-31', '15:30:00', '2019-12-31', '17:47:00', 1),
+(39, 13, 290859, '2019-12-21', '22:00:00', '2019-12-22', '00:23:00', 1),
+(40, 14, 474350, '2019-12-25', '15:30:00', '2019-12-25', '18:34:00', 1),
+(41, 13, 480105, '2019-12-27', '15:15:00', '2019-12-27', '17:00:00', 1),
+(42, 12, 521777, '2019-12-31', '18:30:00', '2019-12-31', '20:14:00', 1),
+(43, 14, 515195, '2019-12-20', '15:15:00', '2019-12-20', '17:26:00', 1),
+(44, 11, 420809, '2019-12-20', '17:30:00', '2019-12-20', '19:43:00', 1),
+(45, 21, 398978, '2019-12-31', '03:15:00', '2019-12-31', '06:59:00', 0),
+(46, 14, 559969, '2019-12-31', '15:15:00', '2019-12-31', '17:33:00', 1);
 
 -- --------------------------------------------------------
 
@@ -964,6 +1118,40 @@ CREATE TABLE `tickets` (
   `FK_id_show` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+--
+-- Volcado de datos para la tabla `tickets`
+--
+
+INSERT INTO `tickets` (`ticket_number`, `QR`, `FK_id_purchase`, `FK_id_show`) VALUES
+(244, 0, 29, 24),
+(245, 0, 29, 24),
+(246, 0, 29, 24),
+(247, 0, 29, 24),
+(248, 0, 29, 24),
+(249, 0, 30, 37),
+(250, 0, 30, 37),
+(251, 0, 30, 37),
+(252, 0, 30, 37),
+(253, 0, 30, 37),
+(254, 0, 30, 37),
+(255, 0, 30, 37),
+(256, 0, 30, 37),
+(257, 0, 30, 37),
+(258, 0, 30, 37),
+(259, 0, 31, 38),
+(260, 0, 31, 38),
+(261, 0, 31, 38),
+(262, 0, 31, 38),
+(263, 0, 31, 38),
+(264, 0, 32, 26),
+(265, 0, 32, 26),
+(266, 0, 32, 26),
+(267, 0, 32, 26),
+(268, 0, 32, 26),
+(269, 0, 33, 42),
+(270, 0, 33, 42),
+(271, 0, 33, 42);
+
 -- --------------------------------------------------------
 
 --
@@ -974,16 +1162,18 @@ CREATE TABLE `users` (
   `mail` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `FK_dni` int(11) NOT NULL,
-  `FK_id_role` int(11) DEFAULT NULL
+  `FK_id_role` int(11) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`mail`, `password`, `FK_dni`, `FK_id_role`) VALUES
-('user@user.com', '123', 0, 0),
-('admin@admin.com', '123', 11111111, 1);
+INSERT INTO `users` (`mail`, `password`, `FK_dni`, `FK_id_role`, `is_active`) VALUES
+('user@user.com', '123', 1515, 0, 1),
+('pep@mail.com', '123', 10512412, 0, 0),
+('admin@admin.com', '123', 11111111, 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -1016,6 +1206,13 @@ ALTER TABLE `genres_x_movies`
   ADD KEY `FK_gm_id_genre` (`FK_id_genre`) USING BTREE;
 
 --
+-- Indices de la tabla `images`
+--
+ALTER TABLE `images`
+  ADD PRIMARY KEY (`imageId`),
+  ADD KEY `FK_dni_image` (`FK_dni_user`);
+
+--
 -- Indices de la tabla `movies`
 --
 ALTER TABLE `movies`
@@ -1031,7 +1228,7 @@ ALTER TABLE `profile_users`
 -- Indices de la tabla `purchases`
 --
 ALTER TABLE `purchases`
-  ADD PRIMARY KEY (`id_purchase`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `FK_dni_purchase` (`FK_dni`);
 
 --
@@ -1072,31 +1269,37 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `cinemas`
 --
 ALTER TABLE `cinemas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `cinema_rooms`
 --
 ALTER TABLE `cinema_rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT de la tabla `images`
+--
+ALTER TABLE `images`
+  MODIFY `imageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id_purchase` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `shows`
 --
 ALTER TABLE `shows`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT de la tabla `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=244;
+  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=272;
 
 --
 -- Restricciones para tablas volcadas
@@ -1116,6 +1319,12 @@ ALTER TABLE `genres_x_movies`
   ADD CONSTRAINT `FK_gm_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `images`
+--
+ALTER TABLE `images`
+  ADD CONSTRAINT `FK_dni_image` FOREIGN KEY (`FK_dni_user`) REFERENCES `profile_users` (`dni`);
+
+--
 -- Filtros para la tabla `purchases`
 --
 ALTER TABLE `purchases`
@@ -1132,7 +1341,7 @@ ALTER TABLE `shows`
 -- Filtros para la tabla `tickets`
 --
 ALTER TABLE `tickets`
-  ADD CONSTRAINT `FK_id_purchase` FOREIGN KEY (`FK_id_purchase`) REFERENCES `purchases` (`id_purchase`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_id_purchase` FOREIGN KEY (`FK_id_purchase`) REFERENCES `purchases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_id_show` FOREIGN KEY (`FK_id_show`) REFERENCES `shows` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

@@ -12,6 +12,7 @@
     class GenreToMovieDAO implements IGenreToMovieDAO {
 
 		private $genreToMovieList = array();		
+		private $connection;
         private $tableName = "genres_x_movies";
 
 		public function add(GenreToMovie $genreToMovie) {
@@ -39,37 +40,37 @@
                     $genreMovie->setIdMovie($values["id"]);
                     foreach($values["genre_ids"] as $genre) {
                         $genreMovie->setIdGenre($genre);
-						$this->Add($genreMovie);												
+						$this->add($genreMovie);												
                     }
                 }
-            }
+			}
+			return true;
 		}
 		
 		//Dado una pelicula, obtiene sus generos de la API y los carga en la db
 		public function getGenresOfMovieFromApi(Movie $movie) {
 			$jsonPath = $jsonPath = MOVIE_DETAILS_PATH . $movie->getId() . "?api_key=" . API_N . "&language=en-US";
             $jsonContent = file_get_contents($jsonPath);
-            $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();						
-			
+            $arrayToDecode = ($jsonContent) ? json_decode($jsonContent, true) : array();									
 			$genreMovie = new GenreToMovie();
 			$genreMovie->setIdMovie($movie->getId());
 			$genres = $arrayToDecode["genres"];				
 			foreach($genres as $genre) {
 				$genreMovie->setIdGenre($genre["id"]);															
-				$this->Add($genreMovie);				
+				$this->add($genreMovie);				
 			}
+			return true;
 		}
 
         public function getAll() {
 			try {
-				$query = "SELECT * FROM " . $this->tableName;
+				$query = "CALL genresxmovies_getAll()";								
 				$this->connection = Connection::getInstance();
-				$resultSet = $this->connection->execute($query);
+				$resultSet = $this->connection->execute($query, array(), QueryType::StoredProcedure);
 				foreach ($resultSet as $row) {
 					$genreToMovie = new GenreToMovie ();
                     $genreToMovie->setIdGenre($row["id_genre"]);
-                    $genreToMovie->setIdMovie($row["id_movie"]);
-					
+                    $genreToMovie->setIdMovie($row["id_movie"]);					
 					array_push($this->genreToMovieList, $genreToMovie);
 				}
 				return $this->genreList;
@@ -88,16 +89,9 @@
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
 				foreach($results as $row) {
 					$movie = new Movie();					
-					$movie->setId($row["id"]);
-					$movie->setPopularity($row["popularity"]);
-					$movie->setVoteCount($row["vote_count"]);
-					$movie->setVideo($row["video"]);
-					$movie->setPosterPath($row["poster_path"]);
-					$movie->setAdult($row["adult"]);
-					$movie->setBackdropPath($row["backdrop_path"]);
-					$movie->setOriginalLanguage($row["original_language"]);
-					$movie->setOriginalTitle($row["original_title"]);
-					$movie->setGenreIds($row["genre_ids"]);
+					$movie->setId($row["id"]);					
+					$movie->setPosterPath($row["poster_path"]);					
+					$movie->setBackdropPath($row["backdrop_path"]);										
 					$movie->setTitle($row["title"]);
 					$movie->setVoteAverage($row["vote_average"]);
 					$movie->setOverview($row["overview"]);
@@ -121,16 +115,9 @@
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
 				foreach($results as $row) {
 					$movie = new Movie();
-					$movie->setId($row["id"]);
-					$movie->setPopularity($row["popularity"]);
-					$movie->setVoteCount($row["vote_count"]);
-					$movie->setVideo($row["video"]);
-					$movie->setPosterPath($row["poster_path"]);
-					$movie->setAdult($row["adult"]);
-					$movie->setBackdropPath($row["backdrop_path"]);
-					$movie->setOriginalLanguage($row["original_language"]);
-					$movie->setOriginalTitle($row["original_title"]);
-					$movie->setGenreIds($row["genre_ids"]);
+					$movie->setId($row["id"]);					
+					$movie->setPosterPath($row["poster_path"]);					
+					$movie->setBackdropPath($row["backdrop_path"]);										
 					$movie->setTitle($row["title"]);
 					$movie->setVoteAverage($row["vote_average"]);
 					$movie->setOverview($row["overview"]);
@@ -155,16 +142,9 @@
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
 				foreach($results as $row) {
 					$movie = new Movie();
-					$movie->setId($row["id"]);
-					$movie->setPopularity($row["popularity"]);
-					$movie->setVoteCount($row["vote_count"]);
-					$movie->setVideo($row["video"]);
-					$movie->setPosterPath($row["poster_path"]);
-					$movie->setAdult($row["adult"]);
-					$movie->setBackdropPath($row["backdrop_path"]);
-					$movie->setOriginalLanguage($row["original_language"]);
-					$movie->setOriginalTitle($row["original_title"]);
-					$movie->setGenreIds($row["genre_ids"]);
+					$movie->setId($row["id"]);					
+					$movie->setPosterPath($row["poster_path"]);					
+					$movie->setBackdropPath($row["backdrop_path"]);							
 					$movie->setTitle($row["title"]);
 					$movie->setVoteAverage($row["vote_average"]);
 					$movie->setOverview($row["overview"]);

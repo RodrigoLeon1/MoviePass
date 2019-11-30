@@ -5,14 +5,14 @@
         <?php if($success != null): ?>
         <div class="alert-container success-container">
             <i class="icon ion-md-checkmark"></i>
-            <h3><?= $success ?></h3>
+            <h3><?= $success; ?></h3>
         </div>
         <?php endif; ?>
 
         <?php if($alert != null): ?>
         <div class="alert-container error-container">
             <i class="icon ion-md-close-circle-outline"></i>
-            <h3><?= $alert ?></h3>
+            <h3><?= $alert; ?></h3>
         </div>
         <?php endif; ?>        
 
@@ -23,30 +23,32 @@
                     <h4>Select Role:</h4>
                     <select class="" name="id_role">                    
                     <?php foreach ($roles as $role): ?>                    
-                       <option value="<?= $role->getId(); ?>"><?= ucfirst($role->getDescription()); ?></option>
+                        <option value="<?= $role->getId(); ?>">
+                            <?= ucfirst($role->getDescription()); ?>
+                        </option>
                     <?php endforeach; ?>
 				    </select>                    
                 </label>
 
                 <label>
                     <h4>First Name:</h4>
-                    <input type="text" name="firstName" id="" required>
+                    <input type="text" name="firstName" required>
                 </label>
                 <label>
                     <h4>Last Name:</h4>
-                    <input type="text" name="lastName" id="" required>
+                    <input type="text" name="lastName" required>
                 </label>
                 <label>
                     <h4>DNI:</h4>
-                    <input type="number" name="dni" id="" required>
+                    <input type="number" name="dni" required>
                 </label>
                 <label>
                     <h4>Mail:</h4>
-                    <input type="email" name="mail" id="" required>
+                    <input type="email" name="mail" required>
                 </label>
                 <label>
                     <h4>Password:</h4>
-                    <input type="password" name="password" id="" required>
+                    <input type="password" name="password" required>
                 </label>
                 <button type="submit" class="btn">Add user</button>
             </form>

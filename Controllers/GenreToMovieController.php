@@ -44,7 +44,7 @@
         }
 
         public function addGenresBD(Movie $movie) {                        
-            $this->genresToMoviesDAO->getGenresOfMovieFromApi($movie);
+            return $this->genresToMoviesDAO->getGenresOfMovieFromApi($movie);            
         }
 
         public function searchMoviesOnShowByGenre($genre) {

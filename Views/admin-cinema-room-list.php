@@ -5,27 +5,30 @@
         <?php if($success != null): ?>
         <div class="alert-container success-container">
             <i class="icon ion-md-checkmark"></i>
-            <h3><?= $success ?></h3>
+            <h3><?= $success; ?></h3>
         </div>
         <?php endif; ?>    
 
 		<?php if($alert != null): ?>
 		<div class="alert-container error-container">
 			<i class="icon ion-md-close-circle-outline"></i>
-			<h3><?= $alert ?></h3>
+			<h3><?= $alert; ?></h3>
 			
 			<?php if($cinemaId != null): ?>			
-			<a href="<?= FRONT_ROOT ?>cinema/forceDelete/<?= $cinemaId ?>">
+			<a href="<?= FRONT_ROOT ?>cinemaRoom/forceDisable/<?= $cinemaId ?>">
 				<i class="icon ion-md-warning"></i>
-				Force Delete
+				Force Disable
 			</a>
 			<?php endif; ?>			
 
 		</div>
 		<?php endif; ?>
 
+		<a href="<?= FRONT_ROOT ?>cinemaRoom/listCinemaRoomPath/all" class="btn-view-all">
+			<i class="icon ion-md-clipboard"></i>
+			List all cinemas rooms (Including the disabled)
+		</a>
         <div class="dashboard-container">
-
             <div class="content-container">				
 				<table border="1">
 					<thead>
@@ -48,14 +51,21 @@
 								<td><?= $cinemaRoom->getCapacity(); ?></td>								
 								<td>
 									<div class="actions-container">
-										<a href="<?php echo FRONT_ROOT . "cinemaRoom/remove/" . $cinemaRoom->getId(); ?>" class="btn btn-delete">
+										<?php if ($cinemaRoom->getIsActive()): ?>
+										<a href="<?php echo FRONT_ROOT . "cinemaRoom/disable/" . $cinemaRoom->getId(); ?>" class="btn btn-disable">
 											<i class="icon ion-md-trash"></i>
-											Remove
-										</a>										
-										<!-- <a href="<?php echo FRONT_ROOT . "" . $cinemaRoom->getId(); ?>" class="btn">
+											Disable
+										</a>			
+										<?php else: ?>
+										<a href="<?php echo FRONT_ROOT . "cinemaRoom/enable/" . $cinemaRoom->getId(); ?>" class="btn btn-enable">
+											<i class="icon ion-md-done-all"></i>
+											Enable
+										</a>		
+										<?php endif; ?>							
+										<a href="<?php echo FRONT_ROOT . "cinemaRoom/modifyById/" . $cinemaRoom->getId(); ?>" class="btn">
 											<i class="icon ion-md-build"></i>
 											Modify
-										</a> -->
+										</a>
 									</div>
 								</td>
 							</tr>

@@ -3,14 +3,14 @@
         <div class="movie-h account-head">                
             <h3 class="section-title text-s">
                 <i class="icon ion-md-cart"></i>
-                <?= $title ?>
+                <?= $title; ?>
             </h3>
         </div>
     </header>
         
     <main>
         <div class="container">
-            <?php if (!empty($purchases)) { ?>
+            <?php if (!empty($purchases)): ?>
             <table border="1">
                 <thead>
                     <tr>
@@ -25,7 +25,7 @@
                     <?php foreach($purchases as $purchase): ?>
                         <tr>
                             <td><?= $purchase->getId(); ?></td>        
-                            <td><?= $purchase->getTicketQuantity() ?></td>
+                            <td><?= $purchase->getTicketQuantity(); ?></td>
                             <td>$<?= $purchase->getDiscount(); ?></td>								
                             <td><?= $purchase->getDate(); ?></td>	
                             <td>$<?= $purchase->getTotal(); ?></td>								
@@ -33,12 +33,12 @@
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <?php } else { ?>            
+            <?php else: ?>            
             <h3 class="info">
                 <i class="icon ion-md-sad"></i>
                 No purchases found
             </h3>
-            <?php } ?>
+            <?php endif; ?>
         </div>
         <br>
         <br>

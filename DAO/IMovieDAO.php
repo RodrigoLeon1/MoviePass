@@ -15,7 +15,8 @@
         function getComingSoonMovies();
         function getById(Movie $movie);
         function getByTitle(Movie $movie);
-        function deleteById(Movie $movie);
+        function enableById(Movie $movie);
+        function disableById(Movie $movie);
         function getShowsOfMovie(Movie $movie);
         function getSales(Movie $movie);
         

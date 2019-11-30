@@ -18,7 +18,7 @@
             $this->purchaseDAO = new PurchaseDAO();
         }
 
-        public function Add($ticket_quantity, $id_show, $discount = "") {            
+        public function add($ticket_quantity, $id_show, $discount = "") {            
             $ticketController = new TicketController();
             $showController = new ShowController();
 
@@ -27,6 +27,8 @@
             $dni = $user->getDni();
             $price = $showController->getShowById($id_show)->getCinemaRoom()->getPrice();
             $total = $ticket_quantity * $price;
+
+            // Descuentos aca?
             
             $purchase = new Purchase();            
             $purchase->setTicketQuantity($ticket_quantity);
@@ -96,14 +98,6 @@
             }
         }
 
-        public function getPurchases() {
-            return $this->purchaseDAO->getAll();
-        }
-
-        public function getById($id) {
-            return $this->purchaseDAO->getById();
-        }
-
         public function numberOfTicketsAvailable($id_show) {
             $showController = new ShowController();
             $ticketController = new TicketController();
@@ -115,9 +109,17 @@
         }
 
         public function ticketsAvailable($id_show) {
-            $quantity = $this->numberOfTicketsAvailable($id_show);
-              
+            $quantity = $this->numberOfTicketsAvailable($id_show);              
             return ($quantity > 0) ? true : false;
+        }
+
+        //
+        public function getPurchases() {
+            return $this->purchaseDAO->getAll();
+        }
+
+        public function getById($id) {
+            return $this->purchaseDAO->getById();
         }
 
         public function getPurchasesByUser($user) {

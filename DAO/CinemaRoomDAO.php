@@ -42,6 +42,7 @@
 					$cinemaRoom->setName($row["cinema_room_name"]);
 					$cinemaRoom->setCapacity($row["cinema_room_capacity"]);
 					$cinemaRoom->setPrice($row["cinema_room_price"]);
+					$cinemaRoom->setIsActive($row["cinema_room_is_active"]);
 
 					$cinema = new Cinema();
 					$cinema->setId($row["cinema_id"]);
@@ -49,7 +50,6 @@
 					$cinema->setAddress($row["cinema_address"]);
 
 					$cinemaRoom->setCinema($cinema);
-
 					array_push ($this->cinemaRoomList, $cinemaRoom);
 				}				
 				return $this->cinemaRoomList;
@@ -59,9 +59,50 @@
 			}
 		}
 		
-		public function deleteById(CinemaRoom $cinemaRoom) {
+		public function getAllActives() {
+			try {								
+				$query = "CALL cinemaRooms_GetAllActives()";
+				$this->connection = Connection::GetInstance();				
+				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
+				foreach($results as $row) {
+					$cinemaRoom = new CinemaRoom();
+					$cinemaRoom->setId($row["cinema_room_id"]);
+					$cinemaRoom->setName($row["cinema_room_name"]);
+					$cinemaRoom->setCapacity($row["cinema_room_capacity"]);
+					$cinemaRoom->setPrice($row["cinema_room_price"]);
+					$cinemaRoom->setIsActive($row["cinema_room_is_active"]);
+
+					$cinema = new Cinema();
+					$cinema->setId($row["cinema_id"]);
+					$cinema->setName($row["cinema_name"]);
+					$cinema->setAddress($row["cinema_address"]);
+
+					$cinemaRoom->setCinema($cinema);
+					array_push ($this->cinemaRoomList, $cinemaRoom);
+				}				
+				return $this->cinemaRoomList;
+			}
+			catch(Exception $e) {
+				return false;
+			}
+		}
+		
+		public function enableById(CinemaRoom $cinemaRoom) {
 			try {
-				$query = "CALL cinemaRooms_deleteById(?)";
+				$query = "CALL cinemaRooms_enableById(?)";
+				$parameters ["id"] = $cinemaRoom->getId();
+				$this->connection = Connection::GetInstance();
+				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+				return true;
+			}
+			catch (Exception $e) {
+				return false;
+			}
+		}
+
+		public function disableById(CinemaRoom $cinemaRoom) {
+			try {
+				$query = "CALL cinemaRooms_disableById(?)";
 				$parameters ["id"] = $cinemaRoom->getId();
 				$this->connection = Connection::GetInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
@@ -77,8 +118,7 @@
 				$query = "CALL cinemaRooms_getById(?)";
 				$parameters ["id"] = $cinemaRoom->getId();
 				$this->connection = Connection::GetInstance();
-				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-				
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);				
 				$cinemaRoom = new CinemaRoom();
 				foreach($results as $row) {
 					$cinemaRoom->setId($row["id"]);
@@ -90,7 +130,6 @@
 					$cinema->setId($row["FK_id_cinema"]);
 
 					$cinemaRoom->setCinema($cinema);
-
 				}
 				return $cinemaRoom;
 			}
@@ -98,22 +137,20 @@
 				return false;
 			}
 		}
-
-		public function checkRoomNameInCinema($name, $id_cinema) {
+		
+		public function checkRoomNameInCinema(CinemaRoom $cinemaRoom, Cinema $cinema) {			
 			try {
 				$query = "CALL cinemaRooms_getByNameAndCinema(?, ?)";
-				$parameters ["name"] = $name;
-				$parameters ["id_cinema"] = $id_cinema;
+				$parameters ["name"] = $cinemaRoom->getName();
+				$parameters ["id_cinema"] = $cinema->getId();
 				$this->connection = Connection::GetInstance();
-				$results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
-				
+				$results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);				
 				return $results;
 			}
 			catch (Exception $e) {
 				return false;
 			}
 		}
-
 
 		public function modify(CinemaRoom $cinemaRoom) {
 			try {
@@ -137,7 +174,6 @@
 				$parameters["name"] = $cinemaRoom->getName();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);				
-
 				return $results;
 			}
 			catch (Exception $e) {
@@ -151,7 +187,6 @@
 				$parameters["id"] = $cinemaRoom->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);				
-
 				return $results;
 			}
 			catch (Exception $e) {
@@ -164,8 +199,7 @@
 				$query = "CALL cinemaRooms_getByIdShow(?)";
 				$parameters ["id_show"] = $show->getId();
 				$this->connection = Connection::GetInstance();
-				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-				
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);				
 				$cinemaRoom = new CinemaRoom();
 				foreach($results as $row) {					
 					$cinemaRoom->setCapacity($row["capacity"]);
@@ -176,7 +210,6 @@
 				return false;
 			}
 		}
-
 
 		public function getSales(CinemaRoom $cinemaRoom) {
 			try {								

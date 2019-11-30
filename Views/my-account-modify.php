@@ -3,7 +3,7 @@
         <div class="movie-h account-head">                
             <h3 class="section-title text-s">
                 <i class="icon ion-md-happy"></i>
-                <?= $title ?>
+                <?= $title; ?>
             </h3>
         </div>
     </header>
@@ -11,14 +11,15 @@
     <main>
         <div class="container account-container">
             <div class="img-account">
-                <img src="<?= IMG_PATH ?>profile.jpg" alt="Profile picture">                
+                <?php if ($imageProfile): ?>
+                    <img src="<?= IMG_UPLOADS_PATH . $imageProfile->getName(); ?>" alt="Profile picture">
+                <?php else: ?>                    
+                    <img src="<?= IMG_PATH ?>profile.jpg" alt="Profile picture">
+                <?php endif; ?>             
             </div>
             <div class="content-account">
-                <form class="content-container modify-form" action="<?= FRONT_ROOT ?>user/updateAccount" method="post">
-                    <!-- <label>
-                        <h4>Insert Photo:</h4>
-                        <input type="file" name="file" required>
-                    </label> -->
+            <h3> <span>_</span> Insert the new information</h3>
+                <form class="content-container modify-form" action="<?= FRONT_ROOT ?>user/updateAccount" method="post">              
                     <label>
                         <h4>Insert Firstname:</h4>
                         <input type="text" name="firstname" value="<?= $user->getFirstName(); ?>" required>

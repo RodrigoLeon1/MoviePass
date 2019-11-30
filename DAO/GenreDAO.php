@@ -10,6 +10,7 @@
     class GenreDAO implements IGenreDAO {
 
         private $genreList = array();
+        private $connection;
         private $tableName = "genres";
 
         public function add(Genre $genre) {
@@ -33,8 +34,7 @@
 				foreach ($resultSet as $row) {
 					$genre = new Genre();
                     $genre->setIdGenre($row["id"]);
-                    $genre->setName($row["name"]);
-					
+                    $genre->setName($row["name"]);					
 					array_push($this->genreList, $genre);
                 }
 				return $this->genreList;
@@ -59,8 +59,7 @@
                 return $genre;    
             } catch (Exception $ex) {
                 return false;
-            }
-            
+            }            
         }
             
         public function getByName(Genre $genre) {

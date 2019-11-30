@@ -6,9 +6,10 @@
     use Models\Ticket as Ticket;
     use DAO\TicketDAO as TicketDAO;
     use Controllers\ShowController as ShowController;
-    use Controllers\UserController as UserController;    
+    use Controllers\UserController as UserController; 
+    use Controllers\ViewsRouterController as ViewsRouter;     
 
-    class TicketController {
+    class TicketController extends ViewsRouter {
         
         private $ticketDAO;
         
@@ -28,13 +29,14 @@
             return $this->ticketDAO->add($ticket);
         }
 
-        private function validateTicketForm($id_purchase, $id_show) {
+        /* al pedo?
+        private function isFormNotEmpty($id_purchase, $id_show) {
             if (empty($id_purchase) || empty($id_show)) {
                 return false;
             }
             return true;
-        }
-
+        } */
+ 
         public function getByNumber($number) {
             return $this->ticketDAO-getByNumber($number);
         }
@@ -56,24 +58,29 @@
 			if (isset($_SESSION["loggedUser"])) {
 				$admin = $_SESSION["loggedUser"];
 				if ($admin->getRole() == 1) {                                         
-                    $tickets = $this->ticketDAO->getInfoShowTickets();                    
-					require_once(VIEWS_PATH . "admin-head.php");
-					require_once(VIEWS_PATH . "admin-header.php");
-					require_once(VIEWS_PATH . "admin-tickets-sold.php");
+                    $tickets = $this->ticketDAO->getInfoShowTickets();    
+                    if ($tickets) {
+                        require_once(VIEWS_PATH . "admin-head.php");
+                        require_once(VIEWS_PATH . "admin-header.php");
+                        require_once(VIEWS_PATH . "admin-tickets-sold.php");
+                    } else {
+                        return $this->goToAdminPath();
+                    }
                 } else {
-                    $userController = new UserController();
-                    return $userController->userPath();
+                    // $userController = new UserController();
+                    // return $userController->userPath();
+                    return $this->goToUserPath();
                 }
 			} else {
-                $userController = new UserController();
-                return $userController->userPath();
+                // $userController = new UserController();
+                // return $userController->userPath();
+                return $this->goToUserPath();
             }
         }
         
         public function getTicketsSold($id_show) {
             $show = new Show();
             $show->setId($id_show);
-
             return $this->ticketDAO->getTicketsOfShows($show);
         }
         
@@ -86,7 +93,7 @@
             $tickesSold = $this->getTicketsSold($id_show);
             
             return ($cinemaRoom->getCapacity() - $tickesSold);
-        }
+        }      
 
     }
 ?>

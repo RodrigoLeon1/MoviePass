@@ -10,7 +10,7 @@
 	class ProfileUserDAO implements IProfileUserDAO {
 		
 		private $connection;
-		private $tableName = "profile_users";
+		private $tableName = "profile_users";		
 
         public function add(User $user) {
 			try {				
