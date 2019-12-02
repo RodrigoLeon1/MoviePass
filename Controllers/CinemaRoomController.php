@@ -2,10 +2,10 @@
 
     namespace Controllers;
 
-    use DAO\CinemaRoomDAO as CinemaRoomDAO;
-	use Models\CinemaRoom as CinemaRoom;
-	use Models\Cinema as Cinema;
 	use Models\Show as Show;
+	use Models\Cinema as Cinema;
+	use Models\CinemaRoom as CinemaRoom;
+    use DAO\CinemaRoomDAO as CinemaRoomDAO;
 	use Controllers\UserController as UserController;   
 	use Controllers\ViewsRouterController as ViewsRouter;  
 

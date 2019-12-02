@@ -5,9 +5,9 @@
     use Models\Purchase as Purchase;
     use Models\User as User;
     use Models\PaymenteCreditCard as PaymenteCreditCard;
+    use DAO\QueryType as QueryType;
     use DAO\Connection as Connection;
     use DAO\IPurchaseDAO as IPurchaseDAO;
-    use DAO\QueryType as QueryType;
         
     class PurchaseDAO implements IPurchaseDAO {
 
@@ -34,8 +34,7 @@
 
             } catch(Exception $e) {
                 return false;
-            }
-            
+            }            
         }
         
         public function getAll() {

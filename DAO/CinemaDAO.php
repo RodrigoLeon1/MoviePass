@@ -3,9 +3,10 @@
     namespace DAO;
 
 	use \Exception as Exception;
+    use Models\Cinema as Cinema;
+	use DAO\QueryType as QueryType;
 	use DAO\Connection as Connection;
 	use DAO\ICinemaDAO as ICinemaDAO;
-    use Models\Cinema as Cinema;
 
     class CinemaDAO implements ICinemaDAO {
 

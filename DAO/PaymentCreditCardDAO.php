@@ -3,8 +3,9 @@
     namespace DAO;
 
     use \Exception as Exception;
-    use DAO\Connection as Connection;    
     use Models\PaymentCreditCard as PaymentCreditCard;
+    use DAO\QueryType as QueryType;
+    use DAO\Connection as Connection;    
 
     class PaymentCreditCardDAO {
 

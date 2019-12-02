@@ -3,9 +3,10 @@
     namespace DAO;
 
 	use \Exception as Exception;
-	use DAO\Connection as Connection;
-	use DAO\IMovieDAO as IMovieDAO;
 	use Models\Movie as Movie;
+	use DAO\IMovieDAO as IMovieDAO;
+	use DAO\QueryType as QueryType;
+	use DAO\Connection as Connection;
 
     class MovieDAO implements IMovieDAO {
 

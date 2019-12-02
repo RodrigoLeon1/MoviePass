@@ -2,9 +2,9 @@
     
     namespace Controllers;
     
-    use DAO\ImageDAO as ImageDAO;
-    use Models\Image as Image;
     use Models\User as User;
+    use Models\Image as Image;
+    use DAO\ImageDAO as ImageDAO;
     use Controllers\UserController as UserController;   
     
     class ImageController {

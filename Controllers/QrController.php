@@ -1,15 +1,16 @@
 <?php
 
     namespace Controllers;
-
-    use views\assets\libs\qrcode\QrCode;
-
+        
+    require 'Views/assets/libs/phpqrcode/phpqrcode.php';
+    
     class QrController {
+        
+        public function index() {
 
-        public function Index() {
-            $qrCode = new QrCode();
+            $content = 'prubea-ticket-qr';                    
+            QRcode::png($content);
 
-            var_dump($qrCode);
         }
         
     }

@@ -4,11 +4,11 @@
 
     use Models\Movie as Movie;    
     use DAO\MovieDAO as MovieDAO;
-    use Controllers\GenreToMovieController as GenreToMovieController;
-    use Controllers\ShowController as ShowController;
-    use Controllers\PurchaseController as PurchaseController;
     use Controllers\UserController as UserController;   
+    use Controllers\ShowController as ShowController;
     use Controllers\ViewsRouterController as ViewsRouter;  
+    use Controllers\PurchaseController as PurchaseController;
+    use Controllers\GenreToMovieController as GenreToMovieController;
 
     class MovieController extends ViewsRouter {
 

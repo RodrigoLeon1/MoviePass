@@ -2,15 +2,15 @@
 
     namespace Controllers;
 
+    use Models\Show as Show;
 	use Models\Movie as Movie;
     use Models\CinemaRoom as CinemaRoom;
-    use Models\Show as Show;
     use DAO\ShowDAO as ShowDAO;	
-	use Controllers\CinemaController as CinemaController;
-	use Controllers\CinemaRoomController as CinemaRoomController;
-	use Controllers\MovieController as MovieController;
 	use Controllers\UserController as UserController;   
+	use Controllers\MovieController as MovieController;
+	use Controllers\CinemaController as CinemaController;
 	use Controllers\ViewsRouterController as ViewsRouter;  
+	use Controllers\CinemaRoomController as CinemaRoomController;
 	
     class ShowController extends ViewsRouter {
 

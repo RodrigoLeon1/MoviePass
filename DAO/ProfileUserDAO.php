@@ -3,10 +3,11 @@
     namespace DAO;
 	
 	use \Exception as Exception;
-	use DAO\Connection as Connection;
-	use DAO\IProfileUserDAO as IProfileUserDAO;
     use Models\User as User;
     use Models\ProfileUser as ProfileUser;
+	use DAO\QueryType as QueryType;
+	use DAO\Connection as Connection;
+	use DAO\IProfileUserDAO as IProfileUserDAO;
 	
 	class ProfileUserDAO implements IProfileUserDAO {
 		

@@ -3,9 +3,10 @@
 	namespace DAO;
 
 	use \Exception as Exception;
-	use DAO\Connection as Connection;
-	use DAO\IRoleDAO as IRoleDAO;
 	use Models\Role as Role;
+	use DAO\IRoleDAO as IRoleDAO;
+	use DAO\QueryType as QueryType;
+	use DAO\Connection as Connection;
 
 	class RoleDAO implements IRoleDAO {
 

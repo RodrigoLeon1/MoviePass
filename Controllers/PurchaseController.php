@@ -2,17 +2,17 @@
 
     namespace Controllers;
 
-    use DAO\PurchaseDAO as PurchaseDAO;
-    use Models\Purchase as Purchase;
-    use Models\Show as Show;
     use Models\User as User;    
-    use Models\PaymentCreditCard as PaymentCreditCard;    
+    use Models\Show as Show;
+    use Models\Purchase as Purchase;
     use Models\CreditAccount as CreditAccount;  
+    use Models\PaymentCreditCard as PaymentCreditCard;    
+    use DAO\PurchaseDAO as PurchaseDAO;
     use Controllers\ShowController as ShowController;
-    use Controllers\TicketController as TicketController;
     use Controllers\MovieController as MovieController;
-    use Controllers\PaymentCreditCardController as PaymentCreditCardController;    
+    use Controllers\TicketController as TicketController;
     use Controllers\ViewsRouterController as ViewsRouter; 
+    use Controllers\PaymentCreditCardController as PaymentCreditCardController;    
 
     class PurchaseController extends ViewsRouter {
 
@@ -47,7 +47,7 @@
                
             $paymentCreditCard = new PaymentCreditCard();            
             $paymentCreditCard->setCodeAuth($cardSecurity);
-            $paymentCreditCard->setDate($date);             
+            $paymentCreditCard->setDate($expirationDate);        //Expiration date or date of purchase?     
             $paymentCreditCard->setTotal($total);                        
             $creditAccount = new CreditAccount();
             $creditAccount->setId($id_card);

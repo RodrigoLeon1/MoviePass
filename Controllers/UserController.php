@@ -6,10 +6,10 @@
     use Models\User as User;
 	use DAO\UserDAO as UserDAO;
     use Controllers\HomeController as HomeController;
-    use Controllers\MovieController as MovieController;
     use Controllers\RoleController as RoleController;    
-    use Controllers\PurchaseController as PurchaseController;    
+    use Controllers\MovieController as MovieController;
     use Controllers\ImageController as ImageController;    
+    use Controllers\PurchaseController as PurchaseController;    
     
     class UserController {
 

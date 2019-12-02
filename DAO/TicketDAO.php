@@ -2,14 +2,14 @@
 
     namespace DAO;
 
+    use Models\Show as Show;
+    use Models\Movie as Movie;
+    use Models\Cinema as Cinema;
+    use Models\Ticket as Ticket;
+	use Models\CinemaRoom as CinemaRoom;
     use DAO\QueryType as QueryType;
     use DAO\Connection as Connection;
     use DAO\ITicketDAO as ITicketDAO;
-    use Models\Ticket as Ticket;
-    use Models\Show as Show;
-    use Models\Movie as Movie;
-	use Models\CinemaRoom as CinemaRoom;
-    use Models\Cinema as Cinema;
     
     class TicketDAO implements ITicketDAO {
         

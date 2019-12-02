@@ -2,8 +2,8 @@
 
     namespace Controllers;
 
-    use DAO\CinemaDAO as cinemaDAO;
 	use Models\Cinema as Cinema;
+    use DAO\CinemaDAO as cinemaDAO;
 	use Controllers\UserController as UserController;   
 	use Controllers\ViewsRouterController as ViewsRouter;   
 

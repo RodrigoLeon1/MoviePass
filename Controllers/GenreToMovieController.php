@@ -2,9 +2,9 @@
 
     namespace Controllers;
     
+    use Models\Show as Show;
     use Models\Movie as Movie;
     use Models\Genre as Genre;
-    use Models\Show as Show;
     use Models\GenreToMovie as GenreToMovie;
     use DAO\GenreDAO as GenreDAO;
     use DAO\GenreToMovieDAO as GenreToMovieDAO;

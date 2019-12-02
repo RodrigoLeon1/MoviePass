@@ -3,11 +3,12 @@
     namespace DAO;
 
 	use \Exception as Exception;
+	use Models\Show as Show;
+	use Models\Cinema as Cinema;
+	use Models\CinemaRoom as CinemaRoom;
+	use DAO\QueryType as QueryType;
 	use DAO\Connection as Connection;
 	use DAO\ICinemaRoomDAO as ICinemaRoomDAO;
-	use Models\CinemaRoom as CinemaRoom;
-	use Models\Cinema as Cinema;
-	use Models\Show as Show;
 
     class CinemaRoomDAO implements ICinemaRoomDAO {
 

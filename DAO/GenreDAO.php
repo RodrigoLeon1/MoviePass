@@ -3,9 +3,10 @@
     namespace DAO;
 
     use \Exception as Exception;
-    use DAO\Connection as Connection;
-    use DAO\IGenreDAO as IGenreDAO;
     use Models\Genre as Genre;
+    use DAO\IGenreDAO as IGenreDAO;
+    use DAO\QueryType as QueryType;
+    use DAO\Connection as Connection;
 
     class GenreDAO implements IGenreDAO {
 

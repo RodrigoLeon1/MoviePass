@@ -3,12 +3,13 @@
     namespace DAO;
 
 	use \Exception as Exception;
+	use Models\Show as Show;
+	use Models\Genre as Genre;
+	use Models\Movie as Movie;
+	use Models\GenreToMovie as GenreToMovie;
+	use DAO\QueryType as QueryType;
 	use DAO\Connection as Connection;
 	use DAO\IGenreToMovieDAO as IGenreToMovieDAO;
-	use Models\Genre as Genre;
-	use Models\GenreToMovie as GenreToMovie;
-	use Models\Movie as Movie;
-	use Models\Show as Show;
 
     class GenreToMovieDAO implements IGenreToMovieDAO {
 

@@ -3,13 +3,14 @@
     namespace DAO;
 
 	use \Exception as Exception;
-	use DAO\Connection as Connection;
-	use DAO\IShowDAO as IShowDAO;
-	use DAO\MovieDAO as MovieDAO;
     use Models\Show as Show;
     use Models\Movie as Movie;
-	use Models\CinemaRoom as CinemaRoom;
 	use Models\Cinema as Cinema;
+	use Models\CinemaRoom as CinemaRoom;
+	use DAO\IShowDAO as IShowDAO;
+	use DAO\MovieDAO as MovieDAO;
+	use DAO\QueryType as QueryType;
+	use DAO\Connection as Connection;
 
     class ShowDAO implements IShowDAO {
 
