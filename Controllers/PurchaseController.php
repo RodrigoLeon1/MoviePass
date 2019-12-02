@@ -6,11 +6,15 @@
     use Models\Purchase as Purchase;
     use Models\Show as Show;
     use Models\User as User;    
+    use Models\PaymentCreditCard as PaymentCreditCard;    
+    use Models\CreditAccount as CreditAccount;  
     use Controllers\ShowController as ShowController;
     use Controllers\TicketController as TicketController;
     use Controllers\MovieController as MovieController;
+    use Controllers\PaymentCreditCardController as PaymentCreditCardController;    
+    use Controllers\ViewsRouterController as ViewsRouter; 
 
-    class PurchaseController {
+    class PurchaseController extends ViewsRouter {
 
         private $purchaseDAO;
 
@@ -18,49 +22,79 @@
             $this->purchaseDAO = new PurchaseDAO();
         }
 
-        public function add($ticket_quantity, $id_show, $discount = "") {            
+        public function add($ticket_quantity, $id_show, $id_card, $cardNumber, $cardSecurity, $expirationDate) {                    
             $ticketController = new TicketController();
             $showController = new ShowController();
+            $paymentCreditCardController = new PaymentCreditCardController();
 
             $date = date('Y-m-d');
             $user = $_SESSION["loggedUser"];
             $dni = $user->getDni();
+            $discount = 0;
+            // $qr = ; 
             $price = $showController->getShowById($id_show)->getCinemaRoom()->getPrice();
-            $total = $ticket_quantity * $price;
 
-            // Descuentos aca?
-            
+            // Discount -> 25% of discount of ticket price
+            if ($this->applyDiscount($ticket_quantity)) {                
+                $totalWithoutDiscount = $ticket_quantity * $price;                                
+                $discountValue = ($price * .25);                                
+                $newPriceTicket = $price - $discountValue;                      
+                $total = $ticket_quantity * $newPriceTicket;   
+                $discount = $totalWithoutDiscount - $total;            
+            } else {                
+                $total = $ticket_quantity * $price;
+            }
+               
+            $paymentCreditCard = new PaymentCreditCard();            
+            $paymentCreditCard->setCodeAuth($cardSecurity);
+            $paymentCreditCard->setDate($date);             
+            $paymentCreditCard->setTotal($total);                        
+            $creditAccount = new CreditAccount();
+            $creditAccount->setId($id_card);
+            $paymentCreditCard->setCreditAccount($creditAccount);
+
             $purchase = new Purchase();            
             $purchase->setTicketQuantity($ticket_quantity);
             $purchase->setDiscount($discount);
             $purchase->setDate($date);
             $purchase->setTotal($total);
-            $purchase->setDni($dni);
-            
-            $id_purchase = $this->purchaseDAO->add($purchase);                        
+            $purchase->setDni($dni);             
+                        
+            if ($id_payment = $paymentCreditCardController->addObject($paymentCreditCard)) {                
+                $paymentCreditCard->setId($id_payment);
+                $purchase->setPaymentCreditCard($paymentCreditCard);
+                if ($id_purchase = $this->purchaseDAO->add($purchase)) {  
+                    for ($i = 0; $i < $ticket_quantity; $i++) {
+                        if ($ticketController->add(0, $id_show, $id_purchase)) {
+                            continue;
+                        }                    
+                    }  
+                    return $this->purchaseSuccess($id_purchase);                          
+                }
+            } 	
+            return $this->goToUserPath();		
+        }
 
-            for ($i=0; $i<$ticket_quantity; $i++) {
-                $ticketController->add(0, $id_show, $id_purchase);
-            }                            
-
-            /*
-            if ($this->purchaseDAO->add($purchase)) {
-                for ($i=0; $i<$ticket_quantity; $i++) {
-                    if ($ticketController->add(0, $id_show, $id_purchase)) {
-                        continue;
-                    }                    
-                }  
-                return $this->purchaseSuccess($id_purchase);                          
-            } */
-
-			return $this->purchaseSuccess($id_purchase);
+        private function applyDiscount($ticket_quantity) {
+            $today = getdate();
+            $day = $today['wday'];
+            // The discount only applies if the quantity of tickets if greater than or equal 2
+            if($ticket_quantity >= 2) {
+                // 2 -> Tuesday // 3 -> Wednesday
+                if($day == 2 || $day == 3 ) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public function buyTicketPath($idShow) {            
             if (isset($_SESSION["loggedUser"])) {              
                 $showController = new ShowController();
-                $show = $showController->getShowById($idShow);      
-                if ($show) {
+                $show = $showController->getShowById($idShow);    
+                $creditAccountController = new CreditAccountController();
+                $creditAccounts = $creditAccountController->getAllCompanies();
+                if ($show && $creditAccounts) {
                     $title = 'Buy ticket - ' . $show->getMovie()->getTitle();
                     $img = IMG_PATH_TMDB . $show->getMovie()->getBackdropPath();
                     $available = $this->numberOfTicketsAvailable($idShow);    
@@ -81,8 +115,10 @@
 
         public function purchaseSuccess($id) {
             if (isset($_SESSION["loggedUser"])) {  
-                $title = 'Purchase';
-                $purchase = $this->purchaseDAO->getById($id);
+                $title = 'Purchase';                
+                $purchaseTemp = new Purchase();
+                $purchaseTemp->setId($id);
+                $purchase = $this->purchaseDAO->getById($purchaseTemp);
                 if ($purchase) {
                     require_once(VIEWS_PATH . "header.php");			            
                     require_once(VIEWS_PATH . "navbar.php");            
@@ -119,16 +155,18 @@
         }
 
         public function getById($id) {
-            return $this->purchaseDAO->getById();
+            $purchase = new Purchase();
+            $purchase->setId($id);
+            return $this->purchaseDAO->getById($purchase);
         }
 
         public function getPurchasesByUser($user) {
-            return $this->purchaseDAO->getByDni($user->getDni());
+            return $this->purchaseDAO->getByDni($user);
         }
 
         public function getPurchasesByThisUser() {
             $user = $_SESSION["loggedUser"];
-            return $this->purchaseDAO->getByDni($user->getDni());
+            return $this->purchaseDAO->getByDni($user);
         }
         
     }

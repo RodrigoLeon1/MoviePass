@@ -4,6 +4,7 @@
     
     use Models\Movie as Movie;
     use Models\Genre as Genre;
+    use Models\Show as Show;
     use Models\GenreToMovie as GenreToMovie;
     use DAO\GenreDAO as GenreDAO;
     use DAO\GenreToMovieDAO as GenreToMovieDAO;
@@ -47,26 +48,30 @@
             return $this->genresToMoviesDAO->getGenresOfMovieFromApi($movie);            
         }
 
-        public function searchMoviesOnShowByGenre($genre) {
-            $movies = array();
-            if (is_numeric($genre)) {
-                $movies = $this->genresToMoviesDAO->getByGenre($genre);
-            } else {                
-                $aux = $this->genreByName($genre);
-                $movies = $this->genresToMoviesDAO->getByGenre($aux->getId());
-            }
+        public function searchMoviesOnShowByGenre($id) {
+            $movies = array();    
+            $genre = new Genre();
+            $genre->setIdGenre($id);
+            $movies = $this->genresToMoviesDAO->getByGenre($genre);            
             return $movies;
         }
 
         public function searchMoviesOnShowByDate($date) {
             $movies = array();
-            $movies = $this->genresToMoviesDAO->getByDate($date);            
+            $show = new Show();
+            $show->setDateStart($date);
+            $movies = $this->genresToMoviesDAO->getByDate($show);            
             return $movies;
         }         
 
-        public function searchMoviesOnShowByGenreAndDate($genre, $date) {
-            $movies = array();            
-            $movies = $this->genresToMoviesDAO->getByGenreAndDate($genre, $date);
+        // arreglar
+        public function searchMoviesOnShowByGenreAndDate($idGenre, $date) {
+            $movies = array();     
+            $genre = new Genre();
+            $genre->setIdGenre($idGenre);
+            $show = new Show();
+            $show->setDateStart($date);
+            $movies = $this->genresToMoviesDAO->getByGenreAndDate($genre, $show);
             return $movies;
         }        
 

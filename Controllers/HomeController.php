@@ -15,7 +15,7 @@
 			require_once(VIEWS_PATH . "nav-video.php");
             require_once(VIEWS_PATH . "navbar.php");
             require_once(VIEWS_PATH . "index.php");
-			require_once(VIEWS_PATH . "footer.php");
+            require_once(VIEWS_PATH . "footer.php");
         }
         
     }

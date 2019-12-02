@@ -44,6 +44,10 @@
 
             <div class="show-container">
                 <h2>Movie Showtimes</h2>
+                
+                <?php if(empty($shows)): ?>
+                    <p class="synopsis_Style">No shows available at the moment.</p>
+                <?php endif; ?>
 
                 <?php foreach ($shows as $show): ?>
                 <div class="show-item">

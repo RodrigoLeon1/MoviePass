@@ -47,14 +47,10 @@
 					require_once(VIEWS_PATH . "admin-head.php");
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-cinema-add.php");
-				} else {
-					// $userController = new UserController();
-					// return $userController->userPath();	
+				} else {	
 					return $this->goToUserPath();
 				}				
 			} else {
-                // $userController = new UserController();
-				// return $userController->userPath();
 				return $this->goToUserPath();
             }
         }
@@ -69,18 +65,12 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-cinema-list.php");
 					} else {
-						// $userController = new UserController();
-						// return $userController->adminPath();
 						return $this->goToAdminPath();
 					}
-				} else {
-					// $userController = new UserController();
-					// return $userController->userPath();	
+				} else {	
 					return $this->goToUserPath();
 				}
 			} else {
-                // $userController = new UserController();
-				// return $userController->userPath();
 				return $this->goToUserPath();
             }
         }
@@ -137,13 +127,9 @@
 						return $this->listCinemaPath(null, null, DB_ERROR, null);
 					}
 				} else {
-					// $userController = new UserController();
-					// return $userController->userPath();
 					return $this->goToUserPath();
 				}
 			} else {
-                // $userController = new UserController();
-				// return $userController->userPath();
 				return $this->goToUserPath();
             }
 		}
@@ -169,18 +155,12 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-cinema-sales.php");
 					} else {
-						// $userController = new UserController();
-						// return $userController->adminPath();
 						return $this->goToAdminPath();
 					}
 				} else {
-					// $userController = new UserController();
-					// return $userController->userPath();
 					return $this->goToUserPath();
 				}
 			} else {
-                // $userController = new UserController();
-				// return $userController->userPath();
 				return $this->goToUserPath();
             }
 		}

@@ -1,4 +1,5 @@
 <?php
+
     namespace DAO;
 
     use Models\Cinema as Cinema;
@@ -7,8 +8,8 @@
         
         function add(Cinema $cinema);
         function getAll();
-        function enableById(Cinema $cinema);
         function disableById(Cinema $cinema);
+        function enableById(Cinema $cinema);
         function getById(Cinema $cinema);
         function modify(Cinema $cinema);
         function getByName(Cinema $cinema);

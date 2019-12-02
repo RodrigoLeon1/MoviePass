@@ -45,33 +45,34 @@
                     <form action="<?= FRONT_ROOT ?>purchase/Add" method="POST" class="register-form">                        
                         <label>
                             <h4>Insert quantity of tickets</h4>               
-                            <input type="number" name="numberOfTickets" id="numberTickets" min="1" max="<?= $available; ?>" required>
+                            <input type="number" name="ticket_quantity" id="numberTickets" min="1" max="<?= $available; ?>" required>
                         </label> 
                         
                         <input type="hidden" name="id_show" value="<?= $show->getId(); ?>">                        
-<!-- 
+
                         <label>
                             <h4>Card</h4>
                             <div class="card-container">
-                                <input type="radio" name="card" value="visa" id="visa">Visa
-                                <input type="radio" name="card" value="mastercard" id="mastercard">MasterCard          
+                                <?php foreach($creditAccounts as $creditAccount): ?>
+                                    <input type="radio" name="card" value="<?= $creditAccount->getId(); ?>"><?= $creditAccount->getCompany(); ?>                                    
+                                <?php endforeach; ?>
                             </div>
                         </label>
 
                         <label>
                             <h4>Insert card number</h4>               
-                            <input type="text" name="cardNumber" id="" maxlength="16" minlength="16" required>
+                            <input type="text" name="cardNumber" maxlength="16" minlength="16" required>
                         </label>
 
                         <label>
                             <h4>Security code</h4>               
-                            <input type="text" name="cardSecurity" id="" maxlength="3" minlength="3" required>
+                            <input type="text" name="cardSecurity" maxlength="3" minlength="3" required>
                         </label>
 
                         <label>
                             <h4>Expiration date</h4>               
-                            <input type="month" name="expirationDate" id="" required>
-                        </label> -->
+                            <input type="month" name="expirationDate" required>
+                        </label>
 
                         <button class="btn-l" type="submit">Buy</button>
                     </form> 

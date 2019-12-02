@@ -696,7 +696,6 @@ BEGIN
 	WHERE (shows.FK_id_cinemaRoom = id_cinemaRoom);
 END$$
 
--- AGREGAR FILTROS? PARA SABER SI ESTA ACTIVO EL SHOW?
 DROP procedure IF EXISTS `shows_getShowsOfMovie`;
 DELIMITER $$
 CREATE PROCEDURE shows_getShowsOfMovie (IN id_movie INT)
@@ -715,7 +714,7 @@ BEGIN
 		cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
 	INNER JOIN
 		cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
-	WHERE ( (shows.FK_id_movie = id_movie) AND (shows.date_start >= curdate()) ) 
+	WHERE ( (shows.FK_id_movie = id_movie) AND (shows.date_start >= curdate()) AND (shows.is_active = true) ) 
 	ORDER BY shows.date_start ASC, shows.time_start ASC;
 END$$
 
@@ -728,15 +727,27 @@ CREATE TABLE purchases (
 	`date` date NOT NULL,
 	`total` int NOT NULL,
 	`FK_dni` int NOT NULL,
-	CONSTRAINT `FK_dni_purchase` FOREIGN KEY (`FK_dni`) REFERENCES `profile_users` (`dni`)
+	`FK_payment_cc` int NOT NULL,
+	CONSTRAINT `FK_dni_purchase` FOREIGN KEY (`FK_dni`) REFERENCES `profile_users` (`dni`),
+	CONSTRAINT `FK_payment_purchase` FOREIGN KEY (`FK_payment_cc`) REFERENCES `payments_credit_card` (`id`)
 )
 
 DROP PROCEDURE IF EXISTS `purchases_Add`;
 DELIMITER $$
-CREATE PROCEDURE purchases_Add(IN ticket_quantity int, IN discount int, IN date DATE, IN total int, IN dni_user int)
+CREATE PROCEDURE purchases_Add(
+								IN ticket_quantity int, 
+								IN discount int, 
+								IN date DATE, 
+								IN total int, 
+								IN dni_user int, 
+								IN FK_payment_cc int,
+								OUT lastId int
+							)
 BEGIN
-    INSERT INTO purchases(purchases.ticket_quantity, purchases.discount, purchases.date, purchases.total, purchases.FK_dni)
-    VALUES (ticket_quantity, discount, date, total, dni_user);	
+    INSERT INTO purchases(purchases.ticket_quantity, purchases.discount, purchases.date, purchases.total, purchases.FK_dni, purchases.FK_payment_cc)
+    VALUES (ticket_quantity, discount, date, total, dni_user, FK_payment_cc);
+	SET lastId = LAST_INSERT_ID();	
+	SELECT lastId;
 END$$
 
 
@@ -800,6 +811,65 @@ BEGIN
     WHERE(purchases.FK_dni = dni);
 END$$
 
+
+----------------------------- Payments Credit Card ----------------------
+
+CREATE TABLE payments_credit_card (
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`code_auth` int NOT NULL,
+	`date` DATE NOT NULL,	
+	`total` FLOAT NOT NULL,
+	`FK_card` INT NOT NULL,
+	CONSTRAINT `FK_card_company` FOREIGN KEY (`FK_card`) REFERENCES `credit_accounts` (`id`)
+);
+
+DROP PROCEDURE IF EXISTS `payments_credit_card_Add`;
+DELIMITER $$
+CREATE PROCEDURE payments_credit_card_Add (
+							IN code_auth INT, 
+							IN date DATE, 
+							IN total FLOAT,
+							IN FK_card INT,
+							OUT lastId INT							
+							)
+BEGIN
+    INSERT INTO payments_credit_card 
+		(payments_credit_card.code_auth, payments_credit_card.date, payments_credit_card.total, payments_credit_card.FK_card)
+    VALUES 
+		(code_auth, date, total, FK_card);
+	SET lastId = LAST_INSERT_ID();	
+	SELECT lastId;
+END$$
+
+----------------------------- CREDIT ACCOUNTS -----------------------------
+
+CREATE TABLE credit_accounts (
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`company` VARCHAR(255) NOT NULL
+);
+
+DROP PROCEDURE IF EXISTS `credit_accounts_Add`;
+DELIMITER $$
+CREATE PROCEDURE credit_accounts_Add (
+							IN company VARCHAR(255)
+							)
+BEGIN
+    INSERT INTO credit_accounts 
+		(credit_accounts.company)
+    VALUES 
+		(company);
+END$$
+
+DROP PROCEDURE IF EXISTS `credit_accounts_GetAll`;
+DELIMITER $$
+CREATE PROCEDURE credit_accounts_GetAll ()
+BEGIN
+    SELECT 
+		*
+	FROM
+		credit_accounts;	
+END$$
+
 ----------------------------- TICKET -----------------------------
 
 CREATE TABLE tickets (
@@ -807,15 +877,19 @@ CREATE TABLE tickets (
 	`QR` int NOT NULL,
 	`FK_id_purchase` int NOT NULL,
 	`FK_id_show` int NOT NULL,
-	CONSTRAINT `FK_id_purchase` FOREIGN KEY (`FK_id_purchase`) REFERENCES `purchases` (`id_purchase`),
+	CONSTRAINT `FK_id_purchase` FOREIGN KEY (`FK_id_purchase`) REFERENCES `purchases` (`id`),
 	CONSTRAINT `FK_id_show` FOREIGN KEY (`FK_id_show`) REFERENCES `shows` (`id`)
 );
 
 DROP PROCEDURE IF EXISTS `tickets_Add`;
 DELIMITER $$
-CREATE PROCEDURE tickets_Add(IN qr int, IN id_purchase int, IN id_show int)
+CREATE PROCEDURE tickets_Add (
+							IN qr int, 
+							IN id_purchase int, 
+							IN id_show int
+							)
 BEGIN
-    INSERT INTO tickets(tickets.qr, tickets.FK_id_purchase, tickets.FK_id_show)
+    INSERT INTO tickets (tickets.qr, tickets.FK_id_purchase, tickets.FK_id_show)
     VALUES (qr, id_purchase, id_show);
 END$$
 
@@ -868,7 +942,7 @@ BEGIN
 		movies.title AS movie_title	
 	FROM tickets 
 	INNER JOIN shows ON tickets.FK_id_show = shows.id
-	INNER JOIN purchases ON tickets.FK_id_purchase = purchases.id_purchase
+	INNER JOIN purchases ON tickets.FK_id_purchase = purchases.id
 	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
 	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
 	INNER JOIN movies ON shows.FK_id_movie = movies.id
@@ -1110,8 +1184,7 @@ BEGIN
 	INNER JOIN movies ON movies.id = genres_x_movies.FK_id_movie
 	INNER JOIN genres ON genres_x_movies.FK_id_genre = genres.id
 	INNER JOIN shows ON shows.FK_id_movie = genres_x_movies.FK_id_movie						
-	WHERE (genres_x_movies.FK_id_movie = shows.FK_id_movie)
+	WHERE (genres_x_movies.FK_id_movie = shows.FK_id_movie) AND (shows.is_active = true)
 	GROUP BY genres.name;
 END$$
-
 

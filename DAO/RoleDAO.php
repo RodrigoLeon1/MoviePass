@@ -13,10 +13,10 @@
 		private $connection;
 		private $tableName = "roles";
 
-		public function getById($id) {
+		public function getById(Role $role) {
 			try {				
 				$query = "CALL roles_getById(?)";
-				$parameters["id"] = $id;
+				$parameters["id"] = $role->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
 				foreach($results as $row) {

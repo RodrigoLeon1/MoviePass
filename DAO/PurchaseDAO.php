@@ -3,11 +3,12 @@
     namespace DAO;
 
     use Models\Purchase as Purchase;
+    use Models\User as User;
+    use Models\PaymenteCreditCard as PaymenteCreditCard;
     use DAO\Connection as Connection;
     use DAO\IPurchaseDAO as IPurchaseDAO;
     use DAO\QueryType as QueryType;
-
-    // arreglar -> ahora no es mas id_purchase -> es solo 'id' en la BD
+        
     class PurchaseDAO implements IPurchaseDAO {
 
         private $tableName = "purchases";
@@ -15,49 +16,26 @@
         
         public function add(Purchase $purchase) {
             try {
-                $query = "CALL purchases_Add(?, ?, ?, ?, ?)";
+                $query = "CALL purchases_Add(?, ?, ?, ?, ?, ?, @lastId)";
                 $parameters['ticket_quantity'] = $purchase->getTicketQuantity();
                 $parameters['discount'] = $purchase->getDiscount();
                 $parameters['date'] = $purchase->getDate();
                 $parameters['total'] = $purchase->getTotal();
-                $parameters['dni'] = $purchase->getDni();                   
+                $parameters['dni'] = $purchase->getDni();            
+                $parameters['FK_payment_cc'] = $purchase->getPaymentCreditCard()->getId();            
                 $this->connection = Connection::GetInstance();
-                $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
+                $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 
-                $id = $this->getId($purchase->getTicketQuantity(), $purchase->getDiscount(), $purchase->getDate(), $purchase->getTotal(), $purchase->getDni());
-
-                return $id;
-
-            } catch(Exception $e) {
-                return false;
-            }
-            
-        }
-
-        public function getId($ticket_quantity, $discount, $date, $total, $dni) {
-            try {
-                $query = "SELECT * FROM " . $this->tableName . " WHERE((ticket_quantity = :ticket_quantity) AND (discount = :discount) AND (date = :date) AND (total = :total) AND (FK_dni = :dni) )";			
-                $parameters['ticket_quantity'] = $ticket_quantity;
-                $parameters['discount'] = $discount;
-                $parameters['date'] = $date;
-                $parameters['total'] = $total;
-                $parameters['dni'] = $dni;
-                $this->connection = Connection::GetInstance();
-                $results = $this->connection->Execute($query, $parameters);
                 foreach($results as $row) {
-                    $purchase = new Purchase();
-                    $purchase->setId($row['id']);
-                    $purchase->setTicketQuantity($row['ticket_quantity']);
-                    $purchase->setDiscount($row['discount']);
-                    $purchase->setDate($row['date']);
-                    $purchase->setTotal($row['total']);
-                    $purchase->setDni($row['FK_dni']);
+                    $lastId = $row['lastId'];                
                 }
-                return $purchase->getId();
-            
+                
+                return $lastId;
+
             } catch(Exception $e) {
                 return false;
             }
+            
         }
         
         public function getAll() {
@@ -82,12 +60,11 @@
                 return false;
             }
         }
-
-        //PASAR A OBJ
-        public function getById($id) {
+        
+        public function getById(Purchase $purchase) {
             try {
                 $query = "CALL purchases_GetById(?)";
-                $parameters['id'] = $id;
+                $parameters['id'] = $purchase->getId();
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $purchase = new Purchase();
@@ -106,10 +83,10 @@
             }
         }
 
-        public function getByDni($dni) {
+        public function getByDni(User $user) {
             try {
                 $query = "CALL purchases_GetByDni(?)";
-                $parameters['dni'] = $dni;
+                $parameters['dni'] = $user->getDni();
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $purchases = array();
@@ -130,6 +107,6 @@
             }
         }
 
-}
+    }
 
 ?>

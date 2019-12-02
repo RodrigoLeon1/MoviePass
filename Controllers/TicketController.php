@@ -38,11 +38,15 @@
         } */
  
         public function getByNumber($number) {
-            return $this->ticketDAO-getByNumber($number);
+            $ticket = new Ticket();
+            $ticket->setTicketNumber($number);
+            return $this->ticketDAO-getByNumber($ticket);
         }
 
         public function getByShow($id) {
-            return  $this->ticketDAO->getByShowId($id);
+            $show = new Show();
+            $show->setId($id);
+            return  $this->ticketDAO->getByShowId($show);
         }
 
         public function getTickets() {
@@ -67,13 +71,9 @@
                         return $this->goToAdminPath();
                     }
                 } else {
-                    // $userController = new UserController();
-                    // return $userController->userPath();
                     return $this->goToUserPath();
                 }
 			} else {
-                // $userController = new UserController();
-                // return $userController->userPath();
                 return $this->goToUserPath();
             }
         }

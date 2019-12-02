@@ -1,15 +1,16 @@
 <?php
+
     namespace DAO;
 
     use Models\Purchase as Purchase;
+    use Models\User as User;
 
     interface IPurchaseDAO {
         
-        function add(Purchase $purchase);
-        function getId($ticket_quantity, $discount, $date, $total, $dni);
+        function add(Purchase $purchase);        
         function getAll();
-        function getById($id);
-        function getByDni($dni);        
+        function getById(Purchase $purchase);
+        function getByDni(User $user);        
         
     }
 

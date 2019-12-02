@@ -1,4 +1,4 @@
-<main>
+    <main>
         <h2 class="dash-title">Movies sales</h2>
         <hr>
         
@@ -6,8 +6,10 @@
             <div class="content-container">
                 <table border="1" id="myTable">
                     <div class="filter-container">
-                        <i class="icon ion-md-search"></i>
-                        <input class="filter-input" type="text" class="filter" id="myInput" onkeyup="myFunction()" placeholder="Search for movies..">
+                        <div class="filter-search">		
+                            <i class="icon ion-md-search"></i>
+                            <input class="filter-input" type="text" class="filter" id="myInput" placeholder="Search for movies..">
+                        </div>
                     </div>                    
                     <thead>
                         <tr>
@@ -33,29 +35,30 @@
             </div>
         </div>
     </main>
-    <script>
-	function myFunction() {
-	// Declare variables
-	var input, filter, table, tr, td, i, txtValue;
-	input = document.getElementById("myInput");
-	filter = input.value.toUpperCase();
-	table = document.getElementById("myTable");
-	tr = table.getElementsByTagName("tr");
+	<script>
 
-	// Loop through all table rows, and hide those who don't match the search query
-	for (i = 0; i < tr.length; i++) {
-		td = tr[i].getElementsByTagName("td")[2];
-		if (td) {
-		txtValue = td.textContent || td.innerText;
-		if (txtValue.toUpperCase().indexOf(filter) > -1) {
-			tr[i].style.display = "";
-		} else {
-			tr[i].style.display = "none";
-		}
-		}
-	}
-	}
+		let outerInput = document.getElementById('myInput');
 
-</script>
+		outerInput.addEventListener('keyup', function() {
+			let innerInput, filter, table, tr, td, i, txtValue;
+			innerInput = document.getElementById('myInput');
+			filter = innerInput.value.toUpperCase();
+			table = document.getElementById('myTable');
+			tr = table.getElementsByTagName('tr');
+			
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[2];
+				if (td) {
+					txtValue = td.textContent || td.innerText;
+					if (txtValue.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = '';
+					} else {
+						tr[i].style.display = 'none';
+					}
+				}
+			}
+		});
+
+	</script>
 </body>
 </html>

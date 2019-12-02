@@ -1,4 +1,4 @@
-<main>
+    <main>
         <h2 class="dash-title">Add Movie</h2>
         <hr>
 
@@ -37,7 +37,6 @@
             <div id="movie-container"></div>
         </div>       
     </main>
-</body>
 
     <script>    
 
@@ -93,4 +92,6 @@
         }
 
     </script>
+    
+</body>
 </html>

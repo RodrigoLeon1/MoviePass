@@ -8,6 +8,7 @@
 	use Models\Genre as Genre;
 	use Models\GenreToMovie as GenreToMovie;
 	use Models\Movie as Movie;
+	use Models\Show as Show;
 
     class GenreToMovieDAO implements IGenreToMovieDAO {
 
@@ -80,11 +81,11 @@
 			}
 		}
 		
-		public function getByGenre($id) {
+		public function getByGenre(Genre $genre) {
 			try {
 				$movies = array();	
 				$query = "CALL genresxmovies_getByGenre(?)";
-				$parameters["id_genre"] = $id;
+				$parameters["id_genre"] = $genre->getIdGenre();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
 				foreach($results as $row) {
@@ -95,8 +96,7 @@
 					$movie->setTitle($row["title"]);
 					$movie->setVoteAverage($row["vote_average"]);
 					$movie->setOverview($row["overview"]);
-					$movie->setReleaseDate($row["release_date"]);
-					// $movie->setRuntime($row["runtime"]);
+					$movie->setReleaseDate($row["release_date"]);					
 					array_push($movies, $movie);
 				}			
 				return $movies;
@@ -106,11 +106,11 @@
 			}
 		} 
 
-		public function getByDate($date) {
+		public function getByDate(Show $show) {
 			try {
 				$movies = array();	
 				$query = "CALL genresxmovies_getByDate(?)";
-				$parameters["date"] = $date;
+				$parameters["date"] = $show->getDateStart();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
 				foreach($results as $row) {
@@ -121,8 +121,7 @@
 					$movie->setTitle($row["title"]);
 					$movie->setVoteAverage($row["vote_average"]);
 					$movie->setOverview($row["overview"]);
-					$movie->setReleaseDate($row["release_date"]);
-					// $movie->setRuntime($row["runtime"]);
+					$movie->setReleaseDate($row["release_date"]);					
 					array_push($movies, $movie);
 				}			
 				return $movies;
@@ -132,14 +131,16 @@
 			}
 		} 		
 
-		public function getByGenreAndDate($id, $date) {
+		// se rompio?
+		public function getByGenreAndDate(Genre $genre, Show $show) {
 			try {
 				$movies = array();	
 				$query = "CALL genresxmovies_getByGenreAndDate(?, ?)";
-				$parameters["id_genre"] = $id;
-				$parameters["date_show"] = $date;
+				$parameters["id_genre"] = $genre->getIdGenre();
+				$parameters["date_show"] = $show->getDateStart();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
+				var_dump($results);
 				foreach($results as $row) {
 					$movie = new Movie();
 					$movie->setId($row["id"]);					
@@ -148,13 +149,12 @@
 					$movie->setTitle($row["title"]);
 					$movie->setVoteAverage($row["vote_average"]);
 					$movie->setOverview($row["overview"]);
-					$movie->setReleaseDate($row["release_date"]);
-					$movie->setRuntime($row["runtime"]);
+					$movie->setReleaseDate($row["release_date"]);					
 					array_push($movies, $movie);
-				}			
+				}							
 				return $movies;
 			}
-			catch (Exception $ex) {
+			catch (Exception $ex) {				
 				return false;
 			}
 		}		

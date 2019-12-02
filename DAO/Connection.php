@@ -1,4 +1,5 @@
 <?php
+
     namespace DAO;
 
     use \PDO as PDO;
@@ -18,11 +19,6 @@
             catch(Exception $ex) {
                 throw $ex;
             }
-        }
-
-        public function lastId() {
-            return $this->pdo->lastInsertId();
-            //return $this->pdo->lastId();
         }
 
         public static function GetInstance() {

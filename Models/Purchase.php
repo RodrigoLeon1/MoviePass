@@ -1,6 +1,8 @@
 <?php
 
     namespace Models;
+    
+    use Models\PaymentCreditCard as PaymentCreditCard;
 
     class Purchase {
         
@@ -10,6 +12,7 @@
         private $date;
         private $total;
         private $dni;
+        private $paymentCreditCard;
 
         public function getId() {
             return $this->id;
@@ -64,6 +67,15 @@
             $this->dni = $dni;
             return $this;
         }
+
+        public function getPaymentCreditCard() {
+            return $this->paymentCreditCard;
+        }
+
+        public function setPaymentCreditCard(PaymentCreditCard $paymentCreditCard) {
+            $this->paymentCreditCard = $paymentCreditCard;
+            return $this;
+        }        
     }
 
 ?>

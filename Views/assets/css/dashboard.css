@@ -228,7 +228,9 @@ hr {
 
 /*  */
 .filter-container {
-    margin: 3rem 0 3rem 0;    
+    margin: 3rem 0 3rem 0;        
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
 .filter-container i {
@@ -241,6 +243,17 @@ hr {
     color: #fff !important;
     width: 30%;
     background-color: #323c48 !important;
+}
+
+.filter-options {    
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;    
+}
+
+.filter-options input {
+    margin: 1rem;
+    color: red;
 }
 
 .content-container {

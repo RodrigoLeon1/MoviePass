@@ -120,8 +120,7 @@
 				$query = "CALL cinemas_modify(?, ?, ?)";
 				$parameters["id"] = $cinema->getId();
 				$parameters["name"] = $cinema->getName();				
-				$parameters["address"] = $cinema->getAddress();
-				// añadir isActive?
+				$parameters["address"] = $cinema->getAddress();				
 				$this->connection = Connection::getInstance();
 				$this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
 				return true;

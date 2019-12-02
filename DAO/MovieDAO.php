@@ -124,8 +124,7 @@
 		}
 
 		public function getRunTimeMovieFromDAO() {
-			try {
-				// $query = "SELECT id FROM " . $this->tableName;
+			try {				
 				$query = "CALL movies_getId()";
 				$this->connection = Connection::getInstance();
 				$resultSet = $this->connection->execute($query, array(), QueryType::StoredProcedure);

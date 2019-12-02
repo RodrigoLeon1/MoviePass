@@ -11,8 +11,7 @@
 	use Controllers\MovieController as MovieController;
 	use Controllers\UserController as UserController;   
 	use Controllers\ViewsRouterController as ViewsRouter;  
-
-	// ARREGLAR -> NO MOSTRAR LOS SHOWS QUE ESTAN INHABILITADOS EN NOW PLAYING	
+	
     class ShowController extends ViewsRouter {
 
         private $showDAO;
@@ -145,18 +144,12 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-show-add.php");
 					} else {
-						// $userController = new UserController();
-						// return $userController->adminPath();	
 						return $this->goToAdminPath();	
 					}
 				} else {
-					// $userController = new UserController();
-					// return $userController->userPath();	
 					return $this->goToUserPath();
 				}
 			} else {
-                // $userController = new UserController();
-				// return $userController->userPath();
 				return $this->goToUserPath();
             } 
 		}
@@ -178,18 +171,12 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-show-list.php");
 					} else {
-						// $userController = new UserController();
-						// return $userController->adminPath();
 						return $this->goToAdminPath();
 					}
 				} else {
-					// $userController = new UserController();
-					// return $userController->userPath();
 					return $this->goToUserPath();
 				}
 			} else {
-                // $userController = new UserController();
-				// return $userController->userPath();
 				return $this->goToUserPath();
             } 
 		}
@@ -211,49 +198,7 @@
 				return $this->listShowsPath(SHOW_DISABLE, null);
 			}
 			return $this->listShowsPath(null, DB_ERROR);
-		}
-		
-		public function modifyById($id) {
-			if (isset($_SESSION["loggedUser"])) {
-				$admin = $_SESSION["loggedUser"];
-				if ($admin->getRole() == 1) {					
-					$show = $this->showDAO->getById($id);					
-					$movieController = new MovieController();
-					$movies = $movieController->moviesNowPlaying();											
-					$cinemaRoomController = new CinemaRoomController();
-					$cinemaRooms = $cinemaRoomController->getAllCinemaRooms();					
-					if ($show && $movies && $cinemaRooms) {
-						require_once(VIEWS_PATH . "admin-head.php");
-						require_once(VIEWS_PATH . "admin-header.php");
-						require_once(VIEWS_PATH . "admin-show-modify.php");
-					} else {
-						return $this->goToAdminPath();
-					}
-				}
-			} else {
-                // $userController = new UserController();
-				// return $userController->userPath();
-				return $this->goToUserPath();
-            } 
-		} 
-
-		public function modify($id, $id_cinemaRoom, $id_movie, $date, $time) {
-			$movie = new Movie ();
-			$movie->setId($id_cinema);
-			$cinemaRoom = new CinemaRoom ();
-			$cinemaRoom->setId ($id_cinemaRoom);
-			$show = new Show();
-			$show->setId($id);
-			$show->setDateStart($date);
-			$show->setTimeStart($time);
-			$show->setMovie($movie);
-			$show->setCinemaRoom($cinemaRoom);
-			if ($this->showDAO->modify($show)) {
-				return $this->listShowsPath(SHOW_MODIFY, null);	
-			} else {
-				return $this->listShowsPath(null, DB_ERROR);
-			}
-		}
+		}		
 
 		//
 		public function getShowById($id) {

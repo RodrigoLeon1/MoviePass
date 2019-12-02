@@ -17,26 +17,24 @@
         private $connection;
 
         public function add(Ticket $ticket) {
-            try {
-                $query = "INSERT INTO " . $this->tableName . " (qr, FK_id_purchase, FK_id_show) VALUES (:qr, :id_purchase, :id_show);";
-                //$query = "CALL tickets_Add(?,?,?)";
+            try {                
+                $query = "CALL tickets_Add(?, ?, ?)";
                 $parameters['qr'] = $ticket->getQr();
-                $parameters['id_show'] = $ticket->getShow()->getId();   
                 $parameters['id_purchase'] = $ticket->getIdPurchase();                            
+                $parameters['id_show'] = $ticket->getShow()->getId();   
 
                 $this->connection = Connection::GetInstance();
-                $this->connection->ExecuteNonQuery($query, $parameters);
+                $this->connection->ExecuteNonQuery($query, $parameters, QueryType::StoredProcedure);
                 return true;
             } catch(Exception $e) {
                 return false;
             }
         }
-
-        // Ticket $ticket ??????
-        public function getByNumber($number) {
+        
+        public function getByNumber(Ticket $ticket) {
             try {
                 $query = "CALL tickets_GetByNumber(?)";
-                $parameters['number'] = $number;
+                $parameters['number'] = $ticket->getTicketNumber();
 
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
@@ -73,12 +71,11 @@
                 return false;
             }
         }
-
-        // Show $show
-        public function getByShowId($id) {
+        
+        public function getByShowId(Show $show) {
             try {
                 $query = "CALL tickets_GetByShowId(?)";
-                $parameters['id'] = $id;
+                $parameters['id'] = $show->getId();
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $ticketList = array();
@@ -98,8 +95,7 @@
                 return false;
             }
         }
-
-        //feo
+        
         public function getGeneralInfo() {
             try {
                 $query = "CALL tickets_GetInfoTicket()";                

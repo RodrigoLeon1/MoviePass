@@ -46,7 +46,6 @@
                 $keyTrailer = $this->movieDAO->getKeyMovieTrailer($movie);     
                 $shows = $this->showController->getShowsOfMovieById($id);
                 $genres = $genreMovieController->getGenresOfMovie($movie); 
-
                 require_once(VIEWS_PATH . "header.php");
                 require_once(VIEWS_PATH . "header-s.php");
                 require_once(VIEWS_PATH . "navbar.php");
@@ -96,28 +95,20 @@
                 $nameGenre = $genreMovieController->getNameOfGenre($id);                   
                 $title = 'Now Playing - ' . $nameGenre;         
                 $movies = $genreMovieController->searchMoviesOnShowByGenre($id); 
-
-                return (!empty($movies)) ? $this->nowPlaying($movies, $title) : $this->nowPlaying($movies, $title, MOVIES_NULL);
-
             } else if (!empty($date) && empty($id)) {                                
                 //Filtramos solo por fecha                
                 $movies = $genreMovieController->searchMoviesOnShowByDate($date);
                 $title = 'Now Playing - ' . $date; 
-
-                return (!empty($movies)) ? $this->nowPlaying($movies, $title) : $this->nowPlaying($movies, $title, MOVIES_NULL);
-
             } else if (!empty($id) && !empty($date)) {                
                 //Filtramos por genero y fecha
                 $nameGenre = $genreMovieController->getNameOfGenre($id);            
                 $title = 'Now Playing - ' . $nameGenre . ' - ' . $date;
-                $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);  
-                               
-                return (!empty($movies)) ? $this->nowPlaying($movies, $title) : $this->nowPlaying($movies, $title, MOVIES_NULL);
-                
+                $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);                                      
             } else {                            
                 return $this->nowPlaying();
             }    
-            // Arreglar??? No repetir siempre el return, ponerlo al finalizar el bloque            
+             
+            return (!empty($movies)) ? $this->nowPlaying($movies, $title) : $this->nowPlaying($movies, $title, MOVIES_NULL);        
         } 
 
 		public function comingSoon() {
@@ -139,13 +130,9 @@
 				    require_once(VIEWS_PATH . "admin-header.php");
                     require_once(VIEWS_PATH . "admin-movie-add.php");
                 } else {
-                    // $userController = new UserController();
-                    // return $userController->userPath();
                     return $this->goToUserPath();
                 }
 			} else {
-                // $userController = new UserController();
-                // return $userController->userPath();
                 return $this->goToUserPath();
             }
         }        
@@ -160,7 +147,7 @@
                     if ($genreMovieController->addGenresBD($movieDetails)) {                        
                         return $this->addMoviePath(null, MOVIE_ADDED);                                    
                     } else {
-                        // si no se pudieron agregar los generos, se borrara la pelicula de la db
+                        // If the shows couldnt add , the movie will be remove
                         if ($this->movieDAO->deleteById($movieDetails)) {
                             return $this->addMoviePath(DB_ERROR, null);                   
                         } else {
@@ -220,18 +207,12 @@
                         require_once(VIEWS_PATH . "admin-header.php");
                         require_once(VIEWS_PATH . "admin-movie-list.php");
                     } else {
-                        // $userController = new UserController();
-                        // return $userController->adminPath();
                         return $this->goToAdminPath();
                     }
                 } else {
-                    // $userController = new UserController();
-                    // return $userController->userPath();
                     return $this->goToUserPath();
                 }
 			} else {
-                // $userController = new UserController();
-                // return $userController->userPath();
                 return $this->goToUserPath();
             }            
         }         
@@ -257,18 +238,12 @@
                         require_once(VIEWS_PATH . "admin-header.php");
                         require_once(VIEWS_PATH . "admin-movie-sales.php");
                     } else {
-                        // $userController = new UserController();
-                        // return $userController->adminPath();
                         return $this->goToAdminPath();
                     }
 				} else {
-                    // $userController = new UserController();
-                    // return $userController->userPath();
                     return $this->goToUserPath();
                 }
 			} else {
-                // $userController = new UserController();
-                // return $userController->userPath();
                 return $this->goToUserPath();
             } 
         }
