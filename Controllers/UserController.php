@@ -238,8 +238,8 @@
                 $user = $_SESSION["loggedUser"];
                 $title = "My Cart";                                      
                 $purchaseController = new PurchaseController();
-                $purchases = $purchaseController->getPurchasesByThisUser();                                                          
-                if ($purchases || $purchases == array()) {
+                $purchasesCart = $purchaseController->getPurchasesByThisUser();                                                     
+                if ($purchasesCart || $purchasesCart == array()) {
                     require_once(VIEWS_PATH . "header.php");
                     require_once(VIEWS_PATH . "navbar.php");
                     require_once(VIEWS_PATH . "my-cart.php");

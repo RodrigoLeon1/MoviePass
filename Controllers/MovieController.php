@@ -37,9 +37,7 @@
             $purchaseController = new PurchaseController();            
             $movieTemp = new Movie();
             $movieTemp->setId($id);
-
             $movie = $this->movieDAO->getById($movieTemp);
-
             if ($movie->getTitle() != null) {
                 $title = $movie->getTitle();
                 $img = IMG_PATH_TMDB . $movie->getBackdropPath();

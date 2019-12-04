@@ -81,7 +81,9 @@
             // The discount only applies if the quantity of tickets if greater than or equal 2
             if($ticket_quantity >= 2) {
                 // 2 -> Tuesday // 3 -> Wednesday
-                if($day == 2 || $day == 3 ) {
+                $tuesday = 2;
+                $wednesday = 3;
+                if($day == $tuesday || $day == $wednesday ) {
                     return true;
                 }
             }

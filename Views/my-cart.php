@@ -10,25 +10,29 @@
         
     <main>
         <div class="container">
-            <?php if (!empty($purchases)): ?>
+            <?php if (!empty($purchasesCart)): ?>
             <table border="1">
                 <thead>
                     <tr>
                         <th>Id</th>
+                        <th>Movie</th>
+                        <th>Cinema</th>
                         <th>Ticket quantity</th>
                         <th>Discount</th>							
                         <th>Date</th>		
-                        <th>Total</th>												
+                        <th>Total with discount</th>												
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($purchases as $purchase): ?>
+                    <?php foreach($purchasesCart as $purchaseCart): ?>
                         <tr>
-                            <td><?= $purchase->getId(); ?></td>        
-                            <td><?= $purchase->getTicketQuantity(); ?></td>
-                            <td>$<?= $purchase->getDiscount(); ?></td>								
-                            <td><?= $purchase->getDate(); ?></td>	
-                            <td>$<?= $purchase->getTotal(); ?></td>								
+                            <td><?= $purchaseCart->getPurchase()->getId(); ?></td>        
+                            <td><?= $purchaseCart->getMovie()->getTitle(); ?></td>
+                            <td><?= $purchaseCart->getCinema()->getName(); ?></td>
+                            <td><?= $purchaseCart->getPurchase()->getTicketQuantity(); ?></td>
+                            <td>$<?= $purchaseCart->getPurchase()->getDiscount(); ?></td>								
+                            <td><?= $purchaseCart->getPurchase()->getDate(); ?></td>	
+                            <td>$<?= $purchaseCart->getPurchase()->getTotal(); ?></td>								
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

@@ -2,8 +2,12 @@
 
     namespace DAO;
 
-    use Models\Purchase as Purchase;
+    use \Exception as Exception;
     use Models\User as User;
+    use Models\Movie as Movie;
+    use Models\Cinema as Cinema;    
+    use Models\Purchase as Purchase;
+    use Models\PurchaseCart as PurchaseCart;
     use Models\PaymenteCreditCard as PaymenteCreditCard;
     use DAO\QueryType as QueryType;
     use DAO\Connection as Connection;
@@ -89,15 +93,26 @@
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $purchases = array();
-                foreach($results as $row) {
+                foreach($results as $row) {     
                     $purchase = new Purchase();
                     $purchase->setId($row['purchases_id_purchase']);
                     $purchase->setTicketQuantity($row['purchases_ticket_quantity']);
                     $purchase->setDiscount($row['purchases_discount']);
                     $purchase->setDate($row['purchases_date']);
-                    $purchase->setTotal($row['purchases_total']);
-                    $purchase->setDni($row['purchases_FK_dni']);
-                    array_push ($purchases, $purchase);
+                    $purchase->setTotal($row['purchases_total']);   
+                    
+                    $movie = new Movie();
+                    $movie->setTitle($row['movie_title']);
+
+                    $cinema = new Cinema();
+                    $cinema->setName($row['cinema_name']);
+                    
+                    $purchaseCart = new PurchaseCart();
+                    $purchaseCart->setPurchase($purchase);
+                    $purchaseCart->setMovie($movie);                                        
+                    $purchaseCart->setCinema($cinema);
+
+                    array_push ($purchases, $purchaseCart);
                 }
                 return $purchases;
             

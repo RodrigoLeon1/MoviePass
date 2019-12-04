@@ -24,7 +24,7 @@
                 $filePath = UPLOADS_PATH.basename($fileName);            
                 $fileType = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
                 $imageSize = getimagesize($tempFileName);
-                if($imageSize !== false) {
+                if ($imageSize !== false) {
                     if (move_uploaded_file($tempFileName, $filePath)) {
                         $image = new Image();
                         $image->setName($fileName);

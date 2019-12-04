@@ -57,7 +57,7 @@
 			$flag = 1;
 			if ($existance != null) {
 				foreach ($existance as $showsOnDB) {
-					if ( ($showsOnDB["date_start"] == $show->getDateStart()) ) {
+					if ( ($showsOnDB["date_start"] == $show->getDateStart()) ) {						
 						if ( ($showsOnDB["time_start"] > $show->getTimeStart()) && ($showsOnDB["time_start"] > $show->getTimeEnd()) ) {
 							$flag *= 1;
 						}
@@ -102,8 +102,8 @@
                 foreach ($shows as $showList) {
                     if ($showList->getMovie()->getId() == $show->getMovie()->getId()) {
                         if ($showList->getDateStart() == $show->getDateStart()) {
-                            if ($showList->getCinemaRoom()->getCinema()->getId() != $show->getCinemaRoom()->getCinema()->getId()){
-                                return 0;
+                            if ($showList->getCinemaRoom()->getCinema()->getId() != $show->getCinemaRoom()->getCinema()->getId()) {	
+								return 0;
                             }
                         }
                     }

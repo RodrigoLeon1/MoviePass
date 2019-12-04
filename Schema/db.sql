@@ -620,7 +620,7 @@ BEGIN
 	INNER JOIN movies ON movies.id = shows.FK_id_movie
 	INNER JOIN cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
 	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
-	WHERE shows.is_active = true
+	WHERE (shows.is_active = true) AND (shows.date_start >= CURDATE()) 
 	ORDER BY movies.title ASC;
 END$$
 
@@ -805,10 +805,18 @@ BEGIN
            purchases.ticket_quantity AS purchases_ticket_quantity,
            purchases.discount AS purchases_discount,
            purchases.date AS purchases_date,
-           purchases.total AS purchases_total,
-           purchases.FK_dni AS purchases_FK_dni
+           purchases.total AS purchases_total,           
+		   movies.title AS movie_title,
+		   cinemas.name AS cinema_name,
+		   cinema_rooms.name AS cinema_room_name
     FROM purchases
-    WHERE(purchases.FK_dni = dni);
+	INNER JOIN tickets ON purchases.id = tickets.FK_id_purchase
+	INNER JOIN shows ON tickets.FK_id_show = shows.id
+	INNER JOIN movies ON shows.FK_id_movie = movies.id
+	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
+	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
+    WHERE(purchases.FK_dni = dni)
+	GROUP BY purchases.id;
 END$$
 
 
