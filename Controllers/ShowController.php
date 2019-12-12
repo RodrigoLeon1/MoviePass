@@ -9,18 +9,18 @@
 	use Controllers\UserController as UserController;   
 	use Controllers\MovieController as MovieController;
 	use Controllers\CinemaController as CinemaController;
-	use Controllers\ViewsRouterController as ViewsRouter;  
 	use Controllers\CinemaRoomController as CinemaRoomController;
 	
-    class ShowController extends ViewsRouter {
+    class ShowController {
 
         private $showDAO;
 		private $cinemaRoomDAO;		
         private $movieDAO;
 
         public function __construct() {
-            $this->showDAO = new ShowDAO();            
-        }
+			$this->showDAO = new ShowDAO();     
+			$this->userController = new UserController();      
+        } 
 
         public function add($id_cinemaRoom, $id_movie, $date, $time) {
 			if ($this->isFormNotEmpty($id_cinemaRoom, $id_movie, $date, $time)) {					
@@ -144,13 +144,13 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-show-add.php");
 					} else {
-						return $this->goToAdminPath();	
+						return $this->userController->adminPath();	
 					}
 				} else {
-					return $this->goToUserPath();
+					return $this->userController->userPath();
 				}
 			} else {
-				return $this->goToUserPath();
+				return $this->userController->userPath();
             } 
 		}
 		
@@ -171,13 +171,13 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-show-list.php");
 					} else {
-						return $this->goToAdminPath();
+						return $this->userController->adminPath();
 					}
 				} else {
-					return $this->goToUserPath();
+					return $this->userController->userPath();
 				}
 			} else {
-				return $this->goToUserPath();
+				return $this->userController->userPath();
             } 
 		}
 

@@ -4,15 +4,15 @@
 
 	use Models\Cinema as Cinema;
     use DAO\CinemaDAO as cinemaDAO;
-	use Controllers\UserController as UserController;   
-	use Controllers\ViewsRouterController as ViewsRouter;   
+	use Controllers\UserController as UserController;   	  
 
-    class CinemaController extends ViewsRouter {
+    class CinemaController {
         
         private $cinemaDAO;		
 
         public function __construct() {
-            $this->cinemaDAO = new CinemaDAO();
+			$this->cinemaDAO = new CinemaDAO();
+			$this->userController = new UserController();
 		}			
 
         public function add($name, $address) {
@@ -48,10 +48,10 @@
 					require_once(VIEWS_PATH . "admin-header.php");
 					require_once(VIEWS_PATH . "admin-cinema-add.php");
 				} else {	
-					return $this->goToUserPath();
+					return $this->userController->userPath();
 				}				
 			} else {
-				return $this->goToUserPath();
+				return $this->userController->userPath();
             }
         }
 
@@ -65,13 +65,13 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-cinema-list.php");
 					} else {
-						return $this->goToAdminPath();
+						return $this->userController->adminPath();
 					}
 				} else {	
-					return $this->goToUserPath();
+					return $this->userController->userPath();
 				}
 			} else {
-				return $this->goToUserPath();
+				return $this->userController->userPath();
             }
         }
 
@@ -127,10 +127,10 @@
 						return $this->listCinemaPath(null, null, DB_ERROR, null);
 					}
 				} else {
-					return $this->goToUserPath();
+					return $this->userController->userPath();
 				}
 			} else {
-				return $this->goToUserPath();
+				return $this->userController->userPath();
             }
 		}
 
@@ -155,13 +155,13 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-cinema-sales.php");
 					} else {
-						return $this->goToAdminPath();
+						return $this->userController->adminPath();
 					}
 				} else {
-					return $this->goToUserPath();
+					return $this->userController->userPath();
 				}
 			} else {
-				return $this->goToUserPath();
+				return $this->userController->userPath();
             }
 		}
 

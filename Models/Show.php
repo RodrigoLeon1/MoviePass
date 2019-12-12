@@ -6,6 +6,7 @@
 	use Models\Movie as Movie;
 
     class Show {
+        
         private $id;
         private $cinemaRoom;
         private $movie;

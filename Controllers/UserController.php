@@ -275,7 +275,7 @@
 		}
 
 
-        // Todavia no funciona al 100%
+        // no funciona
         public function updateAccount($firstName, $lastName, $dni, $mail, $password) {
             $usr = $_SESSION["loggedUser"];
             if ($this->validateRegisterForm($firstName, $lastName, $dni, $mail, $password) && $this->validateMailForm($mail)) {      

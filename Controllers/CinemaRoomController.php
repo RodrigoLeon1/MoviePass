@@ -6,15 +6,15 @@
 	use Models\Cinema as Cinema;
 	use Models\CinemaRoom as CinemaRoom;
     use DAO\CinemaRoomDAO as CinemaRoomDAO;
-	use Controllers\UserController as UserController;   
-	use Controllers\ViewsRouterController as ViewsRouter;  
+	use Controllers\UserController as UserController;    
 
-    class CinemaRoomController extends ViewsRouter {
+    class CinemaRoomController {
 		
 		private $cinemaRoomDAO;			
 
         public function __construct() {
-            $this->cinemaRoomDAO = new CinemaRoomDAO();
+			$this->cinemaRoomDAO = new CinemaRoomDAO();
+			$this->userController = new UserController();
 		}			
 
         public function add($id_cinema, $name, $capacity, $price) {
@@ -59,13 +59,13 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-cinema-room-add.php");
 					} else {
-						return $this->goToAdminPath();
+						return $this->userController->adminPath();
 					}
 				} else {
-					return $this->goToUserPath();
+					return $this->userController->userPath();
 				}				
 			} else {
-				return $this->goToUserPath();
+				return $this->userController->userPath();
             }
         }
 
@@ -81,13 +81,13 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-cinema-room-list.php");
 					} else {
-						return $this->goToAdminPath();
+						return $this->userController->adminPath();
 					}
 				} else {
-					return $this->goToUserPath();
+					return $this->userController->userPath();
 				}
 			} else {
-				return $this->goToUserPath();
+				return $this->userController->userPath();
             }
         }
 
@@ -141,13 +141,13 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-cinema-room-modify.php");
 					} else {
-						return $this->goToAdminPath();
+						return $this->userController->adminPath();
 					}
 				} else {
-					return $this->goToUserPath();
+					return $this->userController->userPath();
 				}
 			} else {
-				return $this->goToUserPath();
+				return $this->userController->userPath();
             }
 		}
 
@@ -173,13 +173,13 @@
 						require_once(VIEWS_PATH . "admin-header.php");
 						require_once(VIEWS_PATH . "admin-cinema-room-sales.php");
 					} else {
-						return $this->goToAdminPath();
+						return $this->userController->adminPath();
 					}
 				} else {
-					return $this->goToUserPath();
+					return $this->userController->userPath();
 				}
 			} else {
-				return $this->goToUserPath();
+				return $this->userController->userPath();
             }
 		}
 		

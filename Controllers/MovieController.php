@@ -6,18 +6,18 @@
     use DAO\MovieDAO as MovieDAO;
     use Controllers\UserController as UserController;   
     use Controllers\ShowController as ShowController;
-    use Controllers\ViewsRouterController as ViewsRouter;  
     use Controllers\PurchaseController as PurchaseController;
     use Controllers\GenreToMovieController as GenreToMovieController;
 
-    class MovieController extends ViewsRouter {
+    class MovieController {
 
         private $movieDAO;
 		private $showController;
 
         public function __construct() {
             $this->movieDAO = new MovieDAO();
-			$this->showController = new ShowController();
+            $this->showController = new ShowController();
+            $this->userController = new UserController();
         }
 
         public function moviesNowPlaying() {
@@ -128,10 +128,10 @@
 				    require_once(VIEWS_PATH . "admin-header.php");
                     require_once(VIEWS_PATH . "admin-movie-add.php");
                 } else {
-                    return $this->goToUserPath();
+                    return $this->userController->userPath();
                 }
 			} else {
-                return $this->goToUserPath();
+                return $this->userController->userPath();
             }
         }        
         
@@ -205,13 +205,13 @@
                         require_once(VIEWS_PATH . "admin-header.php");
                         require_once(VIEWS_PATH . "admin-movie-list.php");
                     } else {
-                        return $this->goToAdminPath();
+                        return $this->userController->adminPath();
                     }
                 } else {
-                    return $this->goToUserPath();
+                    return $this->userController->userPath();
                 }
 			} else {
-                return $this->goToUserPath();
+                return $this->userController->userPath();
             }            
         }         
 
@@ -236,13 +236,13 @@
                         require_once(VIEWS_PATH . "admin-header.php");
                         require_once(VIEWS_PATH . "admin-movie-sales.php");
                     } else {
-                        return $this->goToAdminPath();
+                        return $this->userController->adminPath();
                     }
 				} else {
-                    return $this->goToUserPath();
+                    return $this->userController->userPath();
                 }
 			} else {
-                return $this->goToUserPath();
+                return $this->userController->userPath();
             } 
         }
         

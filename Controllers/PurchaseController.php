@@ -9,17 +9,18 @@
     use Models\PaymentCreditCard as PaymentCreditCard;    
     use DAO\PurchaseDAO as PurchaseDAO;
     use Controllers\ShowController as ShowController;
+    use Controllers\UserController as UserController; 
     use Controllers\MovieController as MovieController;
     use Controllers\TicketController as TicketController;
-    use Controllers\ViewsRouterController as ViewsRouter; 
     use Controllers\PaymentCreditCardController as PaymentCreditCardController;    
 
-    class PurchaseController extends ViewsRouter {
+    class PurchaseController {
 
         private $purchaseDAO;
 
         public function __construct() {
             $this->purchaseDAO = new PurchaseDAO();
+            $this->userController = new UserController();
         }
 
         public function add($ticket_quantity, $id_show, $id_card, $cardNumber, $cardSecurity, $expirationDate) {                    
@@ -72,18 +73,17 @@
                     return $this->purchaseSuccess($id_purchase);                          
                 }
             } 	
-            return $this->goToUserPath();		
+            return $this->userController->userPath();	
         }
 
         private function applyDiscount($ticket_quantity) {
-            $today = getdate();
-            $day = $today['wday'];
+            $date= getdate();
+            $today = $date['wday'];
             // The discount only applies if the quantity of tickets if greater than or equal 2
-            if($ticket_quantity >= 2) {
-                // 2 -> Tuesday // 3 -> Wednesday
-                $tuesday = 2;
-                $wednesday = 3;
-                if($day == $tuesday || $day == $wednesday ) {
+            if($ticket_quantity >= 2) {                
+                $tuesday = 2;   // 2 -> Tuesday 
+                $wednesday = 3; // 3 -> Wednesday
+                if($today == $tuesday || $today == $wednesday ) {
                     return true;
                 }
             }
@@ -109,9 +109,8 @@
                     $movieController = new MovieController();
                     return $movieController->nowPlaying();
                 }                                
-            } else {
-                $userController = new UserController();
-                return $userController->loginPath(LOGIN_NEEDED);
+            } else {                
+                return $this->userController->loginPath(LOGIN_NEEDED);
             }
         }
 
@@ -130,9 +129,8 @@
                     $movieController = new MovieController();
                     return $movieController->nowPlaying();
                 }
-            } else {
-                $userController = new UserController();
-                return $userController->loginPath(LOGIN_NEEDED);
+            } else {                
+                return $this->userController->loginPath(LOGIN_NEEDED);
             }
         }
 

@@ -4,17 +4,17 @@
 
     use Models\Show as Show;
     use Models\Ticket as Ticket;
-    use DAO\TicketDAO as TicketDAO;
+    use DAO\TicketDAO as TicketDAO;    
     use Controllers\ShowController as ShowController;
-    use Controllers\UserController as UserController; 
-    use Controllers\ViewsRouterController as ViewsRouter;     
+    use Controllers\UserController as UserController;    
 
-    class TicketController extends ViewsRouter {
+    class TicketController {
         
         private $ticketDAO;
         
         public function __construct() {            
-            $this->ticketDAO = new TicketDAO();            
+            $this->ticketDAO = new TicketDAO();     
+            $this->userController = new UserController();          
         }
 
         public function add($qr, $id_show, $id_purchase) {
@@ -28,14 +28,6 @@
             
             return $this->ticketDAO->add($ticket);
         }
-
-        /* al pedo?
-        private function isFormNotEmpty($id_purchase, $id_show) {
-            if (empty($id_purchase) || empty($id_show)) {
-                return false;
-            }
-            return true;
-        } */
  
         public function getByNumber($number) {
             $ticket = new Ticket();
@@ -68,13 +60,13 @@
                         require_once(VIEWS_PATH . "admin-header.php");
                         require_once(VIEWS_PATH . "admin-tickets-sold.php");
                     } else {
-                        return $this->goToAdminPath();
+                        return $this->userController->adminPath();
                     }
                 } else {
-                    return $this->goToUserPath();
+                    return $this->userController->userPath();
                 }
 			} else {
-                return $this->goToUserPath();
+                return $this->userController->userPath();
             }
         }
         
