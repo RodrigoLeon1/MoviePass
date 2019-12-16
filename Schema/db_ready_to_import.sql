@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-11-2019 a las 21:53:18
+-- Tiempo de generación: 17-12-2019 a las 00:04:52
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.9
 
@@ -159,6 +159,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cinema_rooms_add` (IN `name` VARCHA
         (name, price, capacity, id_cinema);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `credit_accounts_Add` (IN `company` VARCHAR(255))  BEGIN
+    INSERT INTO credit_accounts 
+		(credit_accounts.company)
+    VALUES 
+		(company);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `credit_accounts_GetAll` ()  BEGIN
+    SELECT 
+		*
+	FROM
+		credit_accounts;	
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `genreMovie_add` (IN `FK_gxm_id_genre` INT, IN `FK_gxm_id_movie` INT)  BEGIN
 	INSERT INTO genres_x_movies (
 			genres_x_movies.FK_gxm_id_genre,
@@ -240,7 +254,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getGenresOfShows` () 
 	INNER JOIN movies ON movies.id = genres_x_movies.FK_id_movie
 	INNER JOIN genres ON genres_x_movies.FK_id_genre = genres.id
 	INNER JOIN shows ON shows.FK_id_movie = genres_x_movies.FK_id_movie						
-	WHERE (genres_x_movies.FK_id_movie = shows.FK_id_movie)
+	WHERE (genres_x_movies.FK_id_movie = shows.FK_id_movie) AND (shows.is_active = true)
 	GROUP BY genres.name;
 END$$
 
@@ -386,6 +400,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_hasShows` (IN `id_movie` INT
 	WHERE movies.id = id_movie;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `payments_credit_card_Add` (IN `code_auth` INT, IN `date` DATE, IN `total` FLOAT, IN `FK_card` INT, OUT `lastId` INT)  BEGIN
+    INSERT INTO payments_credit_card 
+		(payments_credit_card.code_auth, payments_credit_card.date, payments_credit_card.total, payments_credit_card.FK_card)
+    VALUES 
+		(code_auth, date, total, FK_card);
+	SET lastId = LAST_INSERT_ID();	
+	SELECT lastId;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `profile_users_add` (IN `dni` INT, IN `first_name` VARCHAR(255), IN `last_name` VARCHAR(255))  BEGIN
 	INSERT INTO profile_users (
 			profile_users.dni,
@@ -396,9 +419,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `profile_users_add` (IN `dni` INT, I
         (dni, first_name, last_name);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_Add` (IN `ticket_quantity` INT, IN `discount` INT, IN `date` DATE, IN `total` INT, IN `dni_user` INT)  BEGIN
-    INSERT INTO purchases(purchases.ticket_quantity, purchases.discount, purchases.date, purchases.total, purchases.FK_dni)
-    VALUES (ticket_quantity, discount, date, total, dni_user);	
+CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_Add` (IN `ticket_quantity` INT, IN `discount` INT, IN `date` DATE, IN `total` INT, IN `dni_user` INT, IN `FK_payment_cc` INT, OUT `lastId` INT)  BEGIN
+    INSERT INTO purchases(purchases.ticket_quantity, purchases.discount, purchases.date, purchases.total, purchases.FK_dni, purchases.FK_payment_cc)
+    VALUES (ticket_quantity, discount, date, total, dni_user, FK_payment_cc);
+	SET lastId = LAST_INSERT_ID();	
+	SELECT lastId;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_GetAll` ()  BEGIN
@@ -422,10 +447,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_GetByDni` (IN `dni` INT) 
            purchases.ticket_quantity AS purchases_ticket_quantity,
            purchases.discount AS purchases_discount,
            purchases.date AS purchases_date,
-           purchases.total AS purchases_total,
-           purchases.FK_dni AS purchases_FK_dni
+           purchases.total AS purchases_total,           
+		   movies.title AS movie_title,
+		   cinemas.name AS cinema_name,
+		   cinema_rooms.name AS cinema_room_name
     FROM purchases
-    WHERE(purchases.FK_dni = dni);
+	INNER JOIN tickets ON purchases.id = tickets.FK_id_purchase
+	INNER JOIN shows ON tickets.FK_id_show = shows.id
+	INNER JOIN movies ON shows.FK_id_movie = movies.id
+	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
+	INNER JOIN cinemas ON cinema_rooms.FK_id_cinema = cinemas.id
+    WHERE(purchases.FK_dni = dni)
+	GROUP BY purchases.id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `purchases_GetById` (IN `id` INT)  BEGIN 
@@ -522,7 +555,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_getAllActives` ()  BEGIN
 	INNER JOIN movies ON movies.id = shows.FK_id_movie
 	INNER JOIN cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
 	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
-	WHERE shows.is_active = true
+	WHERE (shows.is_active = true) AND (shows.date_start >= CURDATE()) 
 	ORDER BY movies.title ASC;
 END$$
 
@@ -582,7 +615,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_getShowsOfMovie` (IN `id_movi
 		cinema_rooms ON cinema_rooms.id = shows.FK_id_cinemaRoom
 	INNER JOIN
 		cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
-	WHERE ( (shows.FK_id_movie = id_movie) AND (shows.date_start >= curdate()) ) 
+	WHERE ( (shows.FK_id_movie = id_movie) AND (shows.date_start >= curdate()) AND (shows.is_active = true) ) 
 	ORDER BY shows.date_start ASC, shows.time_start ASC;
 END$$
 
@@ -590,9 +623,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_modify` (IN `id` INT, IN `id_
 	UPDATE shows SET shows.	FK_id_cinemaRoom = id_cinemaRoom, shows.FK_id_movie = id_movie, shows.date_start = date_start, shows.time_start = time_start, shows.date_end = date_end, shows.time_end = time_end WHERE shows.id = id;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `tickets_Add` (IN `id_purchase` INT, IN `id_show` INT)  BEGIN
-    INSERT INTO tickets(tickets.FK_id_purchase, tickets.FK_id_show)
-    VALUES (id_purchase, id_show);
+CREATE DEFINER=`root`@`localhost` PROCEDURE `tickets_Add` (IN `qr` INT, IN `id_purchase` INT, IN `id_show` INT)  BEGIN
+    INSERT INTO tickets (tickets.qr, tickets.FK_id_purchase, tickets.FK_id_show)
+    VALUES (qr, id_purchase, id_show);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `tickets_GetAll` ()  BEGIN
@@ -629,7 +662,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `tickets_GetInfoTicket` ()  BEGIN
 		movies.title AS movie_title	
 	FROM tickets 
 	INNER JOIN shows ON tickets.FK_id_show = shows.id
-	INNER JOIN purchases ON tickets.FK_id_purchase = purchases.id_purchase
+	INNER JOIN purchases ON tickets.FK_id_purchase = purchases.id
 	INNER JOIN cinema_rooms ON shows.FK_id_cinemaRoom = cinema_rooms.id
 	INNER JOIN cinemas ON cinemas.id = cinema_rooms.FK_id_cinema
 	INNER JOIN movies ON shows.FK_id_movie = movies.id
@@ -774,7 +807,7 @@ INSERT INTO `cinemas` (`id`, `name`, `address`, `is_active`) VALUES
 (12, 'CinemaCenter', 'Diag. Pueyrredon 3050', 1),
 (13, 'Cinema II', 'Los Gallegos Shopping', 1),
 (14, 'Cine del Paseo', 'Diagonal Pueyrredon', 1),
-(21, 'at', 'a5', 0);
+(21, 'Cinema disable', 'disable', 0);
 
 -- --------------------------------------------------------
 
@@ -800,7 +833,26 @@ INSERT INTO `cinema_rooms` (`id`, `name`, `price`, `capacity`, `FK_id_cinema`, `
 (12, 'Sala 1', 30, 160, 11, 1),
 (13, 'Sala 2', 55, 5, 10, 1),
 (14, 'Sala 3', 15, 15, 10, 1),
-(21, 'attt', 5, 5, 21, 0);
+(21, 'Cinema room disable', 5, 5, 21, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `credit_accounts`
+--
+
+CREATE TABLE `credit_accounts` (
+  `id` int(11) NOT NULL,
+  `company` varchar(255) COLLATE utf8_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Volcado de datos para la tabla `credit_accounts`
+--
+
+INSERT INTO `credit_accounts` (`id`, `company`) VALUES
+(1, 'Visa'),
+(2, 'MasterCard');
 
 -- --------------------------------------------------------
 
@@ -909,7 +961,14 @@ INSERT INTO `genres_x_movies` (`FK_id_genre`, `FK_id_movie`) VALUES
 (878, 14161),
 (28, 272),
 (80, 272),
-(18, 272);
+(18, 272),
+(28, 181812),
+(12, 181812),
+(878, 181812),
+(80, 537056),
+(16, 537056),
+(9648, 537056),
+(28, 537056);
 
 -- --------------------------------------------------------
 
@@ -928,7 +987,7 @@ CREATE TABLE `images` (
 --
 
 INSERT INTO `images` (`imageId`, `name`, `FK_dni_user`) VALUES
-(8, '35017858.jpg', 11111111);
+(9, '35017858.jpg', 404040);
 
 -- --------------------------------------------------------
 
@@ -957,6 +1016,7 @@ INSERT INTO `movies` (`id`, `poster_path`, `backdrop_path`, `title`, `vote_avera
 (272, '/dr6x4GyyegBWtinPBzipY02J2lV.jpg', '/9myrRcegWGGp24mpVfkD4zhUfhi.jpg', 'Batman Begins', '7.6', 'Driven by tragedy, billionaire Bruce Wayne dedicates his life to uncovering and defeating the corruption that plagues his home, Gotham City.  Unable to work within the system, he instead creates a new identity, a symbol of fear for the criminal underworld', '2005-06-10', 140, 1),
 (14161, '/zf1idF1ys8zuaAzEEzghre5A4m3.jpg', '/ywxrdkfbr8Dg3SBW2gi4kC59qOb.jpg', '2012', '5.7', 'Dr. Adrian Helmsley, part of a worldwide geophysical team investigating the effect on the earth of radiation from unprecedented solar storms, learns that the earth\'s core is heating up. He warns U.S. President Thomas Wilson that the crust of the earth is ', '2009-10-10', 158, 1),
 (157336, '/nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg', '/xu9zaAevzQ5nnrsXN6JcahLnG4i.jpg', 'Interstellar', '8.3', 'Interstellar chronicles the adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.', '2014-11-05', 169, 1),
+(181812, '/db32LaOibwEliAmSL2jjDF6oDdj.jpg', '/jOzrELAzFxtMx2I4uDGHOotdfsS.jpg', 'Star Wars: The Rise of Skywalker', '0', 'The next installment in the franchise and the conclusion of the â€œStar Warsâ€œ sequel trilogy as well as the â€œSkywalker Saga.â€œ', '2019-12-18', 141, 1),
 (290859, '/vqzNJRH4YyquRiWxCCOH0aXggHI.jpg', '/a6cDxdwaQIFjSkXf7uskg78ZyTq.jpg', 'Terminator: Dark Fate', '6.6', 'More than two decades have passed since Sarah Connor prevented Judgment Day, changed the future, and re-wrote the fate of the human race. Dani Ramos is living a simple life in Mexico City with her brother and father when a highly advanced and deadly new T', '2019-11-01', 128, 1),
 (295151, '/tXTccijjTnpXWFEMaHC1gp59cNc.jpg', '/9REB0BCTk2RueTj5PuELYRYJN5e.jpg', 'Let It Snow', '6.3', 'When a huge blizzard (that doesn\'t show signs of stopping) hits, Gracetown is completely snowed in. But even though it\'s cold outside, things are heating up inside, proving that Christmas is magical when it comes to love.', '2019-11-08', 93, 0),
 (338967, '/pIcV8XXIIvJCbtPoxF9qHMKdRr2.jpg', '/jCCdt0e8Xe9ttvevD4S3TSMNdH.jpg', 'Zombieland: Double Tap', '7.5', 'The group will face a new zombie threat as a new breed of zombie has developed. This new super-zombie type is faster, bigger, and stronger than the previous strain of zombies and harder to kill. These super-zombies have started grouping up into a horde go', '2019-10-18', 99, 1),
@@ -973,8 +1033,23 @@ INSERT INTO `movies` (`id`, `poster_path`, `backdrop_path`, `title`, `vote_avera
 (501170, '/p69QzIBbN06aTYqRRiCOY1emNBh.jpg', '/4D4Ic9N4tnwaW4x241LGb1XOi7O.jpg', 'Doctor Sleep', '6.9', 'A traumatized, alcoholic Dan Torrance meets Abra, a kid who also has the ability to \"shine.\" He tries to protect her from the True Knot, a cult whose goal is to feed off people like them in order to remain immortal.', '2019-11-08', 152, 1),
 (515195, '/1rjaRIAqFPQNnMtqSMLtg0VEABi.jpg', '/t5Kp02Jzixl0KfpwthHp9ZUex9t.jpg', 'Yesterday', '6.7', 'Jack Malik is a struggling singer-songwriter in an English seaside town whose dreams of fame are rapidly fading, despite the fierce devotion and support of his childhood best friend, Ellie. After a freak bus accident during a mysterious global blackout, J', '2019-06-28', 116, 1),
 (521777, '/tximyCXMEnWIIyOy9STkOduUprG.jpg', '/jTwUkBa6BOPypqCx4KcvrYIlAcI.jpg', 'Good Boys', '6.5', 'A group of young boys on the cusp of becoming teenagers embark on an epic quest to fix their broken drone before their parents get home.', '2019-08-16', 89, 1),
+(537056, '/eiVQORVyVuNNZHPAELuWtlXoQsD.jpg', '/eevJuYAitUe6VwFN29aFwzeyeTr.jpg', 'Batman: Hush', '7', 'A mysterious new villain known only as Hush uses a gallery of villains to destroy Batman\'s crime-fighting career as well as Bruce Wayne\'s personal life, which has been further complicated by a  relationship with Selina Kyle/Catwoman.', '2019-07-19', 82, 1),
 (559969, '/ePXuKdXZuJx8hHMNr2yM4jY2L7Z.jpg', '/ijiE9WoGSwSzM16zTxvUneJ8RXc.jpg', 'El Camino: A Breaking Bad Movie', '7.1', 'In the wake of his dramatic escape from captivity, Jesse Pinkman must come to terms with his past in order to forge some kind of future.', '2019-10-11', 123, 1),
 (568012, '/4E2lyUGLEr3yH4q6kJxPkQUhX7n.jpg', '/iGnCzXEx0cFlUbpyAMeHwHWhPhx.jpg', 'One Piece: Stampede', '7.6', 'One Piece: Stampede is a stand-alone film that celebrates the anime\'s 20th Anniversary and takes place outside the canon of the \"One Piece\" TV series. Monkey D. Luffy and his Straw Hat pirate crew are invited to a massive Pirate Festival that brings many ', '2019-10-24', 101, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `payments_credit_card`
+--
+
+CREATE TABLE `payments_credit_card` (
+  `id` int(11) NOT NULL,
+  `code_auth` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `total` float NOT NULL,
+  `FK_card` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -993,9 +1068,9 @@ CREATE TABLE `profile_users` (
 --
 
 INSERT INTO `profile_users` (`dni`, `first_name`, `last_name`) VALUES
-(1515, 'user', 'user'),
-(10512412, 'pep', 'pep'),
-(11111111, 'Rodrigo', 'Leon');
+(101010, 'Usuario', 'Usuario'),
+(404040, 'Rodrigo', 'Leon'),
+(9592315, 'Pepe', 'Jose');
 
 -- --------------------------------------------------------
 
@@ -1009,46 +1084,9 @@ CREATE TABLE `purchases` (
   `discount` int(11) NOT NULL,
   `date` date NOT NULL,
   `total` int(11) NOT NULL,
-  `FK_dni` int(11) NOT NULL
+  `FK_dni` int(11) NOT NULL,
+  `FK_payment_cc` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `purchases`
---
-
-INSERT INTO `purchases` (`id`, `ticket_quantity`, `discount`, `date`, `total`, `FK_dni`) VALUES
-(1, 4, 0, '2019-11-17', 120, 11111111),
-(2, 3, 0, '2019-11-17', 90, 11111111),
-(3, 2, 0, '2019-11-17', 60, 11111111),
-(4, 2, 0, '2019-11-17', 60, 11111111),
-(5, 2, 0, '2019-11-17', 60, 11111111),
-(6, 2, 0, '2019-11-17', 60, 11111111),
-(7, 2, 0, '2019-11-17', 60, 11111111),
-(8, 2, 0, '2019-11-17', 60, 11111111),
-(9, 3, 0, '2019-11-17', 90, 11111111),
-(10, 5, 0, '2019-11-17', 250, 11111111),
-(11, 5, 0, '2019-11-17', 250, 11111111),
-(12, 3, 0, '2019-11-17', 150, 11111111),
-(13, 3, 0, '2019-11-17', 150, 11111111),
-(14, 3, 0, '2019-11-17', 150, 11111111),
-(15, 3, 0, '2019-11-17', 150, 11111111),
-(16, 3, 0, '2019-11-17', 150, 11111111),
-(17, 3, 0, '2019-11-17', 90, 11111111),
-(18, 2, 0, '2019-11-17', 60, 1515),
-(19, 1, 0, '2019-11-17', 30, 11111111),
-(20, 159, 0, '2019-11-17', 4770, 11111111),
-(21, 3, 0, '2019-11-17', 45, 11111111),
-(22, 3, 0, '2019-11-17', 45, 11111111),
-(23, 10, 0, '2019-11-17', 500, 11111111),
-(24, 4, 0, '2019-11-18', 60, 11111111),
-(25, 3, 0, '2019-11-18', 90, 11111111),
-(26, 2, 0, '2019-11-18', 60, 11111111),
-(28, 4, 0, '2019-11-19', 120, 11111111),
-(29, 5, 0, '2019-11-20', 275, 11111111),
-(30, 10, 0, '2019-11-20', 500, 1515),
-(31, 5, 0, '2019-11-20', 275, 11111111),
-(32, 5, 0, '2019-11-21', 75, 1515),
-(33, 3, 0, '2019-11-28', 90, 1515);
 
 -- --------------------------------------------------------
 
@@ -1091,19 +1129,8 @@ CREATE TABLE `shows` (
 --
 
 INSERT INTO `shows` (`id`, `FK_id_cinemaRoom`, `FK_id_movie`, `date_start`, `time_start`, `date_end`, `time_end`, `is_active`) VALUES
-(24, 13, 14161, '2019-12-28', '10:10:00', '2019-12-28', '13:03:00', 1),
-(25, 13, 14161, '2019-12-28', '15:15:00', '2019-12-28', '18:08:00', 1),
-(26, 14, 14161, '2019-12-28', '10:25:00', '2019-12-28', '13:18:00', 1),
-(37, 11, 14161, '2019-12-28', '17:30:00', '2019-12-28', '20:23:00', 1),
-(38, 13, 475557, '2019-12-31', '15:30:00', '2019-12-31', '17:47:00', 1),
-(39, 13, 290859, '2019-12-21', '22:00:00', '2019-12-22', '00:23:00', 1),
-(40, 14, 474350, '2019-12-25', '15:30:00', '2019-12-25', '18:34:00', 1),
-(41, 13, 480105, '2019-12-27', '15:15:00', '2019-12-27', '17:00:00', 1),
-(42, 12, 521777, '2019-12-31', '18:30:00', '2019-12-31', '20:14:00', 1),
-(43, 14, 515195, '2019-12-20', '15:15:00', '2019-12-20', '17:26:00', 1),
-(44, 11, 420809, '2019-12-20', '17:30:00', '2019-12-20', '19:43:00', 1),
-(45, 21, 398978, '2019-12-31', '03:15:00', '2019-12-31', '06:59:00', 0),
-(46, 14, 559969, '2019-12-31', '15:15:00', '2019-12-31', '17:33:00', 1);
+(61, 12, 14161, '2019-12-03', '18:30:00', '2019-12-03', '21:23:00', 1),
+(62, 12, 14161, '2019-12-03', '14:00:00', '2019-12-03', '16:53:00', 1);
 
 -- --------------------------------------------------------
 
@@ -1117,40 +1144,6 @@ CREATE TABLE `tickets` (
   `FK_id_purchase` int(11) NOT NULL,
   `FK_id_show` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Volcado de datos para la tabla `tickets`
---
-
-INSERT INTO `tickets` (`ticket_number`, `QR`, `FK_id_purchase`, `FK_id_show`) VALUES
-(244, 0, 29, 24),
-(245, 0, 29, 24),
-(246, 0, 29, 24),
-(247, 0, 29, 24),
-(248, 0, 29, 24),
-(249, 0, 30, 37),
-(250, 0, 30, 37),
-(251, 0, 30, 37),
-(252, 0, 30, 37),
-(253, 0, 30, 37),
-(254, 0, 30, 37),
-(255, 0, 30, 37),
-(256, 0, 30, 37),
-(257, 0, 30, 37),
-(258, 0, 30, 37),
-(259, 0, 31, 38),
-(260, 0, 31, 38),
-(261, 0, 31, 38),
-(262, 0, 31, 38),
-(263, 0, 31, 38),
-(264, 0, 32, 26),
-(265, 0, 32, 26),
-(266, 0, 32, 26),
-(267, 0, 32, 26),
-(268, 0, 32, 26),
-(269, 0, 33, 42),
-(270, 0, 33, 42),
-(271, 0, 33, 42);
 
 -- --------------------------------------------------------
 
@@ -1171,9 +1164,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`mail`, `password`, `FK_dni`, `FK_id_role`, `is_active`) VALUES
-('user@user.com', '123', 1515, 0, 1),
-('pep@mail.com', '123', 10512412, 0, 0),
-('admin@admin.com', '123', 11111111, 1, 1);
+('user@user.com', '$2y$10$.wmJ0AtEQHu0SXvZXbYjTeuq.p9e/eSuCHQpUG3BBFzOk8YNPYaWG', 101010, 0, 1),
+('admin@admin.com', '$2y$10$dqygmgUiZXOu32nyVRcd9.YzgyZMwoKSQztAjOhwFH4AKwkTSEfMq', 404040, 1, 1),
+('pepe@user.com', '$2y$10$vIiWzmu2rRsHD0uhnFCBX.TV8.dj8naTR4OjcS6Oe8dAX0y2Pg9zC', 9592315, 0, 0);
 
 --
 -- Índices para tablas volcadas
@@ -1191,6 +1184,12 @@ ALTER TABLE `cinemas`
 ALTER TABLE `cinema_rooms`
   ADD PRIMARY KEY (`id`),
   ADD KEY `FK_id_cinema` (`FK_id_cinema`) USING BTREE;
+
+--
+-- Indices de la tabla `credit_accounts`
+--
+ALTER TABLE `credit_accounts`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `genres`
@@ -1219,6 +1218,13 @@ ALTER TABLE `movies`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `payments_credit_card`
+--
+ALTER TABLE `payments_credit_card`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_card_company` (`FK_card`);
+
+--
 -- Indices de la tabla `profile_users`
 --
 ALTER TABLE `profile_users`
@@ -1229,7 +1235,8 @@ ALTER TABLE `profile_users`
 --
 ALTER TABLE `purchases`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_dni_purchase` (`FK_dni`);
+  ADD KEY `FK_dni_purchase` (`FK_dni`),
+  ADD KEY `FK_payment_purchase` (`FK_payment_cc`);
 
 --
 -- Indices de la tabla `roles`
@@ -1278,28 +1285,40 @@ ALTER TABLE `cinema_rooms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
+-- AUTO_INCREMENT de la tabla `credit_accounts`
+--
+ALTER TABLE `credit_accounts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT de la tabla `images`
 --
 ALTER TABLE `images`
-  MODIFY `imageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `imageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT de la tabla `payments_credit_card`
+--
+ALTER TABLE `payments_credit_card`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `shows`
 --
 ALTER TABLE `shows`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT de la tabla `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=272;
+  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=306;
 
 --
 -- Restricciones para tablas volcadas
@@ -1325,10 +1344,17 @@ ALTER TABLE `images`
   ADD CONSTRAINT `FK_dni_image` FOREIGN KEY (`FK_dni_user`) REFERENCES `profile_users` (`dni`);
 
 --
+-- Filtros para la tabla `payments_credit_card`
+--
+ALTER TABLE `payments_credit_card`
+  ADD CONSTRAINT `FK_card_company` FOREIGN KEY (`FK_card`) REFERENCES `credit_accounts` (`id`);
+
+--
 -- Filtros para la tabla `purchases`
 --
 ALTER TABLE `purchases`
-  ADD CONSTRAINT `FK_dni_purchase` FOREIGN KEY (`FK_dni`) REFERENCES `profile_users` (`dni`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `FK_dni_purchase` FOREIGN KEY (`FK_dni`) REFERENCES `profile_users` (`dni`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_payment_purchase` FOREIGN KEY (`FK_payment_cc`) REFERENCES `payments_credit_card` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `shows`

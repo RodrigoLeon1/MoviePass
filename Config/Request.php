@@ -3,6 +3,7 @@
     namespace Config;
 
     class Request {
+        
         private $controller;
         private $method;
         private $parameters = array();
