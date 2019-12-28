@@ -80,10 +80,10 @@
             $date= getdate();
             $today = $date['wday'];
             // The discount only applies if the quantity of tickets if greater than or equal 2
-            if($ticket_quantity >= 2) {                
+            if ($ticket_quantity >= 2) {                
                 $tuesday = 2;   // 2 -> Tuesday 
                 $wednesday = 3; // 3 -> Wednesday
-                if($today == $tuesday || $today == $wednesday ) {
+                if ($today == $tuesday || $today == $wednesday ) {
                     return true;
                 }
             }

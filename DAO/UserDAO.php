@@ -48,7 +48,7 @@
 				$parameters["mail"] = $user->getMail();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);						
-				foreach($results as $row) {
+				foreach ($results as $row) {
 					$userTemp = new User();
 					$userTemp->setMail($row["mail"]);
 					$userTemp->setPassword($row["password"]);
@@ -69,7 +69,7 @@
 				$query = "CALL users_getAll()";
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-				foreach($results as $row) {
+				foreach ($results as $row) {
 					$user = new User();
 					$user->setFirstName($row["first_name"]);
 					$user->setLastName($row["last_name"]);

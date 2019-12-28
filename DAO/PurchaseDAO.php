@@ -30,7 +30,7 @@
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 
-                foreach($results as $row) {
+                foreach ($results as $row) {
                     $lastId = $row['lastId'];                
                 }
                 
@@ -47,7 +47,7 @@
                 $query = "CALL purchases_GetAll()";
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-                foreach($results as $row) {
+                foreach ($results as $row) {
                     $purchase = new Purchase();
                     $purchase->setId($row['id']);
                     $purchase->setTicketQuantity($row['ticket_quantity']);
@@ -71,7 +71,7 @@
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $purchase = new Purchase();
-                foreach($results as $row) {
+                foreach ($results as $row) {
                     $purchase->setId($row['purchases_id_purchase']);
                     $purchase->setTicketQuantity($row['purchases_ticket_quantity']);
                     $purchase->setDiscount($row['purchases_discount']);
@@ -93,7 +93,7 @@
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $purchases = array();
-                foreach($results as $row) {     
+                foreach ($results as $row) {     
                     $purchase = new Purchase();
                     $purchase->setId($row['purchases_id_purchase']);
                     $purchase->setTicketQuantity($row['purchases_ticket_quantity']);

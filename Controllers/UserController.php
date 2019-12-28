@@ -285,14 +285,11 @@
                 $user->setDni($dni);
                 $user->setMail($mail);
                 $user->setPassword($password);   
-                $user->setRole($usr->getRole());                
-            
+                $user->setRole($usr->getRole());                        
                 // echo '<pre>';
                 // var_dump($user);
                 // echo '</pre>';
-
                 $this->userDAO->updateUser($user);
-
                 $_SESSION["loggedUser"] = $user;
 
                 return $this->myAccountPath();

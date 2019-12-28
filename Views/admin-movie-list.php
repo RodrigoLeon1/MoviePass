@@ -2,18 +2,18 @@
 	<h2 class="dash-title">Movies</h2>
 	<hr>
 
-	<?php if($success != null): ?>
+	<?php if ($success != null): ?>
 	<div class="alert-container success-container">
 		<i class="icon ion-md-checkmark"></i>
 		<h3><?= $success; ?></h3>
 	</div>
 	<?php endif; ?> 
 
-	<?php if($alert != null): ?>
+	<?php if ($alert != null): ?>
 	<div class="alert-container error-container">
 		<i class="icon ion-md-close-circle-outline"></i>
 		<h3><?= $alert; ?></h3>		
-		<?php if($movieId != null): ?>			
+		<?php if ($movieId != null): ?>			
 		<a href="<?= FRONT_ROOT ?>movie/forceDelete/<?= $movieId ?>">
 			<i class="icon ion-md-warning"></i>
 			Force Delete
@@ -57,12 +57,12 @@
 							<td>
 								<div class="actions-container">
 									<?php if ($movie->getIsActive()): ?>
-									<a href="<?php echo FRONT_ROOT . "movie/disable/" . $movie->getId(); ?>" class="btn btn-disable">
+									<a href="<?= FRONT_ROOT . "movie/disable/" . $movie->getId(); ?>" class="btn btn-disable">
 										<i class="icon ion-md-trash"></i>
 										Disable
 									</a>			
 									<?php else: ?>
-									<a href="<?php echo FRONT_ROOT . "movie/enable/" . $movie->getId(); ?>" class="btn btn-enable">
+									<a href="<?= FRONT_ROOT . "movie/enable/" . $movie->getId(); ?>" class="btn btn-enable">
 										<i class="icon ion-md-done-all"></i>
 										Enable
 									</a>			
@@ -74,6 +74,30 @@
 					<?php endforeach; ?>
 				</tbody>
 			</table>
+
+			<div class="center">
+				<div class="pagination">
+					<?php if ($page > 1): ?>
+						<a href="<?= FRONT_ROOT ?>movie/listMoviePath/<?= $page - 1; ?>">
+							<i class="icon ion-md-arrow-dropleft"></i>
+						</a>
+					<?php endif; ?>
+					
+					<?php for ($i = 1; $i <= $pages; $i++): ?>
+						<a href="<?= FRONT_ROOT ?>movie/listMoviePath/<?= $i; ?>" 
+							class="<?php if ($page == $i) echo "active"; ?>" >
+							<?php $current = $i; ?>
+							<?= $i; ?>
+						</a>
+					<?php endfor; ?> 
+
+					<?php if ($page != $current): ?>
+						<a href="<?= FRONT_ROOT ?>movie/listMoviePath/<?= $page + 1; ?>">
+							<i class="icon ion-md-arrow-dropright"></i>
+						</a>
+					<?php endif; ?>
+				</div>
+			</div>
 		</div>
 
 	</div>

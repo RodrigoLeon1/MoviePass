@@ -1,8 +1,7 @@
 <?php
 
     namespace Config;
-
-    //Path to your project's root folder
+    
     define("ROOT", dirname(__DIR__) . "/");
     define("FRONT_ROOT", "/MoviePass/");
     define("VIEWS_PATH", "Views/");
@@ -13,6 +12,7 @@
 	define('VIDEO_PATH', FRONT_ROOT . VIEWS_PATH . "assets/video/");
 	define("UPLOADS_PATH", "uploads/");
 	define("IMG_UPLOADS_PATH", FRONT_ROOT . "uploads/");
+	define("MAX_ITEMS_PAGE", 6);
 
 	//DB
 	define("DB_HOST", "localhost");
@@ -70,4 +70,9 @@
 	define("LOGIN_ERROR", "You have entered an invalid e-mail or password. Try again!");	
 	define("REGISTER_ERROR", "This email address has already been registered.");
 	define("EMPTY_FIELDS", "Complete all the fields correctly to continue.");
+
+	define("IMAGE_UPLOAD", "Image upload with success.");
+	define("IMAGE_UPLOAD_ERROR", "An error has ocurred. The image can't upload.");
+	define("IMAGE_TYPE_ERROR", "The file does not correspond to an image");
+
 ?>

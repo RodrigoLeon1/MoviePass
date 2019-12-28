@@ -460,10 +460,14 @@ DELIMITER $$
 CREATE PROCEDURE movies_getByTitle (IN title VARCHAR(255))
 BEGIN
 	SELECT
-		movies.id AS movie_id
+		movies.id AS movie_id,
+		movies.title AS movie_title,
+		movies.poster_path AS movie_poster_path,
+		movies.vote_average AS movie_vote_average,
+		movies.overview AS movie_overview
 	FROM movies 
 	INNER JOIN shows ON movies.id = shows.FK_id_movie
-	WHERE movies.title = title;
+	WHERE movies.title LIKE CONCAT('%', title , '%');
 END$$
 
 DROP procedure IF EXISTS `movies_getAll`;

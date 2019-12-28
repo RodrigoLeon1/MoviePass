@@ -327,12 +327,10 @@ hr {
     margin-left: 1rem;
     padding: .5rem;
     color: #fff;
-    text-align: center;
-    /* background-color: #171b21; */
+    text-align: center;    
     background-color: #222831;
     border: none;    
-    border-bottom: 1.5px solid rgba(255, 255, 0, .5);
-    /* border-radius: 5px; */
+    border-bottom: 1.5px solid rgba(255, 255, 0, .5);    
     cursor: pointer;
 }
 
@@ -384,8 +382,7 @@ hr {
 
 .movie-container {    
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    /* max-height: 300px;     */
+    grid-template-columns: 1fr 2fr 1fr;    
     margin-bottom: 4rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -635,8 +632,7 @@ hr {
 
 /* Datasheet page*/
 .back-container {
-    width: 75%;
-    /* background-color: red; */
+    width: 75%;    
     margin: 0 auto;
     padding-left: 3rem;
 }
@@ -815,9 +811,9 @@ hr {
     background-color: inherit;
 }
 
+
 /* Purchase ticket */
-.purchase-container {
-    height: 600px;
+.purchase-container {    
     width: 85%;    
     display: grid;
     grid-template-columns: 1fr 1fr;    
@@ -864,15 +860,10 @@ hr {
     margin: 2rem 0 0 0;
 }
 
-.purchase-seats {    
-    
-}
-
 .purchase-seats h2 {
     text-transform: uppercase;
     font-size: 2rem;
 }
-
 
 .show-info {    
     font-size: 1.4rem;
@@ -915,153 +906,6 @@ hr {
 .ticket-information h4 {
     font-weight: 200;
 }
-
-
-
-/* CINEMA SEATS - TEST */
-.theatre {
-    height: 500px;
-    padding: 10rem;
-    /* position: relative;     */
-    display: flex;
-    justify-content: center;
-    /* top: 70%; */
-    /* left: 60%; */
-    
-    
-    /* transform: translate(-50%, -50%); */
-  }
-  
-  .cinema-seats {
-    display: flex;
-  }
-  .cinema-seats .seat {
-    cursor: pointer;
-  }
-  .cinema-seats .seat:hover:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 7px;
-  }
-  .cinema-seats .seat.active:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 7px;
-  }
-  
-  .left .cinema-row {
-    transform: skew(-15deg);
-    margin: 0 6px;
-  }
-  .left .seat {
-    width: 35px;
-    height: 50px;
-    border-radius: 7px;
-    background: linear-gradient(to top, #761818, #761818, #761818, #761818, #761818, #B54041, #F3686A);
-    margin-bottom: 10px;
-    transform: skew(20deg);
-    margin-top: -32px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  }
-  .left .row-2 {
-    transform: skew(-13deg);
-  }
-  .left .row-2 .seat {
-    transform: skew(18deg);
-  }
-  .left .row-3 {
-    transform: skew(-12deg);
-  }
-  .left .row-3 .seat {
-    transform: skew(16deg);
-  }
-  .left .row-4 {
-    transform: skew(-11deg);
-  }
-  .left .row-4 .seat {
-    transform: skew(15deg);
-  }
-  .left .row-5 {
-    transform: skew(-10deg);
-  }
-  .left .row-5 .seat {
-    transform: skew(12deg);
-  }
-  .left .row-6 {
-    transform: skew(-9deg);
-  }
-  .left .row-6 .seat {
-    transform: skew(10deg);
-  }
-  .left .row-7 {
-    transform: skew(-7deg);
-  }
-  .left .row-7 .seat {
-    transform: skew(8deg);
-  }
-  
-  .right {
-    margin-left: 70px;
-  }
-  .right .cinema-row {
-    transform: skew(7deg);
-    margin: 0 6px;
-  }
-  .right .seat {
-    width: 35px;
-    height: 50px;
-    border-radius: 7px;
-    background: linear-gradient(to top, #761818, #761818, #761818, #761818, #761818, #B54041, #F3686A);
-    margin-bottom: 10px;
-    transform: skew(-8deg);
-    margin-top: -32px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  }
-  .right .row-2 {
-    transform: skew(9deg);
-  }
-  .right .row-2 .seat {
-    transform: skew(-10deg);
-  }
-  .right .row-3 {
-    transform: skew(10deg);
-  }
-  .right .row-3 .seat {
-    transform: skew(-12deg);
-  }
-  .right .row-4 {
-    transform: skew(11deg);
-  }
-  .right .row-4 .seat {
-    transform: skew(-15deg);
-  }
-  .right .row-5 {
-    transform: skew(12deg);
-  }
-  .right .row-5 .seat {
-    transform: skew(-16deg);
-  }
-  .right .row-6 {
-    transform: skew(13deg);
-  }
-  .right .row-6 .seat {
-    transform: skew(-18deg);
-  }
-  .right .row-7 {
-    transform: skew(15deg);
-  }
-  .right .row-7 .seat {
-    transform: skew(-20deg);
-  }
-
 
   
 /* Account page */
@@ -1154,7 +998,7 @@ hr {
     font-size: 1rem;
 }
 
-/* MIS COMPRAS */
+/*  My purchases page */
 .container > table > tbody > td > a {
     display: inline-block;
 }
@@ -1180,3 +1024,7 @@ hr {
     width: 50px;
     border-radius: 5px;
 }
+
+
+/* Responsive section */
+

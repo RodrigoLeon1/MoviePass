@@ -22,7 +22,7 @@
                 $parameters["FK_card"] = $paymentCreditCard->getCreditAccount()->getId();
 				$this->connection = Connection::GetInstance();
                 $results = $this->connection->execute($query, $parameters, QueryType::StoredProcedure);
-                foreach($results as $row) {
+                foreach ($results as $row) {
                     $lastId = $row['lastId'];
                 }
                 return $lastId;

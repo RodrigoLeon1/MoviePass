@@ -2,7 +2,7 @@
 	<h2 class="dash-title">Shows</h2>
 	<hr>
 
-	<?php if($success != null): ?>
+	<?php if ($success != null): ?>
 	<div class="alert-container success-container">
 		<i class="icon ion-md-checkmark"></i>
 		<h3><?= $success; ?></h3>
@@ -48,12 +48,12 @@
 							<td>
 								<div class="actions-container">
 									<?php if ($show->getIsActive()): ?>
-									<a href="<?php echo FRONT_ROOT . "show/disable/" . $show->getId(); ?>" class="btn btn-disable">
+									<a href="<?= FRONT_ROOT . "show/disable/" . $show->getId(); ?>" class="btn btn-disable">
 										<i class="icon ion-md-trash"></i>
 										Disable
 									</a>
 									<?php else: ?>
-									<a href="<?php echo FRONT_ROOT . "show/enable/" . $show->getId(); ?>" class="btn btn-enable">
+									<a href="<?= FRONT_ROOT . "show/enable/" . $show->getId(); ?>" class="btn btn-enable">
 										<i class="icon ion-md-done-all"></i>
 										Enable
 									</a>

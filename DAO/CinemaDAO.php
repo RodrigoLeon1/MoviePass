@@ -100,10 +100,9 @@
 				$query = "CALL cinemas_getById(?)";
 				$parameters ["id"] = $cinema->getId();
 				$this->connection = Connection::GetInstance();
-				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-				
-				$cinema = new Cinema();
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);				
 				foreach ($results as $row) {
+					$cinema = new Cinema();
 					$cinema->setId($row["id"]);
 					$cinema->setName($row["name"]);					
 					$cinema->setAddress($row["address"]);
@@ -157,6 +156,7 @@
 			}
 		}
 
+		// pasar a la controladora??? no deberia estar en el dao
 		public function getSales(Cinema $cinema) {
 			try {								
 				$query = "CALL tickets_getTicketsOfCinema(?)";

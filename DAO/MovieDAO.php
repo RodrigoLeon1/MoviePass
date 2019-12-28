@@ -34,7 +34,7 @@
 			}
         }
 
-		// Tambien agrega el runtime
+		// Also, add the runtime
 		public function addMovie(Movie $movie) {
 			try {				
 				$query = "CALL movies_add_details(?, ?, ?, ?, ?, ?, ?, ?)";
@@ -61,7 +61,46 @@
 				$this->connection = Connection::getInstance();				
 				$resultSet = $this->connection->execute($query, array(), QueryType::StoredProcedure);
 				foreach ($resultSet as $row) {
-					$movie = new Movie ();
+					$movie = new Movie();
+					$movie->setId($row["id"]);					
+					$movie->setPosterPath($row["poster_path"]);					
+					$movie->setBackdropPath($row["backdrop_path"]);														
+					$movie->setTitle($row["title"]);
+					$movie->setVoteAverage($row["vote_average"]);
+					$movie->setOverview($row["overview"]);
+					$movie->setReleaseDate($row["release_date"]);
+					$movie->setRuntime($row["runtime"]);
+					$movie->setIsActive($row["is_active"]);
+					array_push($this->movieList, $movie);
+				}
+				return $this->movieList;
+			}
+			catch (Exception $ex) {
+				return false;
+			}
+		}
+
+		public function getCount() {
+			try {				
+				$query = "SELECT count(*) AS total FROM " . $this->tableName;
+				$this->connection = Connection::getInstance();				
+				$results = $this->connection->execute($query, array());								
+				foreach ($results as $row) {
+					return $row["total"];
+				}
+			}
+			catch (Exception $ex) {
+				return false;
+			}
+		}
+
+		public function getMoviesWithLimit($start) {
+			try {				
+				$query = "SELECT * FROM " . $this->tableName . " ORDER BY title ASC LIMIT " . $start . "," . MAX_ITEMS_PAGE;
+				$this->connection = Connection::getInstance();				
+				$resultSet = $this->connection->execute($query, array());
+				foreach ($resultSet as $row) {
+					$movie = new Movie();
 					$movie->setId($row["id"]);					
 					$movie->setPosterPath($row["poster_path"]);					
 					$movie->setBackdropPath($row["backdrop_path"]);														
@@ -86,7 +125,7 @@
 				$this->connection = Connection::getInstance();				
 				$resultSet = $this->connection->execute($query, array(), QueryType::StoredProcedure);
 				foreach ($resultSet as $row) {
-					$movie = new Movie ();
+					$movie = new Movie();
 					$movie->setId($row["id"]);					
 					$movie->setPosterPath($row["poster_path"]);					
 					$movie->setBackdropPath($row["backdrop_path"]);														
@@ -228,12 +267,17 @@
 				$query = "CALL movies_getByTitle(?)";
 				$parameters ["title"] = $movie->getTitle();
 				$this->connection = Connection::GetInstance();
-				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-				$movie = new Movie();
+				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);				
 				foreach ($results as $values) {
-					$movie->setId($values["movie_id"]);
+					$movie = new Movie();
+					$movie->setId($values["movie_id"]);					
+					$movie->setTitle($values["movie_title"]);
+					$movie->setPosterPath($values["movie_poster_path"]);										
+					$movie->setVoteAverage($values["movie_vote_average"]);
+					$movie->setOverview($values["movie_overview"]);
+					array_push($movies, $movie);
 				}
-				return $movie;
+				return $movies;
 			}
 			catch (Exception $e) {
 				return false;
@@ -292,6 +336,7 @@
 			}
 		}
 
+		// pasar a controladora
 		public function getSales(Movie $movie) {
 			try {								
 				$query = "CALL tickets_getTicketsOfMovie(?)";

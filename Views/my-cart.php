@@ -24,7 +24,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($purchasesCart as $purchaseCart): ?>
+                    <?php foreach ($purchasesCart as $purchaseCart): ?>
                         <tr>
                             <td><?= $purchaseCart->getPurchase()->getId(); ?></td>        
                             <td><?= $purchaseCart->getMovie()->getTitle(); ?></td>

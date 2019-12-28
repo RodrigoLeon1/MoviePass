@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-12-2019 a las 00:04:52
+-- Tiempo de generación: 26-12-2019 a las 20:38:39
 -- Versión del servidor: 10.4.6-MariaDB
 -- Versión de PHP: 7.3.9
 
@@ -383,10 +383,14 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_getByTitle` (IN `title` VARCHAR(255))  BEGIN
 	SELECT
-		movies.id AS movie_id
+		movies.id AS movie_id,
+		movies.title AS movie_title,
+		movies.poster_path AS movie_poster_path,
+		movies.vote_average AS movie_vote_average,
+		movies.overview AS movie_overview
 	FROM movies 
 	INNER JOIN shows ON movies.id = shows.FK_id_movie
-	WHERE movies.title = title;
+	WHERE movies.title LIKE CONCAT('%', title , '%');
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `movies_getId` ()  BEGIN
@@ -968,7 +972,10 @@ INSERT INTO `genres_x_movies` (`FK_id_genre`, `FK_id_movie`) VALUES
 (80, 537056),
 (16, 537056),
 (9648, 537056),
-(28, 537056);
+(28, 537056),
+(12, 11),
+(28, 11),
+(878, 11);
 
 -- --------------------------------------------------------
 
@@ -1012,6 +1019,7 @@ CREATE TABLE `movies` (
 --
 
 INSERT INTO `movies` (`id`, `poster_path`, `backdrop_path`, `title`, `vote_average`, `overview`, `release_date`, `runtime`, `is_active`) VALUES
+(11, '/btTdmkgIvOi0FFip1sPuZI2oQG6.jpg', '/4iJfYYoQzZcONB9hNzg0J0wWyPH.jpg', 'Star Wars', '8.2', 'Princess Leia is captured and held hostage by the evil Imperial forces in their effort to take over the galactic Empire. Venturesome Luke Skywalker and dashing captain Han Solo team together with the loveable robot duo R2-D2 and C-3PO to rescue the beauti', '1977-05-25', 121, 1),
 (77, '/fQMSaP88cf1nz4qwuNEEFtazuDM.jpg', '/q2CtXYjp9IlnfBcPktNkBPsuAEO.jpg', 'Memento', '8.2', 'Leonard Shelby is tracking down the man who raped and murdered his wife. The difficulty of locating his wife\'s killer, however, is compounded by the fact that he suffers from a rare, untreatable form of short-term memory loss. Although he can recall detai', '2000-10-11', 113, 1),
 (272, '/dr6x4GyyegBWtinPBzipY02J2lV.jpg', '/9myrRcegWGGp24mpVfkD4zhUfhi.jpg', 'Batman Begins', '7.6', 'Driven by tragedy, billionaire Bruce Wayne dedicates his life to uncovering and defeating the corruption that plagues his home, Gotham City.  Unable to work within the system, he instead creates a new identity, a symbol of fear for the criminal underworld', '2005-06-10', 140, 1),
 (14161, '/zf1idF1ys8zuaAzEEzghre5A4m3.jpg', '/ywxrdkfbr8Dg3SBW2gi4kC59qOb.jpg', '2012', '5.7', 'Dr. Adrian Helmsley, part of a worldwide geophysical team investigating the effect on the earth of radiation from unprecedented solar storms, learns that the earth\'s core is heating up. He warns U.S. President Thomas Wilson that the crust of the earth is ', '2009-10-10', 158, 1),
@@ -1130,7 +1138,9 @@ CREATE TABLE `shows` (
 
 INSERT INTO `shows` (`id`, `FK_id_cinemaRoom`, `FK_id_movie`, `date_start`, `time_start`, `date_end`, `time_end`, `is_active`) VALUES
 (61, 12, 14161, '2019-12-03', '18:30:00', '2019-12-03', '21:23:00', 1),
-(62, 12, 14161, '2019-12-03', '14:00:00', '2019-12-03', '16:53:00', 1);
+(62, 12, 14161, '2019-12-03', '14:00:00', '2019-12-03', '16:53:00', 1),
+(63, 12, 181812, '2019-12-27', '15:03:00', '2019-12-27', '17:39:00', 1),
+(64, 11, 11, '2019-12-31', '17:50:00', '2019-12-31', '20:06:00', 1);
 
 -- --------------------------------------------------------
 
@@ -1312,7 +1322,7 @@ ALTER TABLE `purchases`
 -- AUTO_INCREMENT de la tabla `shows`
 --
 ALTER TABLE `shows`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT de la tabla `tickets`

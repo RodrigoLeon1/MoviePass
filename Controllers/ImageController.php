@@ -32,15 +32,15 @@
                         $image->setUser($user);
 
                         if ($this->imageDAO->add($image)) {
-                            $message = "Imagen subida correctamente";
+                            $message = IMAGE_UPLOAD;
                         } else {
-                            $message = "Error en la base de datos";
+                            $message = DB_ERROR;
                         }
                     } else {
-                        $message = "Ocurrió un error al intentar subir la imagen";
+                        $message = IMAGE_UPLOAD_ERROR;
                     }
                 } else {
-                    $message = "El archivo no corresponde a una imágen";
+                    $message = IMAGE_TYPE_ERROR;
                 }
             } catch(Exception $ex) {
                 $message = $ex->getMessage();

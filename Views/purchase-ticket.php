@@ -15,7 +15,7 @@
                         </h3>                        
                         <h3>
                             <i class="icon ion-md-calendar"></i> 
-                            <?= $show->getCinemaRoom()->getCinema()->getName() ?> - <?= $show->getCinemaRoom()->getName() ?>
+                            <?= $show->getCinemaRoom()->getCinema()->getName() ?> - <?= $show->getCinemaRoom()->getName(); ?>
                         </h3>
                         <h3>
                             <i class="icon ion-md-pin"></i> 
@@ -27,6 +27,10 @@
                             at 
                             <?= date('H:i', strtotime($show->getTimeStart())); ?>
                         </h3>
+                        <h3>
+                            Discounts on Tuesday and Wednesday <br>
+                            Buying two tickets or more                             
+                        </h3>
                     </div>
                     <div class="show-total">
                         <h3 class="cinema-name">
@@ -35,7 +39,8 @@
                             <div class="ticket-information">
                                 <h4>Ticket type: General</h4>
                                 <h4>Tickets: <span id="ticket-quantity">0</span> </h4>
-                                <h4>Discount: N/A</h4>
+                                <h4>Discount: <span id="discount">N/A</span></h4>
+                                <h4 id="total"></h4>
                             </div>
                         </h3>
                     </div>
@@ -53,7 +58,7 @@
                         <label>
                             <h4>Card</h4>
                             <div class="card-container">
-                                <?php foreach($creditAccounts as $creditAccount): ?>
+                                <?php foreach ($creditAccounts as $creditAccount): ?>
                                     <input type="radio" name="card" value="<?= $creditAccount->getId(); ?>"><?= $creditAccount->getCompany(); ?>                                    
                                 <?php endforeach; ?>
                             </div>
@@ -80,103 +85,57 @@
                 </div>
 
             </div>
-        </div>
-        <!-- <div class="container purchase-seats">                
-                <h2>Seats cinema</h2>
-                <div class="theatre">  
-                    <div class="cinema-seats left">
-                        <div class="cinema-row row-1">
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                        </div>
-
-                        <div class="cinema-row row-2">
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                        </div>
-
-                        <div class="cinema-row row-3">
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                        </div>
-
-                        <div class="cinema-row row-4">
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                        </div>
-
-                        <div class="cinema-row row-5">
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                        </div>
-
-                        <div class="cinema-row row-6">
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                        </div>
-
-                        <div class="cinema-row row-7">
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                            <div class="seat"></div>
-                        </div>                        
-                    </div>                                      
-                </div>  
-        </div>  -->
+        </div>       
     </main>
                                 
     <script>
 
         let priceTicket = document.getElementById('price-ticket');        
             priceTicket = parseInt(priceTicket.innerHTML);
-
         let cartTotal = document.getElementById('cart-total');
         let tickets = document.getElementById('numberTickets');    
         let ticketQuantity = document.getElementById('ticket-quantity'); 
+        let discountElement = document.getElementById('discount'); 
+        let totalElement = document.getElementById('total'); 
                 
         //Cada vez que el usuario ingrese una cantidad numerica de ticket, se renderizara el total de la compra
-        tickets.addEventListener('keyup', function getNumberTickets() {      
-            console.log(priceTicket, this.value)  ;
-            cartTotal.innerHTML = renderTotal(priceTicket, this.value);
+        tickets.addEventListener('keyup', function getNumberTickets() {                  
             ticketQuantity.innerHTML = this.value;
-        });        
+            renderTotal(priceTicket, this.value);
+        });                
         
         function renderTotal(price, tickets) {
-            return tickets * price;
+            if (applyDiscount(tickets)) {
+
+                const totalWithoutDiscount = tickets * price;                                
+                const discountValue = (price * .25);                                
+                const newPriceTicket = price - discountValue;                      
+                const total = tickets * newPriceTicket;   
+                const discount = totalWithoutDiscount - total;  
+
+                totalElement.innerHTML = `Total without discount: $${totalWithoutDiscount}`;
+                discountElement.innerHTML = `$${discount}`;
+                cartTotal.innerHTML = total;
+
+            } else {
+                totalElement.remove;
+                discountElement.innerHTML = 'N/A';
+                const total = tickets * price;
+                cartTotal.innerHTML = total;
+                totalElement.innerHTML = "";
+            }                
         }
+
+        function applyDiscount(tickets) {
+            if (tickets >= 2) {
+                const todayDate = new Date();
+                let today = todayDate.getDay();
+                if (today == 2 || today == 3) {
+                    return true;
+                } 
+                return false;
+            }
+            return false;
+        }        
 
     </script>

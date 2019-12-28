@@ -31,7 +31,7 @@
             }
         }
 		
-		//Recorre las peliculas de 'now playing' y carga sus respectivos generos en la bd
+		// Go over the movies of 'now playing' and add their genres into the db		
         public function getGenresOfNowPlaying() {
             $jsonPath = NOW_PLAYING_PATH;
             $jsonContent = file_get_contents($jsonPath);
@@ -49,7 +49,7 @@
 			return true;
 		}
 		
-		//Dado una pelicula, obtiene sus generos de la API y los carga en la db
+		// Given a movie, gets their genres from the db and add into the db		
 		public function getGenresOfMovieFromApi(Movie $movie) {
 			$jsonPath = $jsonPath = MOVIE_DETAILS_PATH . $movie->getId() . "?api_key=" . API_N . "&language=en-US";
             $jsonContent = file_get_contents($jsonPath);
@@ -57,7 +57,7 @@
 			$genreMovie = new GenreToMovie();
 			$genreMovie->setIdMovie($movie->getId());
 			$genres = $arrayToDecode["genres"];				
-			foreach($genres as $genre) {
+			foreach ($genres as $genre) {
 				$genreMovie->setIdGenre($genre["id"]);															
 				$this->add($genreMovie);				
 			}
@@ -89,7 +89,7 @@
 				$parameters["id_genre"] = $genre->getIdGenre();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
-				foreach($results as $row) {
+				foreach ($results as $row) {
 					$movie = new Movie();					
 					$movie->setId($row["id"]);					
 					$movie->setPosterPath($row["poster_path"]);					
@@ -114,7 +114,7 @@
 				$parameters["date"] = $show->getDateStart();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
-				foreach($results as $row) {
+				foreach ($results as $row) {
 					$movie = new Movie();
 					$movie->setId($row["id"]);					
 					$movie->setPosterPath($row["poster_path"]);					
@@ -132,7 +132,7 @@
 			}
 		} 		
 
-		// se rompio?
+		// fix?
 		public function getByGenreAndDate(Genre $genre, Show $show) {
 			try {
 				$movies = array();	
@@ -141,8 +141,8 @@
 				$parameters["date_show"] = $show->getDateStart();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
-				var_dump($results);
-				foreach($results as $row) {
+				// var_dump($results);
+				foreach ($results as $row) {
 					$movie = new Movie();
 					$movie->setId($row["id"]);					
 					$movie->setPosterPath($row["poster_path"]);					
@@ -167,7 +167,7 @@
 				$parameters["id_movie"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
-				foreach($results as $row) {				
+				foreach ($results as $row) {				
 					$genre = $row["name"];
 					array_push($genres, $genre);
 				}	
@@ -184,7 +184,7 @@
 				$query = "CALL genresxmovies_getGenresOfShows()";				
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);			
-				foreach($results as $row) {				
+				foreach ($results as $row) {				
 					$genre = new Genre();
                     $genre->setIdGenre($row["id"]);
 					$genre->setName($row["name"]);

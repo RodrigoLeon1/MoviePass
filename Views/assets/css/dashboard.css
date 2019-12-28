@@ -47,6 +47,7 @@ hr {
     border-bottom: 1px solid #038b9a;
 }
 
+
 /* Navbar */
 .nav-container {
     background-color: #fff;
@@ -113,7 +114,7 @@ hr {
 }
 
 
-/* Error */
+/* Error msg */
 .alert-container {    
     margin: 2rem;
     width: 40%;
@@ -226,7 +227,7 @@ hr {
 }
 
 
-/*  */
+/* Filter */
 .filter-container {
     margin: 3rem 0 3rem 0;        
     display: grid;
@@ -290,6 +291,8 @@ hr {
     height: 3rem;
 }
 
+
+/* Buttons */
 .btn {
     background-color: #038b9a;
     color: #fff;    
@@ -366,6 +369,7 @@ hr {
     color: #000;    
 }
 
+
 /* Add movie */
 .suggestions-container {
     margin: 2rem;    
@@ -412,3 +416,35 @@ hr {
 .movie-item a {
     font-size: 1.3rem;
 }
+
+
+/* Pagination */
+.center {    
+    text-align: center;
+}
+
+.pagination {
+    margin: 2rem;
+    display: inline-block;
+}
+
+.pagination a {
+    color: #fff;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;    
+    margin: 0 4px;
+}
+
+.pagination a.active {
+    background-color: #038b9a;    
+    border: 1px solid #038b9a;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #08535c;
+}
+
+
+/* Responsive section */

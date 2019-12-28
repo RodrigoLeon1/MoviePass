@@ -19,6 +19,7 @@
             $this->genresDAO = new GenreDAO();
         }
     
+
         //Genre
         public function genreByName($name) {
             $genre = new Genre();
@@ -64,7 +65,7 @@
             return $movies;
         }         
 
-        // arreglar
+        // fix
         public function searchMoviesOnShowByGenreAndDate($idGenre, $date) {
             $movies = array();     
             $genre = new Genre();

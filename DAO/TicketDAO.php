@@ -39,7 +39,7 @@
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $ticket = new Ticket();
-                foreach($results as $row) {
+                foreach ($results as $row) {
                     $ticket->setTicketNumber($row['ticket_number']);
                     $ticket->setQR($row['QR']);
                     $ticket->setIdPurchase($row['id_purchase']);
@@ -57,7 +57,7 @@
                 $query = "CALL tickets_GetAll()";
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-                foreach($results as $row) {
+                foreach ($results as $row) {
                     $ticket = new Ticket();
                     $ticket->setTicketNumber($row['ticket_number']);
                     $ticket->setQR($row['QR']);
@@ -79,7 +79,7 @@
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
                 $ticketList = array();
-                foreach($results as $row) {
+                foreach ($results as $row) {
                     $ticket = new Ticket();
                     $ticket->setTicketNumber($row['ticket_number']);
                     $ticket->setQR($row['QR']);
@@ -102,7 +102,7 @@
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
                 $ticketList = array();
-                foreach($results as $row) {
+                foreach ($results as $row) {
                     $ticket = new Ticket();
                     
                     $cinema = new Cinema();
@@ -141,7 +141,7 @@
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
                 $ticketList = array();
-                foreach($results as $row) {
+                foreach ($results as $row) {
                     $ticket = new Ticket();
                     
                     $cinema = new Cinema();

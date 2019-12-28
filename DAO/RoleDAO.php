@@ -20,7 +20,7 @@
 				$parameters["id"] = $role->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-				foreach($results as $row) {
+				foreach ($results as $row) {
 					$role = new Role();
 					$role->setId($row["id"]);
 					$role->setDescription($row["description"]);
@@ -36,7 +36,7 @@
 				$query = "CALL roles_getAll()";
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-				foreach($results as $row) {
+				foreach ($results as $row) {
 					$role = new Role();
 					$role->setId($row["id"]);
 					$role->setDescription($row["description"]);

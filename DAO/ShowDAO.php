@@ -71,7 +71,7 @@
 				$query = "CALL shows_getAll()";
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-				foreach($results as $row) {									
+				foreach ($results as $row) {									
 					$movie = new Movie();
 					$movie->setId($row["movies_id"]);
 					$movie->setTitle($row["movies_title"]);
@@ -107,7 +107,7 @@
 				$query = "CALL shows_getAllActives()";
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-				foreach($results as $row) {									
+				foreach ($results as $row) {									
 					$movie = new Movie();
 					$movie->setId($row["movies_id"]);
 					$movie->setTitle($row["movies_title"]);
@@ -171,7 +171,7 @@
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
 
-				foreach($results as $row) {
+				foreach ($results as $row) {
 					$show = new Show();
 					
 					$movie = new Movie ();
@@ -262,7 +262,7 @@
 				$parameters["id_movie"] = $movie->getId();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-				foreach($results as $row) {
+				foreach ($results as $row) {
 					$show = new Show();
 					$cinema = new Cinema();
 					$cinema->setName($row["cinema_name"]);	

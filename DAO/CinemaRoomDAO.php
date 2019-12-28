@@ -37,7 +37,7 @@
 				$query = "CALL cinemaRooms_GetAll()";
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-				foreach($results as $row) {
+				foreach ($results as $row) {
 					$cinemaRoom = new CinemaRoom();
 					$cinemaRoom->setId($row["cinema_room_id"]);
 					$cinemaRoom->setName($row["cinema_room_name"]);
@@ -65,7 +65,7 @@
 				$query = "CALL cinemaRooms_GetAllActives()";
 				$this->connection = Connection::GetInstance();				
 				$results = $this->connection->Execute($query, array(), QueryType::StoredProcedure);
-				foreach($results as $row) {
+				foreach ($results as $row) {
 					$cinemaRoom = new CinemaRoom();
 					$cinemaRoom->setId($row["cinema_room_id"]);
 					$cinemaRoom->setName($row["cinema_room_name"]);
@@ -121,7 +121,7 @@
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);				
 				$cinemaRoom = new CinemaRoom();
-				foreach($results as $row) {
+				foreach ($results as $row) {
 					$cinemaRoom->setId($row["id"]);
 					$cinemaRoom->setName($row["name"]);
 					$cinemaRoom->setCapacity($row["capacity"]);
@@ -202,7 +202,7 @@
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);				
 				$cinemaRoom = new CinemaRoom();
-				foreach($results as $row) {					
+				foreach ($results as $row) {					
 					$cinemaRoom->setCapacity($row["capacity"]);
 				}
 				return $cinemaRoom;
@@ -212,6 +212,7 @@
 			}
 		}
 
+		// pasar a controladora
 		public function getSales(CinemaRoom $cinemaRoom) {
 			try {								
 				$query = "CALL tickets_getTicketsOfCinemaRoom(?)";

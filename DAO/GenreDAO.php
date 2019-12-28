@@ -52,7 +52,7 @@
                 $parameters["id"] = $genre->getId();
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-                foreach($results as $row) {
+                foreach ($results as $row) {
                     $genre = new Genre();
                     $genre->setIdGenre($row["id_genre"]);
                     $genre->setName($row["name"]);
@@ -70,7 +70,7 @@
                 $parameters["name"] = $genre->getName();
                 $this->connection = Connection::GetInstance();
                 $results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);
-                foreach($results as $row) {
+                foreach ($results as $row) {
                     $genre = new Genre();
                     $genre->setIdGenre($row["id_genre"]);
                     $genre->setName($row["name"]);
@@ -88,7 +88,7 @@
 				$parameters["id"] = $genre->getIdGenre();
 				$this->connection = Connection::GetInstance();
 				$results = $this->connection->Execute($query, $parameters, QueryType::StoredProcedure);			
-				foreach($results as $row) {								
+				foreach ($results as $row) {								
 					$genreName = $row["name"];				
 				}		
                 return $genreName;
