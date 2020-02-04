@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 04, 2020 at 03:12 AM
+-- Generation Time: Feb 04, 2020 at 02:45 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.9
 
@@ -254,7 +254,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `genresxmovies_getGenresOfShows` () 
 	INNER JOIN movies ON movies.id = genres_x_movies.FK_id_movie
 	INNER JOIN genres ON genres_x_movies.FK_id_genre = genres.id
 	INNER JOIN shows ON shows.FK_id_movie = genres_x_movies.FK_id_movie						
-	WHERE (genres_x_movies.FK_id_movie = shows.FK_id_movie) AND (shows.is_active = true)
+	WHERE (genres_x_movies.FK_id_movie = shows.FK_id_movie) AND (shows.date_start >= curdate()) AND (shows.is_active = true)	
 	GROUP BY genres.name;
 END$$
 
@@ -1072,7 +1072,10 @@ CREATE TABLE `payments_credit_card` (
 --
 
 INSERT INTO `payments_credit_card` (`id`, `code_auth`, `date`, `total`, `FK_card`) VALUES
-(5, 123, '0000-00-00', 100, 1);
+(5, 123, '0000-00-00', 100, 1),
+(6, 122, '0000-00-00', 262.5, 1),
+(7, 111, '0000-00-00', 1500, 2),
+(8, 333, '0000-00-00', 2662.5, 1);
 
 -- --------------------------------------------------------
 
@@ -1117,7 +1120,10 @@ CREATE TABLE `purchases` (
 --
 
 INSERT INTO `purchases` (`id`, `ticket_quantity`, `discount`, `date`, `total`, `FK_dni`, `FK_payment_cc`) VALUES
-(17, 2, 0, '2020-02-03', 100, 404040, 5);
+(17, 2, 0, '2020-02-03', 100, 404040, 5),
+(18, 7, 88, '2020-02-04', 263, 101010, 6),
+(19, 40, 500, '2020-02-04', 1500, 101010, 7),
+(20, 71, 888, '2020-02-04', 2663, 404040, 8);
 
 -- --------------------------------------------------------
 
@@ -1186,7 +1192,125 @@ CREATE TABLE `tickets` (
 
 INSERT INTO `tickets` (`ticket_number`, `QR`, `FK_id_purchase`, `FK_id_show`) VALUES
 (306, 0, 17, 65),
-(307, 0, 17, 65);
+(307, 0, 17, 65),
+(308, 0, 18, 65),
+(309, 0, 18, 65),
+(310, 0, 18, 65),
+(311, 0, 18, 65),
+(312, 0, 18, 65),
+(313, 0, 18, 65),
+(314, 0, 18, 65),
+(315, 0, 19, 65),
+(316, 0, 19, 65),
+(317, 0, 19, 65),
+(318, 0, 19, 65),
+(319, 0, 19, 65),
+(320, 0, 19, 65),
+(321, 0, 19, 65),
+(322, 0, 19, 65),
+(323, 0, 19, 65),
+(324, 0, 19, 65),
+(325, 0, 19, 65),
+(326, 0, 19, 65),
+(327, 0, 19, 65),
+(328, 0, 19, 65),
+(329, 0, 19, 65),
+(330, 0, 19, 65),
+(331, 0, 19, 65),
+(332, 0, 19, 65),
+(333, 0, 19, 65),
+(334, 0, 19, 65),
+(335, 0, 19, 65),
+(336, 0, 19, 65),
+(337, 0, 19, 65),
+(338, 0, 19, 65),
+(339, 0, 19, 65),
+(340, 0, 19, 65),
+(341, 0, 19, 65),
+(342, 0, 19, 65),
+(343, 0, 19, 65),
+(344, 0, 19, 65),
+(345, 0, 19, 65),
+(346, 0, 19, 65),
+(347, 0, 19, 65),
+(348, 0, 19, 65),
+(349, 0, 19, 65),
+(350, 0, 19, 65),
+(351, 0, 19, 65),
+(352, 0, 19, 65),
+(353, 0, 19, 65),
+(354, 0, 19, 65),
+(355, 0, 20, 65),
+(356, 0, 20, 65),
+(357, 0, 20, 65),
+(358, 0, 20, 65),
+(359, 0, 20, 65),
+(360, 0, 20, 65),
+(361, 0, 20, 65),
+(362, 0, 20, 65),
+(363, 0, 20, 65),
+(364, 0, 20, 65),
+(365, 0, 20, 65),
+(366, 0, 20, 65),
+(367, 0, 20, 65),
+(368, 0, 20, 65),
+(369, 0, 20, 65),
+(370, 0, 20, 65),
+(371, 0, 20, 65),
+(372, 0, 20, 65),
+(373, 0, 20, 65),
+(374, 0, 20, 65),
+(375, 0, 20, 65),
+(376, 0, 20, 65),
+(377, 0, 20, 65),
+(378, 0, 20, 65),
+(379, 0, 20, 65),
+(380, 0, 20, 65),
+(381, 0, 20, 65),
+(382, 0, 20, 65),
+(383, 0, 20, 65),
+(384, 0, 20, 65),
+(385, 0, 20, 65),
+(386, 0, 20, 65),
+(387, 0, 20, 65),
+(388, 0, 20, 65),
+(389, 0, 20, 65),
+(390, 0, 20, 65),
+(391, 0, 20, 65),
+(392, 0, 20, 65),
+(393, 0, 20, 65),
+(394, 0, 20, 65),
+(395, 0, 20, 65),
+(396, 0, 20, 65),
+(397, 0, 20, 65),
+(398, 0, 20, 65),
+(399, 0, 20, 65),
+(400, 0, 20, 65),
+(401, 0, 20, 65),
+(402, 0, 20, 65),
+(403, 0, 20, 65),
+(404, 0, 20, 65),
+(405, 0, 20, 65),
+(406, 0, 20, 65),
+(407, 0, 20, 65),
+(408, 0, 20, 65),
+(409, 0, 20, 65),
+(410, 0, 20, 65),
+(411, 0, 20, 65),
+(412, 0, 20, 65),
+(413, 0, 20, 65),
+(414, 0, 20, 65),
+(415, 0, 20, 65),
+(416, 0, 20, 65),
+(417, 0, 20, 65),
+(418, 0, 20, 65),
+(419, 0, 20, 65),
+(420, 0, 20, 65),
+(421, 0, 20, 65),
+(422, 0, 20, 65),
+(423, 0, 20, 65),
+(424, 0, 20, 65),
+(425, 0, 20, 65);
 
 -- --------------------------------------------------------
 
@@ -1344,13 +1468,13 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT for table `payments_credit_card`
 --
 ALTER TABLE `payments_credit_card`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `shows`
@@ -1362,7 +1486,7 @@ ALTER TABLE `shows`
 -- AUTO_INCREMENT for table `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=308;
+  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=426;
 
 --
 -- Constraints for dumped tables

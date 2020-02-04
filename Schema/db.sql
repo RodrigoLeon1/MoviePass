@@ -1196,7 +1196,7 @@ BEGIN
 	INNER JOIN movies ON movies.id = genres_x_movies.FK_id_movie
 	INNER JOIN genres ON genres_x_movies.FK_id_genre = genres.id
 	INNER JOIN shows ON shows.FK_id_movie = genres_x_movies.FK_id_movie						
-	WHERE (genres_x_movies.FK_id_movie = shows.FK_id_movie) AND (shows.is_active = true)
+	WHERE (genres_x_movies.FK_id_movie = shows.FK_id_movie) AND (shows.date_start >= curdate()) AND (shows.is_active = true)	
 	GROUP BY genres.name;
 END$$
 

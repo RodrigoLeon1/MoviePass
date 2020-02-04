@@ -95,18 +95,18 @@
                 $title = 'Now Playing - ' . $nameGenre;         
                 $movies = $genreMovieController->searchMoviesOnShowByGenre($id); 
 
-                echo '<pre>';
-                var_dump($movies);
-                echo '</pre>';
+                // echo '<pre>';
+                // var_dump($movies);
+                // echo '</pre>';
                 
             } else if (!empty($date) && empty($id)) {                                                
                 // Filter by date
                 $title = 'Now Playing - ' . $date; 
                 $movies = $genreMovieController->searchMoviesOnShowByDate($date);
                 
-                echo '<pre>';
-                var_dump($movies);
-                echo '</pre>';
+                // echo '<pre>';
+                // var_dump($movies);
+                // echo '</pre>';
                 
             } else if (!empty($id) && !empty($date)) {                                
                 // Filter by genre and date
@@ -114,9 +114,9 @@
                 $title = 'Now Playing - ' . $nameGenre . ' - ' . $date;
                 $movies = $genreMovieController->searchMoviesOnShowByGenreAndDate($id, $date);      
                 
-                echo '<pre>';
-                var_dump($movies);
-                echo '</pre>';
+                // echo '<pre>';
+                // var_dump($movies);
+                // echo '</pre>';
                                                 
             } else {                            
                 return $this->nowPlaying();
