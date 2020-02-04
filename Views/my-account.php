@@ -46,9 +46,9 @@
                     <p><?= $user->getMail(); ?></p>            
                 </div>
                 
-                <div class="btn-account">
+                <!-- <div class="btn-account">
                     <a href="<?= FRONT_ROOT ?>user/modifyAccountPath" class="btn-l">Edit Account</a>
-                </div>
+                </div> -->
             </div>
 
         </div>

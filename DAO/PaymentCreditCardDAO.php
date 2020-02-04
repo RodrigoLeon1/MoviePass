@@ -26,7 +26,7 @@
                     $lastId = $row['lastId'];
                 }
                 return $lastId;
-			}catch (Exception $e) {
+			} catch (Exception $e) {
 				return false;
 			}
         }

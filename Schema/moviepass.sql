@@ -2,10 +2,10 @@
 -- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 26-12-2019 a las 20:38:39
--- Versión del servidor: 10.4.6-MariaDB
--- Versión de PHP: 7.3.9
+-- Host: 127.0.0.1
+-- Generation Time: Feb 04, 2020 at 03:12 AM
+-- Server version: 10.4.6-MariaDB
+-- PHP Version: 7.3.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,12 +19,12 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `moviepass`
+-- Database: `moviepass`
 --
 
 DELIMITER $$
 --
--- Procedimientos
+-- Procedures
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cinemaRooms_deleteById` (IN `id` INT)  BEGIN
 	DELETE FROM `cinema_rooms` WHERE `cinema_rooms`.`id` = id;
@@ -497,6 +497,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `roles_getById` (IN `id` INT)  BEGIN
     WHERE (roles.id = id);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `service_getByDescription` (IN `description` VARCHAR(255))  BEGIN
+	SELECT  
+        additional_service.id AS service_id,
+        additional_service.description AS service_description,
+        additional_service.total AS service_total        
+    FROM `addiotional_service`     
+    WHERE `addiotional_service`.`description` = description;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `shows_add` (IN `FK_id_cinemaRoom` INT, IN `FK_id_movie` INT, IN `date_start` DATE, IN `time_start` TIME, IN `date_end` DATE, IN `time_end` TIME)  BEGIN
 	INSERT INTO shows (
 			shows.FK_id_cinemaRoom,
@@ -791,7 +800,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cinemas`
+-- Table structure for table `cinemas`
 --
 
 CREATE TABLE `cinemas` (
@@ -802,7 +811,7 @@ CREATE TABLE `cinemas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `cinemas`
+-- Dumping data for table `cinemas`
 --
 
 INSERT INTO `cinemas` (`id`, `name`, `address`, `is_active`) VALUES
@@ -811,12 +820,13 @@ INSERT INTO `cinemas` (`id`, `name`, `address`, `is_active`) VALUES
 (12, 'CinemaCenter', 'Diag. Pueyrredon 3050', 1),
 (13, 'Cinema II', 'Los Gallegos Shopping', 1),
 (14, 'Cine del Paseo', 'Diagonal Pueyrredon', 1),
-(21, 'Cinema disable', 'disable', 0);
+(21, 'Cinema disable', 'disable', 0),
+(22, 'cine 1125', 'calle 994', 1);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `cinema_rooms`
+-- Table structure for table `cinema_rooms`
 --
 
 CREATE TABLE `cinema_rooms` (
@@ -829,20 +839,21 @@ CREATE TABLE `cinema_rooms` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Volcado de datos para la tabla `cinema_rooms`
+-- Dumping data for table `cinema_rooms`
 --
 
 INSERT INTO `cinema_rooms` (`id`, `name`, `price`, `capacity`, `FK_id_cinema`, `is_active`) VALUES
 (11, 'Sala 1', 50, 120, 10, 1),
-(12, 'Sala 1', 30, 160, 11, 1),
+(12, 'Sala 1', 30, 160, 11, 0),
 (13, 'Sala 2', 55, 5, 10, 1),
 (14, 'Sala 3', 15, 15, 10, 1),
-(21, 'Cinema room disable', 5, 5, 21, 0);
+(21, 'Cinema room disable', 5, 5, 21, 0),
+(22, 'sala cine 1674', 80, 100, 22, 1);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `credit_accounts`
+-- Table structure for table `credit_accounts`
 --
 
 CREATE TABLE `credit_accounts` (
@@ -851,7 +862,7 @@ CREATE TABLE `credit_accounts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Volcado de datos para la tabla `credit_accounts`
+-- Dumping data for table `credit_accounts`
 --
 
 INSERT INTO `credit_accounts` (`id`, `company`) VALUES
@@ -861,7 +872,7 @@ INSERT INTO `credit_accounts` (`id`, `company`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `genres`
+-- Table structure for table `genres`
 --
 
 CREATE TABLE `genres` (
@@ -870,7 +881,7 @@ CREATE TABLE `genres` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `genres`
+-- Dumping data for table `genres`
 --
 
 INSERT INTO `genres` (`id`, `name`) VALUES
@@ -897,7 +908,7 @@ INSERT INTO `genres` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `genres_x_movies`
+-- Table structure for table `genres_x_movies`
 --
 
 CREATE TABLE `genres_x_movies` (
@@ -906,7 +917,7 @@ CREATE TABLE `genres_x_movies` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `genres_x_movies`
+-- Dumping data for table `genres_x_movies`
 --
 
 INSERT INTO `genres_x_movies` (`FK_id_genre`, `FK_id_movie`) VALUES
@@ -975,12 +986,15 @@ INSERT INTO `genres_x_movies` (`FK_id_genre`, `FK_id_movie`) VALUES
 (28, 537056),
 (12, 11),
 (28, 11),
-(878, 11);
+(878, 11),
+(10752, 530915),
+(18, 530915),
+(36, 530915);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `images`
+-- Table structure for table `images`
 --
 
 CREATE TABLE `images` (
@@ -989,17 +1003,10 @@ CREATE TABLE `images` (
   `FK_dni_user` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
---
--- Volcado de datos para la tabla `images`
---
-
-INSERT INTO `images` (`imageId`, `name`, `FK_dni_user`) VALUES
-(9, '35017858.jpg', 404040);
-
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `movies`
+-- Table structure for table `movies`
 --
 
 CREATE TABLE `movies` (
@@ -1015,7 +1022,7 @@ CREATE TABLE `movies` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `movies`
+-- Dumping data for table `movies`
 --
 
 INSERT INTO `movies` (`id`, `poster_path`, `backdrop_path`, `title`, `vote_average`, `overview`, `release_date`, `runtime`, `is_active`) VALUES
@@ -1041,6 +1048,7 @@ INSERT INTO `movies` (`id`, `poster_path`, `backdrop_path`, `title`, `vote_avera
 (501170, '/p69QzIBbN06aTYqRRiCOY1emNBh.jpg', '/4D4Ic9N4tnwaW4x241LGb1XOi7O.jpg', 'Doctor Sleep', '6.9', 'A traumatized, alcoholic Dan Torrance meets Abra, a kid who also has the ability to \"shine.\" He tries to protect her from the True Knot, a cult whose goal is to feed off people like them in order to remain immortal.', '2019-11-08', 152, 1),
 (515195, '/1rjaRIAqFPQNnMtqSMLtg0VEABi.jpg', '/t5Kp02Jzixl0KfpwthHp9ZUex9t.jpg', 'Yesterday', '6.7', 'Jack Malik is a struggling singer-songwriter in an English seaside town whose dreams of fame are rapidly fading, despite the fierce devotion and support of his childhood best friend, Ellie. After a freak bus accident during a mysterious global blackout, J', '2019-06-28', 116, 1),
 (521777, '/tximyCXMEnWIIyOy9STkOduUprG.jpg', '/jTwUkBa6BOPypqCx4KcvrYIlAcI.jpg', 'Good Boys', '6.5', 'A group of young boys on the cusp of becoming teenagers embark on an epic quest to fix their broken drone before their parents get home.', '2019-08-16', 89, 1),
+(530915, '/iZf0KyrE25z1sage4SYFLCCrMi9.jpg', '/2WgieNR1tGHlpJUsolbVzbUbE1O.jpg', '1917', '8.1', 'At the height of the First World War, two young British soldiers, Schofield and Blake are given a seemingly impossible mission. In a race against time, they must cross enemy territory and deliver a message that will stop a deadly attack on hundreds of sol', '2019-12-10', 119, 1),
 (537056, '/eiVQORVyVuNNZHPAELuWtlXoQsD.jpg', '/eevJuYAitUe6VwFN29aFwzeyeTr.jpg', 'Batman: Hush', '7', 'A mysterious new villain known only as Hush uses a gallery of villains to destroy Batman\'s crime-fighting career as well as Bruce Wayne\'s personal life, which has been further complicated by a  relationship with Selina Kyle/Catwoman.', '2019-07-19', 82, 1),
 (559969, '/ePXuKdXZuJx8hHMNr2yM4jY2L7Z.jpg', '/ijiE9WoGSwSzM16zTxvUneJ8RXc.jpg', 'El Camino: A Breaking Bad Movie', '7.1', 'In the wake of his dramatic escape from captivity, Jesse Pinkman must come to terms with his past in order to forge some kind of future.', '2019-10-11', 123, 1),
 (568012, '/4E2lyUGLEr3yH4q6kJxPkQUhX7n.jpg', '/iGnCzXEx0cFlUbpyAMeHwHWhPhx.jpg', 'One Piece: Stampede', '7.6', 'One Piece: Stampede is a stand-alone film that celebrates the anime\'s 20th Anniversary and takes place outside the canon of the \"One Piece\" TV series. Monkey D. Luffy and his Straw Hat pirate crew are invited to a massive Pirate Festival that brings many ', '2019-10-24', 101, 0);
@@ -1048,7 +1056,7 @@ INSERT INTO `movies` (`id`, `poster_path`, `backdrop_path`, `title`, `vote_avera
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `payments_credit_card`
+-- Table structure for table `payments_credit_card`
 --
 
 CREATE TABLE `payments_credit_card` (
@@ -1059,10 +1067,17 @@ CREATE TABLE `payments_credit_card` (
   `FK_card` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+--
+-- Dumping data for table `payments_credit_card`
+--
+
+INSERT INTO `payments_credit_card` (`id`, `code_auth`, `date`, `total`, `FK_card`) VALUES
+(5, 123, '0000-00-00', 100, 1);
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `profile_users`
+-- Table structure for table `profile_users`
 --
 
 CREATE TABLE `profile_users` (
@@ -1072,18 +1087,19 @@ CREATE TABLE `profile_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `profile_users`
+-- Dumping data for table `profile_users`
 --
 
 INSERT INTO `profile_users` (`dni`, `first_name`, `last_name`) VALUES
 (101010, 'Usuario', 'Usuario'),
 (404040, 'Rodrigo', 'Leon'),
-(9592315, 'Pepe', 'Jose');
+(9592315, 'Pepe', 'Jose'),
+(40138320, 'Rodrigo', 'Leon');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `purchases`
+-- Table structure for table `purchases`
 --
 
 CREATE TABLE `purchases` (
@@ -1096,10 +1112,17 @@ CREATE TABLE `purchases` (
   `FK_payment_cc` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+--
+-- Dumping data for table `purchases`
+--
+
+INSERT INTO `purchases` (`id`, `ticket_quantity`, `discount`, `date`, `total`, `FK_dni`, `FK_payment_cc`) VALUES
+(17, 2, 0, '2020-02-03', 100, 404040, 5);
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `roles`
+-- Table structure for table `roles`
 --
 
 CREATE TABLE `roles` (
@@ -1108,7 +1131,7 @@ CREATE TABLE `roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `roles`
+-- Dumping data for table `roles`
 --
 
 INSERT INTO `roles` (`id`, `description`) VALUES
@@ -1118,7 +1141,7 @@ INSERT INTO `roles` (`id`, `description`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `shows`
+-- Table structure for table `shows`
 --
 
 CREATE TABLE `shows` (
@@ -1133,19 +1156,21 @@ CREATE TABLE `shows` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Volcado de datos para la tabla `shows`
+-- Dumping data for table `shows`
 --
 
 INSERT INTO `shows` (`id`, `FK_id_cinemaRoom`, `FK_id_movie`, `date_start`, `time_start`, `date_end`, `time_end`, `is_active`) VALUES
 (61, 12, 14161, '2019-12-03', '18:30:00', '2019-12-03', '21:23:00', 1),
 (62, 12, 14161, '2019-12-03', '14:00:00', '2019-12-03', '16:53:00', 1),
 (63, 12, 181812, '2019-12-27', '15:03:00', '2019-12-27', '17:39:00', 1),
-(64, 11, 11, '2019-12-31', '17:50:00', '2019-12-31', '20:06:00', 1);
+(64, 11, 11, '2019-12-31', '17:50:00', '2019-12-31', '20:06:00', 1),
+(65, 11, 530915, '2020-02-04', '19:00:00', '2020-02-04', '21:14:00', 1),
+(66, 22, 530915, '2020-02-06', '17:30:00', '2020-02-06', '19:44:00', 1);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tickets`
+-- Table structure for table `tickets`
 --
 
 CREATE TABLE `tickets` (
@@ -1155,10 +1180,18 @@ CREATE TABLE `tickets` (
   `FK_id_show` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+--
+-- Dumping data for table `tickets`
+--
+
+INSERT INTO `tickets` (`ticket_number`, `QR`, `FK_id_purchase`, `FK_id_show`) VALUES
+(306, 0, 17, 65),
+(307, 0, 17, 65);
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -1170,78 +1203,79 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`mail`, `password`, `FK_dni`, `FK_id_role`, `is_active`) VALUES
 ('user@user.com', '$2y$10$.wmJ0AtEQHu0SXvZXbYjTeuq.p9e/eSuCHQpUG3BBFzOk8YNPYaWG', 101010, 0, 1),
 ('admin@admin.com', '$2y$10$dqygmgUiZXOu32nyVRcd9.YzgyZMwoKSQztAjOhwFH4AKwkTSEfMq', 404040, 1, 1),
-('pepe@user.com', '$2y$10$vIiWzmu2rRsHD0uhnFCBX.TV8.dj8naTR4OjcS6Oe8dAX0y2Pg9zC', 9592315, 0, 0);
+('pepe@user.com', '$2y$10$vIiWzmu2rRsHD0uhnFCBX.TV8.dj8naTR4OjcS6Oe8dAX0y2Pg9zC', 9592315, 0, 1),
+('rodrigoleon2016@hotmail.com', '$2y$10$9Vn1JUDMcwSpiMQU6LLPw.hiLJIHfAnCHlRAtuFbxcb45lUnRvfsS', 40138320, 0, 1);
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `cinemas`
+-- Indexes for table `cinemas`
 --
 ALTER TABLE `cinemas`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `cinema_rooms`
+-- Indexes for table `cinema_rooms`
 --
 ALTER TABLE `cinema_rooms`
   ADD PRIMARY KEY (`id`),
   ADD KEY `FK_id_cinema` (`FK_id_cinema`) USING BTREE;
 
 --
--- Indices de la tabla `credit_accounts`
+-- Indexes for table `credit_accounts`
 --
 ALTER TABLE `credit_accounts`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `genres`
+-- Indexes for table `genres`
 --
 ALTER TABLE `genres`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `genres_x_movies`
+-- Indexes for table `genres_x_movies`
 --
 ALTER TABLE `genres_x_movies`
   ADD KEY `FK_gm_id_movie` (`FK_id_movie`) USING BTREE,
   ADD KEY `FK_gm_id_genre` (`FK_id_genre`) USING BTREE;
 
 --
--- Indices de la tabla `images`
+-- Indexes for table `images`
 --
 ALTER TABLE `images`
   ADD PRIMARY KEY (`imageId`),
   ADD KEY `FK_dni_image` (`FK_dni_user`);
 
 --
--- Indices de la tabla `movies`
+-- Indexes for table `movies`
 --
 ALTER TABLE `movies`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `payments_credit_card`
+-- Indexes for table `payments_credit_card`
 --
 ALTER TABLE `payments_credit_card`
   ADD PRIMARY KEY (`id`),
   ADD KEY `FK_card_company` (`FK_card`);
 
 --
--- Indices de la tabla `profile_users`
+-- Indexes for table `profile_users`
 --
 ALTER TABLE `profile_users`
   ADD PRIMARY KEY (`dni`);
 
 --
--- Indices de la tabla `purchases`
+-- Indexes for table `purchases`
 --
 ALTER TABLE `purchases`
   ADD PRIMARY KEY (`id`),
@@ -1249,13 +1283,13 @@ ALTER TABLE `purchases`
   ADD KEY `FK_payment_purchase` (`FK_payment_cc`);
 
 --
--- Indices de la tabla `roles`
+-- Indexes for table `roles`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `shows`
+-- Indexes for table `shows`
 --
 ALTER TABLE `shows`
   ADD PRIMARY KEY (`id`),
@@ -1263,7 +1297,7 @@ ALTER TABLE `shows`
   ADD KEY `FK_id_movie` (`FK_id_movie`);
 
 --
--- Indices de la tabla `tickets`
+-- Indexes for table `tickets`
 --
 ALTER TABLE `tickets`
   ADD PRIMARY KEY (`ticket_number`),
@@ -1271,7 +1305,7 @@ ALTER TABLE `tickets`
   ADD KEY `FK_id_show` (`FK_id_show`);
 
 --
--- Indices de la tabla `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`FK_dni`),
@@ -1279,109 +1313,109 @@ ALTER TABLE `users`
   ADD KEY `FK_id_role` (`FK_id_role`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `cinemas`
+-- AUTO_INCREMENT for table `cinemas`
 --
 ALTER TABLE `cinemas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- AUTO_INCREMENT de la tabla `cinema_rooms`
+-- AUTO_INCREMENT for table `cinema_rooms`
 --
 ALTER TABLE `cinema_rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- AUTO_INCREMENT de la tabla `credit_accounts`
+-- AUTO_INCREMENT for table `credit_accounts`
 --
 ALTER TABLE `credit_accounts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT de la tabla `images`
+-- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `imageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `imageId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT de la tabla `payments_credit_card`
+-- AUTO_INCREMENT for table `payments_credit_card`
 --
 ALTER TABLE `payments_credit_card`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `purchases`
+-- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
--- AUTO_INCREMENT de la tabla `shows`
+-- AUTO_INCREMENT for table `shows`
 --
 ALTER TABLE `shows`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
--- AUTO_INCREMENT de la tabla `tickets`
+-- AUTO_INCREMENT for table `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=306;
+  MODIFY `ticket_number` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=308;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `cinema_rooms`
+-- Constraints for table `cinema_rooms`
 --
 ALTER TABLE `cinema_rooms`
   ADD CONSTRAINT `FK_id_cinema_room` FOREIGN KEY (`FK_id_cinema`) REFERENCES `cinemas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `genres_x_movies`
+-- Constraints for table `genres_x_movies`
 --
 ALTER TABLE `genres_x_movies`
   ADD CONSTRAINT `FK_gm_id_genre` FOREIGN KEY (`FK_id_genre`) REFERENCES `genres` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_gm_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `images`
+-- Constraints for table `images`
 --
 ALTER TABLE `images`
   ADD CONSTRAINT `FK_dni_image` FOREIGN KEY (`FK_dni_user`) REFERENCES `profile_users` (`dni`);
 
 --
--- Filtros para la tabla `payments_credit_card`
+-- Constraints for table `payments_credit_card`
 --
 ALTER TABLE `payments_credit_card`
   ADD CONSTRAINT `FK_card_company` FOREIGN KEY (`FK_card`) REFERENCES `credit_accounts` (`id`);
 
 --
--- Filtros para la tabla `purchases`
+-- Constraints for table `purchases`
 --
 ALTER TABLE `purchases`
   ADD CONSTRAINT `FK_dni_purchase` FOREIGN KEY (`FK_dni`) REFERENCES `profile_users` (`dni`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_payment_purchase` FOREIGN KEY (`FK_payment_cc`) REFERENCES `payments_credit_card` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `shows`
+-- Constraints for table `shows`
 --
 ALTER TABLE `shows`
   ADD CONSTRAINT `FK_id_cinemaRoom_show` FOREIGN KEY (`FK_id_cinemaRoom`) REFERENCES `cinema_rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_id_movie` FOREIGN KEY (`FK_id_movie`) REFERENCES `movies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `tickets`
+-- Constraints for table `tickets`
 --
 ALTER TABLE `tickets`
   ADD CONSTRAINT `FK_id_purchase` FOREIGN KEY (`FK_id_purchase`) REFERENCES `purchases` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_id_show` FOREIGN KEY (`FK_id_show`) REFERENCES `shows` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `users`
+-- Constraints for table `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `FK_dni` FOREIGN KEY (`FK_dni`) REFERENCES `profile_users` (`dni`) ON DELETE CASCADE ON UPDATE CASCADE,

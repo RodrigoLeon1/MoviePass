@@ -103,7 +103,8 @@
 				return $movies;
 			}
 			catch (Exception $ex) {
-				return false;
+				// return false;
+				echo $ex;
 			}
 		} 
 
@@ -128,7 +129,8 @@
 				return $movies;
 			}
 			catch (Exception $ex) {
-				return false;
+				// return false;
+				echo $ex;
 			}
 		} 		
 
@@ -156,7 +158,8 @@
 				return $movies;
 			}
 			catch (Exception $ex) {				
-				return false;
+				// return false;
+				echo $ex;
 			}
 		}		
 
