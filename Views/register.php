@@ -45,14 +45,14 @@
                     <button class="btn-l" type="submit">Register</button>
                 </form>
 
-                <hr class="hr-l" />
-                <div class="register-extra">
+                <!-- <hr class="hr-l" /> -->
+                <!-- <div class="register-extra">
                     <p>Register with: </p>
                     <button class="btn-fb">
                         <i class="icon ion-logo-facebook"></i>
                         <span>Facebook</span>
                     </button>
-                </div>
+                </div> -->
             </div>
             <div class="register-img" style="background-image: url('<?= $img; ?>');"></div>
         </div>

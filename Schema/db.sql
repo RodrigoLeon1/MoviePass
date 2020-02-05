@@ -467,7 +467,8 @@ BEGIN
 		movies.overview AS movie_overview
 	FROM movies 
 	INNER JOIN shows ON movies.id = shows.FK_id_movie
-	WHERE movies.title LIKE CONCAT('%', title , '%');
+	WHERE movies.title LIKE CONCAT('%', title , '%')
+	GROUP BY movies.id;
 END$$
 
 DROP procedure IF EXISTS `movies_getAll`;
